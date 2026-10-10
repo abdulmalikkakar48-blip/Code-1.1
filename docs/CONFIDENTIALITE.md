@@ -6,7 +6,7 @@ Marée aide à réduire le temps d’écran. Les données de suivi restent sur l
 
 ## Responsable et contact
 
-**Responsable du traitement : identité à renseigner avant diffusion publique. Cette information est encore incomplète.** Le nom de la marque Marée ne remplace pas l’identité de la personne ou de l’organisme responsable.
+**Responsable du traitement : Abdul Malik Kakar**, éditeur de Marée à titre personnel (personne physique).
 
 Contact confidentialité : **abdulmalikkakar48@gmail.com**.
 
@@ -68,4 +68,4 @@ Les blocages et les points sont des aides personnelles au temps d’écran. Ils 
 
 Un compte, une synchronisation, un coach IA, une publicité ou un paiement nécessiterait une nouvelle analyse et une information mise à jour avant activation. Cette politique décrit uniquement les fonctions locales actuelles.
 
-Ce texte d’information et les fonctions de suppression constituent une base de travail. **Ils ne garantissent pas à eux seuls la conformité de l’ensemble du service ni l’absence d’amende.** L’identité et le traitement des courriels doivent notamment être complétés avant une diffusion publique.
+Ce texte d’information et les fonctions de suppression constituent une base de travail. **Ils ne garantissent pas à eux seuls la conformité de l’ensemble du service ni l’absence d’amende.** Les modalités du traitement des courriels doivent notamment être vérifiées et précisées avant une diffusion publique.

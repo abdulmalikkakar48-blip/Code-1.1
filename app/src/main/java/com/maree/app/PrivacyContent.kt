@@ -1,8 +1,8 @@
 package com.maree.app
 
-/** Identité à compléter dans le code avant toute diffusion publique. */
+/** Identité et contact fournis par l’éditeur pour la confidentialité. */
 object PrivacyIdentity {
-    val controllerName: String? = null
+    const val controllerName = "Abdul Malik Kakar"
     const val contactEmail = "abdulmalikkakar48@gmail.com"
 }
 
@@ -18,10 +18,7 @@ object PrivacyContent {
     val sections: List<PrivacySection>
         get() = listOf(
             PrivacySection("Qui est responsable ?", listOf(
-                if (PrivacyIdentity.controllerName.isNullOrBlank())
-                    "Responsable du traitement : identité à renseigner avant diffusion publique. " +
-                        "Cette information est encore incomplète."
-                else "Responsable du traitement : ${PrivacyIdentity.controllerName}.",
+                "Responsable du traitement : ${PrivacyIdentity.controllerName}, éditeur de Marée à titre personnel.",
                 "Contact confidentialité : ${PrivacyIdentity.contactEmail}."
             )),
             PrivacySection("Quelles données sont utilisées ?", listOf(

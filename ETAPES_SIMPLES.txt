@@ -29,5 +29,6 @@ nécessitent encore des développements.
 L'APK fourni est une version de test. Vérifie le suivi, les notifications et le
 verrou sur ton Samsung avant une diffusion publique.
 
-Avant diffusion publique : compléter l’identité du responsable dans la politique
-et les conditions de la messagerie. Le texte fourni ne garantit pas l’absence de sanctions.
+Responsable de Marée : Abdul Malik Kakar, contact abdulmalikkakar48@gmail.com.
+Avant diffusion publique : vérifier et préciser les conditions de la messagerie.
+Le texte fourni ne garantit pas l’absence de sanctions.

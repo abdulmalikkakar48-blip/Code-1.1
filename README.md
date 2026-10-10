@@ -1,8 +1,12 @@
 # Marée 🌊 — application Android de réduction du temps d'écran
 
-**Version actuelle : 0.2.0 (APK de test et code source).** Interface entièrement en français.
+**Version actuelle : 0.2.1 (APK de test et code source).** Interface entièrement en français.
 
 Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Material 3, `minSdk 29` (Android 10), `targetSdk 34`, package `com.maree.app`, Gradle 8.7, AGP 8.5.2, Kotlin 1.9.24.
+
+## Mise à jour 0.2.1
+
+La politique affiche **Abdul Malik Kakar** comme responsable à titre personnel, avec le contact **abdulmalikkakar48@gmail.com**, tous deux fournis par l’éditeur. La mise à jour conserve le fonctionnement et les données de la version 0.2.0.
 
 ## Mise à jour 0.2.0
 
@@ -12,7 +16,7 @@ Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Materia
 - Pause du suivi et gestion des autorisations depuis Plus. Ni le démarrage du téléphone ni une permission déjà accordée ne démarrent le suivi avant la fin du parcours et son activation.
 - Politique hors ligne dans l’accueil et Plus, contact fourni par l’éditeur, suppression locale avec confirmation. La suppression arrête le suivi et retire limites, verrous, points, défis et choix d’accueil, puis revient au parcours initial. Elle ne révoque pas les permissions Android et ne supprime pas les statistiques détenues par Android.
 
-La politique est une information pour la version locale, pas une certification juridique. Le responsable n’a pas encore fourni son identité réelle ; elle est explicitement à compléter avant diffusion publique. Les conditions et transferts de la messagerie de contact restent également à vérifier. Voir [le texte de confidentialité](docs/CONFIDENTIALITE.md) et [les points avant publication](docs/CONFIDENTIALITE_AVANT_PUBLICATION.md).
+La politique est une information pour la version locale, pas une certification juridique. L’identité du responsable et son contact sont renseignés. Les conditions et transferts de la messagerie de contact restent à vérifier avant diffusion publique. Voir [le texte de confidentialité](docs/CONFIDENTIALITE.md) et [les points avant publication](docs/CONFIDENTIALITE_AVANT_PUBLICATION.md).
 
 ## Ce qui est codé dans l'application Android
 
