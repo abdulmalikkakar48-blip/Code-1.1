@@ -1,8 +1,18 @@
 # Marée 🌊 — application Android de réduction du temps d'écran
 
-**Version actuelle : 0.3.0 (APK de test et code source).** Interface entièrement en français.
+**Version actuelle : 0.4.0 (APK de test et code source).** Interface entièrement en français.
 
 Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Material 3, `minSdk 29` (Android 10), `targetSdk 34`, package `com.maree.app`, Gradle 8.7, AGP 8.5.2, Kotlin 1.9.24.
+
+## Mise à jour 0.4.0
+
+- La règle de 0 point s’applique à toutes les offres : aucun ajout ou changement de limite à 0 point. Une réinitialisation exige réellement ses 10 points ; le retrait d’une application et l’effacement des données restent disponibles.
+- Offres prévues : Gratuit, 5 applications ; Premium, 13 applications pour 10 €/mois ; Ultra, 25 applications pour 20 €/mois. L’APK de test affiche un mode démonstration gratuit dans Plus, pour tester les limites et les fonctions locales. Il ne vend aucun abonnement et n’effectue aucun paiement.
+- Défis → Mes défis : Premium et Ultra permettent de créer un titre avec exactement trois étapes et une durée choisie de 2 à 365 jours. Les trois étapes doivent être cochées pour valider une journée. Les jours peuvent être espacés ; ces défis sont indépendants de la rotation standard de 21 jours. La récompense totale est de 0,25 point une seule fois après la durée choisie. Elle n’augmente pas le compteur de bonus des défis Marée.
+- Les points sont enregistrés en quarts entiers, pour conserver exactement 0,25 / 0,50 / 0,75 point. Les anciens soldes sont migrés une fois sans perte ni double crédit. Les cases du jour et la progression survivent à la relance.
+- Ultra ajoute la recherche dans les applications suivies et le tri par nom, temps passé ou proximité de la limite. Le coach IA illimité par messages est prévu pour Ultra, mais reste à développer et à financer.
+
+Les défis personnels terminés peuvent être supprimés sans retirer les points acquis. Recréer un défi demande de nouvelles journées de pratique depuis zéro. Un retour à Gratuit conserve les applications et défis existants, mais empêche les nouveaux ajouts au-delà de son plafond et la validation des défis personnels réservée à Premium/Ultra.
 
 ## Mise à jour 0.3.0
 
@@ -34,13 +44,13 @@ La politique est une information pour la version locale, pas une certification j
 - Déblocage après 24 h et remise de la limite complète via une base locale (Android ne remet pas ses propres compteurs à zéro). Réinitialisation anticipée à −10 points, retrait de l'application qui supprime son verrou.
 - Points d'honneur : 100 au départ, minimum 0 ; +10 par période de 24 h respectant les limites, −5 pour la réouverture d'une app verrouillée (une fois au maximum par 30 s), −10 pour la réinitialisation, +5 tous les 5 défis cumulés.
 - Deux séries de 10 défis, en alternance tous les 21 jours. Chaque défi demande 5 validations sur des jours différents, une au maximum par date locale. Un défi terminé n’est récompensé qu’une fois par cycle.
-- Blocage des ajouts, changements de limite et réinitialisations à 0 point hors premium ; les défis permettent de regagner des points.
+- Blocage des ajouts et changements de limite à 0 point dans toutes les offres ; réinitialisation à partir de 10 points. Les défis permettent de regagner des points.
 - Redémarrage du service après démarrage du téléphone *lorsque le système l'autorise*.
 
 ## Ce qui reste à activer / développer
 
 - **Coach IA** : interface informative uniquement dans l'APK. Un exemple de fonction sécurisée Supabase se trouve dans `supabase/functions/coach/index.ts`, avec quota des 100 questions sur le serveur, mais le chat Android et l'authentification ne sont pas encore connectés.
-- **Premium** : l’offre est à l’étude, sans prix ni achat actif. Aucun abonnement n’est vendu. L'achat demandera Google Play Billing ou l'équivalent Galaxy Store, une vérification serveur et des comptes développeur actifs. **Ne pas utiliser Stripe** pour cet achat.
+- **Premium et Ultra** : les prix de lancement prévus sont affichés, avec un mode de démonstration gratuit dans l’APK debug. Aucun abonnement n’est vendu. Avant commercialisation, remplacer le statut de démonstration local par des droits vérifiés côté serveur, Google Play Billing ou l’équivalent Galaxy Store et des comptes développeur actifs. Le mode de démonstration ne doit pas servir de validation d’abonnement. **Ne pas utiliser Stripe** pour cet achat.
 - **Compte email et sauvegarde cloud** : tables RLS Supabase préparées mais pas encore reliées à l'APK. Les données actuelles sont locales dans `SharedPreferences` et `allowBackup=false`.
 - **Tests sur un téléphone Samsung réel et distribution** : nécessaires avant mise en production.
 
@@ -121,6 +131,9 @@ app/src/main/java/com/maree/app/
   PrivacyContent.kt    → texte et identité de confidentialité
   PrivacyScreen.kt     → information hors ligne et contact
   MareeTheme.kt         → palette claire et accents
+  Membership.kt         → offres, quarts de point et modèles de défis personnels
+  MembershipScreen.kt   → offres prévues et démonstration gratuite
+  CustomChallengesScreen.kt → formulaire et étapes des défis personnels
   Store.kt              → SharedPreferences, règles des points, cycles et verrous
   UsageReader.kt        → événements d'activité et temps d'écran
   MonitorService.kt     → surveillance, notifications, pénalités
@@ -135,3 +148,5 @@ supabase/                   → migration SQL et fonction coach (préparation)
 Le moteur de suivi fonctionne en local. L'APK ne contient pas de clé API, n'envoie pas les statistiques à un serveur et ne sollicite pas de paiement. Le backend Supabase est fourni à titre de code de préparation ; aucune fonction cloud n'est exécutée par cette version de l'APK.
 
 L’APK de mise à jour distribué dans `downloads/Maree-Android.apk` conserve la signature de l’APK 0.1.0 construit dans cet environnement. Installer la mise à jour sans désinstaller préserve les données. Les builds GitHub Actions utilisent une signature debug propre au runner : ne pas les présenter comme des mises à jour compatibles tant qu’une signature de distribution stable n’est pas configurée. Aucune clé de signature n’est enregistrée dans le dépôt.
+
+Les tests de la version 0.4.0 couvrent aussi la migration unique des soldes, les quarts exacts, la règle de 0 point pour chaque offre, les plafonds et le retour à Gratuit, le coût complet d’une réinitialisation et les défis personnels (durées de 2 et 7 jours, trois étapes persistées, récompense unique, relance, suppression et effacement). Le schéma Supabase préparatoire représente encore l’abonnement par un booléen : les droits des trois offres et les quotas du futur coach devront être reliés à une vérification d’achat côté serveur avant leur commercialisation.

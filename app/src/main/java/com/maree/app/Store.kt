@@ -10,6 +10,7 @@ import java.time.ZoneId
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
 import kotlin.math.ceil
 
 private const val DAY = 24L * 60 * 60 * 1000
@@ -52,14 +53,17 @@ data class AppSnapshot(
 }
 
 data class MareeSnapshot(
-    val points: Int,
+    val points: Double,
     val apps: List<AppSnapshot>,
     val premium: Boolean,
     val challengeSeries: Int,
     val checkedChallenges: Set<Int>,
     val daysUntilChallenges: Int,
     val totalCompletedChallenges: Int,
-    val challengeProgress: Map<Int, ChallengeProgress> = emptyMap()
+    val challengeProgress: Map<Int, ChallengeProgress> = emptyMap(),
+    val pointUnits: Int = (points * POINT_UNITS_PER_POINT).toInt(),
+    val plan: PlanType = if (premium) PlanType.PREMIUM else PlanType.FREE,
+    val customChallenges: List<CustomChallenge> = emptyList()
 )
 
 data class ChallengeProgress(
@@ -68,6 +72,20 @@ data class ChallengeProgress(
     val validatedToday: Boolean = false,
     val canValidateToday: Boolean = completedDays < requiredDays && !validatedToday
 )
+
+private data class StoredCustomChallenge(
+    val id: String,
+    val title: String,
+    val steps: List<String>,
+    val requiredDays: Int,
+    val createdAt: Long,
+    val days: List<LocalDate> = emptyList(),
+    val stepDate: LocalDate? = null,
+    val checkedSteps: Set<Int> = emptySet(),
+    val rewardClaimed: Boolean = false
+) {
+    val completed: Boolean get() = days.size >= requiredDays
+}
 
 data class TickResult(
     val snapshot: MareeSnapshot,
@@ -84,7 +102,15 @@ class Store internal constructor(private val prefs: SharedPreferences) {
 
     init {
         synchronized(lock) {
-            if (!prefs.contains("points")) prefs.edit().putInt("points", 100).apply()
+            if (!prefs.contains("pointUnits")) {
+                val legacyPoints = prefs.getInt("points", 100).coerceAtLeast(0)
+                prefs.edit().putInt("pointUnits", (legacyPoints.toLong() * POINT_UNITS_PER_POINT)
+                    .coerceAtMost(Int.MAX_VALUE.toLong()).toInt()).remove("points").apply()
+            }
+            if (!prefs.contains("plan")) {
+                val plan = if (prefs.getBoolean("premium", false)) PlanType.PREMIUM else PlanType.FREE
+                prefs.edit().putString("plan", plan.name).remove("premium").apply()
+            }
             if (!prefs.contains("periodStart"))
                 prefs.edit().putLong("periodStart", System.currentTimeMillis()).apply()
             if (!prefs.contains("challengeStart"))
@@ -120,8 +146,14 @@ class Store internal constructor(private val prefs: SharedPreferences) {
     }
 
     fun packages(): Set<String> = synchronized(lock) { readApps().map { it.packageName }.toSet() }
-    fun points(): Int = synchronized(lock) { prefs.getInt("points", 100) }
-    fun isPremium(): Boolean = synchronized(lock) { prefs.getBoolean("premium", false) }
+    fun pointUnits(): Int = synchronized(lock) { prefs.getInt("pointUnits", 100 * POINT_UNITS_PER_POINT).coerceAtLeast(0) }
+    fun points(): Double = pointUnits() / POINT_UNITS_PER_POINT.toDouble()
+    fun planType(): PlanType = synchronized(lock) {
+        PlanType.entries.firstOrNull { it.name == prefs.getString("plan", PlanType.FREE.name) } ?: PlanType.FREE
+    }
+    fun isPremium(): Boolean = planType().canCreateCustomChallenges
+    /** Simulation locale explicite ; cette méthode ne crée aucun achat ni abonnement. */
+    fun setDemoPlan(plan: PlanType) = synchronized(lock) { prefs.edit().putString("plan", plan.name).apply() }
     fun trackedCount(): Int = synchronized(lock) { readApps().size }
 
     /**
@@ -135,12 +167,16 @@ class Store internal constructor(private val prefs: SharedPreferences) {
     /** Une éventuelle brèche de la période ne disparaît pas quand on retire l'application. */
     private fun recordBreach() = prefs.edit().putBoolean("periodBreach", true).apply()
 
-    private fun canEdit(): Boolean = isPremium() || points() > 0
+    private fun canEdit(): Boolean = pointUnits() > 0
+
+    private fun shiftedPointUnits(delta: Int): Int =
+        (pointUnits().toLong() + delta).coerceIn(0, Int.MAX_VALUE.toLong()).toInt()
 
     fun addApp(packageName: String, limitMinutes: Int, rawTodayMillis: Long): String? = synchronized(lock) {
         if (!canEdit()) return@synchronized "Tu n'as plus de points. Fais un défi ou attends le prochain bonus."
         val apps = readApps()
-        if (!isPremium() && apps.size >= 5) return@synchronized "5 applications maximum avec la version gratuite."
+        val plan = planType()
+        if (apps.size >= plan.maxTrackedApps) return@synchronized "${plan.maxTrackedApps} applications maximum avec l’offre ${plan.displayName}."
         if (apps.any { it.packageName == packageName }) return@synchronized "Cette application est déjà suivie."
         if (limitMinutes < 5 || limitMinutes % 5 != 0) return@synchronized "Choisis un multiple de 5 minutes."
         apps.add(TrackedApp(packageName, limitMinutes, rawTodayMillis))
@@ -149,7 +185,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
     }
 
     fun editLimit(packageName: String, minutes: Int): String? = synchronized(lock) {
-        if (!canEdit()) return@synchronized "Impossible de modifier une limite à 0 point sans premium."
+        if (!canEdit()) return@synchronized "Impossible de modifier une limite à 0 point. Termine des défis pour en regagner."
         if (minutes < 5 || minutes % 5 != 0) return@synchronized "Choisis un multiple de 5 minutes."
         val apps = readApps()
         val index = apps.indexOfFirst { it.packageName == packageName }
@@ -164,15 +200,14 @@ class Store internal constructor(private val prefs: SharedPreferences) {
     }
 
     fun resetApp(packageName: String, rawTodayMillis: Long): String? = synchronized(lock) {
-        val points = points()
-        if (points == 0 && !isPremium())
-            return@synchronized "À 0 point, fais des défis, attends 24 h ou passe en premium."
+        if (pointUnits() < 10 * POINT_UNITS_PER_POINT)
+            return@synchronized "Il faut 10 points pour réinitialiser une limite."
         val apps = readApps()
         val index = apps.indexOfFirst { it.packageName == packageName }
         if (index < 0) return@synchronized "Application introuvable."
         apps[index] = apps[index].copy(baselineMillis = rawTodayMillis, lockedUntil = 0L)
         saveApps(apps)
-        prefs.edit().putInt("points", (points - 10).coerceAtLeast(0)).apply()
+        prefs.edit().putInt("pointUnits", shiftedPointUnits(-10 * POINT_UNITS_PER_POINT)).apply()
         null
     }
 
@@ -183,7 +218,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
         advancePeriods(now)
         apps[index] = apps[index].copy(lastPenaltyAt = now)
         saveApps(apps)
-        prefs.edit().putInt("points", (points() - 5).coerceAtLeast(0)).apply()
+        prefs.edit().putInt("pointUnits", shiftedPointUnits(-5 * POINT_UNITS_PER_POINT)).apply()
         recordBreach()
         true
     }
@@ -257,11 +292,145 @@ class Store internal constructor(private val prefs: SharedPreferences) {
             val reward = if (count % 5 == 0) 5 else 0
             editor.putString("checked", array.toString())
                 .putInt("completedCount", count)
-                .putInt("points", points() + reward)
+                .putInt("pointUnits", shiftedPointUnits(reward * POINT_UNITS_PER_POINT))
         }
         // Dates, défi terminé, compteur et récompense sont enregistrés ensemble.
         editor.apply()
         true
+    }
+
+    private fun readCustomChallenges(): MutableList<StoredCustomChallenge> {
+        val array = try { JSONArray(prefs.getString("customChallenges", "[]")) }
+            catch (_: Exception) { JSONArray() }
+        val result = mutableListOf<StoredCustomChallenge>()
+        for (i in 0 until array.length()) {
+            val value = array.optJSONObject(i) ?: continue
+            val id = value.optString("id")
+            val title = value.optString("title")
+            val requiredDays = value.optInt("requiredDays", CUSTOM_MIN_DAYS)
+            val stepsArray = value.optJSONArray("steps") ?: continue
+            val steps = (0 until stepsArray.length()).map { stepsArray.optString(it) }
+            if (id.isBlank() || title.isBlank() || steps.size != 3 || steps.any { it.isBlank() } ||
+                requiredDays !in CUSTOM_MIN_DAYS..CUSTOM_MAX_DAYS || result.any { it.id == id }) continue
+            val dates = value.optJSONArray("days") ?: JSONArray()
+            val days = (0 until dates.length()).mapNotNull { j ->
+                try { LocalDate.parse(dates.optString(j)) } catch (_: Exception) { null }
+            }.distinct().sorted().take(requiredDays)
+            val checked = value.optJSONArray("checkedSteps") ?: JSONArray()
+            val checkedSteps = (0 until checked.length()).map { checked.optInt(it, -1) }
+                .filter { it in 0..2 }.toSet()
+            val stepDate = try { LocalDate.parse(value.optString("stepDate")) }
+                catch (_: Exception) { null }
+            result.add(StoredCustomChallenge(id, title, steps, requiredDays, value.optLong("createdAt"),
+                days, stepDate, checkedSteps, value.optBoolean("rewardClaimed", false)))
+        }
+        return result
+    }
+
+    private fun customChallengesJson(challenges: List<StoredCustomChallenge>): String {
+        val array = JSONArray()
+        challenges.forEach { challenge ->
+            array.put(JSONObject().apply {
+                put("id", challenge.id)
+                put("title", challenge.title)
+                put("steps", JSONArray(challenge.steps))
+                put("requiredDays", challenge.requiredDays)
+                put("createdAt", challenge.createdAt)
+                put("days", JSONArray(challenge.days.map { it.toString() }))
+                put("stepDate", challenge.stepDate?.toString() ?: "")
+                put("checkedSteps", JSONArray(challenge.checkedSteps.sorted()))
+                put("rewardClaimed", challenge.rewardClaimed)
+            })
+        }
+        return array.toString()
+    }
+
+    private fun canEditCustomToday(challenge: StoredCustomChallenge, now: Long): Boolean {
+        val today = localDate(now)
+        return planType().canCreateCustomChallenges && !challenge.completed && now >= challenge.createdAt &&
+            (challenge.days.lastOrNull()?.let { today > it } ?: true) &&
+            (challenge.stepDate?.let { today >= it } ?: true)
+    }
+
+    private fun customSnapshots(now: Long): List<CustomChallenge> {
+        val today = localDate(now)
+        return readCustomChallenges().map { challenge ->
+            val checked = if (challenge.stepDate == today) challenge.checkedSteps else emptySet()
+            val canEditToday = canEditCustomToday(challenge, now)
+            CustomChallenge(challenge.id, challenge.title, challenge.steps, challenge.days.size,
+                challenge.requiredDays, checked, today in challenge.days, canEditToday,
+                canEditToday && checked.size == 3, challenge.completed, challenge.rewardClaimed)
+        }
+    }
+
+    fun createCustomChallenge(
+        title: String, steps: List<String>, requiredDays: Int,
+        now: Long = System.currentTimeMillis()
+    ): String? = synchronized(lock) {
+        if (!planType().canCreateCustomChallenges) return@synchronized "Les défis personnalisés sont disponibles avec Premium et Ultra."
+        val cleanTitle = title.trim()
+        val cleanSteps = steps.map { it.trim() }
+        if (cleanTitle.isEmpty()) return@synchronized "Donne un titre à ton défi."
+        if (cleanSteps.size != 3 || cleanSteps.any { it.isEmpty() })
+            return@synchronized "Un défi personnalisé demande exactement 3 étapes renseignées."
+        if (requiredDays !in CUSTOM_MIN_DAYS..CUSTOM_MAX_DAYS)
+            return@synchronized "Choisis une durée entre $CUSTOM_MIN_DAYS et $CUSTOM_MAX_DAYS jours."
+        val challenges = readCustomChallenges()
+        val active = challenges.filterNot { it.completed }
+        if (active.size >= MAX_ACTIVE_CUSTOM_CHALLENGES)
+            return@synchronized "$MAX_ACTIVE_CUSTOM_CHALLENGES défis personnalisés actifs maximum."
+        fun normalized(text: String) = text.lowercase(Locale.ROOT).replace(Regex("\\s+"), " ").trim()
+        if (active.any { normalized(it.title) == normalized(cleanTitle) &&
+                it.steps.map(::normalized) == cleanSteps.map(::normalized) })
+            return@synchronized "Ce défi personnalisé est déjà actif."
+        challenges.add(StoredCustomChallenge(UUID.randomUUID().toString(), cleanTitle, cleanSteps, requiredDays, now))
+        prefs.edit().putString("customChallenges", customChallengesJson(challenges)).apply()
+        null
+    }
+
+    fun setCustomChallengeStep(
+        id: String, index: Int, checked: Boolean, now: Long = System.currentTimeMillis()
+    ): String? = synchronized(lock) {
+        if (!planType().canCreateCustomChallenges) return@synchronized "Active Premium ou Ultra pour poursuivre ce défi personnalisé."
+        if (index !in 0..2) return@synchronized "Étape introuvable."
+        val challenges = readCustomChallenges()
+        val position = challenges.indexOfFirst { it.id == id }
+        if (position < 0) return@synchronized "Défi introuvable."
+        val challenge = challenges[position]
+        if (!canEditCustomToday(challenge, now)) return@synchronized "Cette journée ne peut plus être modifiée."
+        val today = localDate(now)
+        val steps = if (challenge.stepDate == today) challenge.checkedSteps else emptySet()
+        challenges[position] = challenge.copy(stepDate = today,
+            checkedSteps = if (checked) steps + index else steps - index)
+        prefs.edit().putString("customChallenges", customChallengesJson(challenges)).apply()
+        null
+    }
+
+    fun validateCustomChallengeToday(id: String, now: Long = System.currentTimeMillis()): String? = synchronized(lock) {
+        if (!planType().canCreateCustomChallenges) return@synchronized "Active Premium ou Ultra pour poursuivre ce défi personnalisé."
+        val challenges = readCustomChallenges()
+        val position = challenges.indexOfFirst { it.id == id }
+        if (position < 0) return@synchronized "Défi introuvable."
+        val challenge = challenges[position]
+        if (!canEditCustomToday(challenge, now)) return@synchronized "Cette journée est déjà validée ou indisponible."
+        val today = localDate(now)
+        if (challenge.stepDate != today || challenge.checkedSteps.size != 3)
+            return@synchronized "Termine les 3 étapes d’aujourd’hui avant de valider."
+        val days = challenge.days + today
+        val earnsReward = days.size == challenge.requiredDays && !challenge.rewardClaimed
+        challenges[position] = challenge.copy(days = days, rewardClaimed = challenge.rewardClaimed || earnsReward)
+        val editor = prefs.edit().putString("customChallenges", customChallengesJson(challenges))
+        if (earnsReward) editor.putInt("pointUnits", shiftedPointUnits(1))
+        // Le solde exact et le marqueur de récompense sont dans une seule transaction.
+        editor.apply()
+        null
+    }
+
+    fun deleteCustomChallenge(id: String): String? = synchronized(lock) {
+        val challenges = readCustomChallenges()
+        if (challenges.none { it.id == id }) return@synchronized "Défi introuvable."
+        prefs.edit().putString("customChallenges", customChallengesJson(challenges.filterNot { it.id == id })).apply()
+        null
     }
 
     private fun snapshot(apps: List<TrackedApp>, raw: Map<String, Long>, now: Long): MareeSnapshot {
@@ -291,7 +460,8 @@ class Store internal constructor(private val prefs: SharedPreferences) {
             },
             isPremium(),
             series,
-            done, daysRemaining, prefs.getInt("completedCount", 0), progress
+            done, daysRemaining, prefs.getInt("completedCount", 0), progress,
+            pointUnits(), planType(), customSnapshots(now)
         )
     }
 
@@ -347,10 +517,10 @@ class Store internal constructor(private val prefs: SharedPreferences) {
     private fun advancePeriods(now: Long) {
         var periodStart = prefs.getLong("periodStart", now)
         var breach = prefs.getBoolean("periodBreach", false)
-        var p = points()
+        var p = pointUnits().toLong()
         var processed = 0
         while (now - periodStart >= DAY && processed < 7) {
-            if (!breach) p += 10
+            if (!breach) p += 10 * POINT_UNITS_PER_POINT
             periodStart += DAY
             breach = false
             processed++
@@ -359,7 +529,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
             periodStart = now // limite de rattrapage ; ne pas créditer une durée non vérifiée
             breach = false
         }
-        prefs.edit().putInt("points", p).putLong("periodStart", periodStart)
+        prefs.edit().putInt("pointUnits", p.coerceAtMost(Int.MAX_VALUE.toLong()).toInt()).putLong("periodStart", periodStart)
             .putBoolean("periodBreach", breach).apply()
 
     }

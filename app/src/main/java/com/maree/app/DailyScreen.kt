@@ -55,6 +55,7 @@ internal fun DailyTab(
     val currentChallenges = snapshot.checkedChallenges.size
     val challengeIndices = if (snapshot.challengeSeries == 0) 0..9 else 10..19
     val validatedToday = challengeIndices.count { snapshot.challengeProgress[it]?.validatedToday == true }
+    val personalValidationsToday = snapshot.customChallenges.count { it.validatedToday }
 
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState())
@@ -96,10 +97,10 @@ internal fun DailyTab(
                     "Choisis une application à suivre. Ton bilan se remplira avec son temps d’utilisation.",
                     color = MareePalette.Muted
                 )
-                Button(onClick = onAddApp, enabled = snapshot.points > 0 || snapshot.premium) {
+                Button(onClick = onAddApp, enabled = snapshot.points > 0) {
                     Text("Choisir une application")
                 }
-                if (snapshot.points <= 0 && !snapshot.premium) {
+                if (snapshot.points <= 0) {
                     Text(
                         "L’ajout d’une application sera disponible quand tu auras retrouvé des points.",
                         color = MareePalette.Muted,
@@ -205,7 +206,7 @@ internal fun DailyTab(
         DailyCard(MareePalette.Surface) {
             Text("Chaque petit pas compte", fontWeight = FontWeight.Bold, fontSize = 20.sp)
             Text(
-                "$validatedToday défi${if (validatedToday > 1) "s" else ""} pratiqué${if (validatedToday > 1) "s" else ""} et validé${if (validatedToday > 1) "s" else ""} aujourd’hui.",
+                "$validatedToday défi${if (validatedToday > 1) "s" else ""} Marée pratiqué${if (validatedToday > 1) "s" else ""} et validé${if (validatedToday > 1) "s" else ""} aujourd’hui.",
                 color = MareePalette.Lavender,
                 fontWeight = FontWeight.Medium
             )
@@ -220,6 +221,15 @@ internal fun DailyTab(
             )
             Text("Un défi se termine après $CHALLENGE_REQUIRED_DAYS jours différents, qui peuvent être espacés. Les totaux de défis terminés couvrent plusieurs jours.",
                 color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
+            if (snapshot.customChallenges.isNotEmpty()) {
+                HorizontalDivider(color = MareePalette.Outline)
+                Text(
+                    "$personalValidationsToday défi${if (personalValidationsToday > 1) "s" else ""} personnel${if (personalValidationsToday > 1) "s" else ""} validé${if (personalValidationsToday > 1) "s" else ""} aujourd’hui.",
+                    color = MareePalette.Lavender, fontWeight = FontWeight.Medium, fontSize = 14.sp
+                )
+                Text("Pour tes défis personnels, la durée est celle que tu as choisie. Chaque journée nécessite les 3 étapes.",
+                    color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
+            }
         }
 
         DailyCard(MareePalette.Lilac) {

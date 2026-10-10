@@ -32,8 +32,9 @@ object PrivacyContent {
                 "Marée enregistre sur l’appareil : les identifiants des applications choisies, leurs " +
                     "limites, les durées de référence utilisées pour les réinitialisations, les dates " +
                     "de verrouillage, d’alerte et de pénalité, les points, les défis accomplis et " +
-                    "les dates locales des validations quotidiennes, " +
-                    "et les dates des cycles de progression. Android conserve ses propres statistiques " +
+                    "les dates locales des validations quotidiennes, les titres et les trois étapes " +
+                    "des défis personnels, leur durée et leurs cases du jour, le choix d’offre de " +
+                    "démonstration et les dates des cycles de progression. Android conserve ses propres statistiques " +
                     "d’utilisation, indépendamment de Marée.",
                 "Marée ne lit pas tes messages, le contenu de tes écrans, tes contacts, tes photos " +
                     "ou ta position. Il n’y a pas de compte, de synchronisation, de publicité, de " +
@@ -97,13 +98,16 @@ object PrivacyContent {
                     "jusqu’à l’effacement complet. Les durées du jour sont recalculées depuis les " +
                     "événements Android ; Marée n’en conserve pas un historique détaillé.",
                 "Effacer les données supprime les données locales de Marée, dont les applications " +
-                    "suivies, les verrous, les points et les défis. À la prochaine utilisation, " +
+                    "suivies, les verrous, les points, le choix d’offre de démonstration et les défis " +
+                    "personnels avec leurs étapes et leurs dates. À la prochaine utilisation, " +
                     "la progression repart avec les valeurs initiales. Cette action ne supprime " +
                     "pas les statistiques d’Android et ne révoque pas automatiquement les " +
                     "autorisations accordées dans les paramètres du téléphone.",
-                "Les dates de validation des défis sont effacées au renouvellement de la série, " +
+                "Les dates de validation des défis proposés par Marée sont effacées au renouvellement de la série, " +
                     "tous les 21 jours. Le nombre total de défis terminés et les points restent " +
-                    "jusqu’à l’effacement complet."
+                    "jusqu’à l’effacement complet. Les défis personnels et leurs dates restent " +
+                    "jusqu’à leur suppression individuelle ou à l’effacement complet ; ils ne " +
+                    "sont pas réinitialisés par le changement de série."
             )),
             PrivacySection("Tes droits et tes choix", listOf(
                 "Tu peux consulter et modifier tes limites, retirer une application et effacer " +

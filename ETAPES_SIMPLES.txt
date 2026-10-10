@@ -16,6 +16,16 @@ MARÉE — COMMENT TESTER L'APPLICATION SUR TON SAMSUNG
    Après la validation du jour, reviens le lendemain pour continuer.
    Les points arrivent seulement tous les 5 défis entièrement terminés : +5 points.
    La série se renouvelle après 21 jours et sa progression est alors remise à zéro.
+8. Dans Plus, les offres prévues sont Gratuit (5 applications), Premium
+   (13 applications, 10 €/mois) et Ultra (25 applications, 20 €/mois).
+   Ce sont des démonstrations gratuites dans cet APK : aucun paiement.
+   Sélectionne Tester Premium ou Tester Ultra pour essayer leurs fonctions.
+9. Dans Défis → Mes défis, choisis un titre, une durée à partir de 2 jours
+   et exactement 3 étapes. Réalise et coche les 3 étapes chaque jour, puis valide.
+   La récompense totale de 0,25 point arrive une seule fois à la fin.
+   Ces défis personnels ne sont pas remis à zéro par la série de 21 jours.
+10. À 0 point, aucun ajout ou changement de limite n’est permis dans les offres.
+    Une réinitialisation demande 10 points. Ultra propose la recherche et le tri.
 
 MISE À JOUR : installe le nouvel APK sans désinstaller Marée pour conserver
 tes points, limites et défis déjà terminés. Ces anciens défis ne redonnent pas

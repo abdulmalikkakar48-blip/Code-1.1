@@ -42,6 +42,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -60,6 +61,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.key
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -303,7 +305,7 @@ private fun MareeApp() {
                         Text("marée", color = Cream, fontSize = 29.sp, fontWeight = FontWeight.Bold)
                     }
                     Surface(color = MareePalette.Sand, shape = CircleShape) {
-                        Text("✧ ${snapshot.points}", color = MareePalette.Amber, fontWeight = FontWeight.Bold,
+                        Text("✧ ${formatPoints(snapshot.points)}", color = MareePalette.Amber, fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 15.dp, vertical = 9.dp))
                     }
                 }
@@ -325,9 +327,35 @@ private fun MareeApp() {
                     }, getName = { appLabel(context, it) }, onAddApp = ::addApplication,
                         monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
                         onActivateTracking = { showSetup = true })
-                    2 -> ChallengeTab(snapshot) { index ->
-                        if (store.completeChallenge(index)) refresh()
-                    }
+                    2 -> ChallengeTab(snapshot,
+                        onComplete = { index ->
+                            if (store.completeChallenge(index)) {
+                                snapshot = store.readSnapshot(lastReading)
+                                refresh()
+                            }
+                        },
+                        onOffers = { tab = 3 },
+                        onCreateCustom = { title, steps, duration ->
+                            store.createCustomChallenge(title, steps, duration).also { issue ->
+                                if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
+                            }
+                        },
+                        onToggleCustomStep = { id, index, checked ->
+                            store.setCustomChallengeStep(id, index, checked).also { issue ->
+                                if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
+                            }
+                        },
+                        onValidateCustom = { id ->
+                            store.validateCustomChallengeToday(id).also { issue ->
+                                if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
+                            }
+                        },
+                        onDeleteCustom = { id ->
+                            store.deleteCustomChallenge(id).also { issue ->
+                                if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
+                            }
+                        }
+                    )
                     else -> MoreTab(
                         active = monitoringEnabled && permissions.readyForMonitoring,
                         notificationsGranted = permissions.notificationsGranted,
@@ -340,7 +368,12 @@ private fun MareeApp() {
                         },
                         onNotifications = ::askNotifications,
                         onPrivacy = { showPrivacy = true },
-                        onPremium = { infoMessage = "Une offre Premium est à l’étude. Aucun achat ni abonnement n’est disponible dans cette version." },
+                        plan = snapshot.plan,
+                        onDemoPlan = { plan ->
+                            store.setDemoPlan(plan)
+                            snapshot = store.readSnapshot(lastReading)
+                            refresh()
+                        },
                         onAccount = { infoMessage = "Marée fonctionne sans compte : pas d’inscription et tes données restent sur ton téléphone. Un compte pourra être proposé plus tard, uniquement pour une sauvegarde facultative." }
                     )
                 }
@@ -419,7 +452,7 @@ private fun MareeApp() {
     if (deleteConfirmation) {
         AlertDialog(onDismissRequest = { if (!deleting) deleteConfirmation = false },
             title = { Text("Effacer les données de Marée ?") },
-            text = { Text("Tes applications suivies, limites, verrous, points, défis et choix d’accueil seront effacés. Le suivi sera arrêté. Cette action est irréversible et ne supprime pas les statistiques Android.") },
+            text = { Text("Tes applications suivies, limites, verrous, points, défis personnalisés et leurs étapes, progression, choix d’offre de démonstration et choix d’accueil seront effacés. Le suivi sera arrêté. Cette action est irréversible et ne supprime pas les statistiques Android.") },
             confirmButton = { Button(enabled = !deleting, onClick = {
                 scope.launch {
                     deleting = true
@@ -456,6 +489,16 @@ private fun HomeTab(
     onAdd: () -> Unit, onEdit: (AppSnapshot) -> Unit, onRemove: (AppSnapshot) -> Unit,
     onReset: (AppSnapshot) -> Unit, getName: (String) -> String
 ) {
+    var appQuery by rememberSaveable { mutableStateOf("") }
+    var appSort by rememberSaveable { mutableIntStateOf(0) }
+    val displayedApps = if (snapshot.plan == PlanType.ULTRA) {
+        val matching = snapshot.apps.filter { getName(it.packageName).contains(appQuery, ignoreCase = true) }
+        when (appSort) {
+            1 -> matching.sortedByDescending { it.usedMillis }
+            2 -> matching.sortedByDescending { it.progress }
+            else -> matching.sortedBy { getName(it.packageName).lowercase(Locale.FRENCH) }
+        }
+    } else snapshot.apps
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())
         .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
         Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp))
@@ -476,7 +519,7 @@ private fun HomeTab(
                     Text("TON CAPITAL DISCIPLINE", color = MareePalette.Coral, fontSize = 10.sp,
                         fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
                     Row(verticalAlignment = Alignment.Bottom) {
-                        Text("${snapshot.points}", color = MareePalette.Coral, fontSize = 43.sp,
+                        Text(formatPoints(snapshot.points), color = MareePalette.Coral, fontSize = 43.sp,
                             fontWeight = FontWeight.Bold)
                         Text(" points", color = Cream, modifier = Modifier.padding(bottom = 9.dp))
                     }
@@ -497,28 +540,49 @@ private fun HomeTab(
             verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
                 Text("Mes applications", color = Cream, fontSize = 22.sp, fontWeight = FontWeight.Bold)
-                Text("${snapshot.apps.size} / ${if (snapshot.premium) "∞" else "5"} suivies", color = Muted, fontSize = 13.sp)
+                Text("${snapshot.apps.size} / ${snapshot.plan.maxTrackedApps} suivies", color = Muted, fontSize = 13.sp)
             }
             Button(onClick = onAdd, shape = RoundedCornerShape(16.dp),
-                enabled = snapshot.premium || (snapshot.points > 0 && snapshot.apps.size < 5)) {
+                enabled = snapshot.points > 0 && snapshot.apps.size < snapshot.plan.maxTrackedApps) {
                 Text("＋ Ajouter", fontWeight = FontWeight.Bold)
             }
         }
-        if (snapshot.points == 0 && !snapshot.premium) {
+        if (snapshot.points <= 0) {
             Text("Tes défis te permettent de regagner des points pour modifier tes limites.", color = Warning, fontSize = 13.sp)
+        }
+        if (snapshot.apps.size > snapshot.plan.maxTrackedApps) {
+            Text("Tes applications restent suivies. Pour en ajouter, retire des applications jusqu’à passer sous la limite de ton offre.",
+                color = Muted, fontSize = 13.sp, lineHeight = 19.sp)
         }
         if (snapshot.apps.isEmpty()) {
             SectionCard {
                 Text("Ta première limite", fontWeight = FontWeight.Bold, fontSize = 19.sp)
                 Text("Choisis une application et le temps que tu souhaites lui consacrer. Tu gardes la main sur tes réglages.",
                     color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
-                OutlinedButton(onClick = onAdd, enabled = snapshot.points > 0 || snapshot.premium) {
+                OutlinedButton(onClick = onAdd, enabled = snapshot.points > 0) {
                     Text("Choisir une application")
                 }
             }
-        } else snapshot.apps.forEach { app ->
-            AppCard(app, getName(app.packageName), snapshot.premium || snapshot.points > 0, active,
-                onEdit = { onEdit(app) }, onRemove = { onRemove(app) }, onReset = { onReset(app) })
+        } else {
+            if (snapshot.plan == PlanType.ULTRA) {
+                OutlinedTextField(value = appQuery, onValueChange = { appQuery = it },
+                    label = { Text("Rechercher une application suivie") }, singleLine = true,
+                    modifier = Modifier.fillMaxWidth())
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf("Nom", "Temps passé", "Limite proche").forEachIndexed { index, title ->
+                        FilterChip(selected = appSort == index, onClick = { appSort = index },
+                            label = { Text(title, fontSize = 12.sp) })
+                    }
+                }
+                if (displayedApps.isEmpty()) Text("Aucune application suivie ne correspond à ta recherche.",
+                    color = Muted, fontSize = 14.sp)
+            }
+            displayedApps.forEach { app ->
+                key(app.packageName) {
+                    AppCard(app, getName(app.packageName), snapshot.points > 0, snapshot.points >= 10, active,
+                        onEdit = { onEdit(app) }, onRemove = { onRemove(app) }, onReset = { onReset(app) })
+                }
+            }
         }
         Spacer(Modifier.height(10.dp))
     }
@@ -535,7 +599,7 @@ private fun SectionCard(content: @Composable ColumnScope.() -> Unit) {
 
 @Composable
 private fun AppCard(
-    app: AppSnapshot, name: String, canEdit: Boolean, active: Boolean,
+    app: AppSnapshot, name: String, canEdit: Boolean, canReset: Boolean, active: Boolean,
     onEdit: () -> Unit, onRemove: () -> Unit, onReset: () -> Unit
 ) {
     val context = LocalContext.current
@@ -574,80 +638,99 @@ private fun AppCard(
         HorizontalDivider(color = MareePalette.Outline)
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             TextButton(onClick = onRemove) { Text("Retirer", color = Muted) }
-            TextButton(onClick = onReset, enabled = canEdit) {
-                Text("Réinitialiser (−10)", color = if (canEdit) Mint else Muted)
+            TextButton(onClick = onReset, enabled = canReset) {
+                Text("Réinitialiser (−10)", color = if (canReset) Mint else Muted)
             }
         }
+        if (!canReset) Text("10 points nécessaires pour réinitialiser cette limite.",
+            color = Muted, fontSize = 12.sp)
     }
 }
 
 @Composable
-private fun ChallengeTab(snapshot: MareeSnapshot, onComplete: (Int) -> Unit) {
+private fun ChallengeTab(
+    snapshot: MareeSnapshot, onComplete: (Int) -> Unit, onOffers: () -> Unit,
+    onCreateCustom: (String, List<String>, Int) -> String?,
+    onToggleCustomStep: (String, Int, Boolean) -> String?,
+    onValidateCustom: (String) -> String?, onDeleteCustom: (String) -> String?
+) {
     val indices = if (snapshot.challengeSeries == 0) 0..9 else 10..19
     val finished = indices.count { it in snapshot.checkedChallenges }
+    var personal by rememberSaveable { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())
         .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(13.dp)) {
         Text("Petits défis,\ngrands changements.", fontSize = 31.sp,
             lineHeight = 37.sp, fontWeight = FontWeight.Bold)
-        Text("10 habitudes à essayer, un jour à la fois.", color = Muted)
-        SectionCard {
-            Text("Série en cours · $finished / 10 défis terminés", fontWeight = FontWeight.Bold)
-            LinearProgressIndicator(progress = { finished / 10f },
-                modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
-                color = Mint, trackColor = CardLighter)
-            Text("Un défi se termine après $CHALLENGE_REQUIRED_DAYS jours différents. Pratique-le, puis valide : une seule fois par jour.",
-                color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
-            Text("Les jours peuvent être espacés, sans perte de progression. Nouvelle série dans ${snapshot.daysUntilChallenges} jours (cycle de 21 jours) : les défis en cours repartent alors à zéro.",
-                color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
-            Text("+5 points tous les 5 défis entièrement terminés, cumulés entre les séries. Aucun point pour une simple validation.",
-                color = Mint, fontSize = 13.sp, lineHeight = 20.sp)
+        Text(if (personal) "Tes objectifs, une journée à la fois." else "10 habitudes à essayer, un jour à la fois.", color = Muted)
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            FilterChip(selected = !personal, onClick = { personal = false },
+                label = { Text("Défis Marée") })
+            FilterChip(selected = personal, onClick = { personal = true },
+                label = { Text("Mes défis") })
         }
-        indices.forEach { index ->
-            val done = index in snapshot.checkedChallenges
-            val progress = snapshot.challengeProgress[index] ?: ChallengeProgress(
-                completedDays = if (done) CHALLENGE_REQUIRED_DAYS else 0
-            )
-            val requiredDays = progress.requiredDays
-            val completedDays = progress.completedDays.coerceIn(0, requiredDays)
-            val validatedToday = progress.validatedToday
-            Card(
-                shape = RoundedCornerShape(22.dp),
-                colors = CardDefaults.cardColors(containerColor = if (done) CardLighter else CardColor),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(Modifier.fillMaxWidth().padding(19.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(CHALLENGES[index], color = Cream,
-                        fontWeight = FontWeight.SemiBold, fontSize = 17.sp, lineHeight = 24.sp)
-                    Text("$completedDays / $requiredDays jours validés", color = Mint,
-                        fontWeight = FontWeight.Medium, fontSize = 14.sp)
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        for (day in 1..requiredDays) {
-                            val dayDone = day <= completedDays
-                            Box(Modifier.weight(1f).clip(RoundedCornerShape(12.dp))
-                                .background(if (dayDone) Mint else MareePalette.Lilac)
-                                .padding(vertical = 10.dp)
-                                .clearAndSetSemantics {
-                                    contentDescription = "Jour $day, ${if (dayDone) "validé" else "à valider"}"
-                                }, contentAlignment = Alignment.Center) {
-                                Text("$day", color = if (dayDone) Color.White else MareePalette.Lavender,
-                                    fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        if (personal) {
+            CustomChallengesSection(snapshot, onOffers, onCreateCustom, onToggleCustomStep,
+                onValidateCustom, onDeleteCustom)
+        } else {
+            SectionCard {
+                Text("Série en cours · $finished / 10 défis terminés", fontWeight = FontWeight.Bold)
+                LinearProgressIndicator(progress = { finished / 10f },
+                    modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
+                    color = Mint, trackColor = CardLighter)
+                Text("Un défi se termine après $CHALLENGE_REQUIRED_DAYS jours différents. Pratique-le, puis valide : une seule fois par jour.",
+                    color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
+                Text("Les jours peuvent être espacés, sans perte de progression. Nouvelle série dans ${snapshot.daysUntilChallenges} jours (cycle de 21 jours) : les défis en cours repartent alors à zéro.",
+                    color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
+                Text("+5 points tous les 5 défis entièrement terminés, cumulés entre les séries. Aucun point pour une simple validation.",
+                    color = Mint, fontSize = 13.sp, lineHeight = 20.sp)
+            }
+            indices.forEach { index ->
+                val done = index in snapshot.checkedChallenges
+                val progress = snapshot.challengeProgress[index] ?: ChallengeProgress(
+                    completedDays = if (done) CHALLENGE_REQUIRED_DAYS else 0
+                )
+                val requiredDays = progress.requiredDays
+                val completedDays = progress.completedDays.coerceIn(0, requiredDays)
+                val validatedToday = progress.validatedToday
+                Card(
+                    shape = RoundedCornerShape(22.dp),
+                    colors = CardDefaults.cardColors(containerColor = if (done) CardLighter else CardColor),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(Modifier.fillMaxWidth().padding(19.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Text(CHALLENGES[index], color = Cream,
+                            fontWeight = FontWeight.SemiBold, fontSize = 17.sp, lineHeight = 24.sp)
+                        Text("$completedDays / $requiredDays jours validés", color = Mint,
+                            fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            for (day in 1..requiredDays) {
+                                val dayDone = day <= completedDays
+                                Box(Modifier.weight(1f).clip(RoundedCornerShape(12.dp))
+                                    .background(if (dayDone) Mint else MareePalette.Lilac)
+                                    .padding(vertical = 10.dp)
+                                    .clearAndSetSemantics {
+                                        contentDescription = "Jour $day, ${if (dayDone) "validé" else "à valider"}"
+                                    }, contentAlignment = Alignment.Center) {
+                                    Text("$day", color = if (dayDone) Color.White else MareePalette.Lavender,
+                                        fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                                }
                             }
                         }
-                    }
-                    when {
-                        done -> Text("Défi terminé", color = Mint,
-                            fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
-                        validatedToday -> Text("Validé aujourd’hui · reviens demain", color = MareePalette.Lavender,
-                            fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 21.sp)
-                        else -> {
-                            Button(onClick = { onComplete(index) }, enabled = progress.canValidateToday,
-                                modifier = Modifier.fillMaxWidth()) {
-                                Text("Valider aujourd’hui")
-                            }
-                            if (!progress.canValidateToday) {
-                                Text("La date du téléphone précède une validation déjà enregistrée. Vérifie les réglages de date pour continuer.",
-                                    color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
+                        when {
+                            done -> Text("Défi terminé", color = Mint,
+                                fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                            validatedToday -> Text("Validé aujourd’hui · reviens demain", color = MareePalette.Lavender,
+                                fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 21.sp)
+                            else -> {
+                                Button(onClick = { onComplete(index) }, enabled = progress.canValidateToday,
+                                    modifier = Modifier.fillMaxWidth()) {
+                                    Text("Valider aujourd’hui")
+                                }
+                                if (!progress.canValidateToday) {
+                                    Text("La date du téléphone précède une validation déjà enregistrée. Vérifie les réglages de date pour continuer.",
+                                        color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
+                                }
                             }
                         }
                     }
@@ -661,7 +744,8 @@ private fun ChallengeTab(snapshot: MareeSnapshot, onComplete: (Int) -> Unit) {
 @Composable
 private fun MoreTab(
     active: Boolean, notificationsGranted: Boolean, onSetup: () -> Unit, onPause: () -> Unit,
-    onNotifications: () -> Unit, onPrivacy: () -> Unit, onPremium: () -> Unit, onAccount: () -> Unit
+    onNotifications: () -> Unit, onPrivacy: () -> Unit, plan: PlanType,
+    onDemoPlan: (PlanType) -> Unit, onAccount: () -> Unit
 ) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())
         .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -692,16 +776,7 @@ private fun MoreTab(
                 color = Muted, lineHeight = 22.sp)
             TextButton(onClick = onAccount) { Text("Et la sauvegarde ?") }
         }
-        Card(shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(containerColor = MareePalette.Lilac)) {
-            Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("Marée Premium · à venir", color = MareePalette.Lavender,
-                    fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                Text("Une offre pour aller plus loin est à l’étude. Aucun paiement n’est disponible pour le moment.",
-                    color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
-                OutlinedButton(onClick = onPremium) { Text("En savoir plus") }
-            }
-        }
+        MembershipSection(plan, onDemoPlan)
         Text("Marée · Version ${BuildConfig.VERSION_NAME} · Conçue pour te rendre du temps.",
             color = Muted, fontSize = 12.sp)
         Spacer(Modifier.height(10.dp))

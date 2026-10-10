@@ -60,7 +60,8 @@ class LockActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val name = intent.getStringExtra("name") ?: "Cette application"
         val until = intent.getLongExtra("until", System.currentTimeMillis())
-        val points = intent.getIntExtra("points", 100)
+        @Suppress("DEPRECATION")
+        val points = (intent.extras?.get("points") as? Number)?.toDouble() ?: 100.0
         setContent {
             LockScreen(name, until, points) { goToHome(this); finish() }
         }
@@ -68,7 +69,7 @@ class LockActivity : ComponentActivity() {
 }
 
 @Composable
-private fun LockScreen(name: String, until: Long, points: Int, leave: () -> Unit) {
+private fun LockScreen(name: String, until: Long, points: Double, leave: () -> Unit) {
     BackHandler(onBack = leave)
     Column(
         modifier = Modifier.fillMaxSize().background(Color(0xFFAD2639)).padding(30.dp),
@@ -85,7 +86,7 @@ private fun LockScreen(name: String, until: Long, points: Int, leave: () -> Unit
         Spacer(Modifier.height(32.dp))
         Text("Déblocage dans ${remainingTime(until)}", color = Color.White, fontSize = 17.sp)
         Spacer(Modifier.height(12.dp))
-        Text("$points points d’honneur", color = Color.White, fontSize = 16.sp)
+        Text("${formatPoints(points)} points d’honneur", color = Color.White, fontSize = 16.sp)
         Spacer(Modifier.height(36.dp))
         ComposeButton(onClick = leave) { Text("Retour à l’accueil") }
     }
@@ -101,24 +102,24 @@ class LockOverlay(private val context: Context) {
     private var honor: TextView? = null
     private var appName = ""
     private var lockUntil = 0L
-    private var points = 0
+    private var points = 0.0
 
     private val refresh = object : Runnable {
         override fun run() {
             countdown?.text = "Déblocage dans ${remainingTime(lockUntil)}"
-            honor?.text = "$points points d’honneur"
+            honor?.text = "${formatPoints(points)} points d’honneur"
             handler.postDelayed(this, 1000)
         }
     }
 
-    fun show(name: String, until: Long, currentPoints: Int) {
+    fun show(name: String, until: Long, currentPoints: Double) {
         appName = name
         lockUntil = until
         points = currentPoints
         if (view == null) create()
         caption?.text = "$name est en pause pendant 24 h."
         countdown?.text = "Déblocage dans ${remainingTime(until)}"
-        honor?.text = "$points points d’honneur"
+        honor?.text = "${formatPoints(points)} points d’honneur"
     }
 
     private fun makeText(text: String, size: Float, bold: Boolean = false): TextView =
