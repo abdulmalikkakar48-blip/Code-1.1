@@ -1,0 +1,33 @@
+MARÉE — COMMENT TESTER L'APPLICATION SUR TON SAMSUNG
+
+1. Récupère l'APK fourni, ou celui généré dans app/build/outputs/apk/debug/app-debug.apk.
+2. Transfère-le sur ton téléphone Android 10 ou plus récent, puis ouvre-le pour l'installer.
+3. Autorise l'installation depuis la source choisie si Android le demande.
+4. Ouvre Marée : le nouvel accueil explique les accès et permet de lire la confidentialité.
+   Pour le suivi, choisis Marée dans les réglages Android et autorise les données
+   d’utilisation et l’affichage par-dessus les autres applications.
+   Les notifications sont facultatives. Tu peux aussi découvrir sans suivi.
+5. Ajoute une application à suivre et choisis sa limite en minutes.
+6. Consulte ton bilan et tes conseils dans Quotidien. Dans Plus, tu peux
+   mettre le suivi en pause, revoir les accès ou effacer les données.
+
+MISE À JOUR DEPUIS 0.1.0 : installe le nouvel APK sans désinstaller Marée
+pour conserver tes points, limites et défis. L’accueil des autorisations
+apparaîtra une fois avant l’accès à la nouvelle interface.
+
+Pour reconstruire l'APK depuis les sources, ouvre le projet dans Android Studio
+avec Java 17 et le SDK Android 34, ou lance :
+./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
+
+Le workflow GitHub "Construire l'APK Android" reste disponible pour un dépôt
+contenant le projet. Son artefact s'appelle "Maree-Android-debug-APK".
+
+La version fournie implémente le cœur du contrôle du temps d'écran, les points
+et les défis. Le coach IA, les abonnements et la synchronisation de compte
+nécessitent encore des développements.
+
+L'APK fourni est une version de test. Vérifie le suivi, les notifications et le
+verrou sur ton Samsung avant une diffusion publique.
+
+Avant diffusion publique : compléter l’identité du responsable dans la politique
+et les conditions de la messagerie. Le texte fourni ne garantit pas l’absence de sanctions.
