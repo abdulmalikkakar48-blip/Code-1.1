@@ -1,17 +1,19 @@
-# Installer Marée 0.2.1 sur Android
+# Installer Marée 0.3.0 sur Android
 
-Fichier : `Maree-Android.apk` (22,695,603 octets). Android 10 ou plus récent.
+Fichier : `Maree-Android.apk` (22,708,407 octets). Android 10 ou plus récent.
 
 1. Télécharge le fichier APK depuis ce dépôt GitHub.
 2. Sur ton téléphone, ouvre Mes fichiers → Téléchargements → Maree-Android.apk.
 3. Choisis Installer. Si Android le demande, autorise cette source dans les paramètres, puis reprends l’installation.
-4. Ne désinstalle pas ta version actuelle de Marée (0.1.0 ou 0.2.0) : cet APK utilise la même signature et met l’application à jour en conservant les données.
-5. Ouvre Marée. Le nouvel accueil explique les autorisations avant l’accès à l’application ; les notifications sont facultatives et un mode découverte sans suivi reste disponible.
+4. Installe la mise à jour sans désinstaller ta version actuelle de Marée (0.1.0, 0.2.0 ou 0.2.1) : cet APK utilise la même signature et conserve les données.
+5. Ouvre Défis. Chaque défi demande 5 jours différents : réalise l’action puis choisis « Valider aujourd’hui ». Les cinq étapes affichent ta progression. Une seule validation est possible par défi et par date locale ; aucune validation rétroactive.
 
-SHA-256 : `97d5a8336be26a96788cbc1c07fd72a147368a3346740ed5214807bef9c24fcb`.
+Une journée manquée n’efface pas la progression. La série se renouvelle tous les 21 jours et remet alors sa progression à zéro. Les points et le total de défis terminés restent conservés. Les défis déjà terminés dans une ancienne version restent terminés, sans nouveau bonus.
 
-Quatre onglets : Accueil, Quotidien, Défis, Plus. Thème clair, bilan des applications suivies, conseils locaux, pause du suivi, politique hors ligne et effacement local avec confirmation.
+Récompense : +5 points tous les 5 défis entièrement terminés, cumulés entre les séries. Aucun point n’est attribué pour un jour intermédiaire. Quotidien distingue les validations du jour et les défis complets.
 
-La compilation, 14 tests unitaires et Android Lint ont réussi. La signature est vérifiée. Le suivi complet reste à vérifier sur téléphone ; le coach IA, les abonnements et la synchronisation ne sont pas encore implémentés.
+SHA-256 : `98c0bb839d9a73455e59723a85bea70fd6b364a33d09aa47b5bb634ab176e68a`.
 
-La politique identifie Abdul Malik Kakar comme responsable à titre personnel, avec le contact abdulmalikkakar48@gmail.com. Les conditions de sa messagerie doivent être vérifiées avant diffusion publique ; ce texte ne certifie pas la conformité. Voir `docs/CONFIDENTIALITE_AVANT_PUBLICATION.md`.
+La compilation, 20 tests unitaires et Android Lint ont réussi. La signature est vérifiée. La validation visuelle et le suivi complet restent à vérifier sur téléphone ; le coach IA, les abonnements et la synchronisation ne sont pas encore implémentés.
+
+La politique identifie Abdul Malik Kakar comme responsable à titre personnel, avec le contact abdulmalikkakar48@gmail.com. Les dates de validation sont conservées localement jusqu’au renouvellement de la série ou à leur suppression. Les conditions de la messagerie doivent être vérifiées avant diffusion publique ; ce texte ne certifie pas la conformité. Voir `docs/CONFIDENTIALITE_AVANT_PUBLICATION.md`.

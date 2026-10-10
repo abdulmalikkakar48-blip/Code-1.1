@@ -1,8 +1,14 @@
 # Marée 🌊 — application Android de réduction du temps d'écran
 
-**Version actuelle : 0.2.1 (APK de test et code source).** Interface entièrement en français.
+**Version actuelle : 0.3.0 (APK de test et code source).** Interface entièrement en français.
 
 Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Material 3, `minSdk 29` (Android 10), `targetSdk 34`, package `com.maree.app`, Gradle 8.7, AGP 8.5.2, Kotlin 1.9.24.
+
+## Mise à jour 0.3.0
+
+Chaque défi demande désormais **5 jours de pratique**, avec une validation par jour selon la date locale du téléphone. L’écran Défis affiche les jours accomplis et un bouton « Valider aujourd’hui ». Les jours peuvent être espacés : une journée manquée n’efface pas la progression. Aucun jour antérieur ne peut être ajouté. Le bilan Quotidien indique également les validations du jour.
+
+Les points sont attribués après des défis entièrement terminés : **+5 points tous les 5 défis complets cumulés**, sans bonus pour les jours intermédiaires. Les séries continuent d’alterner tous les 21 jours ; leur renouvellement efface la progression de la série précédente. Les points, totaux et défis déjà terminés dans une ancienne version sont conservés, sans nouvelle récompense.
 
 ## Mise à jour 0.2.1
 
@@ -27,7 +33,7 @@ La politique est une information pour la version locale, pas une certification j
 - Verrou de 24 h à partir de l'atteinte de la limite, surcouche rouge `TYPE_APPLICATION_OVERLAY` au-dessus de l'application suivie, bouton d'accueil, compte à rebours. Le service réévalue le suivi toutes les 2 secondes.
 - Déblocage après 24 h et remise de la limite complète via une base locale (Android ne remet pas ses propres compteurs à zéro). Réinitialisation anticipée à −10 points, retrait de l'application qui supprime son verrou.
 - Points d'honneur : 100 au départ, minimum 0 ; +10 par période de 24 h respectant les limites, −5 pour la réouverture d'une app verrouillée (une fois au maximum par 30 s), −10 pour la réinitialisation, +5 tous les 5 défis cumulés.
-- Deux séries de 10 défis, en alternance tous les 21 jours. Défis validables une seule fois par cycle.
+- Deux séries de 10 défis, en alternance tous les 21 jours. Chaque défi demande 5 validations sur des jours différents, une au maximum par date locale. Un défi terminé n’est récompensé qu’une fois par cycle.
 - Blocage des ajouts, changements de limite et réinitialisations à 0 point hors premium ; les défis permettent de regagner des points.
 - Redémarrage du service après démarrage du téléphone *lorsque le système l'autorise*.
 
@@ -72,7 +78,7 @@ cd /workspace/Code-1.1
 
 L'activation utilise le proxy et le certificat de confiance fournis par la plateforme, avec vérification TLS conservée. Aucun secret n'est nécessaire pour les fonctions locales de cette version. Le script d'installation et les instructions de démarrage sont également enregistrés dans la configuration de l'environnement.
 
-Les tests de `SetupPreferencesTest` couvrent l’absence de démarrage avant l’accueil, le mode découverte, la pause/reprise et le caractère facultatif des notifications. Le test de suppression de `StoreTest` vérifie l’effacement des verrous, points, défis et clés supplémentaires, puis une reprise propre. Les autres tests de `StoreTest` couvrent les avertissements à 80 %, les verrous de 24 h, les récompenses et pénalités, les réinitialisations et les cycles de défis. Le rafraîchissement de l'interface laisse au service la création des alertes et verrous ; un redémarrage du service n'entraîne plus de pénalité à sa première observation. La liste des applications est chargée en arrière-plan, avec un indicateur de chargement et une action de nouvelle tentative en cas d'erreur.
+Les tests de `SetupPreferencesTest` couvrent l’absence de démarrage avant l’accueil, le mode découverte, la pause/reprise et le caractère facultatif des notifications. Le test de suppression de `StoreTest` vérifie l’effacement des verrous, points, défis, dates de validation et clés supplémentaires, puis une reprise propre. Les tests de défis vérifient les cinq jours distincts, les doubles validations et les redémarrages, les jours espacés, minuit et le changement d’heure, les récompenses après des défis complets, les rotations et la conservation des anciens défis sans recréditer les points. Les autres tests de `StoreTest` couvrent les avertissements à 80 %, les verrous de 24 h, les récompenses et pénalités et les réinitialisations. Le rafraîchissement de l'interface laisse au service la création des alertes et verrous ; un redémarrage du service n'entraîne plus de pénalité à sa première observation. La liste des applications est chargée en arrière-plan, avec un indicateur de chargement et une action de nouvelle tentative en cas d'erreur.
 
 ## Limites de fonctionnement Android et précautions
 

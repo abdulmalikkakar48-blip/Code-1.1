@@ -41,7 +41,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
@@ -76,6 +75,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.compose.ui.text.font.FontWeight
@@ -588,32 +589,68 @@ private fun ChallengeTab(snapshot: MareeSnapshot, onComplete: (Int) -> Unit) {
         .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(13.dp)) {
         Text("Petits défis,\ngrands changements.", fontSize = 31.sp,
             lineHeight = 37.sp, fontWeight = FontWeight.Bold)
-        Text("10 défis pour reprendre tes habitudes, sans pression.", color = Muted)
+        Text("10 habitudes à essayer, un jour à la fois.", color = Muted)
         SectionCard {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("Série en cours", fontWeight = FontWeight.Bold)
-                Text("$finished / 10", color = Mint)
-            }
+            Text("Série en cours · $finished / 10 défis terminés", fontWeight = FontWeight.Bold)
             LinearProgressIndicator(progress = { finished / 10f },
                 modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
                 color = Mint, trackColor = CardLighter)
-            Text("Nouvelle série dans ${snapshot.daysUntilChallenges} jours", color = Muted, fontSize = 13.sp)
-            Text("+5 points tous les 5 défis réussis (cumulés)", color = Mint, fontSize = 13.sp)
+            Text("Un défi se termine après $CHALLENGE_REQUIRED_DAYS jours différents. Pratique-le, puis valide : une seule fois par jour.",
+                color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
+            Text("Les jours peuvent être espacés, sans perte de progression. Nouvelle série dans ${snapshot.daysUntilChallenges} jours (cycle de 21 jours) : les défis en cours repartent alors à zéro.",
+                color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
+            Text("+5 points tous les 5 défis entièrement terminés, cumulés entre les séries. Aucun point pour une simple validation.",
+                color = Mint, fontSize = 13.sp, lineHeight = 20.sp)
         }
         indices.forEach { index ->
             val done = index in snapshot.checkedChallenges
+            val progress = snapshot.challengeProgress[index] ?: ChallengeProgress(
+                completedDays = if (done) CHALLENGE_REQUIRED_DAYS else 0
+            )
+            val requiredDays = progress.requiredDays
+            val completedDays = progress.completedDays.coerceIn(0, requiredDays)
+            val validatedToday = progress.validatedToday
             Card(
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(22.dp),
                 colors = CardDefaults.cardColors(containerColor = if (done) CardLighter else CardColor),
-                modifier = Modifier.fillMaxWidth().clickable(enabled = !done) { onComplete(index) }
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Row(Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(checked = done, onCheckedChange = { if (!done) onComplete(index) },
-                        enabled = !done)
-                    Spacer(Modifier.width(10.dp))
-                    Text(CHALLENGES[index], color = if (done) Muted else Cream,
-                        modifier = Modifier.weight(1f), fontSize = 14.sp)
+                Column(Modifier.fillMaxWidth().padding(19.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(CHALLENGES[index], color = Cream,
+                        fontWeight = FontWeight.SemiBold, fontSize = 17.sp, lineHeight = 24.sp)
+                    Text("$completedDays / $requiredDays jours validés", color = Mint,
+                        fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        for (day in 1..requiredDays) {
+                            val dayDone = day <= completedDays
+                            Box(Modifier.weight(1f).clip(RoundedCornerShape(12.dp))
+                                .background(if (dayDone) Mint else MareePalette.Lilac)
+                                .padding(vertical = 10.dp)
+                                .clearAndSetSemantics {
+                                    contentDescription = "Jour $day, ${if (dayDone) "validé" else "à valider"}"
+                                }, contentAlignment = Alignment.Center) {
+                                Text("$day", color = if (dayDone) Color.White else MareePalette.Lavender,
+                                    fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                            }
+                        }
+                    }
+                    when {
+                        done -> Text("Défi terminé", color = Mint,
+                            fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                        validatedToday -> Text("Validé aujourd’hui · reviens demain", color = MareePalette.Lavender,
+                            fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 21.sp)
+                        else -> {
+                            Button(onClick = { onComplete(index) }, enabled = progress.canValidateToday,
+                                modifier = Modifier.fillMaxWidth()) {
+                                Text("Valider aujourd’hui")
+                            }
+                            if (!progress.canValidateToday) {
+                                Text("La date du téléphone précède une validation déjà enregistrée. Vérifie les réglages de date pour continuer.",
+                                    color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
+                            }
+                        }
+                    }
                 }
             }
         }

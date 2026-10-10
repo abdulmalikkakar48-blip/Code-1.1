@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import org.json.JSONArray
 import org.json.JSONObject
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -11,6 +14,7 @@ import kotlin.math.ceil
 
 private const val DAY = 24L * 60 * 60 * 1000
 private const val CHALLENGE_CYCLE = 21L * DAY
+const val CHALLENGE_REQUIRED_DAYS = 5
 
 /** 20 défis : les deux groupes alternent tous les 21 jours. */
 val CHALLENGES = listOf(
@@ -54,7 +58,15 @@ data class MareeSnapshot(
     val challengeSeries: Int,
     val checkedChallenges: Set<Int>,
     val daysUntilChallenges: Int,
-    val totalCompletedChallenges: Int
+    val totalCompletedChallenges: Int,
+    val challengeProgress: Map<Int, ChallengeProgress> = emptyMap()
+)
+
+data class ChallengeProgress(
+    val completedDays: Int = 0,
+    val requiredDays: Int = CHALLENGE_REQUIRED_DAYS,
+    val validatedToday: Boolean = false,
+    val canValidateToday: Boolean = completedDays < requiredDays && !validatedToday
 )
 
 data class TickResult(
@@ -184,6 +196,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
             .putLong("challengeStart", start + elapsedCycles * CHALLENGE_CYCLE)
             .putLong("challengeNumber", prefs.getLong("challengeNumber", 0) + elapsedCycles)
             .putString("checked", "[]")
+            .remove("challengeDays")
             .apply()
     }
 
@@ -194,18 +207,60 @@ class Store internal constructor(private val prefs: SharedPreferences) {
         return result
     }
 
+    private fun localDate(now: Long): LocalDate =
+        Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalDate()
+
+    /** Dates locales, distinctes et ordonnées ; une journée sautée ne remet rien à zéro. */
+    private fun readChallengeDays(): MutableMap<Int, List<LocalDate>> {
+        val data = try { JSONObject(prefs.getString("challengeDays", "{}")) }
+            catch (_: Exception) { JSONObject() }
+        val result = mutableMapOf<Int, List<LocalDate>>()
+        for (index in CHALLENGES.indices) {
+            val array = data.optJSONArray(index.toString()) ?: continue
+            val days = (0 until array.length()).mapNotNull { i ->
+                try { LocalDate.parse(array.optString(i)) } catch (_: Exception) { null }
+            }.distinct().sorted().take(CHALLENGE_REQUIRED_DAYS)
+            if (days.isNotEmpty()) result[index] = days
+        }
+        return result
+    }
+
+    private fun challengeDaysJson(days: Map<Int, List<LocalDate>>): String {
+        val data = JSONObject()
+        for ((index, dates) in days.toSortedMap()) {
+            val array = JSONArray()
+            dates.forEach { array.put(it.toString()) }
+            data.put(index.toString(), array)
+        }
+        return data.toString()
+    }
+
+    /** Valide uniquement la date d'aujourd'hui ; le cinquième jour termine le défi. */
     fun completeChallenge(index: Int, now: Long = System.currentTimeMillis()): Boolean = synchronized(lock) {
         updateCycle(now)
         val series = (prefs.getLong("challengeNumber", 0) % 2).toInt()
-        if (index !in (series * 10 until (series + 1) * 10) || index in checked()) return@synchronized false
-        val done = checked() + index
-        val array = JSONArray()
-        done.sorted().forEach { array.put(it) }
-        val count = prefs.getInt("completedCount", 0) + 1
-        val reward = if (count % 5 == 0) 5 else 0
-        prefs.edit().putString("checked", array.toString())
-            .putInt("completedCount", count)
-            .putInt("points", points() + reward).apply()
+        val done = checked()
+        if (index !in (series * 10 until (series + 1) * 10) || index in done ||
+            now < prefs.getLong("challengeStart", now)) return@synchronized false
+        val today = localDate(now)
+        val days = readChallengeDays()
+        val previous = days[index].orEmpty()
+        if (previous.size >= CHALLENGE_REQUIRED_DAYS ||
+            previous.lastOrNull()?.let { today <= it } == true) return@synchronized false
+        val current = previous + today
+        days[index] = current
+        val editor = prefs.edit().putString("challengeDays", challengeDaysJson(days))
+        if (current.size == CHALLENGE_REQUIRED_DAYS) {
+            val array = JSONArray()
+            (done + index).sorted().forEach { array.put(it) }
+            val count = prefs.getInt("completedCount", 0) + 1
+            val reward = if (count % 5 == 0) 5 else 0
+            editor.putString("checked", array.toString())
+                .putInt("completedCount", count)
+                .putInt("points", points() + reward)
+        }
+        // Dates, défi terminé, compteur et récompense sont enregistrés ensemble.
+        editor.apply()
         true
     }
 
@@ -213,6 +268,20 @@ class Store internal constructor(private val prefs: SharedPreferences) {
         updateCycle(now)
         val cycleStart = prefs.getLong("challengeStart", now)
         val daysRemaining = ceil((cycleStart + CHALLENGE_CYCLE - now) / DAY.toDouble()).toInt().coerceAtLeast(0)
+        val series = (prefs.getLong("challengeNumber", 0) % 2L).toInt()
+        val done = checked()
+        val days = readChallengeDays()
+        val today = localDate(now)
+        val progress = (series * 10 until (series + 1) * 10).associateWith { index ->
+            val dates = days[index].orEmpty()
+            val completedDays = if (index in done) CHALLENGE_REQUIRED_DAYS else dates.size
+            ChallengeProgress(
+                completedDays = completedDays,
+                validatedToday = today in dates,
+                canValidateToday = completedDays < CHALLENGE_REQUIRED_DAYS && now >= cycleStart &&
+                    (dates.lastOrNull()?.let { today > it } ?: true)
+            )
+        }
         return MareeSnapshot(
             points(),
             apps.map {
@@ -221,8 +290,8 @@ class Store internal constructor(private val prefs: SharedPreferences) {
                     it.lockedUntil, it.warnedOn)
             },
             isPremium(),
-            (prefs.getLong("challengeNumber", 0) % 2L).toInt(),
-            checked(), daysRemaining, prefs.getInt("completedCount", 0)
+            series,
+            done, daysRemaining, prefs.getInt("completedCount", 0), progress
         )
     }
 

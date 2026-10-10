@@ -53,6 +53,8 @@ internal fun DailyTab(
     val lockedCount = snapshot.apps.count { it.isLocked }
     val tip = dailyTips[(today.toEpochDay() % dailyTips.size).toInt()]
     val currentChallenges = snapshot.checkedChallenges.size
+    val challengeIndices = if (snapshot.challengeSeries == 0) 0..9 else 10..19
+    val validatedToday = challengeIndices.count { snapshot.challengeProgress[it]?.validatedToday == true }
 
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState())
@@ -203,16 +205,21 @@ internal fun DailyTab(
         DailyCard(MareePalette.Surface) {
             Text("Chaque petit pas compte", fontWeight = FontWeight.Bold, fontSize = 20.sp)
             Text(
-                "$currentChallenges / 10 défis réalisés dans ta série actuelle.",
+                "$validatedToday défi${if (validatedToday > 1) "s" else ""} pratiqué${if (validatedToday > 1) "s" else ""} et validé${if (validatedToday > 1) "s" else ""} aujourd’hui.",
+                color = MareePalette.Lavender,
+                fontWeight = FontWeight.Medium
+            )
+            Text(
+                "$currentChallenges / 10 défis entièrement terminés dans ta série actuelle.",
                 color = MareePalette.Muted
             )
             Text(
-                "${snapshot.totalCompletedChallenges} défi${if (snapshot.totalCompletedChallenges > 1) "s" else ""} réalisé${if (snapshot.totalCompletedChallenges > 1) "s" else ""} au total.",
+                "${snapshot.totalCompletedChallenges} défi${if (snapshot.totalCompletedChallenges > 1) "s" else ""} terminé${if (snapshot.totalCompletedChallenges > 1) "s" else ""} au total.",
                 color = MareePalette.Teal,
                 fontWeight = FontWeight.Medium
             )
-            Text("Ces totaux couvrent plusieurs jours ; ils ne sont pas un résultat quotidien.",
-                color = MareePalette.Muted, fontSize = 12.sp)
+            Text("Un défi se termine après $CHALLENGE_REQUIRED_DAYS jours différents, qui peuvent être espacés. Les totaux de défis terminés couvrent plusieurs jours.",
+                color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
         }
 
         DailyCard(MareePalette.Lilac) {

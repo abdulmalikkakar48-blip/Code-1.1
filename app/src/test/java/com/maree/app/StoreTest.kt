@@ -8,8 +8,11 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 class StoreTest {
     private lateinit var prefs: MemoryPreferences
@@ -108,29 +111,158 @@ class StoreTest {
     }
 
     @Test
-    fun challengesRewardEachFiveDistinctCompletionsAndAlternateAfterTwentyOneDays() {
-        repeat(5) { assertTrue(store.completeChallenge(it, NOW)) }
+    fun challengesRewardOnlyAfterFiveWholeChallengesAndAlternateAfterTwentyOneDays() {
+        repeat(CHALLENGE_REQUIRED_DAYS - 1) { day ->
+            repeat(5) { index -> assertTrue(store.completeChallenge(index, NOW + day * DAY)) }
+            assertEquals(100, store.points())
+            assertEquals(0, prefs.getInt("completedCount", 0))
+        }
+        repeat(5) { index ->
+            assertTrue(store.completeChallenge(index, NOW + (CHALLENGE_REQUIRED_DAYS - 1) * DAY))
+            assertEquals(if (index == 4) 105 else 100, store.points())
+            assertEquals(index + 1, prefs.getInt("completedCount", 0))
+        }
         assertEquals(105, store.points())
-        assertFalse(store.completeChallenge(0, NOW))
+        assertEquals(5, prefs.getInt("completedCount", 0))
+        assertFalse(store.completeChallenge(0, NOW + (CHALLENGE_REQUIRED_DAYS - 1) * DAY))
         assertFalse(store.completeChallenge(10, NOW))
 
         val nextCycle = store.readSnapshot(reading(0), NOW + 21 * DAY)
         assertEquals(1, nextCycle.challengeSeries)
         assertTrue(nextCycle.checkedChallenges.isEmpty())
+        assertTrue(nextCycle.challengeProgress.values.all { it.completedDays == 0 })
+        assertFalse(prefs.contains("challengeDays"))
+        assertEquals(5, nextCycle.totalCompletedChallenges)
         assertTrue(store.completeChallenge(10, NOW + 21 * DAY))
         assertFalse(store.completeChallenge(0, NOW + 21 * DAY))
+    }
+
+    @Test
+    fun dailyValidationSurvivesRestartAndRejectsDoubleClicksAndEarlierDates() {
+        assertTrue(store.completeChallenge(0, NOW))
+        assertFalse(store.completeChallenge(0, NOW + 1))
+        assertFalse(Store(prefs).completeChallenge(0, NOW + 2))
+
+        val firstDay = store.readSnapshot(reading(0), NOW).challengeProgress.getValue(0)
+        assertEquals(1, firstDay.completedDays)
+        assertTrue(firstDay.validatedToday)
+        assertFalse(firstDay.canValidateToday)
+        assertTrue(store.completeChallenge(0, NOW + 3 * DAY))
+        assertFalse(store.completeChallenge(0, NOW + DAY))
+
+        val earlierDay = Store(prefs).readSnapshot(reading(0), NOW + DAY).challengeProgress.getValue(0)
+        assertEquals(2, earlierDay.completedDays)
+        assertFalse(earlierDay.validatedToday)
+        assertFalse(earlierDay.canValidateToday)
+    }
+
+    @Test
+    fun skippedDaysKeepProgressAndTheFifthDistinctDayCompletesTheChallengeOnce() {
+        val offsets = listOf(0L, 3L, 5L, 8L, 10L)
+        offsets.forEachIndexed { count, day ->
+            assertTrue(store.completeChallenge(0, NOW + day * DAY))
+            val snapshot = store.readSnapshot(reading(0), NOW + day * DAY)
+            assertEquals(count + 1, snapshot.challengeProgress.getValue(0).completedDays)
+            assertEquals(count == CHALLENGE_REQUIRED_DAYS - 1, 0 in snapshot.checkedChallenges)
+            assertEquals(if (count == CHALLENGE_REQUIRED_DAYS - 1) 1 else 0,
+                snapshot.totalCompletedChallenges)
+        }
+        assertFalse(Store(prefs).completeChallenge(0, NOW + 11 * DAY))
+        assertEquals(1, prefs.getInt("completedCount", 0))
+    }
+
+    @Test
+    fun rotationRemovesPartialProgressAndReactivatesAGroupAfterTwoCycles() {
+        assertTrue(store.completeChallenge(0, NOW))
+        assertTrue(store.completeChallenge(0, NOW + DAY))
+
+        val secondGroup = store.readSnapshot(reading(0), NOW + 21 * DAY)
+        assertEquals((10..19).toSet(), secondGroup.challengeProgress.keys)
+        assertTrue(secondGroup.challengeProgress.values.all { it.completedDays == 0 && it.canValidateToday })
+        assertFalse(prefs.contains("challengeDays"))
+        assertTrue(store.completeChallenge(10, NOW + 21 * DAY))
+
+        val originalGroup = store.readSnapshot(reading(0), NOW + 42 * DAY)
+        assertEquals(0, originalGroup.challengeSeries)
+        assertEquals(0, originalGroup.challengeProgress.getValue(0).completedDays)
+        assertTrue(originalGroup.checkedChallenges.isEmpty())
+        assertTrue(store.completeChallenge(0, NOW + 42 * DAY))
+    }
+
+    @Test
+    fun fifthWholeChallengeRewardsEvenWhenEarlierCompletionsBelongToAPreviousSeries() {
+        repeat(CHALLENGE_REQUIRED_DAYS) { day ->
+            repeat(4) { index -> assertTrue(store.completeChallenge(index, NOW + day * DAY)) }
+        }
+        assertEquals(100, store.points())
+        assertEquals(4, prefs.getInt("completedCount", 0))
+        val nextCycle = store.readSnapshot(reading(0), NOW + 21 * DAY)
+        val pointsAfterDisciplineRewards = nextCycle.points
+        assertEquals(4, nextCycle.totalCompletedChallenges)
+
+        repeat(CHALLENGE_REQUIRED_DAYS) { day ->
+            assertTrue(store.completeChallenge(10, NOW + (21 + day) * DAY))
+            assertEquals(pointsAfterDisciplineRewards + if (day == 4) 5 else 0, store.points())
+        }
+        assertEquals(5, prefs.getInt("completedCount", 0))
+    }
+
+    @Test
+    fun legacyCompletedChallengesRemainCompleteWithoutRecreditingPointsOrCounts() {
+        prefs.edit().putString("checked", "[0,1]").putInt("completedCount", 12)
+            .putInt("points", 137).apply()
+        val upgraded = Store(prefs)
+        val migrated = upgraded.readSnapshot(reading(0), NOW)
+
+        assertEquals(setOf(0, 1), migrated.checkedChallenges)
+        assertEquals(CHALLENGE_REQUIRED_DAYS, migrated.challengeProgress.getValue(0).completedDays)
+        assertFalse(migrated.challengeProgress.getValue(0).canValidateToday)
+        assertEquals(12, migrated.totalCompletedChallenges)
+        assertEquals(137, migrated.points)
+        assertFalse(upgraded.completeChallenge(0, NOW))
+        repeat(CHALLENGE_REQUIRED_DAYS) { day ->
+            assertTrue(upgraded.completeChallenge(2, NOW + day * DAY))
+            assertEquals(137, upgraded.points())
+        }
+        assertEquals(13, prefs.getInt("completedCount", 0))
+        assertEquals(setOf(0, 1, 2), upgraded.readSnapshot(reading(0), NOW).checkedChallenges)
+    }
+
+    @Test
+    fun localMidnightAllowsValidationWithoutWaitingTwentyFourHoursIncludingDst() {
+        val previousZone = TimeZone.getDefault()
+        try {
+            TimeZone.setDefault(TimeZone.getTimeZone("Europe/Paris"))
+            fun time(value: String): Long = LocalDateTime.parse(value)
+                .atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+            val beforeMidnight = time("2027-03-27T23:59:00")
+            prefs.edit().putLong("challengeStart", beforeMidnight).putLong("periodStart", beforeMidnight).apply()
+
+            assertTrue(store.completeChallenge(0, beforeMidnight))
+            assertTrue(store.completeChallenge(0, time("2027-03-28T00:01:00")))
+            assertFalse(Store(prefs).completeChallenge(0, time("2027-03-28T23:59:00")))
+            assertTrue(store.completeChallenge(0, time("2027-03-29T00:01:00")))
+            val progress = store.readSnapshot(reading(0), time("2027-03-29T00:02:00"))
+                .challengeProgress.getValue(0)
+            assertEquals(3, progress.completedDays)
+            assertTrue(progress.validatedToday)
+        } finally {
+            TimeZone.setDefault(previousZone)
+        }
     }
 
     @Test
     fun deletingPersonalDataRemovesLocksProgressAndAllStoredKeysBeforeRestart() {
         store.tick(reading(5 * MINUTE), NOW)
         assertTrue(store.penalizeReopening(PACKAGE, NOW + 1))
-        repeat(5) { assertTrue(store.completeChallenge(it, NOW)) }
+        repeat(CHALLENGE_REQUIRED_DAYS) { day -> assertTrue(store.completeChallenge(0, NOW + day * DAY)) }
+        assertTrue(store.completeChallenge(1, NOW))
         // Même une clé ajoutée à l'avenir ne doit pas survivre à l'effacement complet.
         prefs.edit().putBoolean("premium", true).putString("futurePersonalSetting", "private").apply()
         assertTrue(prefs.contains("apps"))
         assertTrue(prefs.contains("checked"))
         assertTrue(prefs.contains("completedCount"))
+        assertTrue(prefs.contains("challengeDays"))
 
         assertTrue(store.clearPersonalData())
 
@@ -145,6 +277,8 @@ class StoreTest {
         assertEquals(0, snapshot.challengeSeries)
         assertTrue(snapshot.checkedChallenges.isEmpty())
         assertEquals(0, snapshot.totalCompletedChallenges)
+        assertTrue(snapshot.challengeProgress.values.all { it.completedDays == 0 })
+        assertFalse(prefs.contains("challengeDays"))
         assertEquals(21, snapshot.daysUntilChallenges)
         assertFalse(prefs.contains("futurePersonalSetting"))
         assertTrue(prefs.contains("periodStart"))

@@ -31,7 +31,8 @@ object PrivacyContent {
                     "il est utilisé temporairement en mémoire, sans historique enregistré par Marée.",
                 "Marée enregistre sur l’appareil : les identifiants des applications choisies, leurs " +
                     "limites, les durées de référence utilisées pour les réinitialisations, les dates " +
-                    "de verrouillage, d’alerte et de pénalité, les points, les défis cochés et accomplis, " +
+                    "de verrouillage, d’alerte et de pénalité, les points, les défis accomplis et " +
+                    "les dates locales des validations quotidiennes, " +
                     "et les dates des cycles de progression. Android conserve ses propres statistiques " +
                     "d’utilisation, indépendamment de Marée.",
                 "Marée ne lit pas tes messages, le contenu de tes écrans, tes contacts, tes photos " +
@@ -99,7 +100,10 @@ object PrivacyContent {
                     "suivies, les verrous, les points et les défis. À la prochaine utilisation, " +
                     "la progression repart avec les valeurs initiales. Cette action ne supprime " +
                     "pas les statistiques d’Android et ne révoque pas automatiquement les " +
-                    "autorisations accordées dans les paramètres du téléphone."
+                    "autorisations accordées dans les paramètres du téléphone.",
+                "Les dates de validation des défis sont effacées au renouvellement de la série, " +
+                    "tous les 21 jours. Le nombre total de défis terminés et les points restent " +
+                    "jusqu’à l’effacement complet."
             )),
             PrivacySection("Tes droits et tes choix", listOf(
                 "Tu peux consulter et modifier tes limites, retirer une application et effacer " +
