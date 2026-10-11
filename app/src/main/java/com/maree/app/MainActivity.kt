@@ -493,6 +493,7 @@ private fun HomeTab(
 ) {
     var appQuery by rememberSaveable { mutableStateOf("") }
     var appSort by rememberSaveable { mutableIntStateOf(0) }
+    val appLimit = snapshot.plan.maxTrackedApps
     val displayedApps = if (snapshot.plan == PlanType.ULTRA) {
         val matching = snapshot.apps.filter { getName(it.packageName).contains(appQuery, ignoreCase = true) }
         when (appSort) {
@@ -542,17 +543,18 @@ private fun HomeTab(
             verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
                 Text("Mes applications", color = Cream, fontSize = 22.sp, fontWeight = FontWeight.Bold)
-                Text("${snapshot.apps.size} / ${snapshot.plan.maxTrackedApps} suivies", color = Muted, fontSize = 13.sp)
+                Text(if (appLimit == null) "${snapshot.apps.size} suivies · illimité"
+                    else "${snapshot.apps.size} / $appLimit suivies", color = Muted, fontSize = 13.sp)
             }
             Button(onClick = onAdd, shape = RoundedCornerShape(16.dp),
-                enabled = snapshot.points > 0 && snapshot.apps.size < snapshot.plan.maxTrackedApps) {
+                enabled = snapshot.points > 0 && (appLimit == null || snapshot.apps.size < appLimit)) {
                 Text("＋ Ajouter", fontWeight = FontWeight.Bold)
             }
         }
         if (snapshot.points <= 0) {
             Text("Tes défis te permettent de regagner des points pour modifier tes limites.", color = Warning, fontSize = 13.sp)
         }
-        if (snapshot.apps.size > snapshot.plan.maxTrackedApps) {
+        if (appLimit != null && snapshot.apps.size > appLimit) {
             Text("Tes applications restent suivies. Pour en ajouter, retire des applications jusqu’à passer sous la limite de ton offre.",
                 color = Muted, fontSize = 13.sp, lineHeight = 19.sp)
         }

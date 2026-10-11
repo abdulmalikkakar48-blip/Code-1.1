@@ -1,19 +1,23 @@
 # Marée — application Android de réduction du temps d'écran
 
+## Mise à jour 0.6.0
+
+Plafonds : **10 applications en Gratuit**, **50 en Premium** et **aucun plafond commercial en Ultra** (applications compatibles du téléphone). Une baisse d’offre conserve les données et bloque uniquement les nouveaux ajouts au-delà du plafond. Les restrictions à 0 point restent actives dans toutes les offres. Le [choix des plafonds](docs/CALIBRAGE_OFFRES.md) expose la justification et les limites de la comparaison.
+
 ## Mise à jour 0.5.0
 
 Le nom **Marée** est conservé et le nouveau logo associe pause, progression et accents menthe/corail. L’identifiant Android et les données restent stables pour la mise à jour. Voir [l’identité visuelle](docs/IDENTITE_VISUELLE.md).
 
 Pour commencer la distribution et les paiements, ouvre [le guide de démarrage](docs/DEMARRER_PUBLICATION.md). Il mène aux étapes [Google Play](docs/PUBLICATION_GOOGLE_PLAY.md) et [abonnements](docs/ABONNEMENTS.md). Le travail porte sur Android ; la version iPhone est reportée. L’APK reste une version de test ; aucun paiement ni coach IA n’est connecté.
 
-**Version actuelle : 0.5.0 (APK de test et code source).** Interface entièrement en français.
+**Version actuelle : 0.6.0 (APK de test et code source).** Interface entièrement en français.
 
 Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Material 3, `minSdk 29` (Android 10), `targetSdk 34`, package `com.maree.app`, Gradle 8.7, AGP 8.5.2, Kotlin 1.9.24.
 
 ## Mise à jour 0.4.0
 
 - La règle de 0 point s’applique à toutes les offres : aucun ajout ou changement de limite à 0 point. Une réinitialisation exige réellement ses 10 points ; le retrait d’une application et l’effacement des données restent disponibles.
-- Offres prévues : Gratuit, 5 applications ; Premium, 13 applications pour 10 €/mois ; Ultra, 25 applications pour 20 €/mois. L’APK de test affiche un mode démonstration gratuit dans Plus, pour tester les limites et les fonctions locales. Il ne vend aucun abonnement et n’effectue aucun paiement.
+- Offres recalibrées en 0.6.0 : Gratuit, 10 applications ; Premium, 50 applications pour 10 €/mois ; Ultra, toutes les applications compatibles du téléphone sans plafond commercial pour 20 €/mois. L’APK de test affiche un mode démonstration gratuit dans Plus, pour tester les limites et les fonctions locales. Il ne vend aucun abonnement et n’effectue aucun paiement.
 - Défis → Mes défis : Premium et Ultra permettent de créer un titre avec exactement trois étapes et une durée choisie de 2 à 365 jours. Les trois étapes doivent être cochées pour valider une journée. Les jours peuvent être espacés ; ces défis sont indépendants de la rotation standard de 21 jours. La récompense totale est de 0,25 point une seule fois après la durée choisie. Elle n’augmente pas le compteur de bonus des défis Marée.
 - Les points sont enregistrés en quarts entiers, pour conserver exactement 0,25 / 0,50 / 0,75 point. Les anciens soldes sont migrés une fois sans perte ni double crédit. Les cases du jour et la progression survivent à la relance.
 - Ultra ajoute la recherche dans les applications suivies et le tri par nom, temps passé ou proximité de la limite. Le coach IA illimité par messages est prévu pour Ultra, mais reste à développer et à financer.
@@ -43,7 +47,7 @@ La politique est une information pour la version locale, pas une certification j
 ## Ce qui est codé dans l'application Android
 
 - Sélection des applications installées disposant d'une icône de lancement ; limite quotidienne par paliers de 5 minutes, à partir de 5 minutes, 30 minutes par défaut.
-- Maximum de 5 applications en gratuit ; modification et suppression de la liste.
+- Maximum de 10 applications en gratuit ; modification et suppression de la liste.
 - Mesure en millisecondes de l'utilisation au premier plan à partir de `UsageStatsManager` / `UsageEvents` ; affichage du temps en minutes et d'une barre de progression.
 - Avertissement à 80 % (une fois par application et par jour, sous réserve de l'autorisation des notifications).
 - Verrou de 24 h à partir de l'atteinte de la limite, surcouche rouge `TYPE_APPLICATION_OVERLAY` au-dessus de l'application suivie, bouton d'accueil, compte à rebours. Le service réévalue le suivi toutes les 2 secondes.

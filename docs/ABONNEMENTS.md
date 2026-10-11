@@ -8,11 +8,11 @@ Le nom de travail est Marée ; sa disponibilité commerciale doit encore être v
 
 | Offre | Prix prévu | Applications suivies | Fonctions prévues dans l’offre |
 | --- | --- | --- | --- |
-| Gratuit | 0 € | 5 | Limites locales et défis proposés à tous |
-| Premium | 10 € par mois | 13 | Fonctions gratuites et défis personnels à trois étapes |
-| Ultra | 20 € par mois | 25 | Fonctions Premium, recherche et tri des applications |
+| Gratuit | 0 € | 10 | Limites locales et défis proposés à tous |
+| Premium | 10 € par mois | 50 | Fonctions gratuites et défis personnels à trois étapes |
+| Ultra | 20 € par mois | Toutes les applications compatibles, sans plafond commercial | Fonctions Premium, recherche et tri des applications |
 
-La recherche et le tri fonctionnent déjà dans la démonstration Ultra. Les défis personnels demandent trois étapes par journée, une durée choisie de 2 à 365 jours et donnent 0,25 point une seule fois à la fin. Le coach IA illimité reste un projet futur : ne le vends pas comme une fonction disponible tant qu’il n’est pas construit, testé et expliqué dans la politique de confidentialité.
+Les plafonds ont été recalibrés en version 0.6.0 ; voir [la justification](CALIBRAGE_OFFRES.md). La recherche et le tri fonctionnent déjà dans la démonstration Ultra. Les défis personnels demandent trois étapes par journée, une durée choisie de 2 à 365 jours et donnent 0,25 point une seule fois à la fin. Le coach IA illimité reste un projet futur : ne le vends pas comme une fonction disponible tant qu’il n’est pas construit, testé et expliqué dans la politique de confidentialité.
 
 À 0 point, ajouter une application ou modifier sa limite reste bloqué dans **toutes** les offres. Réinitialiser une limite exige réellement 10 points. Un abonnement ne doit pas contourner ces règles.
 

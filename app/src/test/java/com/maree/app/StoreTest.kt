@@ -292,18 +292,30 @@ class StoreTest {
         for (plan in PlanType.entries) {
             store.packages().forEach { store.removeApp(it) }
             store.setDemoPlan(plan)
-            repeat(plan.maxTrackedApps) { assertNull(store.addApp("example.app$it", 5, 0)) }
-            assertTrue(store.addApp("example.extra", 5, 0) != null)
-            assertEquals(plan.maxTrackedApps, store.trackedCount())
+            val appLimit = plan.maxTrackedApps
+            repeat(appLimit ?: 150) { assertNull(store.addApp("example.app$it", 5, 0)) }
+            if (appLimit != null) {
+                assertTrue(store.addApp("example.extra", 5, 0) != null)
+                assertEquals(appLimit, store.trackedCount())
+            } else {
+                assertNull(store.addApp("example.extra", 5, 0))
+                assertEquals(151, store.trackedCount())
+            }
             assertEquals(plan != PlanType.FREE, store.isPremium())
         }
-        assertEquals(25, store.trackedCount())
+        assertEquals(151, store.trackedCount())
+        assertEquals(151, Store(prefs).trackedCount())
+        assertEquals(PlanType.ULTRA, Store(prefs).planType())
+        assertTrue(store.addApp("example.app0", 5, 0) != null)
+        store.setDemoPlan(PlanType.PREMIUM)
+        assertEquals(151, store.trackedCount())
+        assertTrue(store.addApp("example.above-premium", 5, 0) != null)
         store.setDemoPlan(PlanType.FREE)
-        assertEquals(25, store.trackedCount())
-        assertTrue(store.addApp("example.extra", 5, 0) != null)
-        assertEquals(5, PlanType.FREE.maxTrackedApps)
-        assertEquals(13, PlanType.PREMIUM.maxTrackedApps)
-        assertEquals(25, PlanType.ULTRA.maxTrackedApps)
+        assertEquals(151, store.trackedCount())
+        assertTrue(store.addApp("example.above-free", 5, 0) != null)
+        assertEquals(10, PlanType.FREE.maxTrackedApps)
+        assertEquals(50, PlanType.PREMIUM.maxTrackedApps)
+        assertNull(PlanType.ULTRA.maxTrackedApps)
         assertEquals(10, PlanType.PREMIUM.monthlyPriceEuros)
         assertEquals(20, PlanType.ULTRA.monthlyPriceEuros)
     }

@@ -20,12 +20,12 @@ Ensuite, suis dans cet ordre :
 
 Les programmes de paiement alternatif dépendent du pays et de l’éligibilité. Pour débuter sur Google Play, ne construis pas le lancement sur une exception encore non vérifiée. La commission standard connue des abonnements Google est de 15 %, à reconfirmer ; le montant reçu dépend aussi des taxes, remboursements et autres ajustements.
 
-Le suivi local de 13 ou 25 applications n’a pas de coût facturé par application. Il utilise le téléphone et peut consommer davantage de batterie. Les coûts externes viennent surtout du futur coach IA, du serveur éventuel, des comptes développeur et des paiements. Un coach « illimité » doit avoir un modèle économique viable avant sa commercialisation.
+Le suivi local de 50 applications ou de toutes les applications compatibles n’a pas de coût facturé par application. Il utilise le téléphone et peut consommer davantage de batterie. Les coûts externes viennent surtout du futur coach IA, du serveur éventuel, des comptes développeur et des paiements. Un coach « illimité » doit avoir un modèle économique viable avant sa commercialisation.
 
 Si tu encaisses régulièrement des revenus en France, il faut déclarer l’activité sous un statut adapté ; une micro-entreprise peut être une piste selon ta situation. Le compte développeur et le profil bancaire ne remplacent pas ces démarches. Consulte [le portail officiel de création d’entreprise](https://formalites.entreprises.gouv.fr/) pour préparer cette étape.
 
 ## Où en est le projet ?
 
-Marée 0.5.0 apporte le nouveau logo tout en conservant le nom, l’identifiant Android, la signature de test et les données locales. Les limites, les points et les défis sont déjà présents. Les vrais achats, le coach IA et la synchronisation restent à développer. La version iPhone est reportée ; la priorité est la publication Android.
+Marée 0.6.0 propose les plafonds 10 / 50 / illimité. Le nom, le nouveau logo, l’identifiant Android, la signature de test et les données locales sont conservés. Les limites, les points et les défis sont déjà présents. Les vrais achats, le coach IA et la synchronisation restent à développer. La version iPhone est reportée ; la priorité est la publication Android.
 
 Les liens officiels figurent dans chaque guide. Les pages Google ont été bloquées par le proxy de cet environnement le 10 octobre 2026 : les tarifs et règles connus sont donc à reconfirmer dans Play Console avant publication. Aucun compte ni paiement n’a été créé.

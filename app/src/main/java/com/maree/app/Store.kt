@@ -176,7 +176,9 @@ class Store internal constructor(private val prefs: SharedPreferences) {
         if (!canEdit()) return@synchronized "Tu n'as plus de points. Fais un défi ou attends le prochain bonus."
         val apps = readApps()
         val plan = planType()
-        if (apps.size >= plan.maxTrackedApps) return@synchronized "${plan.maxTrackedApps} applications maximum avec l’offre ${plan.displayName}."
+        val appLimit = plan.maxTrackedApps
+        if (appLimit != null && apps.size >= appLimit)
+            return@synchronized "$appLimit applications maximum avec l’offre ${plan.displayName}."
         if (apps.any { it.packageName == packageName }) return@synchronized "Cette application est déjà suivie."
         if (limitMinutes < 5 || limitMinutes % 5 != 0) return@synchronized "Choisis un multiple de 5 minutes."
         apps.add(TrackedApp(packageName, limitMinutes, rawTodayMillis))

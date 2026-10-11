@@ -54,7 +54,8 @@ internal fun MembershipSection(plan: PlanType, onDemoPlan: (PlanType) -> Unit) {
                         fontWeight = FontWeight.Bold, fontSize = 21.sp)
                     Text(if (option == PlanType.FREE) "Gratuit" else "${option.monthlyPriceEuros} € / mois · à venir",
                         color = accent, fontWeight = FontWeight.Bold, fontSize = 25.sp)
-                    Text("Jusqu’à ${option.maxTrackedApps} applications suivies",
+                    Text(option.maxTrackedApps?.let { "Jusqu’à $it applications suivies" }
+                        ?: "Applications illimitées · toutes celles compatibles sur ton téléphone",
                         fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
                     Text("Défis Marée et suivi local du temps d’écran", color = MareePalette.Muted,
                         fontSize = 14.sp, lineHeight = 21.sp)

@@ -7,8 +7,9 @@ const val CUSTOM_MIN_DAYS = 2
 const val CUSTOM_MAX_DAYS = 365
 const val MAX_ACTIVE_CUSTOM_CHALLENGES = 10
 
-enum class PlanType(val maxTrackedApps: Int, val monthlyPriceEuros: Int) {
-    FREE(5, 0), PREMIUM(13, 10), ULTRA(25, 20);
+/** null représente l’absence de plafond commercial sur les applications compatibles. */
+enum class PlanType(val maxTrackedApps: Int?, val monthlyPriceEuros: Int) {
+    FREE(10, 0), PREMIUM(50, 10), ULTRA(null, 20);
 
     val canCreateCustomChallenges: Boolean get() = this != FREE
     val displayName: String get() = when (this) {
