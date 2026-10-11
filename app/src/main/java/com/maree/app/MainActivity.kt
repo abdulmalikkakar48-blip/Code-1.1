@@ -280,7 +280,7 @@ private fun MareeApp() {
             snackbarHost = { SnackbarHost(snackbars) },
             bottomBar = {
                 val extraNavHeight = (LocalDensity.current.fontScale - 1f).coerceAtLeast(0f) * 28f
-                NavigationBar(containerColor = CardColor, tonalElevation = 0.dp,
+                NavigationBar(containerColor = MareePalette.DeepTeal, tonalElevation = 0.dp,
                     modifier = Modifier.heightIn(min = (80f + extraNavHeight).dp)) {
                     listOf(
                         Triple("Accueil", R.drawable.ic_nav_home, 0),
@@ -296,9 +296,9 @@ private fun MareeApp() {
                                 fontWeight = FontWeight.Medium, maxLines = 2,
                                 textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis) },
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = Mint, selectedTextColor = Mint,
-                                indicatorColor = MareePalette.Mint, unselectedIconColor = Muted,
-                                unselectedTextColor = Muted
+                                selectedIconColor = MareePalette.DeepTeal, selectedTextColor = MareePalette.Mint,
+                                indicatorColor = MareePalette.Mint, unselectedIconColor = Color(0xFFAFBEB5),
+                                unselectedTextColor = Color(0xFFAFBEB5)
                             )
                         )
                     }
@@ -521,34 +521,20 @@ private fun HomeTab(
                 "Des limites simples. Plus de place pour toi.")
         }
         item {
-            Card(shape = RoundedCornerShape(28.dp),
-                colors = CardDefaults.cardColors(containerColor = MareePalette.DeepTeal)) {
-                Column(Modifier.fillMaxWidth().padding(24.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically) {
-                        Text("CAPITAL DISCIPLINE", color = MareePalette.Mint, fontSize = 11.sp,
-                            letterSpacing = 1.sp, fontWeight = FontWeight.Medium)
-                        Icon(painterResource(R.drawable.ic_nav_daily), contentDescription = null,
-                            tint = MareePalette.Mint, modifier = Modifier.size(22.dp))
-                    }
-                    Row(verticalAlignment = Alignment.Bottom,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(formatPoints(snapshot.points), color = Color.White,
-                            fontSize = 52.sp, lineHeight = 58.sp, fontWeight = FontWeight.Bold)
-                        Text("points", color = MareePalette.Mint, fontSize = 15.sp,
-                            modifier = Modifier.padding(bottom = 6.dp))
-                    }
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically) {
-                        Text("La régularité compte.", color = MareePalette.Mint,
-                            fontSize = 13.sp, modifier = Modifier.weight(1f))
-                        TextButton(onClick = onChallenges,
-                            colors = ButtonDefaults.textButtonColors(contentColor = MareePalette.Mint)) {
-                            Text("Voir les défis →", fontSize = 13.sp)
-                        }
-                    }
-                }
+            DisciplineCard(snapshot, onChallenges)
+        }
+        item {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                HomeMetric(
+                    value = snapshot.apps.size.toString(),
+                    label = "Applications suivies",
+                    modifier = Modifier.weight(1f)
+                )
+                HomeMetric(
+                    value = snapshot.checkedChallenges.size.toString(),
+                    label = "Défis terminés · série",
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
         if (!active) item {
@@ -893,4 +879,59 @@ private fun MinutesDialog(
         confirmButton = { Button(onClick = { onConfirm(minutes) }) { Text("Confirmer") } },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Annuler") } }
     )
+}
+
+@Composable
+private fun DisciplineCard(snapshot: MareeSnapshot, onChallenges: () -> Unit) {
+    Card(shape = RoundedCornerShape(28.dp),
+        colors = CardDefaults.cardColors(containerColor = MareePalette.DeepTeal)) {
+        Column(Modifier.fillMaxWidth().padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text("TON CAPITAL\nDISCIPLINE", color = MareePalette.Mint,
+                    style = MaterialTheme.typography.labelMedium, letterSpacing = 1.5.sp,
+                    modifier = Modifier.weight(1f))
+                Surface(color = MareePalette.Mint, shape = CircleShape) {
+                    Icon(painterResource(R.drawable.ic_nav_challenges), contentDescription = null,
+                        tint = MareePalette.DeepTeal,
+                        modifier = Modifier.padding(12.dp).size(24.dp))
+                }
+            }
+            Column {
+                Text(formatPoints(snapshot.points), color = Color.White,
+                    fontSize = 64.sp, lineHeight = 70.sp, fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = (-2).sp)
+                Text("points pour avancer", color = Color(0xFFCBDBD0),
+                    style = MaterialTheme.typography.bodyMedium)
+            }
+            HorizontalDivider(color = Color.White.copy(alpha = 0.18f))
+            Text("Chaque petit pas compte.", color = Color.White,
+                style = MaterialTheme.typography.titleMedium)
+            Button(onClick = onChallenges,
+                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MareePalette.Mint,
+                    contentColor = MareePalette.DeepTeal)) {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text("Explorer les défis", style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier.weight(1f))
+                    Text("→", fontSize = 22.sp)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun HomeMetric(value: String, label: String, modifier: Modifier = Modifier) {
+    Surface(modifier = modifier, color = MareePalette.Surface,
+        shape = RoundedCornerShape(20.dp), border = BorderStroke(1.dp, MareePalette.Outline)) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(value, color = MareePalette.Teal, fontSize = 28.sp,
+                lineHeight = 32.sp, fontWeight = FontWeight.Bold)
+            Text(label, color = MareePalette.Muted, style = MaterialTheme.typography.bodySmall)
+        }
+    }
 }

@@ -42,9 +42,9 @@ internal fun BrandIcon(size: Dp = 36.dp) {
 @Composable
 internal fun ScreenHeading(eyebrow: String, title: String, description: String? = null) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Surface(color = MareePalette.Subtle, shape = RoundedCornerShape(50)) {
+        Surface(color = MareePalette.Mint, shape = RoundedCornerShape(6.dp)) {
             Text(eyebrow, color = MareePalette.Teal, style = MaterialTheme.typography.labelMedium,
-                letterSpacing = 1.sp, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
+                letterSpacing = 1.4.sp, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
         }
         Text(title, color = MareePalette.Ink, style = MaterialTheme.typography.headlineMedium)
         if (description != null) Text(description, color = MareePalette.Muted,
@@ -53,10 +53,10 @@ internal fun ScreenHeading(eyebrow: String, title: String, description: String? 
 }
 
 @Composable
-internal fun AppCardSurface(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
-    Card(modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MareePalette.Surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+internal fun AppCardSurface(modifier: Modifier = Modifier, containerColor: Color = MareePalette.Surface, content: @Composable ColumnScope.() -> Unit) {
+    Card(modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         border = BorderStroke(1.dp, MareePalette.Outline)) {
         Column(Modifier.fillMaxWidth().padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp), content = content)

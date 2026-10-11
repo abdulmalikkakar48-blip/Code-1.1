@@ -14,14 +14,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 internal object MareePalette {
-    val Background = Color(0xFFF7F8F4)
+    val Background = Color(0xFFF2F4F0)
     val Surface = Color.White
     val Subtle = Color(0xFFEEF4EE)
-    val Ink = Color(0xFF1D352C)
+    val Ink = Color(0xFF10251E)
     val Muted = Color(0xFF5E7065)
-    val Teal = Color(0xFF245A43)
-    val DeepTeal = Color(0xFF183D2D)
-    val Mint = Color(0xFFD6ECD9)
+    val Teal = Color(0xFF174D38)
+    val DeepTeal = Color(0xFF102B22)
+    val Mint = Color(0xFFC9F79B)
     // Les anciens rôles partagent désormais une seule palette pour garder les écrans cohérents.
     val Coral = Teal
     val Peach = Subtle
@@ -58,8 +58,8 @@ private val MareeScheme = lightColorScheme(
 )
 
 private val MareeTypography = Typography(
-    headlineLarge = TextStyle(fontFamily = FontFamily.Serif, fontSize = 34.sp, lineHeight = 41.sp, fontWeight = FontWeight.Medium),
-    headlineMedium = TextStyle(fontFamily = FontFamily.Serif, fontSize = 30.sp, lineHeight = 37.sp, fontWeight = FontWeight.Medium),
+    headlineLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontSize = 36.sp, lineHeight = 40.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-1).sp),
+    headlineMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontSize = 32.sp, lineHeight = 36.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.8).sp),
     titleLarge = TextStyle(fontSize = 20.sp, lineHeight = 27.sp, fontWeight = FontWeight.SemiBold),
     titleMedium = TextStyle(fontSize = 16.sp, lineHeight = 23.sp, fontWeight = FontWeight.SemiBold),
     bodyLarge = TextStyle(fontSize = 16.sp, lineHeight = 24.sp),
