@@ -1,0 +1,29 @@
+{
+  "file": "downloads/Selkie-Android-0.8.1.apk",
+  "bytes": 23475888,
+  "sha256": "8d534fdfcde170fed1857e5406410a8afd8e21c502a48b236f8ace34548c090d",
+  "test_files": 3,
+  "tests": {
+    "tests": 38,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Warning": 13
+  },
+  "versionName": "0.8.1",
+  "versionCode": 10,
+  "applicationId": "com.maree.app",
+  "sourceCommit": "5eb9fc8a5f7d113653a61087f2832835a3539c79",
+  "certificateSha256": "9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50",
+  "coachConfigured": false,
+  "playBillingEnabled": false,
+  "sourceArchive": {
+    "file": "downloads/Selkie-Android-0.8.1-source.zip",
+    "bytes": 530509,
+    "sha256": "fea1846d336a99ed4a7120fcb3743596b9b2902ba0a6699ca348a7c11986f512",
+    "files": 72
+  },
+  "signaturePolicy": "Existing development key; reinstall may be required; not a Play Store release."
+}

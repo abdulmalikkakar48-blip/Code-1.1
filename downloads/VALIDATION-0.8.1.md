@@ -31,3 +31,11 @@ L’inspection `aapt dump xmltree` du drawable dans l’APK confirme les quatre 
 Le client de conversation préparé est inclus, avec des paramètres Supabase vides. Il ne contacte pas un service par défaut et affiche que l’activation reste nécessaire. Aucun compte, serveur déployé ou crédit OpenAI API n’est configuré ; aucun dialogue réel n’a été testé. Les conseils locaux restent disponibles. Aucun paiement ni droit Premium/Ultra vérifié par Google Play n’est actif.
 
 Le lanceur Samsung, les limites, notifications, défis et autorisations doivent être essayés sur le téléphone. Ce contrôle de compilation ne prouve pas encore le rendu sur le Samsung A16. La publication exige encore les services retenus, la facturation, les exigences Google Play actuelles, les documents et les tests de distribution.
+
+## Sources conservées
+
+- Commit exact des sources : `5eb9fc8a5f7d113653a61087f2832835a3539c79`.
+- Archive : `Selkie-Android-0.8.1-source.zip`, 72 fichiers, 530509 octets.
+- SHA-256 archive : `fea1846d336a99ed4a7120fcb3743596b9b2902ba0a6699ca348a7c11986f512`.
+
+Chaque fichier de cette archive a été comparé au commit source, CRC vérifiés ; le lanceur Gradle conserve son droit d’exécution. Aucun APK ni clé privée ne figure dans l’archive des sources. Les paramètres publics du Coach sont vides dans le BuildConfig de l’APK.
