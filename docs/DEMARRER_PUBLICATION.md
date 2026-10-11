@@ -4,7 +4,9 @@
 
 ## La prochaine action à faire
 
-Ouvre [Google Play Console](https://play.google.com/console/) sur un ordinateur et commence la création de ton compte développeur. Le tarif connu est de **25 USD une seule fois**, à confirmer dans la console. Tu peux préparer le projet avec un compte personnel correspondant à ta situation ; les informations d’identité et les vérifications sont à remplir dans ton propre compte.
+L’éditeur a 17 ans et atteindra 18 ans le 20 décembre 2026. La règle connue de Google impose au moins 18 ans pour créer son propre compte développeur. Il peut préparer le projet maintenant puis ouvrir [Google Play Console](https://play.google.com/console/) à ses 18 ans. Un parent majeur peut éventuellement porter la publication avant cela s’il est réellement titulaire et responsable des contrats, coordonnées bancaires et obligations fiscales. Le tarif connu est de **25 USD une seule fois**, à confirmer dans la console. Les informations d’identité doivent correspondre au titulaire réel.
+
+Les mots APK, AAB, tests, soumission et déclaration d’activité sont expliqués dans [le guide simple de la version retenue](VERSION_REFERENCE.md#publication-expliquée-simplement).
 
 Ensuite, suis dans cet ordre :
 
@@ -26,6 +28,6 @@ Si tu encaisses régulièrement des revenus en France, il faut déclarer l’act
 
 ## Où en est le projet ?
 
-Selkie 0.8.0 conserve les plafonds 10 / 50 / illimité. Le nom est renouvelé ; un logo de phoque noir sur fond menthe accompagne les écrans refondus. L’identifiant Android, la signature de test et les données locales sont conservés. Les limites, les points et les défis sont déjà présents. L’écran Coach est accessible avec des conseils hors ligne. Les vrais achats, le dialogue IA et la synchronisation restent à développer. La version iPhone est reportée ; la priorité est la publication Android.
+La refonte moderne de Selkie 0.8.0 est la [version de référence choisie](VERSION_REFERENCE.md). Elle conserve les plafonds 10 / 50 / illimité et le phoque noir. L’identifiant Android reste le même, mais cet APK utilise une nouvelle signature fixe : une ancienne installation avec un autre certificat doit être désinstallée, ce qui efface ses données locales. Les limites, les points et les défis sont déjà présents. L’écran Coach est accessible avec des conseils hors ligne. Les vrais achats, le dialogue IA et la synchronisation restent à développer. La version iPhone est reportée ; la priorité est la publication Android.
 
 Les liens officiels figurent dans chaque guide. Les pages Google ont été bloquées par le proxy de cet environnement le 10 octobre 2026 : les tarifs et règles connus sont donc à reconfirmer dans Play Console avant publication. Aucun compte ni paiement n’a été créé.

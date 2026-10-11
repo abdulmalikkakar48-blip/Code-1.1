@@ -1,5 +1,9 @@
 # Selkie — application Android de réduction du temps d'écran
 
+## Version de référence pour la suite
+
+Depuis le 11 octobre 2026, la **refonte moderne à signature fixe** est la base retenue par l’éditeur pour toutes les prochaines modifications. Le code, l’APK prêt à installer et les sources sont conservés sur la branche `maree-apk-download`. Voir [la version de référence et le travail restant](docs/VERSION_REFERENCE.md).
+
 ## Refonte moderne et signature fixe
 
 La dernière refonte adopte des titres sans empattement, du vert profond, une menthe lumineuse, une navigation foncée et un accueil avec deux indicateurs distincts. Le fonctionnement local et les règles existantes sont conservés.
