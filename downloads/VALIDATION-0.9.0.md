@@ -22,3 +22,10 @@ Une revue indépendante du branchement UI, des suggestions et de l’effacement 
 La conversation reste en mémoire ; seules les phrases inconnues non identifiées comme sensibles peuvent être conservées, après activation volontaire, jusqu’à 50 sur le téléphone. Aucun export automatique ou envoi à l’éditeur. L’effacement utilise une génération pour rejeter les écritures retardées.
 
 Le dialogue IA génératif distant reste non configuré et n’est pas présenté comme actif. Aucun paiement ni droit d’abonnement vérifié par Google Play n’est intégré. Le phoque et son cadrage, les couleurs et les règles du suivi restent conservés. Voir [le fonctionnement](../docs/COACH_HORS_LIGNE.md).
+
+## Sources conservées
+
+- Commit exact du code : `08e7bbacb5bdbb64bdc0ffe63971a68983bf0a64`.
+- Archive : `Selkie-Android-0.9.0-source.zip`, 555472 octets, 78 fichiers.
+- SHA-256 : `1e28317e665bbbe7490d5a24ff4729b53a41c74a98592d85ddecbfb362d74b12`.
+- CRC ZIP et égalité de chaque fichier avec le commit vérifiés ; script Gradle exécutable conservé. Aucun APK, cache de compilation ou fichier de signature privée dans les sources.
