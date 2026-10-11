@@ -1,6 +1,35 @@
+import java.net.URI
+import java.util.Base64
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+}
+
+// Identifiants publics du projet seulement. La clé OpenAI reste sur le serveur.
+fun coachConfig(name: String, variable: String): String = providers.gradleProperty(name)
+    .orElse(providers.environmentVariable(variable)).orElse("").get()
+fun quoted(value: String): String = "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"")
+    .replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t") + "\""
+
+val coachUrl = coachConfig("selkieSupabaseUrl", "SELKIE_SUPABASE_URL")
+val coachPublicKey = coachConfig("selkieSupabasePublicKey", "SELKIE_SUPABASE_PUBLIC_KEY")
+val isPublicCoachKey = coachPublicKey.matches(Regex("sb_publishable_[A-Za-z0-9_-]{8,}")) || runCatching {
+    val parts = coachPublicKey.split('.')
+    require(parts.size == 3)
+    val payload = String(Base64.getUrlDecoder().decode(parts[1]), Charsets.UTF_8)
+    (groovy.json.JsonSlurper().parseText(payload) as? Map<*, *>)?.get("role") == "anon"
+}.getOrDefault(false)
+require(coachPublicKey.isEmpty() || isPublicCoachKey) {
+    "Coach : seule une clé publique publishable ou anon peut être intégrée à Android. Clés privées interdites."
+}
+require(coachUrl.isEmpty() || runCatching {
+    val url = URI(coachUrl)
+    url.scheme == "https" && url.host?.endsWith(".supabase.co") == true && url.userInfo == null &&
+        url.port == -1 && url.query == null && url.fragment == null && url.path in listOf("", "/")
+}.getOrDefault(false)) { "Coach : fournir uniquement l’URL HTTPS publique du projet Supabase." }
+require(coachUrl.isEmpty() == coachPublicKey.isEmpty()) {
+    "Coach : configurer ensemble l’URL du projet et sa clé publique, ou laisser les deux vides."
 }
 
 android {
@@ -13,6 +42,8 @@ android {
         targetSdk = 34
         versionCode = 9
         versionName = "0.8.0"
+        buildConfigField("String", "SUPABASE_URL", quoted(coachUrl))
+        buildConfigField("String", "SUPABASE_PUBLIC_KEY", quoted(coachPublicKey))
     }
 
     buildTypes {

@@ -12,7 +12,8 @@ data class PrivacySection(val title: String, val paragraphs: List<String>)
 object PrivacyContent {
     const val updatedOn = "11 octobre 2026"
     const val introduction = "Selkie t’aide à réduire ton temps d’écran. Dans cette version, " +
-        "tes données de suivi restent sur ton appareil et tu n’as pas besoin de compte. " +
+        "tes données de suivi restent sur ton appareil et le suivi ne demande pas de compte. " +
+        "Le dialogue IA facultatif, lorsqu’il est activé, demande une connexion par e-mail et un accord avant tout envoi. " +
         "Tu peux lire cette information sans autoriser le suivi."
 
     val sections: List<PrivacySection>
@@ -37,9 +38,12 @@ object PrivacyContent {
                     "démonstration et les dates des cycles de progression. Android conserve ses propres statistiques " +
                     "d’utilisation, indépendamment de Selkie.",
                 "Selkie ne lit pas tes messages, le contenu de tes écrans, tes contacts, tes photos " +
-                    "ou ta position. Il n’y a pas de compte, de synchronisation, de publicité, de " +
-                    "mesure d’audience, de coach IA connecté ni de paiement actif dans cette version. " +
-                    "Les conseils du Coach sont écrits à l’avance et fonctionnent hors ligne, sans envoi de message."
+                    "ou ta position. Il n’y a pas de synchronisation du suivi, de publicité, de " +
+                    "mesure d’audience ni de paiement actif. Les conseils fixes fonctionnent hors ligne. " +
+                    "Le dialogue IA, quand le serveur est configuré, utilise ton adresse e-mail, un identifiant " +
+                    "de connexion, des jetons de session et un compteur de questions. Il envoie uniquement " +
+                    "la question saisie et les douze derniers messages de la conversation, sans transmettre " +
+                    "automatiquement les applications suivies, points ou défis."
             )),
             PrivacySection("Pourquoi, et sur quelle base ?", listOf(
                 "Ces données servent uniquement à fournir le service que tu demandes : choisir " +
@@ -50,8 +54,9 @@ object PrivacyContent {
                 "Les autorisations Android contrôlent l’accès technique aux fonctions du téléphone. " +
                     "Elles ne remplacent pas une base juridique au sens du RGPD et ne valent pas " +
                     "consentement à de la publicité ou à un partage de données. Lire cette politique " +
-                    "n’oblige pas à l’accepter et n’active pas le suivi. Aucun traitement facultatif " +
-                    "fondé sur le consentement n’est ajouté dans cette version."
+                    "n’oblige pas à l’accepter et n’active pas le suivi. Le dialogue IA reste facultatif : " +
+                    "une information et une case d’accord précèdent la connexion et les envois. Refuser " +
+                    "ou quitter le dialogue n’empêche pas d’utiliser les limites et les défis locaux."
             )),
             PrivacySection("À quoi servent les autorisations ?", listOf(
                 "Accès aux données d’utilisation : calculer les durées et reconnaître l’application " +
@@ -68,9 +73,15 @@ object PrivacyContent {
                     "d’un accès nécessaire arrête le suivi avec blocage."
             )),
             PrivacySection("Qui reçoit les données ?", listOf(
-                "Dans cette version, aucun envoi des données de suivi à l’éditeur, à un serveur " +
-                    "ou à un partenaire n’est prévu. L’application ne déclare pas la permission " +
-                    "Internet. Les fonctions locales utilisent les services Android du téléphone.",
+                "Les données de suivi ne sont pas envoyées au serveur. La permission Internet permet " +
+                    "uniquement les demandes volontaires de connexion et de dialogue avec le coach lorsque " +
+                    "son service est activé ; ouvrir l’application ou le Coach n’envoie aucun message.",
+                "Pour le dialogue IA, Supabase traite l’authentification par e-mail et le quota, et son serveur " +
+                    "transmet les échanges à OpenAI pour produire une réponse. Le code demande de ne pas " +
+                    "stocker les réponses via l’API, mais cela ne garantit pas l’absence de conservation " +
+                    "technique par les fournisseurs. Leurs durées de conservation, la région du projet, " +
+                    "les contrats et éventuels transferts hors EEE doivent être précisés avant une " +
+                    "ouverture publique. N’envoie pas d’informations sensibles.",
                 "La sauvegarde Android de Selkie est désactivée. Une migration entre appareils " +
                     "peut toutefois dépendre du constructeur et de ses outils ; cette politique " +
                     "ne garantit pas leur fonctionnement. Les traitements propres à Android, " +
@@ -90,7 +101,7 @@ object PrivacyContent {
                 "Le contact utilise Gmail. Les conditions d’hébergement et les éventuels transferts " +
                     "de la messagerie hors de l’Espace économique européen doivent encore être " +
                     "vérifiés et précisés par le responsable avant diffusion publique. Aucun " +
-                    "hébergement ou transfert des données de suivi n’est effectué par Selkie."
+                    "hébergement ou transfert des données locales de suivi n’est effectué par Selkie."
             )),
             PrivacySection("Combien de temps sont-elles gardées ?", listOf(
                 "Les réglages et la progression restent sur l’appareil jusqu’à leur suppression " +
@@ -102,13 +113,20 @@ object PrivacyContent {
                     "suivies, les verrous, les points, le choix d’offre de démonstration et les défis " +
                     "personnels avec leurs étapes et leurs dates. À la prochaine utilisation, " +
                     "la progression repart avec les valeurs initiales. Cette action ne supprime " +
-                    "pas les statistiques d’Android et ne révoque pas automatiquement les " +
+                    "pas les statistiques d’Android, ne supprime pas un éventuel compte du coach sur " +
+                    "le serveur et ne révoque pas automatiquement les " +
                     "autorisations accordées dans les paramètres du téléphone.",
                 "Les dates de validation des défis proposés par Selkie sont effacées au renouvellement de la série, " +
                     "tous les 21 jours. Le nombre total de défis terminés et les points restent " +
                     "jusqu’à l’effacement complet. Les défis personnels et leurs dates restent " +
                     "jusqu’à leur suppression individuelle ou à l’effacement complet ; ils ne " +
-                    "sont pas réinitialisés par le changement de série."
+                    "sont pas réinitialisés par le changement de série.",
+                "Les échanges du coach sont conservés uniquement en mémoire pendant l’ouverture de " +
+                    "son onglet ; le code du serveur ne les inscrit pas dans une table ni dans ses journaux. " +
+                    "Les jetons de session restent dans le stockage privé du téléphone jusqu’à une déconnexion " +
+                    "ou un effacement local. L’adresse e-mail, le compte et le quota restent dans Supabase : " +
+                    "contacte le responsable pour demander leur suppression. Les traitements techniques " +
+                    "des fournisseurs sont distincts et doivent être documentés avant ouverture publique."
             )),
             PrivacySection("Tes droits et tes choix", listOf(
                 "Tu peux consulter et modifier tes limites, retirer une application et effacer " +
@@ -127,10 +145,10 @@ object PrivacyContent {
                     "des effets similaires significatifs au sens de l’article 22 du RGPD."
             )),
             PrivacySection("Si Selkie évolue", listOf(
-                "Un compte, une synchronisation, un coach IA, une publicité ou un paiement " +
+                "L’ouverture publique du coach, une synchronisation, une publicité ou un paiement " +
                     "nécessiterait une nouvelle analyse et une information mise à jour avant " +
                     "activation. Cette politique décrit seulement les fonctions de la version " +
-                    "locale actuelle."
+                    "actuelle et de la connexion facultative du coach."
             ))
         )
 }

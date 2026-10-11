@@ -22,7 +22,7 @@ Estimation de travail : **environ 65 % pour une première version Android commer
 
 Déjà présents : interface native, permissions expliquées avant suivi, limites locales, points, défis sur plusieurs journées, défis personnels et démonstration des trois offres. Le Coach propose des conseils fixes hors ligne.
 
-Restent notamment : vérification de cette refonte sur téléphone, retouches de lisibilité, vraie facturation Google Play et droits d’abonnement vérifiés, dialogue IA et son serveur, adaptation aux exigences Android/Google Play actuelles, confidentialité adaptée aux services effectivement activés et publication.
+Restent notamment : vérification de cette refonte sur téléphone, retouches de lisibilité, vraie facturation Google Play et droits d’abonnement vérifiés, activation et essais réels du dialogue IA et de son serveur, adaptation aux exigences Android/Google Play actuelles, confidentialité adaptée aux services effectivement activés et publication. La connexion du coach est [préparée dans le code](ACTIVER_COACH_IA.md), sans modification de l’APK de référence tant que les comptes et services ne sont pas configurés.
 
 Deux observations de la revue du code restent à examiner avec l’éditeur : le bloc de points peut repousser trop bas la liste d’applications ; le texte secondaire de la carte quotidienne sur menthe a un contraste de 4,34:1. Elles ne sont pas corrigées dans cet APK afin de conserver la version choisie.
 

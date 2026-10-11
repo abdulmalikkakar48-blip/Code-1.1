@@ -1,5 +1,9 @@
 # Selkie — application Android de réduction du temps d'écran
 
+## Connexion du Coach en préparation
+
+Le code Android intègre désormais une conversation authentifiée par code e-mail et un client HTTPS vers le serveur IA, avec réponses OpenAI, historique limité et gestion du quota. **Le service reste à activer** : aucun compte Supabase ou OpenAI API n’est encore configuré. Voir [les étapes d’activation](docs/ACTIVER_COACH_IA.md). L’APK téléchargeable ci-dessous reste la version de référence du nouveau design ; il n’a pas été remplacé par une compilation sans service configuré.
+
 ## Version de référence pour la suite
 
 Depuis le 11 octobre 2026, la **refonte moderne à signature fixe** est la base retenue par l’éditeur pour toutes les prochaines modifications. Le code, l’APK prêt à installer et les sources sont conservés sur la branche `maree-apk-download`. Voir [la version de référence et le travail restant](docs/VERSION_REFERENCE.md).
@@ -85,7 +89,7 @@ La politique est une information pour la version locale, pas une certification j
 
 ## Ce qui reste à activer / développer
 
-- **Coach IA** : dialogue non connecté ; l’onglet Coach propose des conseils fixes hors ligne. Un exemple de fonction sécurisée Supabase se trouve dans `supabase/functions/coach/index.ts`, avec quota des 100 questions sur le serveur, mais le chat Android et l'authentification ne sont pas encore connectés.
+- **Coach IA** : client de conversation et authentification par code e-mail implémentés dans le code Android ; serveur Supabase/OpenAI préparé avec quota des 100 questions. Les services et accès ne sont pas encore configurés, donc aucun dialogue réel n’est actif. L’APK publié reste antérieur à ce client. Voir [l’activation](docs/ACTIVER_COACH_IA.md).
 - **Premium et Ultra** : les prix de lancement prévus sont affichés, avec un mode de démonstration gratuit dans l’APK debug. Aucun abonnement n’est vendu. Avant commercialisation, remplacer le statut de démonstration local par des droits vérifiés côté serveur, Google Play Billing ou l’équivalent Galaxy Store et des comptes développeur actifs. Le mode de démonstration ne doit pas servir de validation d’abonnement. Pour les abonnements numériques sur Google Play, utiliser Google Play Billing dans le parcours standard. Stripe sert surtout au site web ; les programmes de paiement alternatif demandent une éligibilité et des règles spécifiques. Voir [le guide des abonnements](docs/ABONNEMENTS.md).
 - **Compte email et sauvegarde cloud** : tables RLS Supabase préparées mais pas encore reliées à l'APK. Les données actuelles sont locales dans `SharedPreferences` et `allowBackup=false`.
 - **Tests sur un téléphone Samsung réel et distribution** : nécessaires avant mise en production.
@@ -148,13 +152,13 @@ Le document décrit un projet Supabase déjà créé, ainsi que la table `public
 Pour déployer l'exemple côté serveur :
 
 ```sh
-supabase link --project-ref lzusszoaxrgfkqcfpwrw
+supabase link --project-ref VOTRE_NOUVEAU_PROJET_SELKIE
 supabase db push
 supabase secrets set OPENAI_API_KEY="VOTRE_CLE_PRIVEE"
 supabase functions deploy coach
 ```
 
-**Ne pas utiliser ces commandes sans vérifier et sauvegarder les données préexistantes.** Déployer le backend ne suffit pas à activer le chat dans cet APK : il faut également implémenter la connexion email, l'appel authentifié à la fonction et la synchronisation Android. La clé OpenAI ne doit jamais être incorporée dans l'application mobile.
+**Ne pas utiliser ces commandes sans vérifier et sauvegarder les données préexistantes.** Le dialogue préparé demande la migration complémentaire, la liste de testeurs, l’authentification e-mail configurée et l’URL/clé publique du projet dans une nouvelle compilation Android. Suivre [le guide d’activation](docs/ACTIVER_COACH_IA.md), puis tester une vraie réponse avant distribution. La synchronisation du suivi n’est pas nécessaire au coach et n’est pas implémentée. La clé OpenAI reste uniquement sur le serveur.
 
 ## Structure du projet
 

@@ -1,6 +1,6 @@
 # Confidentialité de Selkie
 
-Information mise à jour le **11 octobre 2026**. Elle décrit la version Android locale actuelle.
+Information mise à jour le **11 octobre 2026**. Elle décrit le suivi local et le dialogue IA facultatif préparé dans le code. Le serveur IA n’est pas encore activé ; l’APK 0.8.0 publié reste antérieur à cette connexion.
 
 Selkie aide à réduire le temps d’écran. Les données de suivi restent sur l’appareil et aucun compte n’est nécessaire. Cette information peut être consultée hors ligne dans l’application, avant toute autorisation et depuis les réglages. Sa consultation ou son affichage n’active pas le suivi et aucune case d’acceptation obligatoire n’est demandée.
 
@@ -17,13 +17,15 @@ Contact confidentialité : **abdulmalikkakar48@gmail.com**.
 - Les identifiants des applications choisies, leurs limites, les durées de référence servant aux réinitialisations, les dates de verrouillage, d’alerte et de pénalité, le solde de points et ses quarts de point, les défis accomplis, les dates locales des validations quotidiennes et les dates des cycles de progression sont enregistrés dans les données privées de Selkie sur l’appareil.
 - Les titres des défis personnels, leurs trois étapes, la durée choisie, les cases du jour et leur progression sont enregistrés localement. Le choix d’offre dans le mode démonstration est également conservé ; il ne constitue pas un abonnement et ne donne lieu à aucun paiement.
 
-L’onglet Coach propose des conseils écrits à l’avance, accessibles hors ligne ; aucun message n’est envoyé à une IA. Selkie ne lit pas les messages, le contenu des écrans, les contacts, les photos ou la position. Cette version ne comporte ni compte, ni synchronisation, ni publicité, ni mesure d’audience, ni coach IA connecté, ni paiement actif. Android conserve ses propres statistiques d’utilisation, indépendamment de Selkie.
+Les conseils fixes du Coach fonctionnent hors ligne et n’envoient rien. Le dialogue IA, lorsque son serveur est activé, demande une connexion par code e-mail et un accord avant les échanges. Supabase traite l’adresse e-mail, le compte et le compteur de questions. Le téléphone transmet la question et au plus douze messages précédents au serveur, qui les transmet à OpenAI. Aucun bilan d’utilisation, point ou défi n’est joint automatiquement.
+
+Selkie ne lit pas les messages des autres applications, le contenu des écrans, les contacts, les photos ou la position. Il n’y a ni synchronisation du suivi, ni publicité, ni mesure d’audience, ni paiement actif. Android conserve ses propres statistiques d’utilisation, indépendamment de Selkie.
 
 ## Finalités et bases juridiques
 
 Les données de suivi servent uniquement à fournir le service demandé : choisir des limites, mesurer leur utilisation, afficher des alertes et des écrans de blocage, et conserver la progression. La base juridique des traitements nécessaires à ce service est son exécution à la demande de l’utilisateur, au titre de l’article 6, paragraphe 1, point b du RGPD.
 
-Les autorisations Android contrôlent l’accès technique aux fonctions du téléphone. Elles ne remplacent pas une base juridique au sens du RGPD et ne valent pas consentement à de la publicité ou à un partage de données. Aucun traitement facultatif fondé sur le consentement n’est ajouté dans cette version. Les règles relatives à l’accès au terminal doivent également être examinées par l’éditeur avant publication, en particulier pour toute fonction supplémentaire.
+Les autorisations Android contrôlent l’accès technique aux fonctions du téléphone. Elles ne remplacent pas une base juridique au sens du RGPD et ne valent pas consentement à de la publicité ou à un partage de données. Le dialogue IA est facultatif : l’utilisateur reçoit une information et accepte les transmissions avant de se connecter et d’envoyer une question. Refuser ou quitter le dialogue n’empêche pas le suivi local. Les bases et contrats applicables au service IA doivent être précisés avant son ouverture publique.
 
 Les demandes d’exercice des droits reçues par courriel sont traitées pour respecter les obligations du RGPD (article 6, paragraphe 1, point c). Les autres questions sont traitées sur la base de l’intérêt légitime à répondre aux personnes qui contactent l’éditeur (article 6, paragraphe 1, point f), avec possibilité d’opposition.
 
@@ -37,7 +39,9 @@ Les deux premiers accès sont nécessaires au suivi avec blocage. Sans eux, cett
 
 ## Destinataires, sauvegarde et transferts
 
-Dans cette version, aucun envoi des données de suivi à l’éditeur, à un serveur ou à un partenaire n’est prévu. L’application ne déclare pas la permission Internet. Les fonctions locales utilisent les services Android de l’appareil.
+Les données de suivi ne sont pas envoyées à l’éditeur ou à un serveur. Le code déclare désormais la permission Internet pour les demandes volontaires de connexion et de dialogue avec le coach ; l’ouverture de l’application ou de l’onglet Coach ne déclenche pas de requête.
+
+Quand le service est activé, Supabase reçoit les données de connexion et traite le quota ; OpenAI reçoit les messages pour produire une réponse. Le code utilise `store: false`, sans garantie d’absence de conservation technique par les fournisseurs. La région du projet, les contrats, durées de conservation et éventuels transferts hors EEE doivent être renseignés avant une ouverture publique. Les messages ne doivent pas contenir d’informations sensibles.
 
 La sauvegarde Android de Selkie est désactivée. Une migration entre appareils peut cependant dépendre du constructeur et de ses outils ; aucune garantie n’est donnée sur leur fonctionnement. Les traitements propres à Android, au constructeur et à la plateforme de téléchargement relèvent de leurs informations de confidentialité.
 
@@ -55,6 +59,8 @@ Le bouton **Effacer les données de Selkie**, suivi d’une confirmation, suppri
 
 Les messages reçus au contact de confidentialité sont conservés le temps de répondre à la demande, puis supprimés, sauf lorsqu’une obligation légale impose une conservation supplémentaire. Le responsable doit appliquer effectivement cette règle et documenter toute exception légale avant diffusion publique.
 
+La conversation IA reste en mémoire pendant l’ouverture de son onglet ; le code ne la stocke pas dans un fichier local ou une table serveur. Les jetons de session restent dans le stockage privé du téléphone, exclu des sauvegardes Android, jusqu’à une déconnexion locale ou un effacement des données. Ces actions ne suppriment pas le compte et le quota Supabase : leur suppression peut être demandée au responsable. Les conservations techniques des fournisseurs sont distinctes et doivent être documentées avant ouverture publique.
+
 ## Droits et recours
 
 Les limites sont consultables et modifiables dans l’application. Une application peut être retirée du suivi et les données de Selkie peuvent être effacées depuis l’application ou les réglages Android.
@@ -69,6 +75,6 @@ Les blocages et les points sont des aides personnelles au temps d’écran. Ils 
 
 ## Évolution de l’application
 
-Un compte, une synchronisation, un coach IA, une publicité ou un paiement nécessiterait une nouvelle analyse et une information mise à jour avant activation. Cette politique décrit uniquement les fonctions locales actuelles.
+L’ouverture publique du coach, une synchronisation, une publicité ou un paiement nécessite une analyse et une information adaptées aux services réellement déployés. Cette politique décrit le suivi local et le dialogue facultatif préparé dans le code ; elle ne prouve pas qu’un service IA est actif.
 
 Ce texte d’information et les fonctions de suppression constituent une base de travail. **Ils ne garantissent pas à eux seuls la conformité de l’ensemble du service ni l’absence d’amende.** Les modalités du traitement des courriels doivent notamment être vérifiées et précisées avant une diffusion publique.

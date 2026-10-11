@@ -66,7 +66,7 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit) {
             }
             item {
                 AppCardSurface {
-                    StatusPill("Sur ton téléphone · sans compte")
+                    StatusPill("Suivi local · coach facultatif")
                     PrivacyFact("Ce qui est enregistré",
                         "Tes applications suivies, tes limites, tes points et tes défis restent sur ton appareil.")
                     PrivacyFact("Ce qui reste privé",
@@ -74,7 +74,7 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit) {
                     PrivacyFact("Tu gardes le contrôle",
                         "Arrête le suivi dans Plus ou efface tes données ci-dessous. Pour retirer un accès, utilise les réglages Android.")
                     PrivacyFact("Le Coach, aujourd’hui",
-                        "Ses conseils sont écrits à l’avance et disponibles hors ligne. Aucun message n’est envoyé à une IA. Les paiements ne sont pas activés.")
+                        "Les conseils hors ligne n’envoient rien. Quand le service IA est activé, le dialogue demande une connexion par e-mail et transmet tes échanges à Supabase puis OpenAI, après ton accord. Les paiements restent inactifs.")
                 }
             }
             item {

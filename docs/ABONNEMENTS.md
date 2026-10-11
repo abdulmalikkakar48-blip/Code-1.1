@@ -1,6 +1,6 @@
 # Encaisser les abonnements Android
 
-**Le prototype actuel ne prélève aucun argent.** Ses boutons Premium/Ultra sélectionnent gratuitement une offre de démonstration enregistrée sur le téléphone. Aucun abonnement Google Play, Stripe, serveur de vérification ou coach IA connecté n’est encore intégré.
+**Le prototype actuel ne prélève aucun argent.** Ses boutons Premium/Ultra sélectionnent gratuitement une offre de démonstration enregistrée sur le téléphone. Aucun abonnement Google Play, Stripe ou serveur de vérification des achats n’est actif. Le client du dialogue IA est préparé dans le code, mais attend la configuration et les essais des services ; voir [son activation](ACTIVER_COACH_IA.md).
 
 Le nom de travail est Selkie ; sa disponibilité commerciale doit encore être vérifiée. Le guide [Publication Google Play](PUBLICATION_GOOGLE_PLAY.md) décrit le compte et le bundle nécessaires avant une distribution commerciale.
 

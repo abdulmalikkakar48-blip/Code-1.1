@@ -472,7 +472,11 @@ private fun MareeApp() {
                     setup.reset()
                     monitoringEnabled = false
                     MonitorService.stop(context)
-                    val cleared = withContext(Dispatchers.IO) { store.clearPersonalData() }
+                    val cleared = withContext(Dispatchers.IO) {
+                        val local = store.clearPersonalData()
+                        val coach = try { CoachSessionStore(context).clear(); true } catch (_: CoachError) { false }
+                        local && coach
+                    }
                     deleting = false
                     deleteConfirmation = false
                     if (cleared) {
