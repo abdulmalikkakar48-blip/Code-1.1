@@ -4,11 +4,12 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,8 +17,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -39,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 
-/** Résumé accessible immédiatement ; politique complète disponible hors ligne sur demande. */
+/** Résumé lisible dès le premier lancement ; toutes les sections sont consultables hors ligne. */
 @Composable
 fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit) {
     BackHandler(onBack = onBack)
@@ -49,75 +48,95 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit) {
     var fullPolicy by rememberSaveable { mutableStateOf(false) }
     Scaffold(containerColor = MareePalette.Background,
         snackbarHost = { SnackbarHost(snackbars) }) { inner ->
-        LazyColumn(Modifier.fillMaxSize().padding(inner).statusBarsPadding()
-            .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(inner)
+                .statusBarsPadding().navigationBarsPadding(),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
             item {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     TextButton(onClick = onBack) { Text("‹ Retour") }
-                    Text("Tes données, tes choix.", fontSize = 28.sp, fontWeight = FontWeight.Bold,
-                        color = MareePalette.Ink)
-                    Text("Voici l’essentiel sur cette version de Milo.", color = MareePalette.Muted,
-                        fontSize = 15.sp, lineHeight = 22.sp)
+                    ScreenHeading(
+                        eyebrow = "CONFIDENTIALITÉ",
+                        title = "Tes données, tes choix.",
+                        description = "L’essentiel sur cette version de Selkie. Le texte complet est disponible ci-dessous."
+                    )
                 }
             }
             item {
-                Card(shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = MareePalette.Surface),
-                    border = BorderStroke(1.dp, MareePalette.Outline)) {
-                    Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        PrivacyFact("Sur ton téléphone", "Tes limites, tes points et tes défis sont stockés sur ton appareil. Aucun compte n’est nécessaire.")
-                        PrivacyFact("Tu choisis les accès", "Le suivi utilise les durées des applications après ton autorisation. Milo ne lit ni tes messages, ni tes photos, ni le contenu de ton écran.")
-                        PrivacyFact("Tu peux arrêter et effacer", "Mets le suivi en pause dans Plus ou supprime les données avec le bouton ci-dessous. Les autorisations Android se retirent dans les réglages du téléphone.")
-                        PrivacyFact("Aucun message envoyé à une IA", "Le coach propose actuellement des conseils fixes hors ligne. Les achats et le dialogue avec une IA ne sont pas activés.")
+                AppCardSurface {
+                    StatusPill("Sur ton téléphone · sans compte")
+                    PrivacyFact("Ce qui est enregistré",
+                        "Tes applications suivies, tes limites, tes points et tes défis restent sur ton appareil.")
+                    PrivacyFact("Ce qui reste privé",
+                        "Selkie ne lit ni tes messages, ni tes photos, ni le contenu de ton écran. Les durées sont consultées uniquement après ton autorisation.")
+                    PrivacyFact("Tu gardes le contrôle",
+                        "Arrête le suivi dans Plus ou efface tes données ci-dessous. Pour retirer un accès, utilise les réglages Android.")
+                    PrivacyFact("Le Coach, aujourd’hui",
+                        "Ses conseils sont écrits à l’avance et disponibles hors ligne. Aucun message n’est envoyé à une IA. Les paiements ne sont pas activés.")
+                }
+            }
+            item {
+                SectionLabel("Une question sur tes données ?")
+            }
+            item {
+                AppCardSurface {
+                    Text("Responsable de l’application", fontSize = 12.sp, color = MareePalette.Muted)
+                    Text(PrivacyIdentity.controllerName, color = MareePalette.Ink,
+                        fontSize = 17.sp, fontWeight = FontWeight.SemiBold)
+                    Text(PrivacyIdentity.contactEmail, color = MareePalette.Muted, fontSize = 14.sp)
+                    OutlinedButton(onClick = {
+                        try {
+                            context.startActivity(Intent(Intent.ACTION_SENDTO,
+                                Uri.parse("mailto:${PrivacyIdentity.contactEmail}"))
+                                .putExtra(Intent.EXTRA_SUBJECT, "Selkie · Confidentialité"))
+                        } catch (_: ActivityNotFoundException) {
+                            scope.launch { snackbars.showSnackbar("Écris à ${PrivacyIdentity.contactEmail}") }
+                        }
+                    }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp)) {
+                        Text("Contacter par e-mail")
                     }
                 }
             }
             item {
-                Card(shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = MareePalette.Subtle)) {
-                    Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text("Ton contact", fontWeight = FontWeight.SemiBold, color = MareePalette.Ink, fontSize = 17.sp)
-                        Text(PrivacyIdentity.controllerName, color = MareePalette.Ink)
-                        Text(PrivacyIdentity.contactEmail, color = MareePalette.Muted, fontSize = 14.sp)
-                        OutlinedButton(onClick = {
-                            try {
-                                context.startActivity(Intent(Intent.ACTION_SENDTO,
-                                    Uri.parse("mailto:${PrivacyIdentity.contactEmail}"))
-                                    .putExtra(Intent.EXTRA_SUBJECT, "Milo · Confidentialité"))
-                            } catch (_: ActivityNotFoundException) {
-                                scope.launch { snackbars.showSnackbar("Écris à ${PrivacyIdentity.contactEmail}") }
-                            }
-                        }) { Text("Envoyer un e-mail") }
-                    }
-                }
-            }
-            item {
-                OutlinedButton(onClick = { fullPolicy = !fullPolicy }, modifier = Modifier.fillMaxWidth()) {
-                    Text(if (fullPolicy) "Masquer le texte complet" else "Lire la politique complète")
+                OutlinedButton(onClick = { fullPolicy = !fullPolicy },
+                    modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp)) {
+                    Text(if (fullPolicy) "Masquer la politique complète" else "Lire la politique complète")
                 }
             }
             if (fullPolicy) {
-                item { Text("Politique complète · ${PrivacyContent.updatedOn}",
-                    fontWeight = FontWeight.SemiBold, color = MareePalette.Teal) }
+                item {
+                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        SectionLabel("Politique complète")
+                        Text("Mise à jour : ${PrivacyContent.updatedOn}",
+                            color = MareePalette.Muted, fontSize = 12.sp)
+                    }
+                }
                 items(PrivacyContent.sections, key = { it.title }) { section ->
-                    Card(shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(containerColor = MareePalette.Surface)) {
-                        Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                            Text(section.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                            section.paragraphs.forEach { Text(it, fontSize = 14.sp, lineHeight = 22.sp) }
+                    AppCardSurface {
+                        Text(section.title, fontSize = 17.sp, lineHeight = 23.sp,
+                            fontWeight = FontWeight.SemiBold, color = MareePalette.Ink)
+                        section.paragraphs.forEach {
+                            Text(it, fontSize = 14.sp, lineHeight = 22.sp, color = MareePalette.Muted)
                         }
                     }
                 }
             }
             item {
-                Column(Modifier.fillMaxWidth().padding(bottom = 28.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                AppCardSurface {
+                    Text("Repartir de zéro", fontSize = 17.sp,
+                        fontWeight = FontWeight.SemiBold, color = MareePalette.Ink)
+                    Text("Cela supprime tes réglages, tes points et tes défis de Selkie.",
+                        fontSize = 14.sp, lineHeight = 21.sp, color = MareePalette.Muted)
                     Button(onClick = onDeleteData, modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer,
+                        shape = RoundedCornerShape(14.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.errorContainer,
                             contentColor = MaterialTheme.colorScheme.onErrorContainer)) {
-                        Text("Effacer les données de Milo")
+                        Text("Effacer mes données")
                     }
-                    Text("Une confirmation sera demandée. Cela n’efface pas les statistiques conservées par Android.",
+                    Text("Une confirmation sera demandée. Les statistiques d’Android et les autorisations du téléphone restent inchangées.",
                         fontSize = 12.sp, lineHeight = 18.sp, color = MareePalette.Muted)
                 }
             }
@@ -128,7 +147,7 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit) {
 @Composable
 private fun PrivacyFact(title: String, description: String) {
     Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-        Text(title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = MareePalette.Teal)
+        Text(title, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = MareePalette.Ink)
         Text(description, fontSize = 14.sp, lineHeight = 21.sp, color = MareePalette.Muted)
     }
 }

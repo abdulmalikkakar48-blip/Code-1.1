@@ -1,6 +1,5 @@
 package com.maree.app
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,11 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,13 +22,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-/** Aucune demande n'est lancée sans clic ; l'activité gère le retour des réglages Android. */
+/** Les réglages Android ne s'ouvrent qu'au clic. Les deux accès requis conditionnent le suivi. */
 @Composable
 fun OnboardingScreen(
     status: PermissionStatus,
@@ -46,111 +38,122 @@ fun OnboardingScreen(
     onComplete: () -> Unit,
     onExplore: () -> Unit
 ) {
-    val colors = MaterialTheme.colorScheme
-    Surface(modifier = Modifier.fillMaxSize(), color = colors.background) {
+    val requiredAccessCount = listOf(status.usageGranted, status.overlayGranted).count { it }
+    Surface(modifier = Modifier.fillMaxSize(), color = MareePalette.Background) {
         Column(
             modifier = Modifier.fillMaxSize()
-
-                .statusBarsPadding().navigationBarsPadding()
-                .verticalScroll(rememberScrollState()).padding(horizontal = 22.dp, vertical = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp, vertical = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(painterResource(R.drawable.brand_mark), contentDescription = null,
-                    modifier = Modifier.size(40.dp))
+                BrandIcon(36.dp)
                 Spacer(Modifier.width(10.dp))
-                Column {
-                    Text("milo", color = colors.onBackground, fontSize = 27.sp, fontWeight = FontWeight.Bold)
-                    Text("DU TEMPS POUR TOI", color = colors.primary, fontSize = 10.sp, letterSpacing = 1.8.sp)
+                Text("selkie", fontSize = 25.sp, fontWeight = FontWeight.Bold, color = MareePalette.Ink)
+            }
+            ScreenHeading(
+                eyebrow = "BIENVENUE",
+                title = "Prépare ton suivi.",
+                description = "Deux accès pour mesurer ton temps et afficher une pause. Les notifications sont facultatives."
+            )
+            SectionLabel("Les accès Android", "$requiredAccessCount / 2 nécessaires")
+
+            OnboardingPermissionCard(
+                number = "01",
+                title = "Mesurer ton temps",
+                required = true,
+                granted = status.usageGranted,
+                description = "Consulte les durées des applications pour calculer tes limites.",
+                guidance = "Dans les réglages Android, choisis Selkie et active l’accès aux données d’utilisation.",
+                action = "Autoriser les durées",
+                onRequest = onUsagePermission
+            )
+            OnboardingPermissionCard(
+                number = "02",
+                title = "Afficher une pause",
+                required = true,
+                granted = status.overlayGranted,
+                description = "Affiche l’écran de pause quand la limite d’une application est atteinte.",
+                guidance = "Dans les réglages Android, autorise Selkie à s’afficher par-dessus les autres applications.",
+                action = "Autoriser l’écran de pause",
+                onRequest = onOverlayPermission
+            )
+            OnboardingPermissionCard(
+                number = "03",
+                title = "Recevoir une alerte",
+                required = false,
+                granted = status.notificationsGranted,
+                description = "Te prévient à l’approche d’une limite. Le suivi fonctionne aussi sans ces alertes.",
+                guidance = null,
+                action = "Autoriser les notifications",
+                onRequest = onNotificationPermission
+            )
+
+            AppCardSurface {
+                Text("Tes données restent sur ton téléphone", fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold, color = MareePalette.Ink)
+                Text("Selkie ne lit ni tes messages, ni tes photos, ni le contenu de ton écran.",
+                    color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
+                TextButton(onClick = onPrivacy) { Text("Lire la confidentialité") }
+            }
+
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                PrimaryAction(
+                    label = "Activer le suivi",
+                    onClick = onComplete,
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = status.readyForMonitoring
+                )
+                if (!status.readyForMonitoring) {
+                    Text("Les deux premiers accès sont nécessaires pour activer le suivi.",
+                        color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
                 }
-            }
-            Text("Bienvenue chez Milo.", fontSize = 28.sp, lineHeight = 34.sp,
-                fontWeight = FontWeight.Bold, color = colors.onBackground)
-            Text("Active les accès utiles au suivi. Tu gardes le choix à chaque étape.",
-                color = colors.onSurfaceVariant, fontSize = 15.sp, lineHeight = 22.sp)
-
-            Card(shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = colors.primary.copy(alpha = 0.1f))) {
-                Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("Tes données, sur ton téléphone", color = colors.primary,
-                        fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
-                    Text("Le suivi fonctionne localement. Milo ne lit pas tes messages ni le contenu de ton écran.",
-                        color = colors.onBackground, fontSize = 13.sp, lineHeight = 19.sp)
-                    OutlinedButton(onClick = onPrivacy) { Text("Lire la confidentialité") }
+                TextButton(onClick = onExplore, modifier = Modifier.fillMaxWidth()) {
+                    Text("Découvrir sans suivi", fontWeight = FontWeight.Medium)
                 }
+                Text("Tu pourras activer le suivi plus tard dans Plus. En attendant, aucune application n’est surveillée ou bloquée.",
+                    color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
             }
-
-            OnboardingPermissionCard(
-                title = "Suivre le temps d’écran", symbol = "◷", accent = colors.primary,
-                required = true, granted = status.usageGranted,
-                description = "Milo consulte les applications ouvertes et leur durée d’utilisation pour calculer tes limites. Dans les réglages Android, choisis Milo puis active l’accès aux données d’utilisation.",
-                action = "Autoriser le suivi", onRequest = onUsagePermission
-            )
-            OnboardingPermissionCard(
-                title = "Afficher l’écran de pause", symbol = "▧", accent = colors.secondary,
-                required = true, granted = status.overlayGranted,
-                description = "Quand une limite est atteinte, Milo affiche un écran de pause au-dessus de l’application suivie. Dans les réglages Android, choisis Milo puis autorise l’affichage par-dessus les autres applications.",
-                action = "Autoriser l’écran de pause", onRequest = onOverlayPermission
-            )
-            OnboardingPermissionCard(
-                title = "Recevoir une alerte", symbol = "✦", accent = colors.tertiary,
-                required = false, granted = status.notificationsGranted,
-                description = "Une notification te prévient à l’approche de ta limite. Tu peux continuer sans notifications : ton choix ne bloque pas l’accès à Milo ni le suivi.",
-                action = "Autoriser les notifications", onRequest = onNotificationPermission
-            )
-
-            Spacer(Modifier.height(2.dp))
-            Button(onClick = onComplete, enabled = status.readyForMonitoring,
-                modifier = Modifier.fillMaxWidth().height(54.dp), shape = RoundedCornerShape(18.dp)) {
-                Text("Activer le suivi", fontWeight = FontWeight.SemiBold)
-            }
-            if (!status.readyForMonitoring) {
-                Text("Pour activer le suivi, autorise les données d’utilisation et l’écran de pause.",
-                    color = colors.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp)
-            }
-            TextButton(onClick = onExplore, modifier = Modifier.fillMaxWidth()) {
-                Text("Découvrir sans suivi")
-            }
-            Text("En mode découverte, le suivi et les écrans de pause restent désactivés. Tu pourras les activer dans l’onglet Plus.",
-                color = colors.onSurfaceVariant, fontSize = 12.sp, lineHeight = 18.sp)
         }
     }
 }
 
 @Composable
 private fun OnboardingPermissionCard(
+    number: String,
     title: String,
-    symbol: String,
-    accent: Color,
     required: Boolean,
     granted: Boolean,
     description: String,
+    guidance: String?,
     action: String,
     onRequest: () -> Unit
 ) {
-    val colors = MaterialTheme.colorScheme
-    Card(shape = RoundedCornerShape(20.dp), border = BorderStroke(1.dp, accent.copy(alpha = 0.25f)),
-        colors = CardDefaults.cardColors(containerColor = colors.surface)) {
-        Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Surface(color = accent.copy(alpha = 0.14f), shape = RoundedCornerShape(12.dp)) {
-                    Text(symbol, fontSize = 25.sp, color = accent,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp))
-                }
-                Spacer(Modifier.width(12.dp))
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(title, color = colors.onSurface, fontWeight = FontWeight.SemiBold, fontSize = 17.sp)
-                    Text(if (required) "NÉCESSAIRE AU SUIVI" else "FACULTATIF", color = accent,
-                        fontSize = 10.sp, letterSpacing = 0.7.sp, fontWeight = FontWeight.SemiBold)
-                }
+    AppCardSurface {
+        Row(verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Surface(color = MareePalette.Subtle, shape = RoundedCornerShape(12.dp)) {
+                Text(number, color = MareePalette.Teal, fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold, modifier = Modifier.padding(12.dp))
             }
-            Text(description, color = colors.onSurfaceVariant, fontSize = 13.sp, lineHeight = 19.sp)
-            if (granted) {
-                Text("✓ Autorisation accordée", color = accent, fontWeight = FontWeight.Medium, fontSize = 13.sp)
-            } else {
-                Button(onClick = onRequest, colors = ButtonDefaults.buttonColors(
-                    containerColor = accent, contentColor = colors.background),
-                    shape = RoundedCornerShape(12.dp)) { Text(action, fontSize = 13.sp) }
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(title, color = MareePalette.Ink, fontWeight = FontWeight.SemiBold, fontSize = 17.sp)
+                Text(if (required) "Nécessaire au suivi" else "Facultatif",
+                    color = MareePalette.Muted, fontSize = 12.sp)
+            }
+        }
+        Text(description, color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
+        if (granted) {
+            StatusPill("✓ Accès accordé")
+        } else {
+            guidance?.let {
+                Text(it, color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
+            }
+            OutlinedButton(onClick = onRequest, modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(14.dp)) {
+                Text(action, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
             }
         }
     }

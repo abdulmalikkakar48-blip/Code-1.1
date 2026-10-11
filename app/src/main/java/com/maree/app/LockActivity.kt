@@ -76,7 +76,7 @@ private fun LockScreen(name: String, until: Long, points: Double, leave: () -> U
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("MILO", color = Color.White.copy(alpha = 0.8f), fontSize = 18.sp)
+        Text("SELKIE", color = Color.White.copy(alpha = 0.8f), fontSize = 18.sp)
         Spacer(Modifier.height(36.dp))
         Text("Le moment de\ndéconnecter.", color = Color.White,
             fontWeight = FontWeight.Bold, fontSize = 35.sp, textAlign = TextAlign.Center)
@@ -151,7 +151,7 @@ class LockOverlay(private val context: Context) {
             gravity = Gravity.CENTER
             setPadding(28, 50, 28, 50)
         }
-        column.addView(makeText("MILO", 19f))
+        column.addView(makeText("SELKIE", 19f))
         column.addView(makeText("Le moment de\ndéconnecter.", 34f, true))
         caption = makeText("", 18f).also { column.addView(it) }
         countdown = makeText("", 18f, true).also { column.addView(it) }

@@ -1,6 +1,6 @@
 # Publier l’application sur Google Play
 
-Ce guide prépare la publication. Aucun compte développeur n’a été créé, aucun paiement n’a été effectué et aucune application n’a été envoyée à Google Play par ce travail. Le nom de travail est Milo ; sa disponibilité commerciale doit encore être vérifiée.
+Ce guide prépare la publication. Aucun compte développeur n’a été créé, aucun paiement n’a été effectué et aucune application n’a été envoyée à Google Play par ce travail. Le nom de travail est Selkie ; sa disponibilité commerciale doit encore être vérifiée.
 
 La version actuelle est un prototype Android : APK de démonstration, données locales, offres simulées gratuitement. Elle ne permet pas d’encaisser un abonnement. Le guide [Abonnements](ABONNEMENTS.md) explique le travail nécessaire pour cela.
 
@@ -75,4 +75,4 @@ La publication et son calendrier dépendent de la vérification du compte, des t
 
 ## Ce qui reste à faire pour ce projet
 
-Vérifier la disponibilité du nom Milo, confirmer le niveau API actuel, adapter les outils si nécessaire, créer et sécuriser la signature de production, valider sur téléphone, mettre la politique en ligne, remplir les déclarations et effectuer le parcours de tests du compte. Pour vendre Premium/Ultra, il faut également développer et tester les vrais abonnements : le prototype local ne les facture pas.
+Vérifier la disponibilité du nom Selkie, confirmer le niveau API actuel, adapter les outils si nécessaire, créer et sécuriser la signature de production, valider sur téléphone, mettre la politique en ligne, remplir les déclarations et effectuer le parcours de tests du compte. Pour vendre Premium/Ultra, il faut également développer et tester les vrais abonnements : le prototype local ne les facture pas.

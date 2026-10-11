@@ -66,7 +66,7 @@ class MonitorService : Service() {
         )
         val notification = NotificationCompat.Builder(this, SERVICE_CHANNEL)
             .setSmallIcon(com.maree.app.R.drawable.ic_notification)
-            .setContentTitle("Milo protège ton temps")
+            .setContentTitle("Selkie protège ton temps")
             .setContentText("Le suivi du temps d’écran est actif")
             .setContentIntent(intent)
             .setOngoing(true)
@@ -81,7 +81,7 @@ class MonitorService : Service() {
     private fun createNotificationChannels() {
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(NotificationChannel(
-            SERVICE_CHANNEL, "Suivi Milo", NotificationManager.IMPORTANCE_LOW
+            SERVICE_CHANNEL, "Suivi Selkie", NotificationManager.IMPORTANCE_LOW
         ).apply { description = "Notification de suivi permanent" })
         manager.createNotificationChannel(NotificationChannel(
             ALERT_CHANNEL, "Alertes de limite", NotificationManager.IMPORTANCE_DEFAULT
@@ -140,7 +140,7 @@ class MonitorService : Service() {
         val message = "Plus que $remaining min sur $name"
         val notification: Notification = NotificationCompat.Builder(this, ALERT_CHANNEL)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("Milo · Dernière ligne droite")
+            .setContentTitle("Selkie · Dernière ligne droite")
             .setContentText(message)
             .setAutoCancel(true)
             .build()

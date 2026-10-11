@@ -157,7 +157,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
     fun trackedCount(): Int = synchronized(lock) { readApps().size }
 
     /**
-     * Efface l'ensemble des données Milo, y compris les clés futures, avant de rendre la main.
+     * Efface l'ensemble des données Selkie, y compris les clés futures, avant de rendre la main.
      * Le service de suivi doit être arrêté par l'appelant avant cette action. Une nouvelle
      * instance de Store recrée les horloges initiales ; les points reviennent à 100 par défaut.
      * false signale un échec de persistance : l'interface ne doit pas annoncer un succès.

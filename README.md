@@ -1,10 +1,18 @@
-# Milo — application Android de réduction du temps d'écran
+# Selkie — application Android de réduction du temps d'écran
+
+## Mise à jour 0.8.0
+
+**Selkie** est le nom choisi par l’éditeur pour remplacer Milo. Son usage commercial reste à vérifier. Nouveau logo de phoque noir sur fond menthe, inspiré de la selkie. Refonte native avec fond blanc cassé, texte vert profond, cartes blanches et boutons cohérents. L’accueil distingue le capital de points des applications suivies ; les actions secondaires d’une application sont regroupées dans son menu. La liste de suivi utilise un défilement progressif, y compris pour les grandes listes Ultra.
+
+Les cinq onglets restent Accueil, Quotidien, Défis, Coach et Plus. Les défis affichent les trois étapes personnelles sur trois lignes, puis les journées dans l’ordre ; les calendriers des défis proposés se déplient pour lire chaque journée. Le quotidien propose une pause et un bilan des compteurs, avec une explication consultable. Le Coach ouvre directement les conseils fixes hors ligne et indique l’état du futur dialogue IA. Les accès Android sont expliqués avant le suivi ; la confidentialité commence par un résumé et conserve le texte complet.
+
+Le paquet Android, la signature de test, les préférences et les règles sont conservés : 10 / 50 / sans plafond, restrictions à 0 point, trois étapes personnelles, durée de 2 à 365 jours et récompense de 0,25 point à la fin. Voir [les règles de design](docs/DESIGN_SELKIE.md) et [les captures Android réelles](downloads/screenshots/README.md).
+
+L’éditeur a demandé Lovable, Figma et MagicPath. Les liens fournis désignent leurs fiches ; leurs outils ne sont pas accessibles dans cette session. Cette refonte est réalisée dans le code Kotlin/Compose et ne prétend pas provenir de ces services.
 
 ## Mise à jour 0.7.0
 
-**Milo** est le nom choisi par l’éditeur. Nouvelle icône pause/temps et palette claire, vert et menthe cohérente. Les jours de pratique sont présentés un par ligne, dans l’ordre ; les trois étapes personnelles portent leur numéro sur des lignes séparées. Un onglet **Coach** ouvre directement un écran de conseils hors ligne ; le dialogue IA reste à connecter. La confidentialité commence par un résumé clair, avec le texte complet toujours disponible hors ligne.
-
-La signature, le paquet Android et toutes les données locales sont conservés. Les offres restent 10 / 50 / illimité, et les règles de points sont inchangées. Voir [les règles de design](docs/DESIGN_MILO.md).
+À cette version, le nom choisi était **Milo**. L’icône pause/temps, l’onglet Coach et la présentation des journées sur des lignes séparées ont été ajoutés. Le nom est remplacé par Selkie en 0.8.0 ; l’identité Android et les données locales restent les mêmes.
 
 ## Mise à jour 0.6.0
 
@@ -16,7 +24,7 @@ Plafonds : **10 applications en Gratuit**, **50 en Premium** et **aucun plafond 
 
 Pour commencer la distribution et les paiements, ouvre [le guide de démarrage](docs/DEMARRER_PUBLICATION.md). Il mène aux étapes [Google Play](docs/PUBLICATION_GOOGLE_PLAY.md) et [abonnements](docs/ABONNEMENTS.md). Le travail porte sur Android ; la version iPhone est reportée. L’APK reste une version de test ; aucun paiement ni coach IA n’est connecté.
 
-**Version actuelle : 0.7.0 (APK de test et code source).** Interface entièrement en français.
+**Version actuelle : 0.8.0 (APK de test et code source).** Interface entièrement en français.
 
 Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Material 3, `minSdk 29` (Android 10), `targetSdk 34`, package `com.maree.app`, Gradle 8.7, AGP 8.5.2, Kotlin 1.9.24.
 
@@ -24,7 +32,7 @@ Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Materia
 
 - La règle de 0 point s’applique à toutes les offres : aucun ajout ou changement de limite à 0 point. Une réinitialisation exige réellement ses 10 points ; le retrait d’une application et l’effacement des données restent disponibles.
 - Offres recalibrées en 0.6.0 : Gratuit, 10 applications ; Premium, 50 applications pour 10 €/mois ; Ultra, toutes les applications compatibles du téléphone sans plafond commercial pour 20 €/mois. L’APK de test affiche un mode démonstration gratuit dans Plus, pour tester les limites et les fonctions locales. Il ne vend aucun abonnement et n’effectue aucun paiement.
-- Défis → Mes défis : Premium et Ultra permettent de créer un titre avec exactement trois étapes et une durée choisie de 2 à 365 jours. Les trois étapes doivent être cochées pour valider une journée. Les jours peuvent être espacés ; ces défis sont indépendants de la rotation standard de 21 jours. La récompense totale est de 0,25 point une seule fois après la durée choisie. Elle n’augmente pas le compteur de bonus des défis Milo.
+- Défis → Mes défis : Premium et Ultra permettent de créer un titre avec exactement trois étapes et une durée choisie de 2 à 365 jours. Les trois étapes doivent être cochées pour valider une journée. Les jours peuvent être espacés ; ces défis sont indépendants de la rotation standard de 21 jours. La récompense totale est de 0,25 point une seule fois après la durée choisie. Elle n’augmente pas le compteur de bonus des défis Selkie.
 - Les points sont enregistrés en quarts entiers, pour conserver exactement 0,25 / 0,50 / 0,75 point. Les anciens soldes sont migrés une fois sans perte ni double crédit. Les cases du jour et la progression survivent à la relance.
 - Ultra ajoute la recherche dans les applications suivies et le tri par nom, temps passé ou proximité de la limite. Le coach IA illimité par messages est prévu pour Ultra, mais reste à développer et à financer.
 
@@ -65,7 +73,7 @@ La politique est une information pour la version locale, pas une certification j
 
 ## Ce qui reste à activer / développer
 
-- **Coach IA** : interface informative uniquement dans l'APK. Un exemple de fonction sécurisée Supabase se trouve dans `supabase/functions/coach/index.ts`, avec quota des 100 questions sur le serveur, mais le chat Android et l'authentification ne sont pas encore connectés.
+- **Coach IA** : dialogue non connecté ; l’onglet Coach propose des conseils fixes hors ligne. Un exemple de fonction sécurisée Supabase se trouve dans `supabase/functions/coach/index.ts`, avec quota des 100 questions sur le serveur, mais le chat Android et l'authentification ne sont pas encore connectés.
 - **Premium et Ultra** : les prix de lancement prévus sont affichés, avec un mode de démonstration gratuit dans l’APK debug. Aucun abonnement n’est vendu. Avant commercialisation, remplacer le statut de démonstration local par des droits vérifiés côté serveur, Google Play Billing ou l’équivalent Galaxy Store et des comptes développeur actifs. Le mode de démonstration ne doit pas servir de validation d’abonnement. Pour les abonnements numériques sur Google Play, utiliser Google Play Billing dans le parcours standard. Stripe sert surtout au site web ; les programmes de paiement alternatif demandent une éligibilité et des règles spécifiques. Voir [le guide des abonnements](docs/ABONNEMENTS.md).
 - **Compte email et sauvegarde cloud** : tables RLS Supabase préparées mais pas encore reliées à l'APK. Les données actuelles sont locales dans `SharedPreferences` et `allowBackup=false`.
 - **Tests sur un téléphone Samsung réel et distribution** : nécessaires avant mise en production.
@@ -74,9 +82,9 @@ La politique est une information pour la version locale, pas une certification j
 
 1. Créer un dépôt GitHub vide et y envoyer **le contenu** de ce répertoire (`app/`, `.github/`, etc.).
 2. Ouvrir l'onglet **Actions**, sélectionner **Construire l'APK Android**, puis lancer **Run workflow** (ou envoyer un commit sur `main`).
-3. À la fin de la tâche `android`, récupérer l'artefact `Milo-Android-debug-APK` ; il contient `app-debug.apk`.
+3. À la fin de la tâche `android`, récupérer l'artefact `Selkie-Android-debug-APK` ; il contient `app-debug.apk`.
 4. Transférer l'APK sur un smartphone Android 10+ et autoriser son installation depuis la source choisie.
-5. Ouvrir Milo, lire les explications, puis activer les accès nécessaires au suivi. Les notifications sont facultatives, et le mode découverte reste disponible.
+5. Ouvrir Selkie, lire les explications, puis activer les accès nécessaires au suivi. Les notifications sont facultatives, et le mode découverte reste disponible.
 
 Le projet a été compilé dans l'environnement cloud. L'APK de test est généré dans `app/build/outputs/apk/debug/app-debug.apk`. Le wrapper Gradle 8.7 est inclus, avec vérification SHA-256 de sa distribution ; GitHub Actions utilise ce wrapper pour compiler, exécuter les tests unitaires et lancer Android Lint.
 
@@ -108,7 +116,7 @@ Les tests de `SetupPreferencesTest` couvrent l’absence de démarrage avant l�
 
 ## Limites de fonctionnement Android et précautions
 
-- Android ne garantit pas un blocage inviolable : la désinstallation de Milo, la révocation de ses autorisations, certains modes économie d'énergie Samsung, la mise en veille du service ou les restrictions de fenêtre superposée peuvent interrompre le suivi et le blocage. L'application **ne prétend pas empêcher ces actions**.
+- Android ne garantit pas un blocage inviolable : la désinstallation de Selkie, la révocation de ses autorisations, certains modes économie d'énergie Samsung, la mise en veille du service ou les restrictions de fenêtre superposée peuvent interrompre le suivi et le blocage. L'application **ne prétend pas empêcher ces actions**.
 - Une surcouche `TYPE_APPLICATION_OVERLAY` ne recouvre pas nécessairement toutes les zones système et Android peut intercepter le geste de retour ou protéger l'écran verrouillé. Le bouton d'accueil est prévu ; la gestion des gestes système dépend du téléphone.
 - Les statistiques `UsageEvents` peuvent avoir un délai, des événements manquants et des particularités sur plusieurs fenêtres. Les sessions encore ouvertes **depuis avant minuit** peuvent être sous-comptées après minuit. Le projet est un prototype à tester sur Samsung avant diffusion.
 - Le suivi lit les événements d'utilisation à partir de minuit à chaque contrôle. Ce fonctionnement simple peut être optimisé pour limiter le coût énergétique sur les téléphones plus lents.
@@ -148,7 +156,8 @@ app/src/main/java/com/maree/app/
   PrivacyScreen.kt     → résumé, politique hors ligne et contact
   CoachScreen.kt       → écran Coach et conseils fixes hors ligne
   ChallengeDays.kt     → journées de pratique en lignes ordonnées
-  MareeTheme.kt         → palette claire et accents
+  MareeTheme.kt         → palette et typographie communes
+  UiComponents.kt      → titres, cartes, badges et boutons communs
   Membership.kt         → offres, quarts de point et modèles de défis personnels
   MembershipScreen.kt   → offres prévues et démonstration gratuite
   CustomChallengesScreen.kt → formulaire et étapes des défis personnels
@@ -165,6 +174,6 @@ supabase/                   → migration SQL et fonction coach (préparation)
 
 Le moteur de suivi fonctionne en local. L'APK ne contient pas de clé API, n'envoie pas les statistiques à un serveur et ne sollicite pas de paiement. Le backend Supabase est fourni à titre de code de préparation ; aucune fonction cloud n'est exécutée par cette version de l'APK.
 
-L’APK de mise à jour distribué dans `downloads/Milo-Android.apk` conserve la signature de l’APK 0.1.0 construit dans cet environnement. Installer la mise à jour sans désinstaller préserve les données. Les builds GitHub Actions utilisent une signature debug propre au runner : ne pas les présenter comme des mises à jour compatibles tant qu’une signature de distribution stable n’est pas configurée. Aucune clé de signature n’est enregistrée dans le dépôt.
+L’APK de mise à jour distribué dans `downloads/Selkie-Android.apk` conserve la signature de l’APK 0.1.0 construit dans cet environnement. Installer la mise à jour sans désinstaller préserve les données. Les builds GitHub Actions utilisent une signature debug propre au runner : ne pas les présenter comme des mises à jour compatibles tant qu’une signature de distribution stable n’est pas configurée. Aucune clé de signature n’est enregistrée dans le dépôt.
 
 Les tests de la version 0.4.0 couvrent aussi la migration unique des soldes, les quarts exacts, la règle de 0 point pour chaque offre, les plafonds et le retour à Gratuit, le coût complet d’une réinitialisation et les défis personnels (durées de 2 et 7 jours, trois étapes persistées, récompense unique, relance, suppression et effacement). Le schéma Supabase préparatoire représente encore l’abonnement par un booléen : les droits des trois offres et les quotas du futur coach devront être reliés à une vérification d’achat côté serveur avant leur commercialisation.

@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -37,6 +38,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -44,6 +46,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -75,8 +80,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.lifecycle.Lifecycle
@@ -180,7 +187,7 @@ private fun MareeApp() {
     fun openSettings(intent: Intent) {
         try { settingsRequest.launch(intent) }
         catch (_: android.content.ActivityNotFoundException) {
-            infoMessage = "Ouvre les paramètres Android, puis Applications → Milo, pour gérer les autorisations."
+            infoMessage = "Ouvre les paramètres Android, puis Applications → Selkie, pour gérer les autorisations."
         }
     }
     fun askNotifications() {
@@ -272,7 +279,9 @@ private fun MareeApp() {
             containerColor = Background,
             snackbarHost = { SnackbarHost(snackbars) },
             bottomBar = {
-                NavigationBar(containerColor = CardColor, tonalElevation = 0.dp) {
+                val extraNavHeight = (LocalDensity.current.fontScale - 1f).coerceAtLeast(0f) * 28f
+                NavigationBar(containerColor = CardColor, tonalElevation = 0.dp,
+                    modifier = Modifier.heightIn(min = (80f + extraNavHeight).dp)) {
                     listOf(
                         Triple("Accueil", R.drawable.ic_nav_home, 0),
                         Triple("Quotidien", R.drawable.ic_nav_daily, 1),
@@ -283,7 +292,9 @@ private fun MareeApp() {
                         NavigationBarItem(
                             selected = tab == index, onClick = { tab = index },
                             icon = { Icon(painterResource(icon), contentDescription = null, modifier = Modifier.size(23.dp)) },
-                            label = { Text(name, fontSize = 11.sp, fontWeight = FontWeight.Medium) },
+                            label = { Text(name, fontSize = 11.sp, lineHeight = 13.sp,
+                                fontWeight = FontWeight.Medium, maxLines = 2,
+                                textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis) },
                             colors = NavigationBarItemDefaults.colors(
                                 selectedIconColor = Mint, selectedTextColor = Mint,
                                 indicatorColor = CardLighter, unselectedIconColor = Muted,
@@ -294,21 +305,21 @@ private fun MareeApp() {
                 }
             }
         ) { inner ->
-            Column(Modifier.fillMaxSize().padding(inner).statusBarsPadding()) {
+            Column(Modifier.fillMaxSize().padding(inner)) {
                 Row(
                     Modifier.fillMaxWidth().padding(start = 22.dp, end = 22.dp, top = 12.dp, bottom = 14.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(painterResource(R.drawable.brand_mark), contentDescription = null,
-                            modifier = Modifier.size(34.dp))
+                    Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
+                        BrandIcon(36.dp)
                         Spacer(Modifier.width(9.dp))
-                        Text("milo", color = Cream, fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.app_name), color = Cream, fontSize = 23.sp,
+                            fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f))
                     }
-                    Surface(color = MareePalette.Sand, shape = CircleShape) {
-                        Text("✧ ${formatPoints(snapshot.points)}", color = MareePalette.Amber, fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 15.dp, vertical = 9.dp))
+                    TextButton(onClick = { tab = 4 }) {
+                        StatusPill(snapshot.plan.displayName)
                     }
                 }
                 when (tab) {
@@ -316,6 +327,7 @@ private fun MareeApp() {
                         snapshot = snapshot,
                         active = monitoringEnabled && permissions.readyForMonitoring,
                         onSetup = { showSetup = true },
+                        onChallenges = { tab = 2 },
                         onAdd = ::addApplication, onEdit = { editApp = it },
                         onRemove = { removeApp = it },
                         onReset = {
@@ -375,7 +387,7 @@ private fun MareeApp() {
                             snapshot = store.readSnapshot(lastReading)
                             refresh()
                         },
-                        onAccount = { infoMessage = "Milo fonctionne sans compte : pas d’inscription et tes données restent sur ton téléphone. Un compte pourra être proposé plus tard, uniquement pour une sauvegarde facultative." }
+                        onAccount = { infoMessage = "Selkie fonctionne sans compte : pas d’inscription et tes données restent sur ton téléphone. Un compte pourra être proposé plus tard, uniquement pour une sauvegarde facultative." }
                     )
                 }
             }
@@ -417,7 +429,7 @@ private fun MareeApp() {
     removeApp?.let { item ->
         AlertDialog(onDismissRequest = { removeApp = null },
             title = { Text("Retirer ${appLabel(context, item.packageName)} ?") },
-            text = { Text("Cette application et son verrou seront supprimés de Milo.") },
+            text = { Text("Cette application et son verrou seront supprimés de Selkie.") },
             confirmButton = { Button(onClick = {
                 store.removeApp(item.packageName); removeApp = null; refresh()
             }) { Text("Retirer") } },
@@ -447,12 +459,12 @@ private fun MareeApp() {
     }
     infoMessage?.let { message ->
         AlertDialog(onDismissRequest = { infoMessage = null },
-            title = { Text("Milo") }, text = { Text(message) },
+            title = { Text("Selkie") }, text = { Text(message) },
             confirmButton = { TextButton(onClick = { infoMessage = null }) { Text("Compris") } })
     }
     if (deleteConfirmation) {
         AlertDialog(onDismissRequest = { if (!deleting) deleteConfirmation = false },
-            title = { Text("Effacer les données de Milo ?") },
+            title = { Text("Effacer les données de Selkie ?") },
             text = { Text("Tes applications suivies, limites, verrous, points, défis personnalisés et leurs étapes, progression, choix d’offre de démonstration et choix d’accueil seront effacés. Le suivi sera arrêté. Cette action est irréversible et ne supprime pas les statistiques Android.") },
             confirmButton = { Button(enabled = !deleting, onClick = {
                 scope.launch {
@@ -486,7 +498,7 @@ private fun MareeApp() {
 
 @Composable
 private fun HomeTab(
-    snapshot: MareeSnapshot, active: Boolean, onSetup: () -> Unit,
+    snapshot: MareeSnapshot, active: Boolean, onSetup: () -> Unit, onChallenges: () -> Unit,
     onAdd: () -> Unit, onEdit: (AppSnapshot) -> Unit, onRemove: (AppSnapshot) -> Unit,
     onReset: (AppSnapshot) -> Unit, getName: (String) -> String
 ) {
@@ -501,95 +513,115 @@ private fun HomeTab(
             else -> matching.sortedBy { getName(it.packageName).lowercase(Locale.FRENCH) }
         }
     } else snapshot.apps
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())
-        .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Moins d’écran. Plus de vie.", fontSize = 28.sp, lineHeight = 34.sp,
-                fontWeight = FontWeight.Bold, color = Cream)
-            Text("Tes limites et tes progrès, au même endroit.", color = Muted,
-                fontSize = 14.sp, lineHeight = 21.sp)
+    LazyColumn(Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(start = 20.dp, end = 20.dp, bottom = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        item {
+            ScreenHeading("TON ESPACE", "Reprends ton temps.",
+                "Des limites simples. Plus de place pour toi.")
         }
-        Card(colors = CardDefaults.cardColors(containerColor = CardLighter),
-            shape = RoundedCornerShape(20.dp)) {
-            Row(Modifier.fillMaxWidth().padding(20.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                    Text("Tes points", color = Mint, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-                    Text("La régularité fait la différence.", color = Muted, fontSize = 13.sp)
+        item {
+            Card(shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = MareePalette.DeepTeal)) {
+                Column(Modifier.fillMaxWidth().padding(22.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically) {
+                        Text("CAPITAL DISCIPLINE", color = MareePalette.Mint, fontSize = 11.sp,
+                            letterSpacing = 1.sp, fontWeight = FontWeight.Medium)
+                        Icon(painterResource(R.drawable.ic_nav_daily), contentDescription = null,
+                            tint = MareePalette.Mint, modifier = Modifier.size(22.dp))
+                    }
+                    Row(verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(formatPoints(snapshot.points), color = Color.White,
+                            fontSize = 46.sp, lineHeight = 50.sp, fontWeight = FontWeight.Bold)
+                        Text("points", color = MareePalette.Mint, fontSize = 15.sp,
+                            modifier = Modifier.padding(bottom = 6.dp))
+                    }
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically) {
+                        Text("La régularité compte.", color = MareePalette.Mint,
+                            fontSize = 13.sp, modifier = Modifier.weight(1f))
+                        TextButton(onClick = onChallenges,
+                            colors = ButtonDefaults.textButtonColors(contentColor = MareePalette.Mint)) {
+                            Text("Voir les défis →", fontSize = 13.sp)
+                        }
+                    }
                 }
-                Text(formatPoints(snapshot.points), color = Mint, fontSize = 34.sp,
-                    fontWeight = FontWeight.Bold)
             }
         }
-        if (!active) {
-            SectionCard {
-                Text("Le suivi est en pause", fontSize = 17.sp, fontWeight = FontWeight.Bold)
-                Text("Active les autorisations pour mesurer tes limites et afficher les écrans de pause. Les compteurs ne sont pas actualisés pendant la pause.",
-                    color = Muted, fontSize = 13.sp, lineHeight = 19.sp)
-                Button(onClick = onSetup) { Text("Configurer le suivi") }
-            }
-        }
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
-            Column(Modifier.weight(1f)) {
-                Text("Mes applications", color = Cream, fontSize = 22.sp, fontWeight = FontWeight.Bold)
-                Text(if (appLimit == null) "${snapshot.apps.size} suivies · illimité"
-                    else "${snapshot.apps.size} / $appLimit suivies", color = Muted, fontSize = 13.sp)
-            }
-            Button(onClick = onAdd, shape = RoundedCornerShape(16.dp),
-                enabled = snapshot.points > 0 && (appLimit == null || snapshot.apps.size < appLimit)) {
-                Text("＋ Ajouter", fontWeight = FontWeight.Bold)
-            }
-        }
-        if (snapshot.points <= 0) {
-            Text("Tes défis te permettent de regagner des points pour modifier tes limites.", color = Warning, fontSize = 13.sp)
-        }
-        if (appLimit != null && snapshot.apps.size > appLimit) {
-            Text("Tes applications restent suivies. Pour en ajouter, retire des applications jusqu’à passer sous la limite de ton offre.",
-                color = Muted, fontSize = 13.sp, lineHeight = 19.sp)
-        }
-        if (snapshot.apps.isEmpty()) {
-            SectionCard {
-                Text("Ta première limite", fontWeight = FontWeight.Bold, fontSize = 19.sp)
-                Text("Choisis une application et le temps que tu souhaites lui consacrer. Tu gardes la main sur tes réglages.",
+        if (!active) item {
+            AppCardSurface {
+                StatusPill("Suivi en pause")
+                Text("Active le suivi pour mesurer tes limites et afficher les écrans de pause.",
                     color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
-                OutlinedButton(onClick = onAdd, enabled = snapshot.points > 0) {
+                PrimaryAction("Activer le suivi", onClick = onSetup, modifier = Modifier.fillMaxWidth())
+            }
+        }
+        item {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("Tes applications", color = Cream, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+                    Text(if (appLimit == null) "${snapshot.apps.size} suivies · sans plafond"
+                        else "${snapshot.apps.size} sur $appLimit suivies", color = Muted, fontSize = 12.sp)
+                }
+                PrimaryAction("+ Ajouter", onClick = onAdd,
+                    enabled = snapshot.points > 0 && (appLimit == null || snapshot.apps.size < appLimit))
+            }
+        }
+        if (snapshot.points <= 0) item {
+            Text("À 0 point, gagne des points avec les défis pour ajouter ou modifier une limite.",
+                color = Warning, fontSize = 13.sp, lineHeight = 20.sp)
+        }
+        if (appLimit != null && snapshot.apps.size >= appLimit) item {
+            Text(if (snapshot.apps.size > appLimit)
+                "Tes applications restent suivies. Retire-en pour passer sous le plafond et en ajouter une autre."
+                else "Plafond atteint. Tu peux retirer une application pour en choisir une autre.",
+                color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
+        }
+        if (snapshot.apps.isEmpty()) item {
+            AppCardSurface {
+                Text("Ta première limite", fontWeight = FontWeight.SemiBold, fontSize = 19.sp)
+                Text("Choisis l’application qui prend le plus de place dans ta journée. Fixe une limite qui te ressemble.",
+                    color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
+                OutlinedButton(onClick = onAdd, enabled = snapshot.points > 0,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp), shape = RoundedCornerShape(14.dp)) {
                     Text("Choisir une application")
                 }
             }
         } else {
             if (snapshot.plan == PlanType.ULTRA) {
-                OutlinedTextField(value = appQuery, onValueChange = { appQuery = it },
-                    label = { Text("Rechercher une application suivie") }, singleLine = true,
-                    modifier = Modifier.fillMaxWidth())
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    listOf("Nom", "Temps passé", "Limite proche").forEachIndexed { index, title ->
-                        FilterChip(selected = appSort == index, onClick = { appSort = index },
-                            label = { Text(title, fontSize = 12.sp) })
+                item {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedTextField(value = appQuery, onValueChange = { appQuery = it },
+                            placeholder = { Text("Rechercher une application") }, singleLine = true,
+                            shape = RoundedCornerShape(14.dp), modifier = Modifier.fillMaxWidth())
+                        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            listOf("Nom", "Temps passé", "Limite proche").forEachIndexed { index, title ->
+                                FilterChip(selected = appSort == index, onClick = { appSort = index },
+                                    label = { Text(title, fontSize = 12.sp) })
+                            }
+                        }
                     }
                 }
-                if (displayedApps.isEmpty()) Text("Aucune application suivie ne correspond à ta recherche.",
-                    color = Muted, fontSize = 14.sp)
-            }
-            displayedApps.forEach { app ->
-                key(app.packageName) {
-                    AppCard(app, getName(app.packageName), snapshot.points > 0, snapshot.points >= 10, active,
-                        onEdit = { onEdit(app) }, onRemove = { onRemove(app) }, onReset = { onReset(app) })
+                if (displayedApps.isEmpty()) item {
+                    Text("Aucune application ne correspond à ta recherche.", color = Muted, fontSize = 14.sp)
                 }
             }
+            items(displayedApps, key = { it.packageName }) { app ->
+                AppCard(app, getName(app.packageName), snapshot.points > 0, snapshot.points >= 10, active,
+                    onEdit = { onEdit(app) }, onRemove = { onRemove(app) }, onReset = { onReset(app) })
+            }
         }
-        Spacer(Modifier.height(10.dp))
     }
 }
 
 @Composable
 private fun SectionCard(content: @Composable ColumnScope.() -> Unit) {
-    Card(shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = CardColor)) {
-        Column(Modifier.fillMaxWidth().padding(19.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp), content = content)
-    }
+    AppCardSurface(content = content)
 }
 
 @Composable
@@ -598,47 +630,52 @@ private fun AppCard(
     onEdit: () -> Unit, onRemove: () -> Unit, onReset: () -> Unit
 ) {
     val context = LocalContext.current
-    SectionCard {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+    var menuOpen by remember { mutableStateOf(false) }
+    AppCardSurface {
+        Row(verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             AndroidView(factory = { ImageView(context).apply {
+                scaleType = ImageView.ScaleType.CENTER_INSIDE
                 try { setImageDrawable(context.packageManager.getApplicationIcon(app.packageName)) }
                 catch (_: Exception) { setImageResource(R.drawable.brand_mark) }
-            } }, modifier = Modifier.size(45.dp).clip(RoundedCornerShape(12.dp)))
-            Spacer(Modifier.width(13.dp))
-            Column(Modifier.weight(1f)) {
+            } }, modifier = Modifier.size(42.dp).clip(RoundedCornerShape(12.dp)))
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(name, fontWeight = FontWeight.SemiBold, fontSize = 17.sp,
                     maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(if (!active) "Suivi en pause" else if (app.isLocked) "Écran de pause actif" else "Suivi en cours",
-                    fontSize = 12.sp, color = if (app.isLocked) Warning else Mint)
+                Text(if (!active) "Suivi en pause" else if (app.isLocked) "Limite atteinte" else "Suivi actif",
+                    fontSize = 12.sp, color = if (!active) Muted else if (app.isLocked) Warning else Mint)
             }
-            TextButton(onClick = onEdit, enabled = canEdit) { Text("Modifier") }
+            Box {
+                IconButton(onClick = { menuOpen = true }) {
+                    Icon(painterResource(R.drawable.ic_app_options), contentDescription = "Options pour $name")
+                }
+                DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
+                    DropdownMenuItem(text = { Text("Réinitialiser · −10 points") }, enabled = canReset,
+                        onClick = { menuOpen = false; onReset() })
+                    DropdownMenuItem(text = { Text("Retirer du suivi", color = MareePalette.Danger) },
+                        onClick = { menuOpen = false; onRemove() })
+                    if (!canReset) Text("10 points nécessaires", color = Muted, fontSize = 12.sp,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp))
+                }
+            }
         }
         if (active) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("${app.usedMinutes} / ${app.limitMinutes} min", color = Cream, fontWeight = FontWeight.Medium)
-                Text("${(app.progress * 100).toInt()} %", color = Muted)
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically) {
+                Text("${app.usedMinutes} min", fontSize = 20.sp, color = Cream, fontWeight = FontWeight.SemiBold)
+                Text("sur ${app.limitMinutes} min", color = Muted, fontSize = 13.sp)
             }
-            LinearProgressIndicator(
-                progress = { app.progress }, modifier = Modifier.fillMaxWidth().height(9.dp)
-                    .clip(RoundedCornerShape(10.dp)),
-                color = if (app.isLocked || app.progress >= 1f) Warning else Mint,
-                trackColor = CardLighter
-            )
+            LinearProgressIndicator(progress = { app.progress.coerceIn(0f, 1f) },
+                modifier = Modifier.fillMaxWidth().height(6.dp).clip(CircleShape),
+                color = if (app.isLocked || app.progress >= 1f) Warning else Mint, trackColor = CardLighter)
         } else {
-            Text("Limite choisie : ${app.limitMinutes} min", color = Muted, fontSize = 13.sp)
+            Text("Limite choisie : ${app.limitMinutes} min", color = Muted, fontSize = 14.sp)
         }
-        if (app.isLocked) {
-            Text("Déblocage dans ${remainingTime(app.lockedUntil)}", color = Warning, fontSize = 13.sp)
+        if (app.isLocked && active) Text("Écran de pause · encore ${remainingTime(app.lockedUntil)}",
+            color = Warning, fontSize = 13.sp)
+        TextButton(onClick = onEdit, enabled = canEdit) {
+            Text("Modifier la limite", fontSize = 13.sp)
         }
-        HorizontalDivider(color = MareePalette.Outline)
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            TextButton(onClick = onRemove) { Text("Retirer", color = Muted) }
-            TextButton(onClick = onReset, enabled = canReset) {
-                Text("Réinitialiser (−10)", color = if (canReset) Mint else Muted)
-            }
-        }
-        if (!canReset) Text("10 points nécessaires pour réinitialiser cette limite.",
-            color = Muted, fontSize = 12.sp)
     }
 }
 
@@ -651,75 +688,84 @@ private fun ChallengeTab(
 ) {
     val indices = if (snapshot.challengeSeries == 0) 0..9 else 10..19
     val finished = indices.count { it in snapshot.checkedChallenges }
+    val firstPending = indices.firstOrNull { it !in snapshot.checkedChallenges }
     var personal by rememberSaveable { mutableStateOf(false) }
+    var showRules by rememberSaveable { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())
-        .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(13.dp)) {
-        Text("Tes défis, un jour à la fois.", fontSize = 28.sp,
-            lineHeight = 34.sp, fontWeight = FontWeight.Bold)
-        Text(if (personal) "Tes objectifs, une journée à la fois." else "10 habitudes à essayer, un jour à la fois.", color = Muted)
+        .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        ScreenHeading("LES DÉFIS", "Un jour à la fois.",
+            if (personal) "Crée les habitudes qui te ressemblent." else "De petites actions pour de vrais progrès.")
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             FilterChip(selected = !personal, onClick = { personal = false },
-                label = { Text("Défis Milo") })
+                modifier = Modifier.weight(1f), label = { Text("Défis proposés") })
             FilterChip(selected = personal, onClick = { personal = true },
-                label = { Text("Mes défis") })
+                modifier = Modifier.weight(1f), label = { Text("Mes défis") })
         }
         if (personal) {
             CustomChallengesSection(snapshot, onOffers, onCreateCustom, onToggleCustomStep,
                 onValidateCustom, onDeleteCustom)
         } else {
-            SectionCard {
-                Text("Série en cours · $finished / 10 défis terminés", fontWeight = FontWeight.Bold)
+            AppCardSurface {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Ta série", color = Cream, fontSize = 20.sp, fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.weight(1f))
+                    Text("$finished / 10", color = Muted, fontSize = 13.sp)
+                    TextButton(onClick = { showRules = !showRules }) {
+                        Text(if (showRules) "Fermer" else "Règles", fontSize = 12.sp)
+                    }
+                }
                 LinearProgressIndicator(progress = { finished / 10f },
-                    modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
+                    modifier = Modifier.fillMaxWidth().height(6.dp).clip(CircleShape),
                     color = Mint, trackColor = CardLighter)
-                Text("Pratique chaque défi pendant $CHALLENGE_REQUIRED_DAYS journées. Une validation par jour ; les jours peuvent être espacés.",
-                    color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
-                Text("Nouvelle série dans ${snapshot.daysUntilChallenges} jours : les défis de cette série repartent alors à zéro.",
+                Text("+5 points pour 5 défis terminés", color = Mint,
+                    fontWeight = FontWeight.Medium, fontSize = 13.sp, lineHeight = 20.sp)
+                Text("Nouvelle série dans ${snapshot.daysUntilChallenges} jours · progression remise à zéro.",
+                    color = Muted, fontSize = 12.sp, lineHeight = 18.sp)
+                if (showRules) Text("Chaque défi demande $CHALLENGE_REQUIRED_DAYS journées différentes, avec une validation par date locale. Les jours peuvent être espacés. Les jours intermédiaires ne donnent pas de points. Les défis entièrement terminés se cumulent entre les séries pour le bonus.",
                     color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
-                Text("+5 points tous les 5 défis entièrement terminés, cumulés entre les séries.",
-                    color = Mint, fontSize = 13.sp, lineHeight = 20.sp)
             }
             indices.forEach { index ->
-                val done = index in snapshot.checkedChallenges
-                val progress = snapshot.challengeProgress[index] ?: ChallengeProgress(
-                    completedDays = if (done) CHALLENGE_REQUIRED_DAYS else 0
-                )
-                val requiredDays = progress.requiredDays
-                val completedDays = progress.completedDays.coerceIn(0, requiredDays)
-                val validatedToday = progress.validatedToday
-                Card(
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = if (done) CardLighter else CardColor),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(Modifier.fillMaxWidth().padding(19.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Text(CHALLENGES[index], color = Cream,
-                            fontWeight = FontWeight.SemiBold, fontSize = 17.sp, lineHeight = 24.sp)
-                        Text("$completedDays / $requiredDays jours validés", color = Mint,
-                            fontWeight = FontWeight.Medium, fontSize = 14.sp)
-                        ChallengeDays(requiredDays, completedDays, validatedToday)
-                        when {
-                            done -> Text("Défi terminé", color = Mint,
-                                fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
-                            validatedToday -> Text("Validé aujourd’hui · reviens demain", color = MareePalette.Lavender,
-                                fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 21.sp)
-                            else -> {
-                                Button(onClick = { onComplete(index) }, enabled = progress.canValidateToday,
-                                    modifier = Modifier.fillMaxWidth()) {
-                                    Text("Valider aujourd’hui")
-                                }
-                                if (!progress.canValidateToday) {
-                                    Text("La date du téléphone précède une validation déjà enregistrée. Vérifie les réglages de date pour continuer.",
-                                        color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
-                                }
+                key(index) {
+                    val done = index in snapshot.checkedChallenges
+                    val progress = snapshot.challengeProgress[index] ?: ChallengeProgress(
+                        completedDays = if (done) CHALLENGE_REQUIRED_DAYS else 0)
+                    var expanded by rememberSaveable(snapshot.challengeSeries, index) {
+                        mutableStateOf(index == firstPending)
+                    }
+                    val completedDays = progress.completedDays.coerceIn(0, progress.requiredDays)
+                    AppCardSurface {
+                        Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            Surface(color = CardLighter, shape = RoundedCornerShape(10.dp)) {
+                                Text("${index - indices.first + 1}", color = Mint, fontWeight = FontWeight.SemiBold,
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp))
+                            }
+                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                                Text(CHALLENGES[index], color = Cream, fontWeight = FontWeight.SemiBold,
+                                    fontSize = 17.sp, lineHeight = 24.sp)
+                                Text("$completedDays / ${progress.requiredDays} journées validées",
+                                    color = Muted, fontSize = 13.sp)
                             }
                         }
+                        when {
+                            done -> StatusPill("✓ Défi terminé")
+                            progress.validatedToday -> StatusPill("✓ Validé aujourd’hui · à demain")
+                            else -> {
+                                PrimaryAction("Valider aujourd’hui", onClick = { onComplete(index) },
+                                    enabled = progress.canValidateToday, modifier = Modifier.fillMaxWidth())
+                                if (!progress.canValidateToday) Text("La date du téléphone précède une validation enregistrée. Vérifie les réglages de date.",
+                                    color = Muted, fontSize = 12.sp, lineHeight = 18.sp)
+                            }
+                        }
+                        TextButton(onClick = { expanded = !expanded }) {
+                            Text(if (expanded) "Masquer les journées" else "Voir les ${progress.requiredDays} journées", fontSize = 13.sp)
+                        }
+                        if (expanded) ChallengeDays(progress.requiredDays, completedDays, progress.validatedToday)
                     }
                 }
             }
         }
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(18.dp))
     }
 }
 
@@ -730,38 +776,34 @@ private fun MoreTab(
     onDemoPlan: (PlanType) -> Unit, onAccount: () -> Unit
 ) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())
-        .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text("Tes réglages.", fontWeight = FontWeight.Bold, fontSize = 28.sp)
-        Text("Tes réglages, tes données, tes choix.", color = Muted, fontSize = 14.sp)
-        SectionCard {
-            Text("Le suivi", fontWeight = FontWeight.Bold, fontSize = 20.sp)
-            Text(if (active) "Actif sur ce téléphone" else "En pause · aucun écran de blocage actif",
-                color = if (active) Mint else MareePalette.Coral)
-            Text("Les autorisations se modifient dans les réglages Android. Tu peux mettre le suivi en pause à tout moment.",
-                color = Muted, fontSize = 14.sp)
-            Button(onClick = onSetup) { Text(if (active) "Revoir les autorisations" else "Activer le suivi") }
-            if (active) TextButton(onClick = onPause) { Text("Mettre en pause") }
-            if (!notificationsGranted) OutlinedButton(onClick = onNotifications) { Text("Activer les alertes facultatives") }
-        }
-        Card(shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = MareePalette.Subtle)) {
-            Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("Ta confidentialité", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = MareePalette.DeepTeal)
-                Text("Ton suivi reste sur ton téléphone. Retrouve les données utilisées, ton contact et les moyens de tout effacer.",
-                    color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
-                OutlinedButton(onClick = onPrivacy) { Text("Lire la politique de confidentialité") }
+        .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
+        ScreenHeading("TES RÉGLAGES", "À ta façon.", "Ton suivi, tes données, tes choix.")
+        AppCardSurface {
+            SectionLabel("Le suivi", if (active) "Actif" else "En pause")
+            Text(if (active) "Les limites de tes applications sont surveillées."
+                else "Aucune application n’est surveillée ou bloquée.",
+                color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
+            PrimaryAction(if (active) "Gérer les autorisations" else "Activer le suivi",
+                onClick = onSetup, modifier = Modifier.fillMaxWidth())
+            if (active) TextButton(onClick = onPause) { Text("Mettre le suivi en pause") }
+            if (!notificationsGranted) {
+                HorizontalDivider(color = MareePalette.Outline)
+                TextButton(onClick = onNotifications) { Text("Activer les alertes facultatives") }
             }
         }
-        SectionCard {
-            Text("Libre de commencer", fontWeight = FontWeight.Bold, fontSize = 20.sp)
-            Text("Milo fonctionne sans compte. Tu n’as pas besoin de t’inscrire pour reprendre ton temps.",
-                color = Muted, lineHeight = 22.sp)
-            TextButton(onClick = onAccount) { Text("Et la sauvegarde ?") }
+        AppCardSurface {
+            Text("Tes données, sous ton contrôle", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+            Text("Ton suivi reste sur ton téléphone. Consulte les informations de confidentialité ou efface tes données.",
+                color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
+            OutlinedButton(onClick = onPrivacy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+                shape = RoundedCornerShape(14.dp)) { Text("Confidentialité et données") }
+            TextButton(onClick = onAccount) { Text("Sans compte · et la sauvegarde ?", fontSize = 13.sp) }
         }
+        Spacer(Modifier.height(4.dp))
         MembershipSection(plan, onDemoPlan)
-        Text("Milo · Version ${BuildConfig.VERSION_NAME} · Conçue pour te rendre du temps.",
-            color = Muted, fontSize = 12.sp)
-        Spacer(Modifier.height(10.dp))
+        Text("Selkie · ${BuildConfig.VERSION_NAME}", color = Muted, fontSize = 12.sp,
+            modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+        Spacer(Modifier.height(18.dp))
     }
 }
 

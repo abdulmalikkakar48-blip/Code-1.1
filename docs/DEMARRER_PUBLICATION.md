@@ -1,6 +1,6 @@
-# Milo : passer du prototype à une application publiée
+# Selkie : passer du prototype à une application publiée
 
-**Milo** est le nouveau nom choisi par l’éditeur. Il remplace Marée dans les écrans ; sa disponibilité commerciale doit encore être vérifiée avant lancement.
+**Selkie** est le nouveau nom choisi par l’éditeur. Il remplace Milo (anciennement Marée) dans les écrans ; sa disponibilité commerciale doit encore être vérifiée avant lancement.
 
 ## La prochaine action à faire
 
@@ -26,6 +26,6 @@ Si tu encaisses régulièrement des revenus en France, il faut déclarer l’act
 
 ## Où en est le projet ?
 
-Milo 0.7.0 conserve les plafonds 10 / 50 / illimité. Le nom et le logo sont renouvelés. L’identifiant Android, la signature de test et les données locales sont conservés. Les limites, les points et les défis sont déjà présents. L’écran Coach est accessible avec des conseils hors ligne. Les vrais achats, le dialogue IA et la synchronisation restent à développer. La version iPhone est reportée ; la priorité est la publication Android.
+Selkie 0.8.0 conserve les plafonds 10 / 50 / illimité. Le nom est renouvelé ; un logo de phoque noir sur fond menthe accompagne les écrans refondus. L’identifiant Android, la signature de test et les données locales sont conservés. Les limites, les points et les défis sont déjà présents. L’écran Coach est accessible avec des conseils hors ligne. Les vrais achats, le dialogue IA et la synchronisation restent à développer. La version iPhone est reportée ; la priorité est la publication Android.
 
 Les liens officiels figurent dans chaque guide. Les pages Google ont été bloquées par le proxy de cet environnement le 10 octobre 2026 : les tarifs et règles connus sont donc à reconfirmer dans Play Console avant publication. Aucun compte ni paiement n’a été créé.

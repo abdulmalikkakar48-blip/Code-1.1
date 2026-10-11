@@ -11,8 +11,8 @@ android {
         applicationId = "com.maree.app"
         minSdk = 29
         targetSdk = 34
-        versionCode = 8
-        versionName = "0.7.0"
+        versionCode = 9
+        versionName = "0.8.0"
     }
 
     buildTypes {

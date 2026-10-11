@@ -2,9 +2,9 @@ package com.maree.app
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
@@ -12,10 +12,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -29,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -54,40 +51,43 @@ internal fun CustomChallengesSection(
     val pendingDelete = snapshot.customChallenges.firstOrNull { it.id == deletingId }
     val activeCount = snapshot.customChallenges.count { !it.completed }
 
-    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Text("Tes défis personnels", color = MareePalette.Ink,
-            fontWeight = FontWeight.Bold, fontSize = 24.sp, lineHeight = 30.sp)
-        PersonalCard(MareePalette.Lilac) {
-            Text("Une habitude qui te ressemble", fontWeight = FontWeight.Bold,
-                color = MareePalette.Lavender, fontSize = 19.sp)
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(18.dp)) {
+        AppCardSurface {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text("Ton objectif, ton rythme", modifier = Modifier.weight(1f),
+                    fontWeight = FontWeight.SemiBold, color = MareePalette.Ink,
+                    fontSize = 19.sp, lineHeight = 25.sp)
+                StatusPill("+0,25 pt")
+            }
             Text(
-                "Choisis ton objectif, exactement 3 étapes et une durée de $CUSTOM_MIN_DAYS à $CUSTOM_MAX_DAYS jours. Accomplis les 3 étapes, puis valide ta journée.",
+                "3 étapes par jour · de $CUSTOM_MIN_DAYS à $CUSTOM_MAX_DAYS journées",
                 color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp
             )
-            Text("+0,25 point à la fin du défi, une seule fois.",
-                color = MareePalette.Teal, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-            TextButton(onClick = { showRules = !showRules }) {
-                Text(if (showRules) "Masquer les détails" else "Comment ça marche ?")
-            }
-            if (showRules) {
-                Text("Les jours peuvent être espacés. Les cases se renouvellent chaque jour. Tes défis personnels restent conservés quand la série Milo change.",
-                    color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 20.sp)
-                Text("Ils ne participent pas au bonus de +5 points des défis proposés par Milo.",
-                    color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 20.sp)
-            }
             if (canCreate) {
-                Text("$activeCount / $MAX_ACTIVE_CUSTOM_CHALLENGES défis personnels en cours", color = MareePalette.Muted, fontSize = 12.sp)
-                Button(onClick = { creating = true; issue = null }, enabled = activeCount < MAX_ACTIVE_CUSTOM_CHALLENGES) {
-                    Text("Créer mon défi")
-                }
+                PrimaryAction("Créer un défi", onClick = { creating = true; issue = null },
+                    enabled = activeCount < MAX_ACTIVE_CUSTOM_CHALLENGES,
+                    modifier = Modifier.fillMaxWidth())
                 if (activeCount >= MAX_ACTIVE_CUSTOM_CHALLENGES) {
                     Text("Termine ou supprime un défi en cours pour en créer un nouveau.",
                         color = MareePalette.Muted, fontSize = 12.sp)
                 }
             } else {
-                Text("La création et la validation des défis personnels sont disponibles avec Premium et Ultra. Tes défis proposés par Milo restent accessibles à tous.",
+                Text("Crée et valide tes propres défis avec Premium ou Ultra.",
                     color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 20.sp)
-                OutlinedButton(onClick = onOffers) { Text("Découvrir les offres") }
+                OutlinedButton(onClick = onOffers, modifier = Modifier.fillMaxWidth()) {
+                    Text("Découvrir les offres")
+                }
+            }
+            TextButton(onClick = { showRules = !showRules }) {
+                Text(if (showRules) "Masquer les règles" else "Comment ça marche ?", fontSize = 13.sp)
+            }
+            if (showRules) {
+                HorizontalDivider(color = MareePalette.Outline)
+                Text("Choisis un objectif et exactement 3 étapes. Accomplis et coche ces 3 étapes avant de valider ta journée. Les cases se renouvellent chaque jour et les journées peuvent être espacées.",
+                    color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 20.sp)
+                Text("Tu gagnes 0,25 point une seule fois, à la fin de la durée choisie. Les défis personnels sont conservés au changement de série et ne participent pas au bonus des défis proposés.",
+                    color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 20.sp)
             }
         }
 
@@ -95,6 +95,9 @@ internal fun CustomChallengesSection(
             Text(issue!!, color = MareePalette.Danger, fontSize = 14.sp)
         }
 
+        if (snapshot.customChallenges.isNotEmpty()) {
+            SectionLabel("Tes défis personnels", "$activeCount en cours")
+        }
         snapshot.customChallenges.forEach { challenge ->
             PersonalChallengeCard(
                 challenge = challenge,
@@ -153,22 +156,22 @@ private fun PersonalChallengeCard(
     onOffers: () -> Unit
 ) {
     val editable = planAllowsValidation && challenge.canEditToday
-    PersonalCard(if (challenge.completed) MareePalette.Subtle else MareePalette.Surface) {
-        Text(challenge.title, fontWeight = FontWeight.Bold, fontSize = 19.sp,
+    AppCardSurface {
+        Text(challenge.title, fontWeight = FontWeight.SemiBold, fontSize = 20.sp,
             lineHeight = 26.sp, color = MareePalette.Ink)
-        Text("${challenge.completedDays} / ${challenge.requiredDays} jours validés",
-            color = MareePalette.Teal, fontWeight = FontWeight.Medium, fontSize = 14.sp)
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically) {
+            Text("${challenge.completedDays} / ${challenge.requiredDays} journées",
+                color = MareePalette.Muted, fontWeight = FontWeight.Medium, fontSize = 13.sp)
+            StatusPill(if (challenge.completed) "Terminé" else "+0,25 pt à la fin")
+        }
         LinearProgressIndicator(
             progress = { (challenge.completedDays / challenge.requiredDays.coerceAtLeast(1).toFloat()).coerceIn(0f, 1f) },
-            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)),
+            modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(8.dp)),
             color = MareePalette.Teal,
-            trackColor = MareePalette.Lilac
+            trackColor = MareePalette.Subtle
         )
-        ChallengeDays(challenge.requiredDays, challenge.completedDays, challenge.validatedToday)
-        if (!challenge.completed) {
-            Text("Tes 3 étapes d’aujourd’hui",
-                color = MareePalette.Muted, fontSize = 13.sp, fontWeight = FontWeight.Medium)
-        }
+        SectionLabel(if (challenge.completed) "Les 3 étapes" else "Aujourd’hui · 3 étapes")
         challenge.steps.forEachIndexed { index, step ->
             val checked = challenge.completed || index in challenge.todayCheckedSteps
             Row(
@@ -177,37 +180,32 @@ private fun PersonalChallengeCard(
                     enabled = editable,
                     role = Role.Checkbox,
                     onValueChange = { onToggleStep(index, it) }
-                ).padding(vertical = 2.dp),
+                ).padding(vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Checkbox(checked = checked, onCheckedChange = null, enabled = editable)
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                    Text("Étape ${index + 1}", color = MareePalette.Teal,
-                        fontWeight = FontWeight.SemiBold, fontSize = 11.sp)
-                    Text(step, color = MareePalette.Ink, fontSize = 15.sp, lineHeight = 22.sp)
-                }
+                Text("${index + 1}.", color = MareePalette.Teal,
+                    fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                Text(step, modifier = Modifier.weight(1f), color = MareePalette.Ink,
+                    fontSize = 15.sp, lineHeight = 22.sp)
             }
+            if (index != challenge.steps.lastIndex) HorizontalDivider(color = MareePalette.Outline)
         }
         when {
             challenge.completed -> {
-                Text("Défi terminé", color = MareePalette.Teal,
-                    fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
                 Text(if (challenge.rewardClaimed) "Récompense de 0,25 point déjà accordée." else "La récompense de ce défi ne peut être obtenue qu’une fois.",
                     color = MareePalette.Muted, fontSize = 13.sp)
             }
-            challenge.validatedToday -> Text("Validé aujourd’hui · reviens demain", color = MareePalette.Lavender,
-                fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 21.sp)
+            challenge.validatedToday -> StatusPill("Journée validée · à demain")
             !planAllowsValidation -> {
                 Text("La validation de ce défi personnel nécessite Premium ou Ultra.",
                     color = MareePalette.Muted, fontSize = 13.sp)
                 TextButton(onClick = onOffers) { Text("Voir les offres") }
             }
             else -> {
-                Button(onClick = onValidate, enabled = challenge.canValidateToday,
-                    modifier = Modifier.fillMaxWidth()) {
-                    Text("Valider aujourd’hui")
-                }
+                PrimaryAction("Valider ma journée", onClick = onValidate,
+                    enabled = challenge.canValidateToday, modifier = Modifier.fillMaxWidth())
                 Text(
                     if (!challenge.canEditToday) "La date du téléphone précède une validation déjà enregistrée. Vérifie les réglages de date pour continuer."
                     else if (challenge.todayCheckedSteps.size < 3) "Accomplis et coche les 3 étapes avant de valider."
@@ -216,6 +214,9 @@ private fun PersonalChallengeCard(
                 )
             }
         }
+        HorizontalDivider(color = MareePalette.Outline)
+        SectionLabel("Tes journées", "${challenge.completedDays} validées")
+        ChallengeDays(challenge.requiredDays, challenge.completedDays, challenge.validatedToday)
         TextButton(onClick = onDelete, modifier = Modifier.align(Alignment.End)) {
             Text("Supprimer ce défi", color = MareePalette.Muted, fontSize = 12.sp)
         }
@@ -284,16 +285,4 @@ private fun CreatePersonalChallengeDialog(
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Annuler") } }
     )
-}
-
-@Composable
-private fun PersonalCard(
-    color: Color,
-    content: @Composable ColumnScope.() -> Unit
-) {
-    Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = color, contentColor = MareePalette.Ink)) {
-        Column(Modifier.fillMaxWidth().padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
-    }
 }

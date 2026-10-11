@@ -3,15 +3,16 @@ package com.maree.app
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -21,70 +22,110 @@ internal fun planName(plan: PlanType): String = plan.displayName
 
 @Composable
 internal fun MembershipSection(plan: PlanType, onDemoPlan: (PlanType) -> Unit) {
-    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Text("Ton offre, à ton rythme", fontWeight = FontWeight.Bold, fontSize = 23.sp)
-        Text("Abonnements en préparation. Les prix ci-dessous sont prévus pour leur lancement ; aucun paiement n’est disponible dans cette version.",
-            color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
-        if (BuildConfig.DEBUG) {
-            Text("MODE DÉMONSTRATION GRATUIT · ${planName(plan)} sélectionné",
-                color = MareePalette.Teal, fontWeight = FontWeight.SemiBold, fontSize = 12.sp)
-            Text("Essaie les limites et les défis personnels sans payer. Changer d’offre conserve tes données et tes points. Ce choix de test ne constitue pas un abonnement.",
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        ScreenHeading(
+            eyebrow = "LES OFFRES",
+            title = "À ton rythme.",
+            description = "Commence gratuitement. Choisis plus de liberté quand tu en as besoin."
+        )
+
+        AppCardSurface {
+            SectionLabel("Ton offre actuelle", if (BuildConfig.DEBUG) "Démonstration" else null)
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                Text(planName(plan), modifier = Modifier.weight(1f), color = MareePalette.Ink,
+                    fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                StatusPill(plan.maxTrackedApps?.let { "$it applications" } ?: "Sans plafond")
+            }
+            Text(
+                if (BuildConfig.DEBUG) "Les changements d’offre sont gratuits dans cette version de test. Tes points et ton suivi sont conservés."
+                else "Les abonnements ne sont pas encore disponibles.",
+                color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 20.sp
+            )
+        }
+
+        Text("Premium et Ultra sont en préparation. Leurs prix sont prévus pour le lancement ; aucun paiement n’est possible ici.",
+            color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 20.sp)
+
+        PlanType.entries.forEach { option ->
+            MembershipPlanCard(option, option == plan, onDemoPlan)
+        }
+
+        AppCardSurface {
+            Text("Les mêmes règles pour tout le monde", color = MareePalette.Ink,
+                fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
+            Text("À 0 point, ajouter une application ou modifier une limite reste bloqué, quelle que soit l’offre. Réinitialiser une limite demande 10 points.",
                 color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 20.sp)
         }
-        PlanType.entries.forEach { option ->
-            val selected = option == plan
-            val background = when (option) {
-                PlanType.FREE -> MareePalette.Subtle
-                PlanType.PREMIUM -> MareePalette.Surface
-                PlanType.ULTRA -> MareePalette.Surface
+    }
+}
+
+@Composable
+private fun MembershipPlanCard(option: PlanType, selected: Boolean, onDemoPlan: (PlanType) -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = MareePalette.Surface),
+        border = BorderStroke(1.dp, if (selected) MareePalette.Teal else MareePalette.Outline)
+    ) {
+        Column(Modifier.fillMaxWidth().padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                Text(planName(option), modifier = Modifier.weight(1f), color = MareePalette.Ink,
+                    fontWeight = FontWeight.Bold, fontSize = 21.sp)
+                if (selected) StatusPill("Sélectionnée")
             }
-            val accent = when (option) {
-                PlanType.FREE -> MareePalette.Teal
-                PlanType.PREMIUM -> MareePalette.Lavender
-                PlanType.ULTRA -> MareePalette.Amber
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.Bottom) {
+                Text(if (option == PlanType.FREE) "0 €" else "${option.monthlyPriceEuros} €",
+                    color = MareePalette.DeepTeal, fontWeight = FontWeight.Bold, fontSize = 28.sp)
+                Text(if (option == PlanType.FREE) "toujours gratuit" else "/ mois · prévu",
+                    modifier = Modifier.weight(1f),
+                    color = MareePalette.Muted, fontSize = 13.sp)
             }
-            Card(
-                modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = background),
-                border = if (selected) BorderStroke(1.dp, accent) else null
-            ) {
-                Column(Modifier.fillMaxWidth().padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("Milo ${planName(option)}", color = accent,
-                        fontWeight = FontWeight.Bold, fontSize = 21.sp)
-                    Text(if (option == PlanType.FREE) "Gratuit" else "${option.monthlyPriceEuros} € / mois · à venir",
-                        color = accent, fontWeight = FontWeight.Bold, fontSize = 23.sp)
-                    Text(option.maxTrackedApps?.let { "Jusqu’à $it applications suivies" }
-                        ?: "Applications illimitées · toutes celles compatibles sur ton téléphone",
-                        fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
-                    Text("Défis Milo et suivi local du temps d’écran", color = MareePalette.Muted,
-                        fontSize = 14.sp, lineHeight = 21.sp)
-                    if (option.canCreateCustomChallenges) {
-                        Text("Défis personnels : 3 étapes par jour, durée choisie dès 2 jours, +0,25 point à la fin",
-                            color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
-                    }
-                    if (option == PlanType.ULTRA) {
-                        Text("Recherche et tri des applications par temps passé ou proximité de la limite",
-                            color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
-                        Text("Coach IA par messages illimité · prévu au lancement, pas encore disponible",
-                            color = accent, fontSize = 14.sp, lineHeight = 21.sp)
-                    }
-                    if (BuildConfig.DEBUG) {
-                        if (selected) {
-                            Text("Offre sélectionnée pour la démonstration", color = accent,
-                                fontWeight = FontWeight.Medium, fontSize = 13.sp)
-                        } else if (option == PlanType.FREE) {
-                            OutlinedButton(onClick = { onDemoPlan(option) }) { Text("Revenir à Gratuit") }
-                        } else {
-                            Button(onClick = { onDemoPlan(option) }) { Text("Tester ${planName(option)} gratuitement") }
-                        }
-                    } else if (option != PlanType.FREE) {
-                        Text("Disponible prochainement", color = accent, fontSize = 13.sp)
-                    }
-                }
+            HorizontalDivider(color = MareePalette.Outline)
+
+            OfferFeature(
+                option.maxTrackedApps?.let { "$it applications suivies" } ?: "Applications sans plafond",
+                if (option.maxTrackedApps == null) "Toutes les applications compatibles de ton téléphone." else null
+            )
+            OfferFeature("Défis quotidiens inclus", "Des défis sur plusieurs jours pour retrouver du temps.")
+            if (option.canCreateCustomChallenges) {
+                OfferFeature("Tes propres défis",
+                    "3 étapes chaque jour · durée de 2 à 365 jours · +0,25 point une fois le défi terminé.")
+            }
+            if (option == PlanType.ULTRA) {
+                OfferFeature("Recherche et tri du suivi", "Par nom, temps passé ou proximité de la limite.")
+                OfferFeature("Coach IA illimité par messages", "Prévu pour Ultra · pas encore disponible.")
+            }
+
+            when {
+                BuildConfig.DEBUG && !selected -> PrimaryAction(
+                    label = if (option == PlanType.FREE) "Choisir Gratuit" else "Essayer ${planName(option)} gratuitement",
+                    onClick = { onDemoPlan(option) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                !BuildConfig.DEBUG && option != PlanType.FREE -> PrimaryAction(
+                    label = "Bientôt disponible",
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = false
+                )
             }
         }
-        Text("À 0 point, les ajouts et les modifications de limites restent bloqués dans toutes les offres. Un défi peut t’aider à retrouver des points. Une réinitialisation nécessite 10 points.",
-            color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 20.sp)
+    }
+}
+
+@Composable
+private fun OfferFeature(title: String, detail: String? = null) {
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Text("✓", color = MareePalette.Teal, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(title, color = MareePalette.Ink, fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp, lineHeight = 20.sp)
+            if (detail != null) Text(detail, color = MareePalette.Muted,
+                fontSize = 13.sp, lineHeight = 19.sp)
+        }
     }
 }

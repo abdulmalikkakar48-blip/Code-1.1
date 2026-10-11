@@ -1,32 +1,26 @@
 package com.maree.app
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,7 +28,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-/** Un bilan des compteurs réellement disponibles, sans historique ou temps gagné inventé. */
+/** Bilan des compteurs disponibles, sans historique ni temps gagné inventé. */
 @Composable
 internal fun DailyTab(
     snapshot: MareeSnapshot,
@@ -45,237 +39,146 @@ internal fun DailyTab(
     onActivateTracking: () -> Unit
 ) {
     val today = LocalDate.now()
+    val tip = dailyTips[Math.floorMod(today.toEpochDay(), dailyTips.size.toLong()).toInt()]
     val usedMillis = snapshot.apps.sumOf { it.usedMillis }
     val limitMinutes = snapshot.apps.sumOf { it.limitMinutes.toLong() }
     val withinLimit = snapshot.apps.count {
         !it.isLocked && it.usedMillis < it.limitMinutes * 60_000L
     }
     val lockedCount = snapshot.apps.count { it.isLocked }
-    val tip = dailyTips[(today.toEpochDay() % dailyTips.size).toInt()]
-    val currentChallenges = snapshot.checkedChallenges.size
     val challengeIndices = if (snapshot.challengeSeries == 0) 0..9 else 10..19
-    val validatedToday = challengeIndices.count { snapshot.challengeProgress[it]?.validatedToday == true }
+    val validatedToday = challengeIndices.count {
+        snapshot.challengeProgress[it]?.validatedToday == true
+    }
     val personalValidationsToday = snapshot.customChallenges.count { it.validatedToday }
+    var showAllApps by rememberSaveable { mutableStateOf(false) }
+    var showCounterDetails by rememberSaveable { mutableStateOf(false) }
 
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(18.dp)
+            .padding(horizontal = 20.dp, vertical = 4.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        Text(
-            today.format(DateTimeFormatter.ofPattern("EEEE d MMMM", Locale.FRENCH))
+        ScreenHeading(
+            eyebrow = today.format(DateTimeFormatter.ofPattern("EEEE d MMMM", Locale.FRENCH))
                 .replaceFirstChar { it.titlecase(Locale.FRENCH) },
-            color = MareePalette.Coral,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 14.sp
+            title = "Un peu plus de vie.",
+            description = "Une pause, un repère, un petit pas à la fois."
         )
-        Text(
-            "Aujourd’hui, à ton rythme.",
-            color = MareePalette.Ink,
-            fontWeight = FontWeight.Bold,
-            fontSize = 28.sp,
-            lineHeight = 34.sp
-        )
-        Text(
-            "Prends un instant pour observer tes habitudes et choisir ta prochaine pause.",
-            color = MareePalette.Muted,
-            fontSize = 15.sp
-        )
-
+        AppCardSurface {
+            SectionLabel("Ta pause du jour")
+            Text(tip.first, color = MareePalette.Ink, fontWeight = FontWeight.Bold,
+                fontSize = 22.sp, lineHeight = 28.sp)
+            Text(tip.second, color = MareePalette.Muted, fontSize = 16.sp, lineHeight = 24.sp)
+            Text("Une idée à essayer, sans validation ni points.",
+                color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 19.sp)
+        }
         if (!monitoringActive) {
-            DailyCard(MareePalette.Peach) {
-                Text("Le bilan attend ton suivi", fontWeight = FontWeight.Bold, fontSize = 20.sp,
-                    color = MareePalette.Coral)
-                Text("Le suivi est en pause. Active-le pour actualiser les durées et le bilan de tes applications. Tes conseils et tes défis restent disponibles.",
-                    color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
-                Button(onClick = onActivateTracking) { Text("Configurer le suivi") }
+            AppCardSurface {
+                StatusPill("Suivi en pause")
+                Text("Tes repères t’attendent", fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp, color = MareePalette.Ink)
+                Text("Active le suivi pour actualiser tes durées. Les conseils et les défis restent disponibles.",
+                    color = MareePalette.Muted, fontSize = 15.sp, lineHeight = 22.sp)
+                PrimaryAction("Configurer le suivi", onClick = onActivateTracking)
             }
         } else if (snapshot.apps.isEmpty()) {
-            DailyCard(MareePalette.Subtle) {
-                Text("Ton premier repère", fontWeight = FontWeight.Bold, fontSize = 21.sp)
-                Text(
-                    "Choisis une application à suivre. Ton bilan se remplira avec son temps d’utilisation.",
-                    color = MareePalette.Muted
-                )
-                Button(onClick = onAddApp, enabled = snapshot.points > 0) {
-                    Text("Choisir une application")
-                }
+            AppCardSurface {
+                SectionLabel("Ton premier repère")
+                Text("Commence avec une application", fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp, color = MareePalette.Ink)
+                Text("Choisis celle que tu souhaites moins consulter. Tu retrouveras son compteur ici.",
+                    color = MareePalette.Muted, fontSize = 15.sp, lineHeight = 22.sp)
+                PrimaryAction("Choisir une application", onClick = onAddApp,
+                    enabled = snapshot.points > 0)
                 if (snapshot.points <= 0) {
-                    Text(
-                        "L’ajout d’une application sera disponible quand tu auras retrouvé des points.",
-                        color = MareePalette.Muted,
-                        fontSize = 13.sp
-                    )
+                    Text("Il te faut des points pour ajouter une application.",
+                        color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 19.sp)
                 }
             }
         } else {
-            DailyCard(MareePalette.Subtle) {
-                Text(
-                    "TEMPS COMPTÉ AUJOURD’HUI",
-                    color = MareePalette.DeepTeal,
-                    fontSize = 11.sp,
-                    letterSpacing = 1.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    durationLabel(usedMillis / 60_000L),
-                    color = MareePalette.Teal,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 40.sp,
-                    lineHeight = 46.sp
-                )
-                Text("sur tes ${snapshot.apps.size} application${if (snapshot.apps.size > 1) "s" else ""} suivie${if (snapshot.apps.size > 1) "s" else ""}",
-                    color = MareePalette.Muted)
+            AppCardSurface {
+                SectionLabel("Tes compteurs")
+                Text(durationLabel(usedMillis / 60_000L), color = MareePalette.Teal,
+                    fontWeight = FontWeight.Bold, fontSize = 36.sp, lineHeight = 42.sp)
+                Text("Sur ${snapshot.apps.size} application${if (snapshot.apps.size > 1) "s" else ""} suivie${if (snapshot.apps.size > 1) "s" else ""}",
+                    color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
                 LinearProgressIndicator(
                     progress = {
                         (usedMillis / (limitMinutes.coerceAtLeast(1) * 60_000f)).coerceIn(0f, 1f)
                     },
-                    modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(8.dp)),
+                    modifier = Modifier.fillMaxWidth().height(6.dp)
+                        .clip(RoundedCornerShape(6.dp)),
                     color = MareePalette.Teal,
-                    trackColor = MareePalette.Teal.copy(alpha = .12f)
+                    trackColor = MareePalette.Subtle
                 )
-                Text(
-                    "${durationLabel(limitMinutes)} de limites cumulées",
-                    color = MareePalette.DeepTeal,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp
-                )
-                Text(
-                    "Ce bilan additionne les compteurs actuels, pas tout le temps passé sur ton téléphone. " +
-                        "Ajouter une application, réinitialiser sa limite ou la débloquer remet son compteur à zéro.",
-                    color = MareePalette.Muted,
-                    fontSize = 12.sp,
-                    lineHeight = 18.sp
-                )
-            }
-
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                DailyCard(MareePalette.Peach, Modifier.weight(1f)) {
-                    Text("$withinLimit", color = MareePalette.Coral,
-                        fontWeight = FontWeight.Bold, fontSize = 29.sp)
-                    Text("Sous la limite", fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                Text("${durationLabel(limitMinutes)} de limites cumulées",
+                    color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
+                Text("$withinLimit sous la limite · $lockedCount verrouillée${if (lockedCount > 1) "s" else ""}",
+                    color = MareePalette.Ink, fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp, lineHeight = 21.sp)
+                TextButton(onClick = { showCounterDetails = !showCounterDetails }) {
+                    Text(if (showCounterDetails) "Masquer l’explication" else "Que mesure ce bilan ?")
                 }
-                DailyCard(MareePalette.Lilac, Modifier.weight(1f)) {
-                    Text("$lockedCount", color = MareePalette.Danger,
-                        fontWeight = FontWeight.Bold, fontSize = 29.sp)
-                    Text("Verrouillée${if (lockedCount > 1) "s" else ""}",
-                        fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                if (showCounterDetails) {
+                    Text("Ce bilan additionne les compteurs de tes applications suivies. Il ne mesure pas tout ton temps d’écran. Ajouter une application, réinitialiser sa limite ou la débloquer remet son compteur à zéro.",
+                        color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
                 }
-            }
-
-            DailyCard(MareePalette.Surface) {
-                Text("Tes repères", fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                snapshot.apps.forEachIndexed { index, app ->
+                HorizontalDivider(color = MareePalette.Outline)
+                val visibleApps = if (showAllApps) snapshot.apps else snapshot.apps.take(3)
+                visibleApps.forEachIndexed { index, app ->
                     if (index > 0) HorizontalDivider(color = MareePalette.Outline)
-                    Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                        Text(getName(app.packageName), fontWeight = FontWeight.SemiBold)
-                        Text(
-                            "${durationLabel(app.usedMillis / 60_000L)} / ${durationLabel(app.limitMinutes.toLong())}",
-                            color = MareePalette.Muted,
-                            fontSize = 13.sp
-                        )
-                        Text(
-                            when {
-                                app.isLocked -> "En pause : application verrouillée"
-                                app.usedMillis >= app.limitMinutes * 60_000L -> "Limite atteinte"
-                                else -> "Ta limite est respectée pour le moment"
-                            },
-                            color = if (app.isLocked) MareePalette.Lavender else MareePalette.Teal,
-                            fontSize = 13.sp
-                        )
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text(getName(app.packageName), color = MareePalette.Ink,
+                            fontWeight = FontWeight.SemiBold, fontSize = 16.sp, lineHeight = 22.sp)
+                        Text("${durationLabel(app.usedMillis / 60_000L)} / ${durationLabel(app.limitMinutes.toLong())}",
+                            color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
+                        if (app.isLocked || app.usedMillis >= app.limitMinutes * 60_000L) {
+                            Text(if (app.isLocked) "En pause · application verrouillée" else "Limite atteinte",
+                                color = MareePalette.Danger, fontSize = 13.sp, lineHeight = 19.sp)
+                        }
+                    }
+                }
+                if (snapshot.apps.size > 3) {
+                    TextButton(onClick = { showAllApps = !showAllApps }) {
+                        Text(if (showAllApps) "Réduire la liste" else "Voir les ${snapshot.apps.size} applications")
                     }
                 }
             }
         }
-
-        DailyCard(MareePalette.Sand) {
-            Row(verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                DailySun(Modifier.size(36.dp))
-                Text("La pause du jour", fontWeight = FontWeight.Bold,
-                    fontSize = 21.sp, color = MareePalette.Ink,
-                    modifier = Modifier.weight(1f))
-            }
-            Text(tip.first, fontWeight = FontWeight.SemiBold, fontSize = 17.sp,
-                color = MareePalette.Amber)
-            Text(tip.second, color = MareePalette.Muted, fontSize = 15.sp, lineHeight = 22.sp)
-            Text("Une idée à essayer, sans objectif à cocher.",
-                color = MareePalette.Muted, fontSize = 12.sp)
-        }
-
-        DailyCard(MareePalette.Surface) {
-            Text("Chaque petit pas compte", fontWeight = FontWeight.Bold, fontSize = 20.sp)
-            Text(
-                "$validatedToday défi${if (validatedToday > 1) "s" else ""} Milo pratiqué${if (validatedToday > 1) "s" else ""} et validé${if (validatedToday > 1) "s" else ""} aujourd’hui.",
-                color = MareePalette.Lavender,
-                fontWeight = FontWeight.Medium
-            )
-            Text(
-                "$currentChallenges / 10 défis entièrement terminés dans ta série actuelle.",
-                color = MareePalette.Muted
-            )
-            Text(
-                "${snapshot.totalCompletedChallenges} défi${if (snapshot.totalCompletedChallenges > 1) "s" else ""} terminé${if (snapshot.totalCompletedChallenges > 1) "s" else ""} au total.",
-                color = MareePalette.Teal,
-                fontWeight = FontWeight.Medium
-            )
-            Text("Un défi se termine après $CHALLENGE_REQUIRED_DAYS jours différents, qui peuvent être espacés. Les totaux de défis terminés couvrent plusieurs jours.",
-                color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
+        AppCardSurface {
+            SectionLabel("Tes petits pas")
+            Text("$validatedToday défi${if (validatedToday > 1) "s" else ""} validé${if (validatedToday > 1) "s" else ""} aujourd’hui",
+                color = MareePalette.Ink, fontWeight = FontWeight.Bold,
+                fontSize = 20.sp, lineHeight = 27.sp)
             if (snapshot.customChallenges.isNotEmpty()) {
-                HorizontalDivider(color = MareePalette.Outline)
-                Text(
-                    "$personalValidationsToday défi${if (personalValidationsToday > 1) "s" else ""} personnel${if (personalValidationsToday > 1) "s" else ""} validé${if (personalValidationsToday > 1) "s" else ""} aujourd’hui.",
-                    color = MareePalette.Lavender, fontWeight = FontWeight.Medium, fontSize = 14.sp
-                )
-                Text("Pour tes défis personnels, la durée est celle que tu as choisie. Chaque journée nécessite les 3 étapes.",
-                    color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
+                Text("$personalValidationsToday défi${if (personalValidationsToday > 1) "s" else ""} personnel${if (personalValidationsToday > 1) "s" else ""} validé${if (personalValidationsToday > 1) "s" else ""} aujourd’hui",
+                    color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
             }
-        }
-
-        DailyCard(MareePalette.Subtle) {
-            Text("Besoin d’un coup de pouce ?", color = MareePalette.Teal,
-                fontWeight = FontWeight.Bold, fontSize = 20.sp)
-            Text("Retrouve les conseils hors ligne et l’espace du futur coach IA.",
+            HorizontalDivider(color = MareePalette.Outline)
+            Text("${snapshot.checkedChallenges.size} / 10 défis terminés dans ta série",
+                color = MareePalette.Teal, fontWeight = FontWeight.SemiBold,
+                fontSize = 15.sp, lineHeight = 22.sp)
+            Text("${snapshot.totalCompletedChallenges} terminé${if (snapshot.totalCompletedChallenges > 1) "s" else ""} au total",
                 color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
-            Button(onClick = onCoach) { Text("Ouvrir le coach") }
+            Text("Chaque défi de la série demande $CHALLENGE_REQUIRED_DAYS journées. Elles peuvent être espacées.",
+                color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 19.sp)
         }
-        Spacer(Modifier.height(8.dp))
-    }
-}
-
-@Composable
-private fun DailyCard(
-    color: Color,
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit
-) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = color, contentColor = MareePalette.Ink)
-    ) {
-        Column(Modifier.fillMaxWidth().padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(11.dp), content = content)
-    }
-}
-
-@Composable
-private fun DailySun(modifier: Modifier = Modifier) {
-    Canvas(modifier) {
-        val radius = size.minDimension / 5f
-        drawCircle(MareePalette.Coral, radius = radius, center = center)
-        for (ray in 0..7) {
-            val angle = ray * Math.PI / 4
-            val direction = Offset(kotlin.math.cos(angle).toFloat(), kotlin.math.sin(angle).toFloat())
-            drawLine(MareePalette.Coral, center + direction * (radius * 1.5f),
-                center + direction * (radius * 2.1f), strokeWidth = 2.dp.toPx())
+        AppCardSurface {
+            Text("Besoin d’un coup de pouce ?", color = MareePalette.Ink,
+                fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 27.sp)
+            Text("Choisis un conseil concret, disponible hors ligne.",
+                color = MareePalette.Muted, fontSize = 15.sp, lineHeight = 22.sp)
+            PrimaryAction("Ouvrir le coach", onClick = onCoach)
         }
+        Spacer(Modifier.height(4.dp))
     }
 }
 
 private fun durationLabel(minutes: Long): String {
     val nonNegative = minutes.coerceAtLeast(0L)
     return if (nonNegative < 60) "$nonNegative min"
+    else if (nonNegative % 60 == 0L) "${nonNegative / 60} h"
     else "${nonNegative / 60} h ${nonNegative % 60} min"
 }
 

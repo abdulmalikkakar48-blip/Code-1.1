@@ -1,23 +1,23 @@
-# Confidentialité de Milo
+# Confidentialité de Selkie
 
 Information mise à jour le **11 octobre 2026**. Elle décrit la version Android locale actuelle.
 
-Milo aide à réduire le temps d’écran. Les données de suivi restent sur l’appareil et aucun compte n’est nécessaire. Cette information peut être consultée hors ligne dans l’application, avant toute autorisation et depuis les réglages. Sa consultation ou son affichage n’active pas le suivi et aucune case d’acceptation obligatoire n’est demandée.
+Selkie aide à réduire le temps d’écran. Les données de suivi restent sur l’appareil et aucun compte n’est nécessaire. Cette information peut être consultée hors ligne dans l’application, avant toute autorisation et depuis les réglages. Sa consultation ou son affichage n’active pas le suivi et aucune case d’acceptation obligatoire n’est demandée.
 
 ## Responsable et contact
 
-**Responsable du traitement : Abdul Malik Kakar**, éditeur de Milo à titre personnel (personne physique).
+**Responsable du traitement : Abdul Malik Kakar**, éditeur de Selkie à titre personnel (personne physique).
 
 Contact confidentialité : **abdulmalikkakar48@gmail.com**.
 
 ## Données utilisées
 
 - Les noms, icônes et identifiants des applications accessibles depuis le lanceur sont consultés localement pour choisir les applications à suivre.
-- Après autorisation, les événements d’utilisation fournis par Android depuis minuit, heure locale, sont lus pour calculer les durées des applications suivies et reconnaître l’application au premier plan. L’identifiant de l’application au premier plan peut concerner une application non suivie : il est temporairement utilisé en mémoire, sans historique enregistré par Milo.
-- Les identifiants des applications choisies, leurs limites, les durées de référence servant aux réinitialisations, les dates de verrouillage, d’alerte et de pénalité, le solde de points et ses quarts de point, les défis accomplis, les dates locales des validations quotidiennes et les dates des cycles de progression sont enregistrés dans les données privées de Milo sur l’appareil.
+- Après autorisation, les événements d’utilisation fournis par Android depuis minuit, heure locale, sont lus pour calculer les durées des applications suivies et reconnaître l’application au premier plan. L’identifiant de l’application au premier plan peut concerner une application non suivie : il est temporairement utilisé en mémoire, sans historique enregistré par Selkie.
+- Les identifiants des applications choisies, leurs limites, les durées de référence servant aux réinitialisations, les dates de verrouillage, d’alerte et de pénalité, le solde de points et ses quarts de point, les défis accomplis, les dates locales des validations quotidiennes et les dates des cycles de progression sont enregistrés dans les données privées de Selkie sur l’appareil.
 - Les titres des défis personnels, leurs trois étapes, la durée choisie, les cases du jour et leur progression sont enregistrés localement. Le choix d’offre dans le mode démonstration est également conservé ; il ne constitue pas un abonnement et ne donne lieu à aucun paiement.
 
-L’onglet Coach propose des conseils écrits à l’avance, accessibles hors ligne ; aucun message n’est envoyé à une IA. Milo ne lit pas les messages, le contenu des écrans, les contacts, les photos ou la position. Cette version ne comporte ni compte, ni synchronisation, ni publicité, ni mesure d’audience, ni coach IA connecté, ni paiement actif. Android conserve ses propres statistiques d’utilisation, indépendamment de Milo.
+L’onglet Coach propose des conseils écrits à l’avance, accessibles hors ligne ; aucun message n’est envoyé à une IA. Selkie ne lit pas les messages, le contenu des écrans, les contacts, les photos ou la position. Cette version ne comporte ni compte, ni synchronisation, ni publicité, ni mesure d’audience, ni coach IA connecté, ni paiement actif. Android conserve ses propres statistiques d’utilisation, indépendamment de Selkie.
 
 ## Finalités et bases juridiques
 
@@ -39,25 +39,25 @@ Les deux premiers accès sont nécessaires au suivi avec blocage. Sans eux, cett
 
 Dans cette version, aucun envoi des données de suivi à l’éditeur, à un serveur ou à un partenaire n’est prévu. L’application ne déclare pas la permission Internet. Les fonctions locales utilisent les services Android de l’appareil.
 
-La sauvegarde Android de Milo est désactivée. Une migration entre appareils peut cependant dépendre du constructeur et de ses outils ; aucune garantie n’est donnée sur leur fonctionnement. Les traitements propres à Android, au constructeur et à la plateforme de téléchargement relèvent de leurs informations de confidentialité.
+La sauvegarde Android de Selkie est désactivée. Une migration entre appareils peut cependant dépendre du constructeur et de ses outils ; aucune garantie n’est donnée sur leur fonctionnement. Les traitements propres à Android, au constructeur et à la plateforme de téléchargement relèvent de leurs informations de confidentialité.
 
 En contactant l’éditeur par courriel, l’adresse de l’expéditeur, le message et les informations techniques liées au courriel sont transmis par son service de messagerie puis reçus par l’éditeur et son fournisseur de messagerie. Il ne faut pas envoyer spontanément des données sensibles, des captures privées ou des données de suivi.
 
-**Le contact utilise Gmail. Les conditions d’hébergement et les éventuels transferts de cette messagerie hors de l’Espace économique européen doivent encore être vérifiés et précisés par le responsable avant diffusion publique.** Aucun hébergement ou transfert des données de suivi n’est effectué par Milo. Ce point concernant les courriels ne doit pas être confondu avec le fonctionnement local de l’APK.
+**Le contact utilise Gmail. Les conditions d’hébergement et les éventuels transferts de cette messagerie hors de l’Espace économique européen doivent encore être vérifiés et précisés par le responsable avant diffusion publique.** Aucun hébergement ou transfert des données de suivi n’est effectué par Selkie. Ce point concernant les courriels ne doit pas être confondu avec le fonctionnement local de l’APK.
 
 ## Conservation et suppression
 
-Les réglages et la progression restent sur l’appareil jusqu’à leur suppression depuis Milo ou sa désinstallation. Retirer une application du suivi supprime son entrée, sa limite et son verrou ; les points et les totaux de défis restent jusqu’à l’effacement complet. Les durées du jour sont recalculées à partir des événements Android : Milo n’en conserve pas un historique détaillé.
+Les réglages et la progression restent sur l’appareil jusqu’à leur suppression depuis Selkie ou sa désinstallation. Retirer une application du suivi supprime son entrée, sa limite et son verrou ; les points et les totaux de défis restent jusqu’à l’effacement complet. Les durées du jour sont recalculées à partir des événements Android : Selkie n’en conserve pas un historique détaillé.
 
-Les dates de validation des défis proposés par Milo appartiennent à la série en cours. Elles sont effacées lors de son renouvellement, tous les 21 jours ; le nombre total de défis terminés et les points restent conservés jusqu’à l’effacement complet. Les défis personnels sont indépendants de ces séries : leurs textes, étapes et dates restent jusqu’à leur suppression individuelle ou à l’effacement complet. Supprimer un défi personnel ne retire pas les points déjà gagnés.
+Les dates de validation des défis proposés par Selkie appartiennent à la série en cours. Elles sont effacées lors de son renouvellement, tous les 21 jours ; le nombre total de défis terminés et les points restent conservés jusqu’à l’effacement complet. Les défis personnels sont indépendants de ces séries : leurs textes, étapes et dates restent jusqu’à leur suppression individuelle ou à l’effacement complet. Supprimer un défi personnel ne retire pas les points déjà gagnés.
 
-Le bouton **Effacer les données de Milo**, suivi d’une confirmation, supprime les applications suivies, les limites, les verrous, les points et leurs fractions, les défis et leurs dates enregistrées, les défis personnels et leurs trois étapes ainsi que le choix d’offre de démonstration. Lors d’une nouvelle utilisation, la progression repart avec les valeurs initiales. Cela ne supprime pas les statistiques conservées par Android et ne révoque pas les autorisations du téléphone ; ces dernières se retirent dans les réglages Android.
+Le bouton **Effacer les données de Selkie**, suivi d’une confirmation, supprime les applications suivies, les limites, les verrous, les points et leurs fractions, les défis et leurs dates enregistrées, les défis personnels et leurs trois étapes ainsi que le choix d’offre de démonstration. Lors d’une nouvelle utilisation, la progression repart avec les valeurs initiales. Cela ne supprime pas les statistiques conservées par Android et ne révoque pas les autorisations du téléphone ; ces dernières se retirent dans les réglages Android.
 
 Les messages reçus au contact de confidentialité sont conservés le temps de répondre à la demande, puis supprimés, sauf lorsqu’une obligation légale impose une conservation supplémentaire. Le responsable doit appliquer effectivement cette règle et documenter toute exception légale avant diffusion publique.
 
 ## Droits et recours
 
-Les limites sont consultables et modifiables dans l’application. Une application peut être retirée du suivi et les données de Milo peuvent être effacées depuis l’application ou les réglages Android.
+Les limites sont consultables et modifiables dans l’application. Une application peut être retirée du suivi et les données de Selkie peuvent être effacées depuis l’application ou les réglages Android.
 
 Il est possible de demander l’accès, la rectification, l’effacement, la limitation et, lorsque ses conditions sont réunies, la portabilité des données. Le droit d’opposition s’applique aux traitements qui le prévoient, notamment aux autres questions reçues par courriel traitées sur la base de l’intérêt légitime. Le service nécessaire de suivi repose sur son exécution à la demande de l’utilisateur. Toute question ou demande peut être adressée au contact indiqué ci-dessus.
 
