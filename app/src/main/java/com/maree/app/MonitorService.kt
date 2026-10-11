@@ -65,7 +65,7 @@ class MonitorService : Service() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
         val notification = NotificationCompat.Builder(this, SERVICE_CHANNEL)
-            .setSmallIcon(com.maree.app.R.drawable.ic_maree)
+            .setSmallIcon(com.maree.app.R.drawable.ic_notification)
             .setContentTitle("Marée protège ton temps")
             .setContentText("Le suivi du temps d’écran est actif")
             .setContentIntent(intent)
@@ -139,7 +139,7 @@ class MonitorService : Service() {
             ) != PackageManager.PERMISSION_GRANTED) return
         val message = "Plus que $remaining min sur $name"
         val notification: Notification = NotificationCompat.Builder(this, ALERT_CHANNEL)
-            .setSmallIcon(R.drawable.ic_maree)
+            .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle("Marée · Dernière ligne droite")
             .setContentText(message)
             .setAutoCancel(true)

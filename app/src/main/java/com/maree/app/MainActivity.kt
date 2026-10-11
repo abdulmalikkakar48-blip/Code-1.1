@@ -13,6 +13,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -300,7 +301,8 @@ private fun MareeApp() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("≋", color = Mint, fontSize = 38.sp, fontWeight = FontWeight.Bold)
+                        Image(painterResource(R.drawable.brand_mark), contentDescription = null,
+                            modifier = Modifier.size(42.dp))
                         Spacer(Modifier.width(9.dp))
                         Text("marée", color = Cream, fontSize = 29.sp, fontWeight = FontWeight.Bold)
                     }
@@ -607,7 +609,7 @@ private fun AppCard(
         Row(verticalAlignment = Alignment.CenterVertically) {
             AndroidView(factory = { ImageView(context).apply {
                 try { setImageDrawable(context.packageManager.getApplicationIcon(app.packageName)) }
-                catch (_: Exception) { setImageResource(R.drawable.ic_maree) }
+                catch (_: Exception) { setImageResource(R.drawable.brand_mark) }
             } }, modifier = Modifier.size(45.dp).clip(RoundedCornerShape(12.dp)))
             Spacer(Modifier.width(13.dp))
             Column(Modifier.weight(1f)) {

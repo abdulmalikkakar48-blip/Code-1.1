@@ -20,8 +20,8 @@
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:label="Marée"
-        android:icon="@drawable/ic_maree"
-        android:roundIcon="@drawable/ic_maree"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.Maree">
         <activity android:name=".LockActivity" android:exported="false"

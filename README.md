@@ -1,6 +1,12 @@
-# Marée 🌊 — application Android de réduction du temps d'écran
+# Marée — application Android de réduction du temps d'écran
 
-**Version actuelle : 0.4.0 (APK de test et code source).** Interface entièrement en français.
+## Mise à jour 0.5.0
+
+Le nom **Marée** est conservé et le nouveau logo associe pause, progression et accents menthe/corail. L’identifiant Android et les données restent stables pour la mise à jour. Voir [l’identité visuelle](docs/IDENTITE_VISUELLE.md).
+
+Pour commencer la distribution et les paiements, ouvre [le guide de démarrage](docs/DEMARRER_PUBLICATION.md). Il mène aux étapes [Google Play](docs/PUBLICATION_GOOGLE_PLAY.md) et [abonnements](docs/ABONNEMENTS.md). Le travail porte sur Android ; la version iPhone est reportée. L’APK reste une version de test ; aucun paiement ni coach IA n’est connecté.
+
+**Version actuelle : 0.5.0 (APK de test et code source).** Interface entièrement en français.
 
 Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Material 3, `minSdk 29` (Android 10), `targetSdk 34`, package `com.maree.app`, Gradle 8.7, AGP 8.5.2, Kotlin 1.9.24.
 
@@ -50,7 +56,7 @@ La politique est une information pour la version locale, pas une certification j
 ## Ce qui reste à activer / développer
 
 - **Coach IA** : interface informative uniquement dans l'APK. Un exemple de fonction sécurisée Supabase se trouve dans `supabase/functions/coach/index.ts`, avec quota des 100 questions sur le serveur, mais le chat Android et l'authentification ne sont pas encore connectés.
-- **Premium et Ultra** : les prix de lancement prévus sont affichés, avec un mode de démonstration gratuit dans l’APK debug. Aucun abonnement n’est vendu. Avant commercialisation, remplacer le statut de démonstration local par des droits vérifiés côté serveur, Google Play Billing ou l’équivalent Galaxy Store et des comptes développeur actifs. Le mode de démonstration ne doit pas servir de validation d’abonnement. **Ne pas utiliser Stripe** pour cet achat.
+- **Premium et Ultra** : les prix de lancement prévus sont affichés, avec un mode de démonstration gratuit dans l’APK debug. Aucun abonnement n’est vendu. Avant commercialisation, remplacer le statut de démonstration local par des droits vérifiés côté serveur, Google Play Billing ou l’équivalent Galaxy Store et des comptes développeur actifs. Le mode de démonstration ne doit pas servir de validation d’abonnement. Pour les abonnements numériques sur Google Play, utiliser Google Play Billing dans le parcours standard. Stripe sert surtout au site web ; les programmes de paiement alternatif demandent une éligibilité et des règles spécifiques. Voir [le guide des abonnements](docs/ABONNEMENTS.md).
 - **Compte email et sauvegarde cloud** : tables RLS Supabase préparées mais pas encore reliées à l'APK. Les données actuelles sont locales dans `SharedPreferences` et `allowBackup=false`.
 - **Tests sur un téléphone Samsung réel et distribution** : nécessaires avant mise en production.
 
