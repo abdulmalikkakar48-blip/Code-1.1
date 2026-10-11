@@ -1,19 +1,13 @@
-# Validation de la refonte Selkie du 11 octobre 2026
+# Validation de l’APK avec la signature d’origine
 
-- Code Android construit : `58a8f0d46e4f49d281adb3f5d9bbcc1cfba95fff`.
-- Compilation, tests unitaires et lint : réussis dans [GitHub Actions](https://github.com/abdulmalikkakar48-blip/Code-1.1/actions/runs/38140276591).
-- APK publié : `downloads/Selkie-Android.apk`.
-- SHA-256 : `683c4366bc824c0ed0029a7a393eddbcae0613d0decd9ca35ca674517864df3e`.
-- Taille : 23401484 octets.
-- Android : `com.maree.app`, version 0.8.0, versionCode 9, Android 10+.
-- Certificat SHA-256 extrait du bloc de signature APK v2 : `fba73c6576ae1408f342a199d03d2f6766b69721a1c889c42d5ed0a61f0514d3`.
-- Ancien certificat cloud : `9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50`. Les signatures sont différentes ; une mise à jour directe de cette ancienne installation n'est pas possible.
-- L'ancien APK est conservé dans `downloads/Selkie-Android-avant-refonte.apk`.
-- L'archive de source est régénérée à partir du code actuel, sans les binaires du dossier downloads.
-- La publication vérifie le SHA-256 et la correspondance du code Android avec la révision testée avant de remplacer le fichier.
+L’APK downloads/Selkie-Android.apk est exactement le fichier d’origine du commit 96fd6caf27c192a173ea20820f85f3b257c6db66.
 
-## Limites de validation
+- Version : Selkie 0.8.0, versionCode 9, Android 10+.
+- Taille : 23 632 504 octets.
+- SHA-256 APK : 3870cf3e2ec2e2dc34d0f226492cabc0ca830a5af4440171eafab1f2eda56a20.
+- SHA-256 certificat initial : 9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50.
+- SHA du blob Git d’origine : 9b0fdad8e45e60516aa603e7197d53e8e03450ce.
 
-Les captures existantes datent de la version antérieure. Aucun rendu de cette refonte, suivi prolongé ou contrôle de grandes polices sur téléphone réel n'a été observé dans cette tâche. Les contrôles automatisés ne remplacent pas cette vérification visuelle.
+La refonte du code a compilé et passé les tests et lint dans le workflow 38140276591, mais l’APK GitHub Actions utilisait une autre clé de test. Il a été retiré du lien principal. L’APK rétabli ne contient donc pas encore cette nouvelle refonte.
 
-Les règles métier et la structure de stockage n'ont pas été modifiées par la refonte.
+Le dépôt et son archive de source ne contiennent pas la clé initiale. Pour reconstruire le nouveau design en conservant le même certificat, il faut réutiliser le fichier de signature de l’environnement Codex qui a produit l’APK d’origine. Le certificat présent dans l’APK ne contient pas cette clé privée.

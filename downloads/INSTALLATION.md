@@ -1,24 +1,11 @@
-# Installer Selkie — refonte moderne et contrastée
+# Installer Selkie avec la signature d’origine
 
 [Télécharger Selkie-Android.apk](https://github.com/abdulmalikkakar48-blip/Code-1.1/raw/maree-apk-download/downloads/Selkie-Android.apk).
 
-Le fichier contient la refonte vert profond et menthe lumineuse : titres affirmés, navigation sombre, carte de points et statistiques. Android 10 ou plus récent. Version de test 0.8.0, code 9.
+L’APK téléchargeable a été rétabli à la version Selkie 0.8.0 du commit 96fd6caf27c192a173ea20820f85f3b257c6db66. Son certificat est le certificat initial, également utilisé par les APK cloud précédents.
 
-Ouvre le fichier sur ton téléphone Android et lance l'installation. Android peut demander d'autoriser l'installation depuis le navigateur ou le gestionnaire de fichiers.
+Le code de la nouvelle refonte reste dans le dépôt. Cette refonte n’est pas encore disponible avec la signature d’origine : la clé privée de signature initiale est nécessaire et n’a pas été trouvée dans le dépôt ou l’archive de source.
 
-## Installation existante
+L’archive Selkie-Android-source.zip correspond à l’APK rétabli. Les captures existantes correspondent aussi à cette ancienne version.
 
-Ce nouvel APK est signé par la compilation GitHub Actions. Son certificat diffère de celui de l'ancien APK cloud. Android ne permet pas de le mettre à jour par-dessus cette installation avec une signature différente.
-
-Ne désinstalle pas ton application si tu souhaites garder ses données : la désinstallation effacerait les données locales. Pour une mise à jour conservant les données, le projet doit être recompilé avec la clé de signature de l'ancien APK. Cette clé privée n'est pas disponible dans ce dépôt.
-
-[L'ancien APK avant refonte](Selkie-Android-avant-refonte.apk) est conservé, ainsi que son historique GitHub.
-
-## Vérifications
-
-Compilation, tests unitaires et Android Lint réussis sur la révision 58a8f0d46e4f49d281adb3f5d9bbcc1cfba95fff. [Résultat et artefact](https://github.com/abdulmalikkakar48-blip/Code-1.1/actions/runs/38140276591).
-
-Le rendu de cette refonte sur appareil reste à vérifier. Les captures du dossier screenshots montrent la version antérieure.
-
-SHA-256 du nouvel APK : `683c4366bc824c0ed0029a7a393eddbcae0613d0decd9ca35ca674517864df3e`.
-Taille : 23401484 octets.
+Le workflow qui remplaçait automatiquement le téléchargement avec une signature GitHub différente a été retiré. Les APK produits par le workflow de compilation peuvent avoir une signature de test différente et ne remplacent plus ce téléchargement.
