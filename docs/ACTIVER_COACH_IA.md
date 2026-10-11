@@ -4,7 +4,7 @@
 
 Le client Android et le serveur sont implémentés : connexion par code e-mail, conversation, transmission HTTPS, réponses OpenAI, quota, erreurs et renouvellement des sessions. Les conseils fixes restent séparés et explicitement hors ligne.
 
-Le service n’est pas activé : l’éditeur a indiqué n’avoir encore aucun compte Supabase ou OpenAI API. Aucun accès, secret ou crédit API n’est configuré dans cet environnement. Une compilation sans configuration affiche l’activation nécessaire ; elle ne simule aucune réponse IA. L’APK publié 0.8.0 reste la version de design retenue, antérieure à cette connexion.
+Le service n’est pas activé : l’éditeur a indiqué n’avoir encore aucun compte Supabase ou OpenAI API. Aucun accès, secret ou crédit API n’est configuré dans cet environnement. L’APK de test 0.8.1 inclut le client sans configuration : il affiche l’activation nécessaire et ne simule aucune réponse IA. L’APK archivé 0.8.0 est antérieur à cette connexion.
 
 ## À faire avec le parent titulaire
 
@@ -46,4 +46,4 @@ Les tests couvrent les entrées, clés et destinations refusées, les sessions, 
 
 Contrôles locaux du 11 octobre 2026 : compilation réussie, **38 tests Android** sans échec, **5 tests du protocole serveur** réussis, contrôle TypeScript strict du protocole réussi, Android Lint sans erreur avec 13 avertissements. La configuration de compilation refuse une clé privée avant de produire l’APK ; ce refus a également été vérifié avec une valeur synthétique sans secret réel.
 
-La connexion réelle Supabase/OpenAI, les migrations SQL et le fonctionnement sur téléphone n’ont pas encore été testés, faute de comptes et d’accès configurés. Le build local sans configuration n’est pas distribué comme un coach actif et ne remplace pas l’APK de design publié.
+La connexion réelle Supabase/OpenAI, les migrations SQL et le fonctionnement sur téléphone n’ont pas encore été testés, faute de comptes et d’accès configurés. L’APK 0.8.1 est distribué pour essayer l’icône et le fonctionnement local, sans annoncer un coach actif. L’APK de design 0.8.0 reste archivé.

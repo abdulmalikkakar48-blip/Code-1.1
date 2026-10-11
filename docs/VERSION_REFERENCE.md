@@ -1,5 +1,22 @@
 # Selkie : version retenue le 11 octobre 2026
 
+## Version de travail 0.8.1
+
+À la demande de l’éditeur, le correctif de cadrage du logo est fourni immédiatement sous forme d’un APK de test distinct, même si sa signature impose de réinstaller la version précédente.
+
+- Application : Selkie 0.8.1, versionCode 10, package `com.maree.app`, Android 10+.
+- APK à essayer : `downloads/Selkie-Android-0.8.1.apk`, 23 475 888 octets.
+- SHA-256 APK : `8d534fdfcde170fed1857e5406410a8afd8e21c502a48b236f8ace34548c090d`.
+- Certificat de développement : `9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50`.
+- Sources de cette compilation : `downloads/Selkie-Android-0.8.1-source.zip`.
+- Contrôles et limites : [validation 0.8.1](../downloads/VALIDATION-0.8.1.md).
+
+Le phoque reste entier dans la zone sûre adaptative grâce aux marges proportionnelles ; le PNG, le fond et l’interface de la refonte restent conservés. La conversation IA préparée est incluse, sans configuration ni service actif. Les abonnements restent en démonstration. La désinstallation d’une version ayant l’autre signature efface ses données locales ; elle n’est pas effectuée automatiquement par ce dépôt.
+
+Les artefacts 0.8.0 ci-dessous restent une archive. La signature de test 0.8.1 ne doit pas être confondue avec la clé fixe 0.8.0 ni une clé de publication Google Play.
+
+## Archive de la refonte 0.8.0
+
 L’éditeur a choisi de conserver la nouvelle refonte comme base du travail à venir, même si sa première installation nécessite de désinstaller l’ancienne application.
 
 ## Référence exacte

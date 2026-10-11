@@ -1,5 +1,13 @@
 # Conserver la signature Android de Selkie
 
+## Exception de test 0.8.1
+
+L’éditeur a demandé de distribuer immédiatement le correctif de l’icône, en acceptant une réinstallation. La sauvegarde de la clé fixe ci-dessous n’est pas accessible dans cet environnement. `downloads/Selkie-Android-0.8.1.apk` utilise donc la clé de développement déjà disponible ici ; son certificat est documenté dans [sa validation](../downloads/VALIDATION-0.8.1.md). Aucune nouvelle clé n’a été générée. Ce fichier ne remplace pas directement une installation 0.8.0 signée avec la clé fixe : sa désinstallation efface les données locales.
+
+Cette exception concerne l’essai direct, pas une publication Google Play. Les artefacts 0.8.0 et leurs empreintes restent conservés. La procédure ci-dessous et `tools/sign_apk.py` continuent de contrôler la clé fixe 0.8.0 ; ne pas les utiliser pour déclarer la signature de développement équivalente. Avant la première publication, choisir et sauvegarder la clé de téléversement adaptée à Google Play App Signing.
+
+## Signature fixe de la refonte 0.8.0
+
 L’APK de la refonte est signé avec une nouvelle clé fixe. Elle doit être réutilisée pour toutes les prochaines mises à jour de cette installation.
 
 - Alias : selkie-stable.

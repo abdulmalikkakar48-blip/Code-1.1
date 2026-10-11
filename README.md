@@ -1,8 +1,16 @@
 # Selkie — application Android de réduction du temps d'écran
 
+## Version de test 0.8.1 — icône corrigée
+
+[Télécharger Selkie 0.8.1](downloads/Selkie-Android-0.8.1.apk) · [Code source de cette version](downloads/Selkie-Android-0.8.1-source.zip) · [Validation](downloads/VALIDATION-0.8.1.md).
+
+Le phoque utilise désormais des marges proportionnelles dans l’icône adaptative du téléphone. Le logo, les couleurs et les autres écrans de la refonte restent conservés. Cette compilation contient également le code de conversation préparé précédemment ; le dialogue IA reste **à activer**, sans comptes Supabase/OpenAI configurés. Aucun paiement n’est actif.
+
+L’éditeur a accepté une réinstallation : ce fichier emploie la signature de développement déjà disponible dans cet environnement, différente de celle de l’APK 0.8.0 à signature fixe. Android peut donc demander de désinstaller cette version précédente ; la désinstallation efface ses données locales. La clé privée n’est pas publiée. La version 0.8.0 et ses sources restent archivées sous leurs noms précédents.
+
 ## Connexion du Coach en préparation
 
-Le code Android intègre désormais une conversation authentifiée par code e-mail et un client HTTPS vers le serveur IA, avec réponses OpenAI, historique limité et gestion du quota. **Le service reste à activer** : aucun compte Supabase ou OpenAI API n’est encore configuré. Voir [les étapes d’activation](docs/ACTIVER_COACH_IA.md). L’APK téléchargeable ci-dessous reste la version de référence du nouveau design ; il n’a pas été remplacé par une compilation sans service configuré.
+Le code Android intègre désormais une conversation authentifiée par code e-mail et un client HTTPS vers le serveur IA, avec réponses OpenAI, historique limité et gestion du quota. **Le service reste à activer** : aucun compte Supabase ou OpenAI API n’est encore configuré. Voir [les étapes d’activation](docs/ACTIVER_COACH_IA.md). L’APK 0.8.1 inclut ce client sans configuration publique ; il affiche cet état sans simuler de réponse IA. L’APK 0.8.0 ci-dessous est conservé comme archive du design.
 
 ## Version de référence pour la suite
 
@@ -40,7 +48,7 @@ Plafonds : **10 applications en Gratuit**, **50 en Premium** et **aucun plafond 
 
 Pour commencer la distribution et les paiements, ouvre [le guide de démarrage](docs/DEMARRER_PUBLICATION.md). Il mène aux étapes [Google Play](docs/PUBLICATION_GOOGLE_PLAY.md) et [abonnements](docs/ABONNEMENTS.md). Le travail porte sur Android ; la version iPhone est reportée. L’APK reste une version de test ; aucun paiement ni coach IA n’est connecté.
 
-**Version actuelle : 0.8.0 (APK de test et code source).** Interface entièrement en français.
+**Version actuelle : 0.8.1 (APK de test et code source).** Interface entièrement en français.
 
 Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Material 3, `minSdk 29` (Android 10), `targetSdk 34`, package `com.maree.app`, Gradle 8.7, AGP 8.5.2, Kotlin 1.9.24.
 
