@@ -2,6 +2,8 @@ name: Construire l'APK Android
 on:
   push:
     branches: [main, master]
+  pull_request:
+    branches: [maree-apk-download]
   workflow_dispatch:
 
 jobs:
@@ -19,6 +21,8 @@ jobs:
           java-version: '17'
       - name: Installer le SDK Android
         uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
       - name: Installer Android API 34
         run: sdkmanager "platforms;android-34" "build-tools;34.0.0"
       - name: Préparer le cache Gradle

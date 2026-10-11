@@ -65,7 +65,7 @@ internal fun DailyTab(
             title = "Un peu plus de vie.",
             description = "Une pause, un repère, un petit pas à la fois."
         )
-        AppCardSurface {
+        AppCardSurface(containerColor = MareePalette.Mint) {
             SectionLabel("Ta pause du jour")
             Text(tip.first, color = MareePalette.Ink, fontWeight = FontWeight.Bold,
                 fontSize = 22.sp, lineHeight = 28.sp)
@@ -107,7 +107,7 @@ internal fun DailyTab(
                     progress = {
                         (usedMillis / (limitMinutes.coerceAtLeast(1) * 60_000f)).coerceIn(0f, 1f)
                     },
-                    modifier = Modifier.fillMaxWidth().height(6.dp)
+                    modifier = Modifier.fillMaxWidth().height(10.dp)
                         .clip(RoundedCornerShape(6.dp)),
                     color = MareePalette.Teal,
                     trackColor = MareePalette.Subtle

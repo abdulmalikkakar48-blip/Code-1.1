@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -39,9 +41,11 @@ internal fun BrandIcon(size: Dp = 36.dp) {
 
 @Composable
 internal fun ScreenHeading(eyebrow: String, title: String, description: String? = null) {
-    Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
-        Text(eyebrow, color = MareePalette.Teal, style = MaterialTheme.typography.labelMedium,
-            letterSpacing = 1.sp)
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Surface(color = MareePalette.Mint, shape = RoundedCornerShape(6.dp)) {
+            Text(eyebrow, color = MareePalette.Teal, style = MaterialTheme.typography.labelMedium,
+                letterSpacing = 1.4.sp, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
+        }
         Text(title, color = MareePalette.Ink, style = MaterialTheme.typography.headlineMedium)
         if (description != null) Text(description, color = MareePalette.Muted,
             style = MaterialTheme.typography.bodyMedium)
@@ -49,11 +53,12 @@ internal fun ScreenHeading(eyebrow: String, title: String, description: String? 
 }
 
 @Composable
-internal fun AppCardSurface(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
-    Card(modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = MareePalette.Surface),
+internal fun AppCardSurface(modifier: Modifier = Modifier, containerColor: Color = MareePalette.Surface, content: @Composable ColumnScope.() -> Unit) {
+    Card(modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         border = BorderStroke(1.dp, MareePalette.Outline)) {
-        Column(Modifier.fillMaxWidth().padding(18.dp),
+        Column(Modifier.fillMaxWidth().padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
     }
 }
@@ -72,7 +77,7 @@ internal fun SectionLabel(title: String, trailing: String? = null) {
 @Composable
 internal fun StatusPill(label: String, color: Color = MareePalette.Teal,
                         background: Color = MareePalette.Subtle) {
-    Surface(color = background, shape = RoundedCornerShape(8.dp)) {
+    Surface(color = background, shape = RoundedCornerShape(50)) {
         Text(label, color = color, fontSize = 12.sp, lineHeight = 17.sp,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp))
@@ -82,8 +87,10 @@ internal fun StatusPill(label: String, color: Color = MareePalette.Teal,
 @Composable
 internal fun PrimaryAction(label: String, onClick: () -> Unit,
                            modifier: Modifier = Modifier, enabled: Boolean = true) {
-    Button(onClick = onClick, enabled = enabled, shape = RoundedCornerShape(14.dp),
-        modifier = modifier.heightIn(min = 50.dp)) {
+    Button(onClick = onClick, enabled = enabled, shape = RoundedCornerShape(18.dp),
+        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 14.dp),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp, pressedElevation = 0.dp),
+        modifier = modifier.heightIn(min = 52.dp)) {
         Text(label, style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Center)
     }
 }
