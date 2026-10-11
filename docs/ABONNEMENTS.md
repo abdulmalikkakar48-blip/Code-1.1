@@ -2,7 +2,7 @@
 
 **Le prototype actuel ne prélève aucun argent.** Ses boutons Premium/Ultra sélectionnent gratuitement une offre de démonstration enregistrée sur le téléphone. Aucun abonnement Google Play, Stripe, serveur de vérification ou coach IA connecté n’est encore intégré.
 
-Le nom de travail est Marée ; sa disponibilité commerciale doit encore être vérifiée. Le guide [Publication Google Play](PUBLICATION_GOOGLE_PLAY.md) décrit le compte et le bundle nécessaires avant une distribution commerciale.
+Le nom de travail est Milo ; sa disponibilité commerciale doit encore être vérifiée. Le guide [Publication Google Play](PUBLICATION_GOOGLE_PLAY.md) décrit le compte et le bundle nécessaires avant une distribution commerciale.
 
 ## Prix et fonctions prévus
 

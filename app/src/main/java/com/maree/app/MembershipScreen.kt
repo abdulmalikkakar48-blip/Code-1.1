@@ -35,8 +35,8 @@ internal fun MembershipSection(plan: PlanType, onDemoPlan: (PlanType) -> Unit) {
             val selected = option == plan
             val background = when (option) {
                 PlanType.FREE -> MareePalette.Subtle
-                PlanType.PREMIUM -> MareePalette.Lilac
-                PlanType.ULTRA -> MareePalette.Sand
+                PlanType.PREMIUM -> MareePalette.Surface
+                PlanType.ULTRA -> MareePalette.Surface
             }
             val accent = when (option) {
                 PlanType.FREE -> MareePalette.Teal
@@ -44,20 +44,20 @@ internal fun MembershipSection(plan: PlanType, onDemoPlan: (PlanType) -> Unit) {
                 PlanType.ULTRA -> MareePalette.Amber
             }
             Card(
-                modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp),
+                modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = background),
                 border = if (selected) BorderStroke(1.dp, accent) else null
             ) {
                 Column(Modifier.fillMaxWidth().padding(20.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("Marée ${planName(option)}", color = accent,
+                    Text("Milo ${planName(option)}", color = accent,
                         fontWeight = FontWeight.Bold, fontSize = 21.sp)
                     Text(if (option == PlanType.FREE) "Gratuit" else "${option.monthlyPriceEuros} € / mois · à venir",
-                        color = accent, fontWeight = FontWeight.Bold, fontSize = 25.sp)
+                        color = accent, fontWeight = FontWeight.Bold, fontSize = 23.sp)
                     Text(option.maxTrackedApps?.let { "Jusqu’à $it applications suivies" }
                         ?: "Applications illimitées · toutes celles compatibles sur ton téléphone",
                         fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
-                    Text("Défis Marée et suivi local du temps d’écran", color = MareePalette.Muted,
+                    Text("Défis Milo et suivi local du temps d’écran", color = MareePalette.Muted,
                         fontSize = 14.sp, lineHeight = 21.sp)
                     if (option.canCreateCustomChallenges) {
                         Text("Défis personnels : 3 étapes par jour, durée choisie dès 2 jours, +0,25 point à la fin",

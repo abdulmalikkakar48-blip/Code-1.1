@@ -1,4 +1,4 @@
-# Calibrage des offres de Marée 0.6.0
+# Calibrage des offres de Milo 0.6.0
 
 Décision du 11 octobre 2026 : **10 applications en Gratuit**, **50 en Premium** et **toutes les applications compatibles du téléphone en Ultra**, sans plafond commercial. Les prix prévus restent 10 €/mois et 20 €/mois ; aucun paiement n’est actif dans l’APK.
 

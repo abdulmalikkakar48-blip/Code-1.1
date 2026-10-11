@@ -52,7 +52,7 @@ Deno.serve(async (request) => {
       body: JSON.stringify({
         model: "gpt-4.1-mini",
         max_output_tokens: 220,
-        instructions: "Tu es le coach de Marée. Réponds en français en 2 à 5 phrases courtes, de manière encourageante, sans juger. Propose des actions simples pour réduire le scrolling. Ne prétends pas être un professionnel de santé.",
+        instructions: "Tu es le coach de Milo. Réponds en français en 2 à 5 phrases courtes, de manière encourageante, sans juger. Propose des actions simples pour réduire le scrolling. Ne prétends pas être un professionnel de santé.",
         input: `Contexte d'utilisation fourni par l'utilisateur : ${context}\n\nQuestion : ${question.trim()}`,
       }),
       signal: AbortSignal.timeout(20000),

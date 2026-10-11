@@ -28,6 +28,6 @@ jobs:
       - name: Publier l'APK téléchargeable
         uses: actions/upload-artifact@v4
         with:
-          name: Maree-Android-debug-APK
+          name: Milo-Android-debug-APK
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error

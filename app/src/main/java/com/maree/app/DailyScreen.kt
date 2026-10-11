@@ -70,11 +70,11 @@ internal fun DailyTab(
             fontSize = 14.sp
         )
         Text(
-            "Ton quotidien,\nà ton rythme.",
+            "Aujourd’hui, à ton rythme.",
             color = MareePalette.Ink,
             fontWeight = FontWeight.Bold,
-            fontSize = 31.sp,
-            lineHeight = 38.sp
+            fontSize = 28.sp,
+            lineHeight = 34.sp
         )
         Text(
             "Prends un instant pour observer tes habitudes et choisir ta prochaine pause.",
@@ -156,7 +156,7 @@ internal fun DailyTab(
                     Text("Sous la limite", fontSize = 14.sp, fontWeight = FontWeight.Medium)
                 }
                 DailyCard(MareePalette.Lilac, Modifier.weight(1f)) {
-                    Text("$lockedCount", color = MareePalette.Lavender,
+                    Text("$lockedCount", color = MareePalette.Danger,
                         fontWeight = FontWeight.Bold, fontSize = 29.sp)
                     Text("Verrouillée${if (lockedCount > 1) "s" else ""}",
                         fontSize = 14.sp, fontWeight = FontWeight.Medium)
@@ -206,7 +206,7 @@ internal fun DailyTab(
         DailyCard(MareePalette.Surface) {
             Text("Chaque petit pas compte", fontWeight = FontWeight.Bold, fontSize = 20.sp)
             Text(
-                "$validatedToday défi${if (validatedToday > 1) "s" else ""} Marée pratiqué${if (validatedToday > 1) "s" else ""} et validé${if (validatedToday > 1) "s" else ""} aujourd’hui.",
+                "$validatedToday défi${if (validatedToday > 1) "s" else ""} Milo pratiqué${if (validatedToday > 1) "s" else ""} et validé${if (validatedToday > 1) "s" else ""} aujourd’hui.",
                 color = MareePalette.Lavender,
                 fontWeight = FontWeight.Medium
             )
@@ -232,16 +232,12 @@ internal fun DailyTab(
             }
         }
 
-        DailyCard(MareePalette.Lilac) {
-            Text("Ton coach, bientôt", color = MareePalette.Lavender,
-                fontWeight = FontWeight.Bold, fontSize = 21.sp)
-            Text(
-                "Un espace pour réfléchir à tes habitudes et trouver des pistes adaptées à ton quotidien.",
-                color = MareePalette.Muted
-            )
-            Text("Le coach IA n’est pas encore disponible. Les idées ci-dessus sont des conseils fixes, accessibles sans compte.",
-                color = MareePalette.Muted, fontSize = 13.sp)
-            TextButton(onClick = onCoach) { Text("Découvrir le coach") }
+        DailyCard(MareePalette.Subtle) {
+            Text("Besoin d’un coup de pouce ?", color = MareePalette.Teal,
+                fontWeight = FontWeight.Bold, fontSize = 20.sp)
+            Text("Retrouve les conseils hors ligne et l’espace du futur coach IA.",
+                color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
+            Button(onClick = onCoach) { Text("Ouvrir le coach") }
         }
         Spacer(Modifier.height(8.dp))
     }
@@ -255,7 +251,7 @@ private fun DailyCard(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = color, contentColor = MareePalette.Ink)
     ) {
         Column(Modifier.fillMaxWidth().padding(20.dp),

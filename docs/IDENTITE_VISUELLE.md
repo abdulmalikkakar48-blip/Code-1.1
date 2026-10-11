@@ -1,16 +1,16 @@
-# Identité visuelle de Marée
+# Identité visuelle de Milo
 
-**Marée** reste le nom affiché de l’application. Le nouveau logo représente la pause et la progression personnelle. Un futur changement de nom demandera un choix de marque et une vérification de disponibilité avant publication.
+**Milo** est le nom choisi par l’éditeur en version 0.7.0. Il remplace Marée dans les écrans. Le symbole représente une pause au centre d’un anneau évoquant le temps ; le repère menthe complète cette idée de rythme personnel.
 
-Nom proposé pour la fiche : **Marée – Temps d’écran**. Signature : **Moins d’écran. Plus de vie.** Le descriptif aide les personnes à comprendre l’application lors d’une recherche, tandis que le nom court porte son identité.
+Nom proposé pour la fiche : **Milo – Temps d’écran**. Signature : **Moins d’écran. Plus de vie.** Le descriptif aide les personnes à comprendre l’application lors d’une recherche, tandis que le nom court porte son identité.
 
 ## Le symbole
 
-Le [logo original transparent](../app/src/main/res/drawable-nodpi/brand_mark.png) associe une pause centrale, deux formes végétales et un anneau ouvert avec un repère corail. La pause évoque le recul face à l’écran ; les feuilles et l’anneau évoquent une progression personnelle. Le symbole ne contient ni texte ni lettre, pour rester utilisable dans plusieurs langues.
+Le [logo original transparent](../app/src/main/res/drawable-nodpi/brand_mark.png) associe une pause centrale et un anneau ouvert avec un repère menthe. La pause évoque le recul face à l’écran ; l’anneau évoque le temps et un rythme personnel. Le symbole ne contient ni texte ni lettre, pour rester utilisable dans plusieurs langues.
 
-Le vert profond et la menthe constituent la base. Le corail donne un accent visible, avec un fond crème pour l’icône Android. L’application conserve ses accents lavande et sable. Le logo PNG transparent de 1254 × 1254 px est intégré sans retouche ; l’icône de lancement Android utilise un fond séparé et un premier plan centré. Les notifications utilisent une version vectorielle monochrome simplifiée de la pause et de l’anneau.
+Le vert profond et la menthe constituent la base, avec un fond clair pour l’icône Android. Les écrans utilisent le même vert pour les actions et le même fond léger pour les repères. Le rouge est réservé aux avertissements et aux actions de suppression. Le logo PNG transparent de 1254 × 1254 px est intégré sans retouche ; l’icône de lancement Android utilise un fond séparé et un premier plan centré. Les notifications utilisent une version vectorielle monochrome simplifiée de la pause et de l’anneau.
 
-Le nom, les introductions, les offres, les autorisations et la politique embarquée conservent Marée. L’identifiant technique `com.maree.app`, les noms internes et les clés de données restent stables pour permettre la mise à jour de l’installation actuelle.
+Le nom, les introductions, les offres, les autorisations et la politique embarquée affichent Milo. L’identifiant technique `com.maree.app`, les noms internes et les clés de données restent stables pour permettre la mise à jour de l’installation actuelle.
 
 ## À vérifier avant le lancement commercial
 
@@ -24,7 +24,7 @@ Description courte : **Retrouve du temps grâce aux limites d’écran et aux d�
 
 Description de départ :
 
-> Marée t’aide à reprendre du temps pour toi. Choisis les applications à suivre, fixe leurs limites et retrouve ta progression dans le bilan quotidien. Quand une limite est atteinte, un écran de pause t’invite à faire une autre activité.
+> Milo t’aide à reprendre du temps pour toi. Choisis les applications à suivre, fixe leurs limites et retrouve ta progression dans le bilan quotidien. Quand une limite est atteinte, un écran de pause t’invite à faire une autre activité.
 >
 > Les défis se construisent sur plusieurs journées. Les points récompensent la régularité. Dans le prototype actuel, le suivi et la progression restent sur ton téléphone, sans compte obligatoire.
 

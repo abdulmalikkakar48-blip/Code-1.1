@@ -74,7 +74,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
@@ -103,7 +102,7 @@ private val CardLighter = MareePalette.Subtle
 private val Mint = MareePalette.Teal
 private val Cream = MareePalette.Ink
 private val Muted = MareePalette.Muted
-private val Warning = MareePalette.Coral
+private val Warning = MareePalette.Danger
 
 data class InstalledApp(val pkg: String, val label: String)
 
@@ -181,7 +180,7 @@ private fun MareeApp() {
     fun openSettings(intent: Intent) {
         try { settingsRequest.launch(intent) }
         catch (_: android.content.ActivityNotFoundException) {
-            infoMessage = "Ouvre les paramètres Android, puis Applications → Marée, pour gérer les autorisations."
+            infoMessage = "Ouvre les paramètres Android, puis Applications → Milo, pour gérer les autorisations."
         }
     }
     fun askNotifications() {
@@ -278,7 +277,8 @@ private fun MareeApp() {
                         Triple("Accueil", R.drawable.ic_nav_home, 0),
                         Triple("Quotidien", R.drawable.ic_nav_daily, 1),
                         Triple("Défis", R.drawable.ic_nav_challenges, 2),
-                        Triple("Plus", R.drawable.ic_nav_more, 3)
+                        Triple("Coach", R.drawable.ic_nav_coach, 3),
+                        Triple("Plus", R.drawable.ic_nav_more, 4)
                     ).forEach { (name, icon, index) ->
                         NavigationBarItem(
                             selected = tab == index, onClick = { tab = index },
@@ -296,15 +296,15 @@ private fun MareeApp() {
         ) { inner ->
             Column(Modifier.fillMaxSize().padding(inner).statusBarsPadding()) {
                 Row(
-                    Modifier.fillMaxWidth().padding(start = 22.dp, end = 22.dp, top = 16.dp, bottom = 18.dp),
+                    Modifier.fillMaxWidth().padding(start = 22.dp, end = 22.dp, top = 12.dp, bottom = 14.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(painterResource(R.drawable.brand_mark), contentDescription = null,
-                            modifier = Modifier.size(42.dp))
+                            modifier = Modifier.size(34.dp))
                         Spacer(Modifier.width(9.dp))
-                        Text("marée", color = Cream, fontSize = 29.sp, fontWeight = FontWeight.Bold)
+                        Text("milo", color = Cream, fontSize = 25.sp, fontWeight = FontWeight.Bold)
                     }
                     Surface(color = MareePalette.Sand, shape = CircleShape) {
                         Text("✧ ${formatPoints(snapshot.points)}", color = MareePalette.Amber, fontWeight = FontWeight.Bold,
@@ -324,9 +324,7 @@ private fun MareeApp() {
                         },
                         getName = { appLabel(context, it) }
                     )
-                    1 -> DailyTab(snapshot, onCoach = {
-                        infoMessage = "Le coach est en préparation. En attendant, retrouve chaque jour un conseil dans Quotidien. Aucun message n’est envoyé à une IA dans cette version."
-                    }, getName = { appLabel(context, it) }, onAddApp = ::addApplication,
+                    1 -> DailyTab(snapshot, onCoach = { tab = 3 }, getName = { appLabel(context, it) }, onAddApp = ::addApplication,
                         monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
                         onActivateTracking = { showSetup = true })
                     2 -> ChallengeTab(snapshot,
@@ -336,7 +334,7 @@ private fun MareeApp() {
                                 refresh()
                             }
                         },
-                        onOffers = { tab = 3 },
+                        onOffers = { tab = 4 },
                         onCreateCustom = { title, steps, duration ->
                             store.createCustomChallenge(title, steps, duration).also { issue ->
                                 if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
@@ -358,6 +356,7 @@ private fun MareeApp() {
                             }
                         }
                     )
+                    3 -> CoachTab()
                     else -> MoreTab(
                         active = monitoringEnabled && permissions.readyForMonitoring,
                         notificationsGranted = permissions.notificationsGranted,
@@ -376,7 +375,7 @@ private fun MareeApp() {
                             snapshot = store.readSnapshot(lastReading)
                             refresh()
                         },
-                        onAccount = { infoMessage = "Marée fonctionne sans compte : pas d’inscription et tes données restent sur ton téléphone. Un compte pourra être proposé plus tard, uniquement pour une sauvegarde facultative." }
+                        onAccount = { infoMessage = "Milo fonctionne sans compte : pas d’inscription et tes données restent sur ton téléphone. Un compte pourra être proposé plus tard, uniquement pour une sauvegarde facultative." }
                     )
                 }
             }
@@ -418,7 +417,7 @@ private fun MareeApp() {
     removeApp?.let { item ->
         AlertDialog(onDismissRequest = { removeApp = null },
             title = { Text("Retirer ${appLabel(context, item.packageName)} ?") },
-            text = { Text("Cette application et son verrou seront supprimés de Marée.") },
+            text = { Text("Cette application et son verrou seront supprimés de Milo.") },
             confirmButton = { Button(onClick = {
                 store.removeApp(item.packageName); removeApp = null; refresh()
             }) { Text("Retirer") } },
@@ -448,12 +447,12 @@ private fun MareeApp() {
     }
     infoMessage?.let { message ->
         AlertDialog(onDismissRequest = { infoMessage = null },
-            title = { Text("Marée") }, text = { Text(message) },
+            title = { Text("Milo") }, text = { Text(message) },
             confirmButton = { TextButton(onClick = { infoMessage = null }) { Text("Compris") } })
     }
     if (deleteConfirmation) {
         AlertDialog(onDismissRequest = { if (!deleting) deleteConfirmation = false },
-            title = { Text("Effacer les données de Marée ?") },
+            title = { Text("Effacer les données de Milo ?") },
             text = { Text("Tes applications suivies, limites, verrous, points, défis personnalisés et leurs étapes, progression, choix d’offre de démonstration et choix d’accueil seront effacés. Le suivi sera arrêté. Cette action est irréversible et ne supprime pas les statistiques Android.") },
             confirmButton = { Button(enabled = !deleting, onClick = {
                 scope.launch {
@@ -504,31 +503,23 @@ private fun HomeTab(
     } else snapshot.apps
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())
         .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
-        Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp))
-            .background(Brush.linearGradient(listOf(MareePalette.DeepTeal, Mint)))
-            .padding(24.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("DU TEMPS POUR TOI", color = MareePalette.Mint, fontSize = 11.sp,
-                fontWeight = FontWeight.Bold, letterSpacing = 1.5.sp)
-            Text("Moins d’écran.\nPlus de vie.", fontSize = 32.sp, lineHeight = 38.sp,
-                fontWeight = FontWeight.Bold, color = Color.White)
-            Text("Chaque minute retrouvée compte.", color = Color(0xFFE1F5EA),
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Moins d’écran. Plus de vie.", fontSize = 28.sp, lineHeight = 34.sp,
+                fontWeight = FontWeight.Bold, color = Cream)
+            Text("Tes limites et tes progrès, au même endroit.", color = Muted,
                 fontSize = 14.sp, lineHeight = 21.sp)
         }
-        Card(colors = CardDefaults.cardColors(containerColor = MareePalette.Peach),
-            shape = RoundedCornerShape(24.dp)) {
-            Row(Modifier.fillMaxWidth().padding(22.dp),
-                verticalAlignment = Alignment.CenterVertically) {
-                Column(Modifier.weight(1f)) {
-                    Text("TON CAPITAL DISCIPLINE", color = MareePalette.Coral, fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        Text(formatPoints(snapshot.points), color = MareePalette.Coral, fontSize = 43.sp,
-                            fontWeight = FontWeight.Bold)
-                        Text(" points", color = Cream, modifier = Modifier.padding(bottom = 9.dp))
-                    }
-                    Text("Un pas à la fois, à ton rythme.", color = Muted, fontSize = 13.sp)
+        Card(colors = CardDefaults.cardColors(containerColor = CardLighter),
+            shape = RoundedCornerShape(20.dp)) {
+            Row(Modifier.fillMaxWidth().padding(20.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                    Text("Tes points", color = Mint, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                    Text("La régularité fait la différence.", color = Muted, fontSize = 13.sp)
                 }
-                Text("✧", fontSize = 45.sp, color = MareePalette.Coral)
+                Text(formatPoints(snapshot.points), color = Mint, fontSize = 34.sp,
+                    fontWeight = FontWeight.Bold)
             }
         }
         if (!active) {
@@ -594,7 +585,7 @@ private fun HomeTab(
 
 @Composable
 private fun SectionCard(content: @Composable ColumnScope.() -> Unit) {
-    Card(shape = RoundedCornerShape(22.dp),
+    Card(shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = CardColor)) {
         Column(Modifier.fillMaxWidth().padding(19.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp), content = content)
@@ -663,12 +654,12 @@ private fun ChallengeTab(
     var personal by rememberSaveable { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())
         .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(13.dp)) {
-        Text("Petits défis,\ngrands changements.", fontSize = 31.sp,
-            lineHeight = 37.sp, fontWeight = FontWeight.Bold)
+        Text("Tes défis, un jour à la fois.", fontSize = 28.sp,
+            lineHeight = 34.sp, fontWeight = FontWeight.Bold)
         Text(if (personal) "Tes objectifs, une journée à la fois." else "10 habitudes à essayer, un jour à la fois.", color = Muted)
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             FilterChip(selected = !personal, onClick = { personal = false },
-                label = { Text("Défis Marée") })
+                label = { Text("Défis Milo") })
             FilterChip(selected = personal, onClick = { personal = true },
                 label = { Text("Mes défis") })
         }
@@ -681,11 +672,11 @@ private fun ChallengeTab(
                 LinearProgressIndicator(progress = { finished / 10f },
                     modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
                     color = Mint, trackColor = CardLighter)
-                Text("Un défi se termine après $CHALLENGE_REQUIRED_DAYS jours différents. Pratique-le, puis valide : une seule fois par jour.",
+                Text("Pratique chaque défi pendant $CHALLENGE_REQUIRED_DAYS journées. Une validation par jour ; les jours peuvent être espacés.",
                     color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
-                Text("Les jours peuvent être espacés, sans perte de progression. Nouvelle série dans ${snapshot.daysUntilChallenges} jours (cycle de 21 jours) : les défis en cours repartent alors à zéro.",
+                Text("Nouvelle série dans ${snapshot.daysUntilChallenges} jours : les défis de cette série repartent alors à zéro.",
                     color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
-                Text("+5 points tous les 5 défis entièrement terminés, cumulés entre les séries. Aucun point pour une simple validation.",
+                Text("+5 points tous les 5 défis entièrement terminés, cumulés entre les séries.",
                     color = Mint, fontSize = 13.sp, lineHeight = 20.sp)
             }
             indices.forEach { index ->
@@ -697,7 +688,7 @@ private fun ChallengeTab(
                 val completedDays = progress.completedDays.coerceIn(0, requiredDays)
                 val validatedToday = progress.validatedToday
                 Card(
-                    shape = RoundedCornerShape(22.dp),
+                    shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(containerColor = if (done) CardLighter else CardColor),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -707,20 +698,7 @@ private fun ChallengeTab(
                             fontWeight = FontWeight.SemiBold, fontSize = 17.sp, lineHeight = 24.sp)
                         Text("$completedDays / $requiredDays jours validés", color = Mint,
                             fontWeight = FontWeight.Medium, fontSize = 14.sp)
-                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            for (day in 1..requiredDays) {
-                                val dayDone = day <= completedDays
-                                Box(Modifier.weight(1f).clip(RoundedCornerShape(12.dp))
-                                    .background(if (dayDone) Mint else MareePalette.Lilac)
-                                    .padding(vertical = 10.dp)
-                                    .clearAndSetSemantics {
-                                        contentDescription = "Jour $day, ${if (dayDone) "validé" else "à valider"}"
-                                    }, contentAlignment = Alignment.Center) {
-                                    Text("$day", color = if (dayDone) Color.White else MareePalette.Lavender,
-                                        fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                                }
-                            }
-                        }
+                        ChallengeDays(requiredDays, completedDays, validatedToday)
                         when {
                             done -> Text("Défi terminé", color = Mint,
                                 fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
@@ -753,7 +731,7 @@ private fun MoreTab(
 ) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())
         .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text("À ta façon.", fontWeight = FontWeight.Bold, fontSize = 32.sp)
+        Text("Tes réglages.", fontWeight = FontWeight.Bold, fontSize = 28.sp)
         Text("Tes réglages, tes données, tes choix.", color = Muted, fontSize = 14.sp)
         SectionCard {
             Text("Le suivi", fontWeight = FontWeight.Bold, fontSize = 20.sp)
@@ -765,7 +743,7 @@ private fun MoreTab(
             if (active) TextButton(onClick = onPause) { Text("Mettre en pause") }
             if (!notificationsGranted) OutlinedButton(onClick = onNotifications) { Text("Activer les alertes facultatives") }
         }
-        Card(shape = RoundedCornerShape(24.dp),
+        Card(shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(containerColor = MareePalette.Subtle)) {
             Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text("Ta confidentialité", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = MareePalette.DeepTeal)
@@ -776,12 +754,12 @@ private fun MoreTab(
         }
         SectionCard {
             Text("Libre de commencer", fontWeight = FontWeight.Bold, fontSize = 20.sp)
-            Text("Marée fonctionne sans compte. Tu n’as pas besoin de t’inscrire pour reprendre ton temps.",
+            Text("Milo fonctionne sans compte. Tu n’as pas besoin de t’inscrire pour reprendre ton temps.",
                 color = Muted, lineHeight = 22.sp)
             TextButton(onClick = onAccount) { Text("Et la sauvegarde ?") }
         }
         MembershipSection(plan, onDemoPlan)
-        Text("Marée · Version ${BuildConfig.VERSION_NAME} · Conçue pour te rendre du temps.",
+        Text("Milo · Version ${BuildConfig.VERSION_NAME} · Conçue pour te rendre du temps.",
             color = Muted, fontSize = 12.sp)
         Spacer(Modifier.height(10.dp))
     }

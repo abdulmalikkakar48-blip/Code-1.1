@@ -6,21 +6,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 internal object MareePalette {
-    val Background = Color(0xFFF7F5EF)
+    val Background = Color(0xFFF5F8F6)
     val Surface = Color.White
-    val Subtle = Color(0xFFEDF4F0)
-    val Ink = Color(0xFF172D2B)
-    val Muted = Color(0xFF536966)
-    val Teal = Color(0xFF176C61)
-    val DeepTeal = Color(0xFF124E47)
-    val Mint = Color(0xFF83E5C6)
-    val Coral = Color(0xFFAD5037)
-    val Peach = Color(0xFFFFEFE6)
-    val Lavender = Color(0xFF695593)
-    val Lilac = Color(0xFFF1EDF8)
-    val Amber = Color(0xFF866014)
-    val Sand = Color(0xFFFBF1DA)
-    val Outline = Color(0xFFD9E2DA)
+    val Subtle = Color(0xFFEAF3EF)
+    val Ink = Color(0xFF193B32)
+    val Muted = Color(0xFF5B6F65)
+    val Teal = Color(0xFF216852)
+    val DeepTeal = Color(0xFF153F34)
+    val Mint = Color(0xFFC4E8D9)
+    // Les anciens rôles partagent désormais une seule palette pour garder les écrans cohérents.
+    val Coral = Teal
+    val Peach = Subtle
+    val Lavender = Teal
+    val Lilac = Subtle
+    val Amber = Teal
+    val Sand = Subtle
+    val Outline = Color(0xFFDCE5DF)
     val Danger = Color(0xFFA33939)
 }
 

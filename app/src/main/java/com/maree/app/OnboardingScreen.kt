@@ -2,7 +2,6 @@ package com.maree.app
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,7 +29,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -52,23 +50,23 @@ fun OnboardingScreen(
     Surface(modifier = Modifier.fillMaxSize(), color = colors.background) {
         Column(
             modifier = Modifier.fillMaxSize()
-                .background(Brush.verticalGradient(listOf(colors.primary.copy(alpha = 0.08f), colors.background)))
+
                 .statusBarsPadding().navigationBarsPadding()
                 .verticalScroll(rememberScrollState()).padding(horizontal = 22.dp, vertical = 24.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(painterResource(R.drawable.brand_mark), contentDescription = null,
-                    modifier = Modifier.size(48.dp))
+                    modifier = Modifier.size(40.dp))
                 Spacer(Modifier.width(10.dp))
                 Column {
-                    Text("marée", color = colors.onBackground, fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                    Text("milo", color = colors.onBackground, fontSize = 27.sp, fontWeight = FontWeight.Bold)
                     Text("DU TEMPS POUR TOI", color = colors.primary, fontSize = 10.sp, letterSpacing = 1.8.sp)
                 }
             }
-            Text("Avant de\ncommencer.", fontSize = 35.sp, lineHeight = 40.sp,
+            Text("Bienvenue chez Milo.", fontSize = 28.sp, lineHeight = 34.sp,
                 fontWeight = FontWeight.Bold, color = colors.onBackground)
-            Text("Choisis les autorisations qui permettent à Marée de protéger ton temps.",
+            Text("Active les accès utiles au suivi. Tu gardes le choix à chaque étape.",
                 color = colors.onSurfaceVariant, fontSize = 15.sp, lineHeight = 22.sp)
 
             Card(shape = RoundedCornerShape(20.dp),
@@ -76,7 +74,7 @@ fun OnboardingScreen(
                 Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Tes données, sur ton téléphone", color = colors.primary,
                         fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
-                    Text("Le suivi fonctionne localement. Marée ne lit pas tes messages ni le contenu de ton écran.",
+                    Text("Le suivi fonctionne localement. Milo ne lit pas tes messages ni le contenu de ton écran.",
                         color = colors.onBackground, fontSize = 13.sp, lineHeight = 19.sp)
                     OutlinedButton(onClick = onPrivacy) { Text("Lire la confidentialité") }
                 }
@@ -85,19 +83,19 @@ fun OnboardingScreen(
             OnboardingPermissionCard(
                 title = "Suivre le temps d’écran", symbol = "◷", accent = colors.primary,
                 required = true, granted = status.usageGranted,
-                description = "Marée consulte les applications ouvertes et leur durée d’utilisation pour calculer tes limites. Dans les réglages Android, choisis Marée puis active l’accès aux données d’utilisation.",
+                description = "Milo consulte les applications ouvertes et leur durée d’utilisation pour calculer tes limites. Dans les réglages Android, choisis Milo puis active l’accès aux données d’utilisation.",
                 action = "Autoriser le suivi", onRequest = onUsagePermission
             )
             OnboardingPermissionCard(
                 title = "Afficher l’écran de pause", symbol = "▧", accent = colors.secondary,
                 required = true, granted = status.overlayGranted,
-                description = "Quand une limite est atteinte, Marée affiche un écran de pause au-dessus de l’application suivie. Dans les réglages Android, choisis Marée puis autorise l’affichage par-dessus les autres applications.",
+                description = "Quand une limite est atteinte, Milo affiche un écran de pause au-dessus de l’application suivie. Dans les réglages Android, choisis Milo puis autorise l’affichage par-dessus les autres applications.",
                 action = "Autoriser l’écran de pause", onRequest = onOverlayPermission
             )
             OnboardingPermissionCard(
                 title = "Recevoir une alerte", symbol = "✦", accent = colors.tertiary,
                 required = false, granted = status.notificationsGranted,
-                description = "Une notification te prévient à l’approche de ta limite. Tu peux continuer sans notifications : ton choix ne bloque pas l’accès à Marée ni le suivi.",
+                description = "Une notification te prévient à l’approche de ta limite. Tu peux continuer sans notifications : ton choix ne bloque pas l’accès à Milo ni le suivi.",
                 action = "Autoriser les notifications", onRequest = onNotificationPermission
             )
 
@@ -131,7 +129,7 @@ private fun OnboardingPermissionCard(
     onRequest: () -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
-    Card(shape = RoundedCornerShape(22.dp), border = BorderStroke(1.dp, accent.copy(alpha = 0.25f)),
+    Card(shape = RoundedCornerShape(20.dp), border = BorderStroke(1.dp, accent.copy(alpha = 0.25f)),
         colors = CardDefaults.cardColors(containerColor = colors.surface)) {
         Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {

@@ -1,4 +1,10 @@
-# Marée — application Android de réduction du temps d'écran
+# Milo — application Android de réduction du temps d'écran
+
+## Mise à jour 0.7.0
+
+**Milo** est le nom choisi par l’éditeur. Nouvelle icône pause/temps et palette claire, vert et menthe cohérente. Les jours de pratique sont présentés un par ligne, dans l’ordre ; les trois étapes personnelles portent leur numéro sur des lignes séparées. Un onglet **Coach** ouvre directement un écran de conseils hors ligne ; le dialogue IA reste à connecter. La confidentialité commence par un résumé clair, avec le texte complet toujours disponible hors ligne.
+
+La signature, le paquet Android et toutes les données locales sont conservés. Les offres restent 10 / 50 / illimité, et les règles de points sont inchangées. Voir [les règles de design](docs/DESIGN_MILO.md).
 
 ## Mise à jour 0.6.0
 
@@ -6,11 +12,11 @@ Plafonds : **10 applications en Gratuit**, **50 en Premium** et **aucun plafond 
 
 ## Mise à jour 0.5.0
 
-Le nom **Marée** est conservé et le nouveau logo associe pause, progression et accents menthe/corail. L’identifiant Android et les données restent stables pour la mise à jour. Voir [l’identité visuelle](docs/IDENTITE_VISUELLE.md).
+À cette version, le nom **Marée** était conservé et le logo associait pause, progression et accents menthe/corail. L’identifiant Android et les données restent stables pour la mise à jour. Voir [l’identité visuelle](docs/IDENTITE_VISUELLE.md).
 
 Pour commencer la distribution et les paiements, ouvre [le guide de démarrage](docs/DEMARRER_PUBLICATION.md). Il mène aux étapes [Google Play](docs/PUBLICATION_GOOGLE_PLAY.md) et [abonnements](docs/ABONNEMENTS.md). Le travail porte sur Android ; la version iPhone est reportée. L’APK reste une version de test ; aucun paiement ni coach IA n’est connecté.
 
-**Version actuelle : 0.6.0 (APK de test et code source).** Interface entièrement en français.
+**Version actuelle : 0.7.0 (APK de test et code source).** Interface entièrement en français.
 
 Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Material 3, `minSdk 29` (Android 10), `targetSdk 34`, package `com.maree.app`, Gradle 8.7, AGP 8.5.2, Kotlin 1.9.24.
 
@@ -18,7 +24,7 @@ Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Materia
 
 - La règle de 0 point s’applique à toutes les offres : aucun ajout ou changement de limite à 0 point. Une réinitialisation exige réellement ses 10 points ; le retrait d’une application et l’effacement des données restent disponibles.
 - Offres recalibrées en 0.6.0 : Gratuit, 10 applications ; Premium, 50 applications pour 10 €/mois ; Ultra, toutes les applications compatibles du téléphone sans plafond commercial pour 20 €/mois. L’APK de test affiche un mode démonstration gratuit dans Plus, pour tester les limites et les fonctions locales. Il ne vend aucun abonnement et n’effectue aucun paiement.
-- Défis → Mes défis : Premium et Ultra permettent de créer un titre avec exactement trois étapes et une durée choisie de 2 à 365 jours. Les trois étapes doivent être cochées pour valider une journée. Les jours peuvent être espacés ; ces défis sont indépendants de la rotation standard de 21 jours. La récompense totale est de 0,25 point une seule fois après la durée choisie. Elle n’augmente pas le compteur de bonus des défis Marée.
+- Défis → Mes défis : Premium et Ultra permettent de créer un titre avec exactement trois étapes et une durée choisie de 2 à 365 jours. Les trois étapes doivent être cochées pour valider une journée. Les jours peuvent être espacés ; ces défis sont indépendants de la rotation standard de 21 jours. La récompense totale est de 0,25 point une seule fois après la durée choisie. Elle n’augmente pas le compteur de bonus des défis Milo.
 - Les points sont enregistrés en quarts entiers, pour conserver exactement 0,25 / 0,50 / 0,75 point. Les anciens soldes sont migrés une fois sans perte ni double crédit. Les cases du jour et la progression survivent à la relance.
 - Ultra ajoute la recherche dans les applications suivies et le tri par nom, temps passé ou proximité de la limite. Le coach IA illimité par messages est prévu pour Ultra, mais reste à développer et à financer.
 
@@ -37,7 +43,7 @@ La politique affiche **Abdul Malik Kakar** comme responsable à titre personnel,
 ## Mise à jour 0.2.0
 
 - Premier lancement : explication des autorisations avant l’accueil, avec accès à la confidentialité. L’accès aux données d’utilisation et la surcouche sont nécessaires au suivi ; les notifications restent facultatives. Un mode découverte fonctionne sans suivi. Une mise à jour depuis 0.1.0 présente aussi cet accueil, sans effacer les limites, points ou défis.
-- Quatre onglets : Accueil, Quotidien, Défis et Plus. Quotidien regroupe le bilan des compteurs suivis, une idée de pause et la carte du futur coach. Les mesures sont masquées lorsque le suivi est en pause.
+- Navigation initiale : Accueil, Quotidien, Défis et Plus ; Coach est ajouté en 0.7.0. Quotidien regroupe le bilan des compteurs suivis, une idée de pause et la carte du futur coach. Les mesures sont masquées lorsque le suivi est en pause.
 - Thème clair crème, vert, corail, lavande et sable ; icônes de navigation vectorielles.
 - Pause du suivi et gestion des autorisations depuis Plus. Ni le démarrage du téléphone ni une permission déjà accordée ne démarrent le suivi avant la fin du parcours et son activation.
 - Politique hors ligne dans l’accueil et Plus, contact fourni par l’éditeur, suppression locale avec confirmation. La suppression arrête le suivi et retire limites, verrous, points, défis et choix d’accueil, puis revient au parcours initial. Elle ne révoque pas les permissions Android et ne supprime pas les statistiques détenues par Android.
@@ -68,9 +74,9 @@ La politique est une information pour la version locale, pas une certification j
 
 1. Créer un dépôt GitHub vide et y envoyer **le contenu** de ce répertoire (`app/`, `.github/`, etc.).
 2. Ouvrir l'onglet **Actions**, sélectionner **Construire l'APK Android**, puis lancer **Run workflow** (ou envoyer un commit sur `main`).
-3. À la fin de la tâche `android`, récupérer l'artefact `Maree-Android-debug-APK` ; il contient `app-debug.apk`.
+3. À la fin de la tâche `android`, récupérer l'artefact `Milo-Android-debug-APK` ; il contient `app-debug.apk`.
 4. Transférer l'APK sur un smartphone Android 10+ et autoriser son installation depuis la source choisie.
-5. Ouvrir Marée, lire les explications, puis activer les accès nécessaires au suivi. Les notifications sont facultatives, et le mode découverte reste disponible.
+5. Ouvrir Milo, lire les explications, puis activer les accès nécessaires au suivi. Les notifications sont facultatives, et le mode découverte reste disponible.
 
 Le projet a été compilé dans l'environnement cloud. L'APK de test est généré dans `app/build/outputs/apk/debug/app-debug.apk`. Le wrapper Gradle 8.7 est inclus, avec vérification SHA-256 de sa distribution ; GitHub Actions utilise ce wrapper pour compiler, exécuter les tests unitaires et lancer Android Lint.
 
@@ -102,7 +108,7 @@ Les tests de `SetupPreferencesTest` couvrent l’absence de démarrage avant l�
 
 ## Limites de fonctionnement Android et précautions
 
-- Android ne garantit pas un blocage inviolable : la désinstallation de Marée, la révocation de ses autorisations, certains modes économie d'énergie Samsung, la mise en veille du service ou les restrictions de fenêtre superposée peuvent interrompre le suivi et le blocage. L'application **ne prétend pas empêcher ces actions**.
+- Android ne garantit pas un blocage inviolable : la désinstallation de Milo, la révocation de ses autorisations, certains modes économie d'énergie Samsung, la mise en veille du service ou les restrictions de fenêtre superposée peuvent interrompre le suivi et le blocage. L'application **ne prétend pas empêcher ces actions**.
 - Une surcouche `TYPE_APPLICATION_OVERLAY` ne recouvre pas nécessairement toutes les zones système et Android peut intercepter le geste de retour ou protéger l'écran verrouillé. Le bouton d'accueil est prévu ; la gestion des gestes système dépend du téléphone.
 - Les statistiques `UsageEvents` peuvent avoir un délai, des événements manquants et des particularités sur plusieurs fenêtres. Les sessions encore ouvertes **depuis avant minuit** peuvent être sous-comptées après minuit. Le projet est un prototype à tester sur Samsung avant diffusion.
 - Le suivi lit les événements d'utilisation à partir de minuit à chaque contrôle. Ce fonctionnement simple peut être optimisé pour limiter le coût énergétique sur les téléphones plus lents.
@@ -139,7 +145,9 @@ app/src/main/java/com/maree/app/
   SetupPreferences.kt  → fin de parcours et activation/pause du suivi
   DailyScreen.kt        → bilan du jour, conseils et futur coach
   PrivacyContent.kt    → texte et identité de confidentialité
-  PrivacyScreen.kt     → information hors ligne et contact
+  PrivacyScreen.kt     → résumé, politique hors ligne et contact
+  CoachScreen.kt       → écran Coach et conseils fixes hors ligne
+  ChallengeDays.kt     → journées de pratique en lignes ordonnées
   MareeTheme.kt         → palette claire et accents
   Membership.kt         → offres, quarts de point et modèles de défis personnels
   MembershipScreen.kt   → offres prévues et démonstration gratuite
@@ -157,6 +165,6 @@ supabase/                   → migration SQL et fonction coach (préparation)
 
 Le moteur de suivi fonctionne en local. L'APK ne contient pas de clé API, n'envoie pas les statistiques à un serveur et ne sollicite pas de paiement. Le backend Supabase est fourni à titre de code de préparation ; aucune fonction cloud n'est exécutée par cette version de l'APK.
 
-L’APK de mise à jour distribué dans `downloads/Maree-Android.apk` conserve la signature de l’APK 0.1.0 construit dans cet environnement. Installer la mise à jour sans désinstaller préserve les données. Les builds GitHub Actions utilisent une signature debug propre au runner : ne pas les présenter comme des mises à jour compatibles tant qu’une signature de distribution stable n’est pas configurée. Aucune clé de signature n’est enregistrée dans le dépôt.
+L’APK de mise à jour distribué dans `downloads/Milo-Android.apk` conserve la signature de l’APK 0.1.0 construit dans cet environnement. Installer la mise à jour sans désinstaller préserve les données. Les builds GitHub Actions utilisent une signature debug propre au runner : ne pas les présenter comme des mises à jour compatibles tant qu’une signature de distribution stable n’est pas configurée. Aucune clé de signature n’est enregistrée dans le dépôt.
 
 Les tests de la version 0.4.0 couvrent aussi la migration unique des soldes, les quarts exacts, la règle de 0 point pour chaque offre, les plafonds et le retour à Gratuit, le coût complet d’une réinitialisation et les défis personnels (durées de 2 et 7 jours, trois étapes persistées, récompense unique, relance, suppression et effacement). Le schéma Supabase préparatoire représente encore l’abonnement par un booléen : les droits des trois offres et les quotas du futur coach devront être reliés à une vérification d’achat côté serveur avant leur commercialisation.
