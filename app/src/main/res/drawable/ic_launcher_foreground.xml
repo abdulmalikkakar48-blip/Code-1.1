@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:width="72dp" android:height="72dp" android:gravity="center"
-        android:drawable="@drawable/brand_mark" />
-</layer-list>
+<!-- Taille proportionnelle : 60/108 du premier plan, dans le cercle sûr adaptatif. -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetLeft="22.2222%"
+    android:insetTop="22.2222%"
+    android:insetRight="22.2222%"
+    android:insetBottom="22.2222%">
+    <bitmap android:src="@drawable/brand_mark"
+        android:gravity="fill"
+        android:filter="true" />
+</inset>

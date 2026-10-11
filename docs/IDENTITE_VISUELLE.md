@@ -10,6 +10,8 @@ Le [symbole intégré](../app/src/main/res/drawable-nodpi/brand_mark.png) est un
 
 L’icône de lancement utilise un fond menthe séparé, le même asset au premier plan et un masque pour les icônes thématiques. Dans l’en-tête et l’accueil des autorisations, le symbole apparaît sur un carré menthe arrondi. L’icône de notification reste une petite pause monochrome liée au suivi ; elle n’est pas présentée comme le logo de marque.
 
+Le cadrage du lanceur est corrigé le 11 octobre 2026 : le premier plan utilise des marges proportionnelles de 22,2222 % de chaque côté, plutôt qu’un calque de 72 dp fixes. Le bitmap occupe ainsi 60/108 du premier plan à toutes les tailles d’icône ; la silhouette visible tient dans le cercle sûr des masques adaptatifs. Le PNG du phoque, le fond et le logo dans l’en-tête restent identiques. Ce correctif du code nécessite une nouvelle compilation signée avec la clé fixe avant de modifier l’icône installée ; l’APK 0.8.0 publié n’est pas remplacé par un fichier signé avec une autre clé.
+
 L’interface conserve le fond blanc cassé `#F6F7F3`, le vert profond `#245A43` et des surfaces blanches. Les couleurs fortes ne se multiplient pas selon les onglets. Le rouge est réservé aux limites atteintes et aux suppressions.
 
 Le nom est changé dans les écrans, les notifications et la politique embarquée. L’identifiant Android `com.maree.app`, les noms internes et les clés de données restent stables pour permettre la mise à jour de l’installation actuelle.
