@@ -1,6 +1,6 @@
-# Captures réelles de Selkie 0.8.0
+# Captures de Selkie avant la refonte moderne
 
-Ces images viennent de l’APK final (SHA-256 `3870cf3e2ec2e2dc34d0f226492cabc0ca830a5af4440171eafab1f2eda56a20`) installé sur un émulateur Android 14 de 320 dp de large, en découverte sans suivi. Elles ne sont pas des maquettes générées ni des images retouchées.
+Ces images correspondent à la version antérieure à la refonte moderne ; elles ne montrent pas le nouvel APK à signature fixe. Elles viennent de l’APK précédent (SHA-256 `3870cf3e2ec2e2dc34d0f226492cabc0ca830a5af4440171eafab1f2eda56a20`) installé sur un émulateur Android 14 de 320 dp de large, en découverte sans suivi. Elles ne sont pas des maquettes générées ni des images retouchées.
 
 - [Accueil et nouveau logo](accueil.png)
 - [Écran Défis](defis.png)

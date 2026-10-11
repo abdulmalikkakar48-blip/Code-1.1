@@ -1,51 +1,27 @@
-MARÉE — COMMENT TESTER L'APPLICATION SUR TON SAMSUNG
+SELKIE — INSTALLER ET ESSAYER LA DERNIÈRE REFONTE
 
-1. Récupère l'APK fourni, ou celui généré dans app/build/outputs/apk/debug/app-debug.apk.
-2. Transfère-le sur ton téléphone Android 10 ou plus récent, puis ouvre-le pour l'installer.
+1. Télécharge downloads/Selkie-Android.apk dans ce dépôt.
+2. Ouvre ce fichier sur ton téléphone Android 10 ou plus récent.
 3. Autorise l'installation depuis la source choisie si Android le demande.
-4. Ouvre Marée : le nouvel accueil explique les accès et permet de lire la confidentialité.
-   Pour le suivi, choisis Marée dans les réglages Android et autorise les données
-   d’utilisation et l’affichage par-dessus les autres applications.
-   Les notifications sont facultatives. Tu peux aussi découvrir sans suivi.
-5. Ajoute une application à suivre et choisis sa limite en minutes.
-6. Consulte ton bilan et tes conseils dans Quotidien. Dans Plus, tu peux
-   mettre le suivi en pause, revoir les accès ou effacer les données.
-7. Dans Défis, réalise une action puis choisis « Valider aujourd’hui ».
-   Chaque défi demande 5 jours différents. Une journée manquée ne remet pas
-   le compteur à zéro. Les jours précédents ne peuvent pas être ajoutés.
-   Après la validation du jour, reviens le lendemain pour continuer.
-   Les points arrivent seulement tous les 5 défis entièrement terminés : +5 points.
-   La série se renouvelle après 21 jours et sa progression est alors remise à zéro.
-8. Dans Plus, les offres prévues sont Gratuit (5 applications), Premium
-   (13 applications, 10 €/mois) et Ultra (25 applications, 20 €/mois).
-   Ce sont des démonstrations gratuites dans cet APK : aucun paiement.
-   Sélectionne Tester Premium ou Tester Ultra pour essayer leurs fonctions.
-9. Dans Défis → Mes défis, choisis un titre, une durée à partir de 2 jours
-   et exactement 3 étapes. Réalise et coche les 3 étapes chaque jour, puis valide.
-   La récompense totale de 0,25 point arrive une seule fois à la fin.
-   Ces défis personnels ne sont pas remis à zéro par la série de 21 jours.
-10. À 0 point, aucun ajout ou changement de limite n’est permis dans les offres.
-    Une réinitialisation demande 10 points. Ultra propose la recherche et le tri.
+4. Cette version utilise une nouvelle signature fixe sauvegardée. Si Android
+   refuse la mise à jour d'une ancienne installation, la désinstallation est
+   nécessaire ; elle efface les points, limites et défis locaux.
+5. Ouvre Selkie et suis les explications des accès Android. Le mode découverte
+   permet de parcourir l'application sans suivi.
+6. Ajoute une application à suivre, règle sa limite et consulte Quotidien.
+7. Dans Défis, les journées sont validées une fois par date locale.
+   Les défis personnels demandent exactement trois étapes et de 2 à 365 jours.
+8. Les plafonds sont Gratuit : 10, Premium : 50, Ultra : sans plafond commercial.
+   Premium et Ultra restent des démonstrations gratuites dans cet APK de test.
+9. Plus permet de gérer les accès, de mettre le suivi en pause et de consulter
+   la confidentialité. Le coach IA et les paiements ne sont pas connectés.
+10. Vérifie le rendu, le suivi, les notifications et le verrou sur ton téléphone.
 
-MISE À JOUR : installe le nouvel APK sans désinstaller Marée pour conserver
-tes points, limites et défis déjà terminés. Ces anciens défis ne redonnent pas
-de points. Depuis 0.1.0, l’accueil des autorisations apparaîtra une fois avant
-l’accès à la nouvelle interface.
+La compilation, les tests unitaires, Android Lint et la signature ont été
+contrôlés. Le rendu de cette refonte reste à vérifier sur téléphone.
+Les captures déjà présentes correspondent à la version antérieure.
 
-Pour reconstruire l'APK depuis les sources, ouvre le projet dans Android Studio
-avec Java 17 et le SDK Android 34, ou lance :
-./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
-
-Le workflow GitHub "Construire l'APK Android" reste disponible pour un dépôt
-contenant le projet. Son artefact s'appelle "Maree-Android-debug-APK".
-
-La version fournie implémente le cœur du contrôle du temps d'écran, les points
-et les défis. Le coach IA, les abonnements et la synchronisation de compte
-nécessitent encore des développements.
-
-L'APK fourni est une version de test. Vérifie le suivi, les notifications et le
-verrou sur ton Samsung avant une diffusion publique.
-
-Responsable de Marée : Abdul Malik Kakar, contact abdulmalikkakar48@gmail.com.
-Avant diffusion publique : vérifier et préciser les conditions de la messagerie.
-Le texte fourni ne garantit pas l’absence de sanctions.
+Pour les futures mises à jour, réutilise la clé privée sauvegardée séparément
+et la procédure docs/SIGNATURE_ANDROID.md. Ne distribue pas cette clé.
+Le workflow de compilation fournit Selkie-build-to-sign, à signer avant
+distribution ; le téléchargement prêt à installer est downloads/Selkie-Android.apk.

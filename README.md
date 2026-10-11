@@ -1,12 +1,20 @@
 # Selkie — application Android de réduction du temps d'écran
 
+## Refonte moderne et signature fixe
+
+La dernière refonte adopte des titres sans empattement, du vert profond, une menthe lumineuse, une navigation foncée et un accueil avec deux indicateurs distincts. Le fonctionnement local et les règles existantes sont conservés.
+
+[Télécharger l’APK de la refonte](downloads/Selkie-Android.apk). L’APK utilise désormais une **nouvelle clé fixe sauvegardée séparément**, avec l’accord de l’éditeur. Elle remplace les clés de test temporaires. Le certificat est contrôlé avec l’outil officiel Android ; voir [la validation](downloads/VALIDATION.md) et [la procédure de signature](docs/SIGNATURE_ANDROID.md). Cette version garde le numéro 0.8.0 et reste un APK de test.
+
+Cette signature est différente de celle de l’ancienne application. Android ne permet pas une mise à jour par-dessus une installation ayant un autre certificat ; une désinstallation efface les données locales. Les captures déjà présentes montrent la version précédente.
+
 ## Mise à jour 0.8.0
 
 **Selkie** est le nom choisi par l’éditeur pour remplacer Milo. Son usage commercial reste à vérifier. Nouveau logo de phoque noir sur fond menthe, inspiré de la selkie. Refonte native avec fond blanc cassé, texte vert profond, cartes blanches et boutons cohérents. L’accueil distingue le capital de points des applications suivies ; les actions secondaires d’une application sont regroupées dans son menu. La liste de suivi utilise un défilement progressif, y compris pour les grandes listes Ultra.
 
 Les cinq onglets restent Accueil, Quotidien, Défis, Coach et Plus. Les défis affichent les trois étapes personnelles sur trois lignes, puis les journées dans l’ordre ; les calendriers des défis proposés se déplient pour lire chaque journée. Le quotidien propose une pause et un bilan des compteurs, avec une explication consultable. Le Coach ouvre directement les conseils fixes hors ligne et indique l’état du futur dialogue IA. Les accès Android sont expliqués avant le suivi ; la confidentialité commence par un résumé et conserve le texte complet.
 
-Le paquet Android, la signature de test, les préférences et les règles sont conservés : 10 / 50 / sans plafond, restrictions à 0 point, trois étapes personnelles, durée de 2 à 365 jours et récompense de 0,25 point à la fin. Voir [les règles de design](docs/DESIGN_SELKIE.md) et [les captures Android réelles](downloads/screenshots/README.md).
+Le paquet Android, les préférences et les règles sont conservés : 10 / 50 / sans plafond, restrictions à 0 point, trois étapes personnelles, durée de 2 à 365 jours et récompense de 0,25 point à la fin. Voir [les règles de design](docs/DESIGN_SELKIE.md) et [les captures Android réelles](downloads/screenshots/README.md).
 
 L’éditeur a demandé Lovable, Figma et MagicPath. Les liens fournis désignent leurs fiches ; leurs outils ne sont pas accessibles dans cette session. Cette refonte est réalisée dans le code Kotlin/Compose et ne prétend pas provenir de ces services.
 
@@ -82,8 +90,8 @@ La politique est une information pour la version locale, pas une certification j
 
 1. Créer un dépôt GitHub vide et y envoyer **le contenu** de ce répertoire (`app/`, `.github/`, etc.).
 2. Ouvrir l'onglet **Actions**, sélectionner **Construire l'APK Android**, puis lancer **Run workflow** (ou envoyer un commit sur `main`).
-3. À la fin de la tâche `android`, récupérer l'artefact `Selkie-Android-debug-APK` ; il contient `app-debug.apk`.
-4. Transférer l'APK sur un smartphone Android 10+ et autoriser son installation depuis la source choisie.
+3. À la fin de la tâche `android`, récupérer l'artefact `Selkie-build-to-sign` ; il contient `app-debug.apk`. C’est un fichier intermédiaire qui utilise la clé temporaire du runner.
+4. Pour distribuer une mise à jour, signer ce fichier avec la clé fixe sauvegardée, selon [la procédure de signature](docs/SIGNATURE_ANDROID.md). Le fichier déjà prêt à installer est dans [downloads/Selkie-Android.apk](downloads/Selkie-Android.apk), pour Android 10+.
 5. Ouvrir Selkie, lire les explications, puis activer les accès nécessaires au suivi. Les notifications sont facultatives, et le mode découverte reste disponible.
 
 Le projet a été compilé dans l'environnement cloud. L'APK de test est généré dans `app/build/outputs/apk/debug/app-debug.apk`. Le wrapper Gradle 8.7 est inclus, avec vérification SHA-256 de sa distribution ; GitHub Actions utilise ce wrapper pour compiler, exécuter les tests unitaires et lancer Android Lint.
@@ -174,6 +182,6 @@ supabase/                   → migration SQL et fonction coach (préparation)
 
 Le moteur de suivi fonctionne en local. L'APK ne contient pas de clé API, n'envoie pas les statistiques à un serveur et ne sollicite pas de paiement. Le backend Supabase est fourni à titre de code de préparation ; aucune fonction cloud n'est exécutée par cette version de l'APK.
 
-L’APK de mise à jour distribué dans `downloads/Selkie-Android.apk` conserve la signature de l’APK 0.1.0 construit dans cet environnement. Installer la mise à jour sans désinstaller préserve les données. Les builds GitHub Actions utilisent une signature debug propre au runner : ne pas les présenter comme des mises à jour compatibles tant qu’une signature de distribution stable n’est pas configurée. Aucune clé de signature n’est enregistrée dans le dépôt.
+L’APK distribué dans `downloads/Selkie-Android.apk` utilise la nouvelle signature fixe. Les prochaines mises à jour doivent réutiliser cette même clé. Les compilations GitHub Actions produisent seulement un fichier intermédiaire à signer : leur clé debug propre au runner ne doit pas remplacer la clé fixe. La clé privée et son mot de passe sont sauvegardés séparément et ne sont pas enregistrés dans le dépôt. Voir [la procédure](docs/SIGNATURE_ANDROID.md).
 
 Les tests de la version 0.4.0 couvrent aussi la migration unique des soldes, les quarts exacts, la règle de 0 point pour chaque offre, les plafonds et le retour à Gratuit, le coût complet d’une réinitialisation et les défis personnels (durées de 2 et 7 jours, trois étapes persistées, récompense unique, relance, suppression et effacement). Le schéma Supabase préparatoire représente encore l’abonnement par un booléen : les droits des trois offres et les quotas du futur coach devront être reliés à une vérification d’achat côté serveur avant leur commercialisation.

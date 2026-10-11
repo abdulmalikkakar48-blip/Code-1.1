@@ -1,13 +1,18 @@
-# Validation de l’APK avec la signature d’origine
+# Validation de l’APK de la refonte
 
-L’APK downloads/Selkie-Android.apk est exactement le fichier d’origine du commit 96fd6caf27c192a173ea20820f85f3b257c6db66.
+- Sources de l’application : 58a8f0d46e4f49d281adb3f5d9bbcc1cfba95fff.
+- Compilation, tests unitaires et Android Lint réussis : [workflow 38140276591](https://github.com/abdulmalikkakar48-blip/Code-1.1/actions/runs/38140276591).
+- Version : Selkie 0.8.0, versionCode 9, package com.maree.app, Android 10+.
+- Taille finale : 23401584 octets.
+- SHA-256 APK : 71572ec8c3eb85f3db0fe5a1559716ef4a58df1509868afb10bd44b6777df209.
+- SHA-256 certificat fixe : c3def84958aae0971760964b987090c787c1796926d716a91131d69396c25826.
+- Clé : RSA 3072 bits, alias selkie-stable, sauvegardée de façon privée.
+- Vérification officielle : apksigner Android Build Tools 34.0.0, résultat « Verifies », un seul signataire, schéma v2 valide.
 
-- Version : Selkie 0.8.0, versionCode 9, Android 10+.
-- Taille : 23 632 504 octets.
-- SHA-256 APK : 3870cf3e2ec2e2dc34d0f226492cabc0ca830a5af4440171eafab1f2eda56a20.
-- SHA-256 certificat initial : 9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50.
-- SHA du blob Git d’origine : 9b0fdad8e45e60516aa603e7197d53e8e03450ce.
+L’APK final conserve exactement les 147 fichiers et leur contenu de la compilation validée ; seul le bloc de signature et son alignement ont changé. Le workflow de publication vérifie les empreintes du fichier d’entrée et du fichier final, le contenu ZIP, l’absence de modification des sources de l’application, puis le certificat fixe avant de remplacer le téléchargement.
 
-La refonte du code a compilé et passé les tests et lint dans le workflow 38140276591, mais l’APK GitHub Actions utilisait une autre clé de test. Il a été retiré du lien principal. L’APK rétabli ne contient donc pas encore cette nouvelle refonte.
+Le premier APK Actions de la refonte utilisait une clé debug temporaire non sauvegardée. Le fichier actuel utilise la nouvelle clé durable acceptée par l’éditeur. Il diffère également de l’ancien certificat initial (9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50).
 
-Le dépôt et son archive de source ne contiennent pas la clé initiale. Pour reconstruire le nouveau design en conservant le même certificat, il faut réutiliser le fichier de signature de l’environnement Codex qui a produit l’APK d’origine. Le certificat présent dans l’APK ne contient pas cette clé privée.
+La clé privée et son mot de passe ne sont pas dans le dépôt ni dans l’archive des sources. Les données du bloc de signature publiées dans tools/selkie-signed-public.json contiennent uniquement le certificat et les signatures publics. Elles permettent de remettre en place cet APK exact ; elles ne permettent pas de signer une autre compilation.
+
+Le rendu de cette refonte n’a pas encore été contrôlé sur téléphone ou émulateur. Les captures existantes montrent l’ancienne version. L’APK reste un build DEBUG ; ces vérifications ne remplacent pas les essais du suivi, des notifications, du verrou et du rendu sur Samsung.

@@ -10,3 +10,9 @@ local.properties
 *.jks
 *.keystore
 .env
+
+# Sauvegarde privée de la signature, à conserver hors du dépôt
+*.p12
+*.pfx
+selkie-signature-private/
+Selkie-signature-privee.zip
