@@ -1,0 +1,32 @@
+name: Préparer les outils de signature Android
+on:
+  push:
+    branches: [maree-apk-download]
+    paths: ['.github/workflows/signing-tools.yml']
+  workflow_dispatch:
+jobs:
+  tools:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - name: Installer les outils Android officiels
+        run: sdkmanager "build-tools;34.0.0"
+      - name: Préparer le vérificateur et signeur officiel
+        run: |
+          mkdir -p signing-tools
+          cp "$ANDROID_HOME/build-tools/34.0.0/lib/apksigner.jar" signing-tools/
+          cp "$ANDROID_HOME/build-tools/34.0.0/source.properties" signing-tools/
+          sha256sum signing-tools/apksigner.jar > signing-tools/SHA256.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Selkie-signing-tools
+          path: signing-tools/
+          if-no-files-found: error
