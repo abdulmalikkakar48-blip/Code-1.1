@@ -297,7 +297,7 @@ private fun MareeApp() {
                                 textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis) },
                             colors = NavigationBarItemDefaults.colors(
                                 selectedIconColor = Mint, selectedTextColor = Mint,
-                                indicatorColor = CardLighter, unselectedIconColor = Muted,
+                                indicatorColor = MareePalette.Mint, unselectedIconColor = Muted,
                                 unselectedTextColor = Muted
                             )
                         )
@@ -307,13 +307,13 @@ private fun MareeApp() {
         ) { inner ->
             Column(Modifier.fillMaxSize().padding(inner)) {
                 Row(
-                    Modifier.fillMaxWidth().padding(start = 22.dp, end = 22.dp, top = 12.dp, bottom = 14.dp),
+                    Modifier.fillMaxWidth().padding(start = 22.dp, end = 22.dp, top = 16.dp, bottom = 20.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                        BrandIcon(36.dp)
-                        Spacer(Modifier.width(9.dp))
+                        BrandIcon(40.dp)
+                        Spacer(Modifier.width(12.dp))
                         Text(stringResource(R.string.app_name), color = Cream, fontSize = 23.sp,
                             fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.weight(1f))
@@ -521,9 +521,9 @@ private fun HomeTab(
                 "Des limites simples. Plus de place pour toi.")
         }
         item {
-            Card(shape = RoundedCornerShape(24.dp),
+            Card(shape = RoundedCornerShape(28.dp),
                 colors = CardDefaults.cardColors(containerColor = MareePalette.DeepTeal)) {
-                Column(Modifier.fillMaxWidth().padding(22.dp),
+                Column(Modifier.fillMaxWidth().padding(24.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically) {
@@ -535,7 +535,7 @@ private fun HomeTab(
                     Row(verticalAlignment = Alignment.Bottom,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(formatPoints(snapshot.points), color = Color.White,
-                            fontSize = 46.sp, lineHeight = 50.sp, fontWeight = FontWeight.Bold)
+                            fontSize = 52.sp, lineHeight = 58.sp, fontWeight = FontWeight.Bold)
                         Text("points", color = MareePalette.Mint, fontSize = 15.sp,
                             modifier = Modifier.padding(bottom = 6.dp))
                     }
@@ -666,7 +666,7 @@ private fun AppCard(
                 Text("sur ${app.limitMinutes} min", color = Muted, fontSize = 13.sp)
             }
             LinearProgressIndicator(progress = { app.progress.coerceIn(0f, 1f) },
-                modifier = Modifier.fillMaxWidth().height(6.dp).clip(CircleShape),
+                modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
                 color = if (app.isLocked || app.progress >= 1f) Warning else Mint, trackColor = CardLighter)
         } else {
             Text("Limite choisie : ${app.limitMinutes} min", color = Muted, fontSize = 14.sp)

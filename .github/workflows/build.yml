@@ -2,6 +2,8 @@ name: Construire l'APK Android
 on:
   push:
     branches: [main, master]
+  pull_request:
+    branches: [maree-apk-download]
   workflow_dispatch:
 
 jobs:
