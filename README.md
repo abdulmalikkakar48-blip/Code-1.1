@@ -1,5 +1,15 @@
 # Selkie — application Android de réduction du temps d'écran
 
+## Version 0.9.0 — coach gratuit hors ligne
+
+Le Coach propose désormais un champ de discussion utilisable sans compte ni service à activer : 40 sujets, 120 conseils préparés, fautes légères reconnues, variantes et boutons de suggestions. Il peut utiliser les points et compteurs locaux réels. Il s’agit d’un coach à règles, explicitement présenté comme tel ; le dialogue IA distant reste à activer séparément.
+
+[Télécharger Selkie 0.9.0](downloads/Selkie-Android-0.9.0.apk) · [Sources](downloads/Selkie-Android-0.9.0-source.zip) · [Fonctionnement et confidentialité](docs/COACH_HORS_LIGNE.md) · [Validation](downloads/VALIDATION-0.9.0.md).
+
+La conversation n’est pas archivée. La conservation des questions non comprises est facultative, désactivée par défaut, limitée à 50 phrases sur le téléphone et effaçable. Les messages de détresse reconnus invitent à une aide humaine. Aucun message du coach local n’est envoyé à un service ni facturé. Le logo corrigé et le design retenu sont conservés.
+
+Cette version de test reprend la même clé que 0.8.1 ; une installation 0.8.1 signée avec ce certificat peut être mise à jour. L’archive 0.8.0 à autre certificat garde ses contraintes de réinstallation. Les paiements et la publication Play restent à préparer.
+
 ## Version de test 0.8.1 — icône corrigée
 
 [Télécharger Selkie 0.8.1](downloads/Selkie-Android-0.8.1.apk) · [Code source de cette version](downloads/Selkie-Android-0.8.1-source.zip) · [Validation](downloads/VALIDATION-0.8.1.md).
@@ -48,7 +58,7 @@ Plafonds : **10 applications en Gratuit**, **50 en Premium** et **aucun plafond 
 
 Pour commencer la distribution et les paiements, ouvre [le guide de démarrage](docs/DEMARRER_PUBLICATION.md). Il mène aux étapes [Google Play](docs/PUBLICATION_GOOGLE_PLAY.md) et [abonnements](docs/ABONNEMENTS.md). Le travail porte sur Android ; la version iPhone est reportée. L’APK reste une version de test ; aucun paiement ni coach IA n’est connecté.
 
-**Version actuelle : 0.8.1 (APK de test et code source).** Interface entièrement en français.
+**Version actuelle : 0.9.0 (APK de test et code source).** Interface entièrement en français.
 
 Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Material 3, `minSdk 29` (Android 10), `targetSdk 34`, package `com.maree.app`, Gradle 8.7, AGP 8.5.2, Kotlin 1.9.24.
 

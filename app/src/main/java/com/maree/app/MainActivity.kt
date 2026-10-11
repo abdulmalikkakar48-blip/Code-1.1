@@ -368,7 +368,9 @@ private fun MareeApp() {
                             }
                         }
                     )
-                    3 -> CoachTab()
+                    3 -> CoachTab(snapshot,
+                        monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
+                        getName = { appLabel(context, it) })
                     else -> MoreTab(
                         active = monitoringEnabled && permissions.readyForMonitoring,
                         notificationsGranted = permissions.notificationsGranted,
@@ -465,7 +467,7 @@ private fun MareeApp() {
     if (deleteConfirmation) {
         AlertDialog(onDismissRequest = { if (!deleting) deleteConfirmation = false },
             title = { Text("Effacer les données de Selkie ?") },
-            text = { Text("Tes applications suivies, limites, verrous, points, défis personnalisés et leurs étapes, progression, choix d’offre de démonstration et choix d’accueil seront effacés. Le suivi sera arrêté. Cette action est irréversible et ne supprime pas les statistiques Android.") },
+            text = { Text("Tes applications suivies, limites, verrous, points, défis, choix de démonstration et d’accueil, ainsi que les questions du coach enregistrées sur ce téléphone seront effacés. Le suivi sera arrêté. Cette action est irréversible et ne supprime pas les statistiques Android.") },
             confirmButton = { Button(enabled = !deleting, onClick = {
                 scope.launch {
                     deleting = true
@@ -475,7 +477,8 @@ private fun MareeApp() {
                     val cleared = withContext(Dispatchers.IO) {
                         val local = store.clearPersonalData()
                         val coach = try { CoachSessionStore(context).clear(); true } catch (_: CoachError) { false }
-                        local && coach
+                        val offlineCoach = OfflineCoachHistory(context).clear()
+                        local && coach && offlineCoach
                     }
                     deleting = false
                     deleteConfirmation = false

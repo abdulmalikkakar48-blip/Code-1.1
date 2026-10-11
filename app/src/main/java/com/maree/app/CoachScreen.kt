@@ -64,7 +64,7 @@ private val coachSituations = listOf(
 
 /** Le dialogue appelle le serveur ; les conseils fixes restent explicitement hors ligne. */
 @Composable
-internal fun CoachTab() {
+internal fun OnlineCoachTab() {
     val context = LocalContext.current
     val client = remember { CoachClient(BuildConfig.SUPABASE_URL, BuildConfig.SUPABASE_PUBLIC_KEY) }
     val sessions = remember { CoachSessionStore(context) }

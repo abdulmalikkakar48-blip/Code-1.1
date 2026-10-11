@@ -13,7 +13,7 @@ object PrivacyContent {
     const val updatedOn = "11 octobre 2026"
     const val introduction = "Selkie t’aide à réduire ton temps d’écran. Dans cette version, " +
         "tes données de suivi restent sur ton appareil et le suivi ne demande pas de compte. " +
-        "Le dialogue IA facultatif, lorsqu’il est activé, demande une connexion par e-mail et un accord avant tout envoi. " +
+        "Le Coach local utilise des conseils préparés, sans compte ni envoi sur Internet. " +
         "Tu peux lire cette information sans autoriser le suivi."
 
     val sections: List<PrivacySection>
@@ -39,11 +39,17 @@ object PrivacyContent {
                     "d’utilisation, indépendamment de Selkie.",
                 "Selkie ne lit pas tes messages, le contenu de tes écrans, tes contacts, tes photos " +
                     "ou ta position. Il n’y a pas de synchronisation du suivi, de publicité, de " +
-                    "mesure d’audience ni de paiement actif. Les conseils fixes fonctionnent hors ligne. " +
-                    "Le dialogue IA, quand le serveur est configuré, utilise ton adresse e-mail, un identifiant " +
-                    "de connexion, des jetons de session et un compteur de questions. Il envoie uniquement " +
-                    "la question saisie et les douze derniers messages de la conversation, sans transmettre " +
-                    "automatiquement les applications suivies, points ou défis."
+                    "mesure d’audience ni de paiement actif.",
+                "Le Coach local reconnaît environ quarante sujets pour choisir des conseils préparés. " +
+                    "Les phrases saisies et, lorsque le conseil le nécessite, tes points et les durées " +
+                    "des applications suivies sont utilisés uniquement sur le téléphone. Ce coach " +
+                    "n’est pas un modèle d’IA et ne peut pas répondre à toutes les questions nouvelles.",
+                "Les échanges restent en mémoire pendant l’ouverture de l’onglet Coach. La conservation " +
+                    "des phrases non comprises est une option désactivée par défaut. Si tu l’actives, " +
+                    "jusqu’à cinquante phrases distinctes de huit cents caractères maximum restent " +
+                    "dans le stockage privé du téléphone. Aucune phrase n’est envoyée automatiquement " +
+                    "à l’éditeur. Les messages reconnus comme sensibles ou liés à une crise ne sont pas " +
+                    "enregistrés ; cette détection peut être imparfaite, évite de saisir des informations privées."
             )),
             PrivacySection("Pourquoi, et sur quelle base ?", listOf(
                 "Ces données servent uniquement à fournir le service que tu demandes : choisir " +
@@ -54,9 +60,11 @@ object PrivacyContent {
                 "Les autorisations Android contrôlent l’accès technique aux fonctions du téléphone. " +
                     "Elles ne remplacent pas une base juridique au sens du RGPD et ne valent pas " +
                     "consentement à de la publicité ou à un partage de données. Lire cette politique " +
-                    "n’oblige pas à l’accepter et n’active pas le suivi. Le dialogue IA reste facultatif : " +
-                    "une information et une case d’accord précèdent la connexion et les envois. Refuser " +
-                    "ou quitter le dialogue n’empêche pas d’utiliser les limites et les défis locaux."
+                    "n’oblige pas à l’accepter et n’active pas le suivi.",
+                "La conservation facultative des phrases non comprises sert à les retrouver sur " +
+                    "ton appareil ; elle repose sur ton choix explicite. Tu peux retirer ce choix " +
+                    "à tout moment : désactiver l’option efface les phrases déjà enregistrées. " +
+                    "Refuser leur conservation n’empêche pas d’utiliser le Coach, les limites ou les défis."
             )),
             PrivacySection("À quoi servent les autorisations ?", listOf(
                 "Accès aux données d’utilisation : calculer les durées et reconnaître l’application " +
@@ -73,15 +81,10 @@ object PrivacyContent {
                     "d’un accès nécessaire arrête le suivi avec blocage."
             )),
             PrivacySection("Qui reçoit les données ?", listOf(
-                "Les données de suivi ne sont pas envoyées au serveur. La permission Internet permet " +
-                    "uniquement les demandes volontaires de connexion et de dialogue avec le coach lorsque " +
-                    "son service est activé ; ouvrir l’application ou le Coach n’envoie aucun message.",
-                "Pour le dialogue IA, Supabase traite l’authentification par e-mail et le quota, et son serveur " +
-                    "transmet les échanges à OpenAI pour produire une réponse. Le code demande de ne pas " +
-                    "stocker les réponses via l’API, mais cela ne garantit pas l’absence de conservation " +
-                    "technique par les fournisseurs. Leurs durées de conservation, la région du projet, " +
-                    "les contrats et éventuels transferts hors EEE doivent être précisés avant une " +
-                    "ouverture publique. N’envoie pas d’informations sensibles.",
+                "Les données de suivi et les échanges du Coach local ne sont pas envoyés au serveur " +
+                    "ou à l’éditeur. Le Coach local ne demande pas de compte, ne fait pas de requête " +
+                    "réseau et ne propose pas d’export automatique de ses phrases sauvegardées. " +
+                    "Ouvrir l’application ou le Coach n’envoie aucun message.",
                 "La sauvegarde Android de Selkie est désactivée. Une migration entre appareils " +
                     "peut toutefois dépendre du constructeur et de ses outils ; cette politique " +
                     "ne garantit pas leur fonctionnement. Les traitements propres à Android, " +
@@ -111,22 +114,22 @@ object PrivacyContent {
                     "événements Android ; Selkie n’en conserve pas un historique détaillé.",
                 "Effacer les données supprime les données locales de Selkie, dont les applications " +
                     "suivies, les verrous, les points, le choix d’offre de démonstration et les défis " +
-                    "personnels avec leurs étapes et leurs dates. À la prochaine utilisation, " +
+                    "personnels avec leurs étapes et leurs dates, ainsi que les phrases non comprises " +
+                    "du Coach et leur option de conservation. À la prochaine utilisation, " +
                     "la progression repart avec les valeurs initiales. Cette action ne supprime " +
-                    "pas les statistiques d’Android, ne supprime pas un éventuel compte du coach sur " +
-                    "le serveur et ne révoque pas automatiquement les " +
+                    "pas les statistiques d’Android et ne révoque pas automatiquement les " +
                     "autorisations accordées dans les paramètres du téléphone.",
                 "Les dates de validation des défis proposés par Selkie sont effacées au renouvellement de la série, " +
                     "tous les 21 jours. Le nombre total de défis terminés et les points restent " +
                     "jusqu’à l’effacement complet. Les défis personnels et leurs dates restent " +
                     "jusqu’à leur suppression individuelle ou à l’effacement complet ; ils ne " +
                     "sont pas réinitialisés par le changement de série.",
-                "Les échanges du coach sont conservés uniquement en mémoire pendant l’ouverture de " +
-                    "son onglet ; le code du serveur ne les inscrit pas dans une table ni dans ses journaux. " +
-                    "Les jetons de session restent dans le stockage privé du téléphone jusqu’à une déconnexion " +
-                    "ou un effacement local. L’adresse e-mail, le compte et le quota restent dans Supabase : " +
-                    "contacte le responsable pour demander leur suppression. Les traitements techniques " +
-                    "des fournisseurs sont distincts et doivent être documentés avant ouverture publique."
+                "La conversation du Coach local reste uniquement en mémoire pendant l’ouverture de " +
+                    "son onglet. Les phrases non comprises conservées sur option restent jusqu’à leur " +
+                    "effacement, la désactivation de l’option, l’effacement global ou la désinstallation. " +
+                    "Au-delà de cinquante phrases, les plus anciennes sont retirées. Effacer seulement " +
+                    "les phrases garde ton choix de conservation pour les futures questions ; " +
+                    "l’effacement global le remet sur désactivé."
             )),
             PrivacySection("Tes droits et tes choix", listOf(
                 "Tu peux consulter et modifier tes limites, retirer une application et effacer " +
@@ -136,7 +139,7 @@ object PrivacyContent {
                     "d’opposition s’applique aux traitements qui le prévoient ; ce service " +
                     "nécessaire repose sur l’exécution à ta demande. Pour toute question ou " +
                     "demande relative à ces droits, utilise le contact ci-dessus.",
-                "L’éditeur ne reçoit pas les données locales de suivi et ne peut donc pas les " +
+                "L’éditeur ne reçoit pas les données locales de suivi ni les phrases du Coach et ne peut donc pas les " +
                     "consulter ou les effacer à distance. Ne les envoie pas spontanément pour " +
                     "exercer tes droits. Tu peux également adresser une réclamation à la CNIL : " +
                     "www.cnil.fr/fr/adresser-une-plainte.",
@@ -144,11 +147,28 @@ object PrivacyContent {
                     "ils ne constituent pas une décision produisant des effets juridiques ou " +
                     "des effets similaires significatifs au sens de l’article 22 du RGPD."
             )),
+            PrivacySection("Un éventuel Coach IA en ligne", listOf(
+                "Un dialogue IA avec Supabase et OpenAI est préparé dans le code, mais il est distinct " +
+                    "du Coach local et n’est pas activé. S’il est proposé à l’avenir, une information " +
+                    "et un accord précéderont la connexion par e-mail et les envois. Il utilisera " +
+                    "l’adresse e-mail, le compte, les jetons de session et un compteur de questions.",
+                "Ce service transmettrait la question et au plus douze messages précédents à " +
+                    "Supabase, puis à OpenAI pour la réponse, sans joindre automatiquement les " +
+                    "applications suivies, points ou défis. Le code demande de ne pas stocker " +
+                    "les réponses via l’API, sans garantir l’absence de conservation technique " +
+                    "par les fournisseurs. Les échanges resteraient en mémoire dans l’application ; " +
+                    "les jetons de session seraient conservés localement jusqu’à une déconnexion ou " +
+                    "un effacement. Ces actions ne supprimeraient pas le compte ni le quota serveur : " +
+                    "leur suppression pourrait être demandée au responsable.",
+                "Les bases juridiques, la région du projet, les contrats, les durées de conservation " +
+                    "et les éventuels transferts hors EEE devront être précisés avant son ouverture. " +
+                    "La permission Internet ne signifie pas qu’un service IA est actif."
+            )),
             PrivacySection("Si Selkie évolue", listOf(
                 "L’ouverture publique du coach, une synchronisation, une publicité ou un paiement " +
                     "nécessiterait une nouvelle analyse et une information mise à jour avant " +
                     "activation. Cette politique décrit seulement les fonctions de la version " +
-                    "actuelle et de la connexion facultative du coach."
+                    "actuelle et distingue le Coach local d’une éventuelle connexion future."
             ))
         )
 }

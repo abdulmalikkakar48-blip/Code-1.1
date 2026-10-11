@@ -91,13 +91,14 @@ private fun MembershipPlanCard(option: PlanType, selected: Boolean, onDemoPlan: 
                 if (option.maxTrackedApps == null) "Toutes les applications compatibles de ton téléphone." else null
             )
             OfferFeature("Défis quotidiens inclus", "Des défis sur plusieurs jours pour retrouver du temps.")
+            OfferFeature("Coach hors ligne inclus", "40 sujets de conseils préparés, sans compte ni frais par message.")
             if (option.canCreateCustomChallenges) {
                 OfferFeature("Tes propres défis",
                     "3 étapes chaque jour · durée de 2 à 365 jours · +0,25 point une fois le défi terminé.")
             }
             if (option == PlanType.ULTRA) {
                 OfferFeature("Recherche et tri du suivi", "Par nom, temps passé ou proximité de la limite.")
-                OfferFeature("Coach IA illimité par messages", "Prévu pour Ultra · pas encore disponible.")
+                OfferFeature("Dialogue IA en ligne illimité", "Prévu pour Ultra · service à activer séparément.")
             }
 
             when {

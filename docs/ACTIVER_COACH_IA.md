@@ -1,5 +1,7 @@
 # Activer le vrai dialogue IA de Selkie
 
+Depuis 0.9.0, le coach à règles fonctionne déjà hors ligne, sans compte ni frais API. Ce guide concerne seulement le dialogue génératif distant facultatif, pas l’utilisation du [coach à conseils préparés](COACH_HORS_LIGNE.md).
+
 ## État réel
 
 Le client Android et le serveur sont implémentés : connexion par code e-mail, conversation, transmission HTTPS, réponses OpenAI, quota, erreurs et renouvellement des sessions. Les conseils fixes restent séparés et explicitement hors ligne.

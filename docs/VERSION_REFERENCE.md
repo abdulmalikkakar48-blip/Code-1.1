@@ -1,5 +1,11 @@
 # Selkie : version retenue le 11 octobre 2026
 
+## Version de travail 0.9.0
+
+Le Coach gratuit à règles remplace l’écran d’activation distant comme entrée principale. Il propose 40 sujets et 120 réponses préparées, sans compte ni réseau, avec données locales réelles et suggestions pour les phrases inconnues. Le futur dialogue IA distant reste distinct. Voir [son fonctionnement](COACH_HORS_LIGNE.md).
+
+APK et sources : `downloads/Selkie-Android-0.9.0.apk` et `downloads/Selkie-Android-0.9.0-source.zip`, versionCode 11, package `com.maree.app`, signature de test identique à 0.8.1. Les empreintes et contrôles sont dans [la validation 0.9.0](../downloads/VALIDATION-0.9.0.md). Le phoque, son cadrage corrigé et le design de référence sont conservés.
+
 ## Version de travail 0.8.1
 
 À la demande de l’éditeur, le correctif de cadrage du logo est fourni immédiatement sous forme d’un APK de test distinct, même si sa signature impose de réinstaller la version précédente.

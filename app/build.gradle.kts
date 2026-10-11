@@ -40,8 +40,8 @@ android {
         applicationId = "com.maree.app"
         minSdk = 29
         targetSdk = 34
-        versionCode = 10
-        versionName = "0.8.1"
+        versionCode = 11
+        versionName = "0.9.0"
         buildConfigField("String", "SUPABASE_URL", quoted(coachUrl))
         buildConfigField("String", "SUPABASE_PUBLIC_KEY", quoted(coachPublicKey))
     }

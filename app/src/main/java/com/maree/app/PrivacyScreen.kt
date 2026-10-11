@@ -74,7 +74,7 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit) {
                     PrivacyFact("Tu gardes le contrôle",
                         "Arrête le suivi dans Plus ou efface tes données ci-dessous. Pour retirer un accès, utilise les réglages Android.")
                     PrivacyFact("Le Coach, aujourd’hui",
-                        "Les conseils hors ligne n’envoient rien. Quand le service IA est activé, le dialogue demande une connexion par e-mail et transmet tes échanges à Supabase puis OpenAI, après ton accord. Les paiements restent inactifs.")
+                        "Le coach à conseils préparés fonctionne sans compte ni envoi. Les questions non comprises restent sur ce téléphone uniquement si tu actives leur enregistrement ; tu peux les consulter et les effacer dans Coach. Un futur dialogue IA en ligne demanderait ton accord pour transmettre les échanges. Les paiements restent inactifs.")
                 }
             }
             item {

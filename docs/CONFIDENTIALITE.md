@@ -1,6 +1,6 @@
 # Confidentialité de Selkie
 
-Information mise à jour le **11 octobre 2026**. Elle décrit le suivi local et le dialogue IA facultatif préparé dans le code. Le serveur IA n’est pas encore activé ; l’APK 0.8.0 publié reste antérieur à cette connexion.
+Information mise à jour le **11 octobre 2026**. Elle décrit le suivi et le Coach à règles locaux. Le dialogue IA en ligne préparé dans le code est distinct et n’est pas activé.
 
 Selkie aide à réduire le temps d’écran. Les données de suivi restent sur l’appareil et aucun compte n’est nécessaire. Cette information peut être consultée hors ligne dans l’application, avant toute autorisation et depuis les réglages. Sa consultation ou son affichage n’active pas le suivi et aucune case d’acceptation obligatoire n’est demandée.
 
@@ -17,7 +17,9 @@ Contact confidentialité : **abdulmalikkakar48@gmail.com**.
 - Les identifiants des applications choisies, leurs limites, les durées de référence servant aux réinitialisations, les dates de verrouillage, d’alerte et de pénalité, le solde de points et ses quarts de point, les défis accomplis, les dates locales des validations quotidiennes et les dates des cycles de progression sont enregistrés dans les données privées de Selkie sur l’appareil.
 - Les titres des défis personnels, leurs trois étapes, la durée choisie, les cases du jour et leur progression sont enregistrés localement. Le choix d’offre dans le mode démonstration est également conservé ; il ne constitue pas un abonnement et ne donne lieu à aucun paiement.
 
-Les conseils fixes du Coach fonctionnent hors ligne et n’envoient rien. Le dialogue IA, lorsque son serveur est activé, demande une connexion par code e-mail et un accord avant les échanges. Supabase traite l’adresse e-mail, le compte et le compteur de questions. Le téléphone transmet la question et au plus douze messages précédents au serveur, qui les transmet à OpenAI. Aucun bilan d’utilisation, point ou défi n’est joint automatiquement.
+Le **Coach local** reconnaît environ quarante sujets et choisit parmi des conseils préparés. Il fonctionne hors ligne, sans compte et sans API d’IA. Les phrases saisies sont traitées uniquement sur le téléphone. Les points et les durées réelles des applications suivies peuvent adapter les conseils ; ces données ne quittent pas l’appareil. Il ne s’agit pas d’un modèle d’IA capable de répondre à toute question nouvelle.
+
+La conversation reste uniquement en mémoire pendant l’ouverture de l’onglet Coach. La conservation des phrases non comprises est une **option désactivée par défaut**. Si elle est activée explicitement, au plus **cinquante phrases distinctes, de huit cents caractères maximum chacune**, sont gardées dans le stockage privé du téléphone. L’utilisateur peut les consulter et les effacer sur ce téléphone. Elles ne sont pas transmises automatiquement à l’éditeur et aucun export automatique n’est proposé. Les messages reconnus comme sensibles ou liés à une crise ne sont pas enregistrés ; la détection automatique peut être imparfaite, il faut éviter de saisir des informations privées.
 
 Selkie ne lit pas les messages des autres applications, le contenu des écrans, les contacts, les photos ou la position. Il n’y a ni synchronisation du suivi, ni publicité, ni mesure d’audience, ni paiement actif. Android conserve ses propres statistiques d’utilisation, indépendamment de Selkie.
 
@@ -25,7 +27,7 @@ Selkie ne lit pas les messages des autres applications, le contenu des écrans, 
 
 Les données de suivi servent uniquement à fournir le service demandé : choisir des limites, mesurer leur utilisation, afficher des alertes et des écrans de blocage, et conserver la progression. La base juridique des traitements nécessaires à ce service est son exécution à la demande de l’utilisateur, au titre de l’article 6, paragraphe 1, point b du RGPD.
 
-Les autorisations Android contrôlent l’accès technique aux fonctions du téléphone. Elles ne remplacent pas une base juridique au sens du RGPD et ne valent pas consentement à de la publicité ou à un partage de données. Le dialogue IA est facultatif : l’utilisateur reçoit une information et accepte les transmissions avant de se connecter et d’envoyer une question. Refuser ou quitter le dialogue n’empêche pas le suivi local. Les bases et contrats applicables au service IA doivent être précisés avant son ouverture publique.
+Les autorisations Android contrôlent l’accès technique aux fonctions du téléphone. Elles ne remplacent pas une base juridique au sens du RGPD et ne valent pas consentement à de la publicité ou à un partage de données. La conservation facultative des phrases non comprises sert à les retrouver sur l’appareil et repose sur le choix explicite de l’utilisateur. Ce choix peut être retiré à tout moment : désactiver l’option efface les phrases déjà enregistrées. Le refus de conservation n’empêche pas l’utilisation du Coach, des limites ou des défis.
 
 Les demandes d’exercice des droits reçues par courriel sont traitées pour respecter les obligations du RGPD (article 6, paragraphe 1, point c). Les autres questions sont traitées sur la base de l’intérêt légitime à répondre aux personnes qui contactent l’éditeur (article 6, paragraphe 1, point f), avec possibilité d’opposition.
 
@@ -39,9 +41,7 @@ Les deux premiers accès sont nécessaires au suivi avec blocage. Sans eux, cett
 
 ## Destinataires, sauvegarde et transferts
 
-Les données de suivi ne sont pas envoyées à l’éditeur ou à un serveur. Le code déclare désormais la permission Internet pour les demandes volontaires de connexion et de dialogue avec le coach ; l’ouverture de l’application ou de l’onglet Coach ne déclenche pas de requête.
-
-Quand le service est activé, Supabase reçoit les données de connexion et traite le quota ; OpenAI reçoit les messages pour produire une réponse. Le code utilise `store: false`, sans garantie d’absence de conservation technique par les fournisseurs. La région du projet, les contrats, durées de conservation et éventuels transferts hors EEE doivent être renseignés avant une ouverture publique. Les messages ne doivent pas contenir d’informations sensibles.
+Les données de suivi et les phrases du Coach local ne sont pas envoyées à l’éditeur ou à un serveur. Le Coach local ne fait pas de requête réseau. L’ouverture de l’application ou de l’onglet Coach ne transmet aucun message. La permission Internet présente dans le code ne signifie pas qu’un service IA est actif.
 
 La sauvegarde Android de Selkie est désactivée. Une migration entre appareils peut cependant dépendre du constructeur et de ses outils ; aucune garantie n’est donnée sur leur fonctionnement. Les traitements propres à Android, au constructeur et à la plateforme de téléchargement relèvent de leurs informations de confidentialité.
 
@@ -55,11 +55,11 @@ Les réglages et la progression restent sur l’appareil jusqu’à leur suppres
 
 Les dates de validation des défis proposés par Selkie appartiennent à la série en cours. Elles sont effacées lors de son renouvellement, tous les 21 jours ; le nombre total de défis terminés et les points restent conservés jusqu’à l’effacement complet. Les défis personnels sont indépendants de ces séries : leurs textes, étapes et dates restent jusqu’à leur suppression individuelle ou à l’effacement complet. Supprimer un défi personnel ne retire pas les points déjà gagnés.
 
-Le bouton **Effacer les données de Selkie**, suivi d’une confirmation, supprime les applications suivies, les limites, les verrous, les points et leurs fractions, les défis et leurs dates enregistrées, les défis personnels et leurs trois étapes ainsi que le choix d’offre de démonstration. Lors d’une nouvelle utilisation, la progression repart avec les valeurs initiales. Cela ne supprime pas les statistiques conservées par Android et ne révoque pas les autorisations du téléphone ; ces dernières se retirent dans les réglages Android.
+Le bouton **Effacer les données de Selkie**, suivi d’une confirmation, supprime les applications suivies, les limites, les verrous, les points et leurs fractions, les défis et leurs dates enregistrées, les défis personnels et leurs trois étapes ainsi que le choix d’offre de démonstration. Il efface également les phrases non comprises du Coach et remet leur option de conservation sur désactivé. Lors d’une nouvelle utilisation, la progression repart avec les valeurs initiales. Cela ne supprime pas les statistiques conservées par Android et ne révoque pas les autorisations du téléphone ; ces dernières se retirent dans les réglages Android.
+
+Les phrases non comprises sauvegardées sur option restent jusqu’à leur effacement, la désactivation de l’option, l’effacement global ou la désinstallation. Au-delà de cinquante phrases, les plus anciennes sont retirées. **Effacer seulement les phrases** laisse l’option active pour les futures questions ; **désactiver l’option** efface les phrases et arrête leur conservation. L’effacement global désactive aussi l’option. La conversation complète n’est pas archivée.
 
 Les messages reçus au contact de confidentialité sont conservés le temps de répondre à la demande, puis supprimés, sauf lorsqu’une obligation légale impose une conservation supplémentaire. Le responsable doit appliquer effectivement cette règle et documenter toute exception légale avant diffusion publique.
-
-La conversation IA reste en mémoire pendant l’ouverture de son onglet ; le code ne la stocke pas dans un fichier local ou une table serveur. Les jetons de session restent dans le stockage privé du téléphone, exclu des sauvegardes Android, jusqu’à une déconnexion locale ou un effacement des données. Ces actions ne suppriment pas le compte et le quota Supabase : leur suppression peut être demandée au responsable. Les conservations techniques des fournisseurs sont distinctes et doivent être documentées avant ouverture publique.
 
 ## Droits et recours
 
@@ -67,14 +67,22 @@ Les limites sont consultables et modifiables dans l’application. Une applicati
 
 Il est possible de demander l’accès, la rectification, l’effacement, la limitation et, lorsque ses conditions sont réunies, la portabilité des données. Le droit d’opposition s’applique aux traitements qui le prévoient, notamment aux autres questions reçues par courriel traitées sur la base de l’intérêt légitime. Le service nécessaire de suivi repose sur son exécution à la demande de l’utilisateur. Toute question ou demande peut être adressée au contact indiqué ci-dessus.
 
-L’éditeur ne reçoit pas les données locales de suivi et ne peut pas les consulter ou les effacer à distance. Elles ne doivent pas être envoyées spontanément pour exercer un droit. Une demande relative aux informations effectivement reçues par courriel peut être traitée par le responsable sans accès à l’appareil.
+L’éditeur ne reçoit pas les données locales de suivi ni les phrases du Coach et ne peut pas les consulter ou les effacer à distance. Elles ne doivent pas être envoyées spontanément pour exercer un droit. Une demande relative aux informations effectivement reçues par courriel peut être traitée par le responsable sans accès à l’appareil.
 
 Une réclamation peut être adressée à la **CNIL** : <https://www.cnil.fr/fr/adresser-une-plainte>.
 
 Les blocages et les points sont des aides personnelles au temps d’écran. Ils ne constituent pas une décision produisant des effets juridiques ou des effets similaires significatifs au sens de l’article 22 du RGPD.
 
+## Un éventuel Coach IA en ligne
+
+Un dialogue IA avec Supabase et OpenAI est préparé dans le code, mais il est **distinct du Coach local et n’est pas activé**. S’il est proposé à l’avenir, une information et un accord précéderont la connexion par code e-mail et les envois. Supabase traiterait l’adresse e-mail, le compte, les jetons de connexion et le compteur de questions. Le téléphone transmettrait la question et au plus douze messages précédents au serveur, puis à OpenAI pour produire une réponse. Aucun bilan d’utilisation, point ou défi ne serait joint automatiquement.
+
+Le code utilise `store: false`, sans garantir l’absence de conservation technique par les fournisseurs. Les échanges resteraient en mémoire dans l’application, sans fichier local ni table serveur de conversation. Les jetons de session seraient conservés dans le stockage privé du téléphone, exclu des sauvegardes Android, jusqu’à une déconnexion locale ou un effacement des données. Ces actions ne supprimeraient pas le compte ni le quota Supabase : leur suppression pourrait être demandée au responsable.
+
+Avant l’ouverture de ce service, les bases juridiques, la région du projet, les contrats, les durées de conservation et les éventuels transferts hors EEE devront être précisés. La permission Internet ne prouve pas qu’un service IA est actif. Les traitements techniques propres aux fournisseurs sont distincts du fonctionnement local décrit ci-dessus.
+
 ## Évolution de l’application
 
-L’ouverture publique du coach, une synchronisation, une publicité ou un paiement nécessite une analyse et une information adaptées aux services réellement déployés. Cette politique décrit le suivi local et le dialogue facultatif préparé dans le code ; elle ne prouve pas qu’un service IA est actif.
+L’ouverture publique d’un coach en ligne, une synchronisation, une publicité ou un paiement nécessite une analyse et une information adaptées aux services réellement déployés. Cette politique décrit le suivi et le Coach locaux et distingue la connexion future préparée dans le code ; elle ne prouve pas qu’un service IA est actif.
 
 Ce texte d’information et les fonctions de suppression constituent une base de travail. **Ils ne garantissent pas à eux seuls la conformité de l’ensemble du service ni l’absence d’amende.** Les modalités du traitement des courriels doivent notamment être vérifiées et précisées avant une diffusion publique.
