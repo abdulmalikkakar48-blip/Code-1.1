@@ -26,7 +26,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/Selkie-Android.apk downloads/Selkie-Android-avant-refonte.apk downloads/Selkie-Android-source.zip downloads/INSTALLATION.md downloads/VALIDATION.md
+          git add -f downloads/Selkie-Android.apk downloads/Selkie-Android-avant-refonte.apk downloads/Selkie-Android-source.zip downloads/INSTALLATION.md downloads/VALIDATION.md
           if ! git diff --cached --quiet; then
             git commit -m "Publish tested Selkie redesign APK and matching sources"
             git push origin HEAD:maree-apk-download
