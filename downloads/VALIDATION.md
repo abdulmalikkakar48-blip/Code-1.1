@@ -1,33 +1,19 @@
-# Validation de Selkie 0.8.0
+# Validation de la refonte Selkie du 11 octobre 2026
 
-## Contrôles automatisés
+- Code Android construit : `58a8f0d46e4f49d281adb3f5d9bbcc1cfba95fff`.
+- Compilation, tests unitaires et lint : réussis dans [GitHub Actions](https://github.com/abdulmalikkakar48-blip/Code-1.1/actions/runs/38140276591).
+- APK publié : `downloads/Selkie-Android.apk`.
+- SHA-256 : `683c4366bc824c0ed0029a7a393eddbcae0613d0decd9ca35ca674517864df3e`.
+- Taille : 23401484 octets.
+- Android : `com.maree.app`, version 0.8.0, versionCode 9, Android 10+.
+- Certificat SHA-256 extrait du bloc de signature APK v2 : `fba73c6576ae1408f342a199d03d2f6766b69721a1c889c42d5ed0a61f0514d3`.
+- Ancien certificat cloud : `9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50`. Les signatures sont différentes ; une mise à jour directe de cette ancienne installation n'est pas possible.
+- L'ancien APK est conservé dans `downloads/Selkie-Android-avant-refonte.apk`.
+- L'archive de source est régénérée à partir du code actuel, sans les binaires du dossier downloads.
+- La publication vérifie le SHA-256 et la correspondance du code Android avec la révision testée avant de remplacer le fichier.
 
-- Commande : `./gradlew --no-daemon --max-workers=2 :app:assembleDebug :app:testDebugUnitTest :app:lintDebug`.
-- Compilation finale réussie en 52 s ; journal local `selkie-080-final-validation.log`.
-- 31 tests : 26 Store et 5 SetupPreferences, aucun échec, erreur ou test ignoré.
-- Android Lint : aucune erreur, 13 avertissements existants.
-- APK : `com.maree.app`, versionCode 9, versionName 0.8.0, nom affiché Selkie, Android 10+, target API 34.
-- Archive ZIP contrôlée sans erreur CRC ; icône Coach présente.
-- Taille : **23 632 504 octets**.
-- SHA-256 APK : `3870cf3e2ec2e2dc34d0f226492cabc0ca830a5af4440171eafab1f2eda56a20`.
-- Signature vérifiée, certificat identique aux APK cloud 0.1.0 à 0.7.0 : SHA-256 `9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50`.
-- Identifiant Android, clés de préférences et canaux de notification conservés. Les changements Store sont limités au commentaire du nom ; les règles n’ont pas été modifiées.
-- Contrastes calculés : texte principal/fond 12,21:1, texte secondaire/fond 4,90:1, bouton blanc/vert 8,02:1 et menthe/vert profond 9,67:1.
+## Limites de validation
 
-## Fonctionnement et outils
+Les captures existantes datent de la version antérieure. Aucun rendu de cette refonte, suivi prolongé ou contrôle de grandes polices sur téléphone réel n'a été observé dans cette tâche. Les contrôles automatisés ne remplacent pas cette vérification visuelle.
 
-Lovable, Figma et MagicPath ont été demandés, mais aucun de leurs outils n’est accessible dans cette session. Les liens vers leurs fiches ne constituent pas une connexion. La refonte est réalisée dans le code Android Kotlin/Compose ; aucune capture n’est présentée comme une maquette issue de ces services.
-
-Le Coach propose des conseils fixes hors ligne, pas des réponses produites par une IA. Le dialogue IA, les vrais achats et la synchronisation restent à développer. Aucun accès Internet ou secret de serveur n’est ajouté à l’APK.
-
-Avant Google Play : vérifier la disponibilité de Selkie, mettre à niveau le SDK, préparer la signature de production, la politique publique, les déclarations et le parcours de tests. Aucun compte développeur, paiement ou publication Google Play n’est créé par cette tâche.
-
-## Contrôle Android de la refonte
-
-Un AVD Android 14 existant, 480 × 800 px à 240 dpi (320 dp de large), a démarré en rendu logiciel sans KVM. Android a présenté des ANR de System UI pendant le démarrage, avant l’ouverture de l’application. Après attente, il est devenu utilisable.
-
-Avant le dernier changement de marque, le binaire de la même refonte a permis d’observer le parcours des autorisations, le bouton de suivi désactivé avec 0/2 accès, la confidentialité avant l’entrée, son retour au parcours, l’exploration sans suivi et les cinq onglets. Les jours 1 à 5 étaient chacun sur une ligne et dans l’ordre. Le Coach affichait « Conseils hors ligne ». Les données locales de l’AVD ont été conservées après réinstallation. Aucun MonitorService ne tournait en découverte sans suivi et aucune entrée de crash du processus de l’application n’a été observée dans le buffer consulté.
-
-Le dernier binaire Selkie reprend ces écrans, le logo phoque, le bandeau de marque, le résumé Défis compact et le libellé court « À valider ». Les captures du dernier binaire sont séparées des essais antérieurs. Le suivi complet, les surcouches et les longues durées n’ont pas été validés sur un Samsung A16 réel ; les tests unitaires couvrent les règles.
-
-Le dernier APK Selkie a été réinstallé sans effacement. Le nouveau logo, l’accueil, le résumé des défis et les cinq journées sur des lignes distinctes ont été observés sur le binaire final. Un contrôle avec texte à 150 % montre le défi et la navigation lisibles, avec « Quotidien » sur deux lignes. Les [quatre captures réelles](screenshots/README.md) correspondent au SHA-256 indiqué ci-dessus et sont conservées sans retouche. Le texte à 200 %, les surcouches en suivi actif et l’A16 réel ne sont pas validés par ces captures.
+Les règles métier et la structure de stockage n'ont pas été modifiées par la refonte.
