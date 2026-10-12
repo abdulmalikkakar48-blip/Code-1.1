@@ -1,4 +1,4 @@
-# Apparence — Selkie 0.10.3
+# Apparence — Selkie 0.10.4
 
 Dans **le menu ☰ en haut → Apparence**, choisir **Clair**, **Nuit** ou **Comme le téléphone**. Le clair reste le choix initial pour conserver le design existant. Nuit utilise un fond presque noir, des surfaces bleu marine et des accents bleus clairs. Comme le téléphone suit le réglage d’apparence d’Android.
 
@@ -8,7 +8,15 @@ Le choix est enregistré localement dans `selkie_appearance`, sans réseau et av
 
 La palette distingue les accents, leur texte, les fonds de cartes et les fonds de navigation. Les couleurs sont dynamiques : les valeurs utilisées dans les écrans ne doivent pas être capturées une seule fois. Les tests des contrastes vérifient des couples réellement utilisés en clair et en nuit ; ils ne remplacent pas la vérification visuelle sur Android et Samsung.
 
-## Surface d’eau pointillée
+## Deux fonds pour la version 0.10.4
+
+**Clair** : 48 petites formes réparties en cellules, dont 24 étoiles à quatre branches, 16 losanges et 8 anneaux. Diamètres de 6 à 14 dp, contours vert/bleu/sauge, dérive et léger balancement. Le scintillement reste continu, sans clignotement : alpha de 16 à 30/255. Les formes gardent une marge de 2 dp dans leurs cellules afin de ne pas assombrir le texte par superposition. Sur un Canvas de 320 × 640 dp, la dérive atteint environ 16–20 dp horizontalement et 15–27 dp verticalement.
+
+**Nuit** : les vagues de points appréciées dans 0.10.3 restent identiques, avec leur couleur bleue et leur opacité maximale de 0,32. Les deux rendus utilisent la boucle de 12 secondes, un plafond de 20 rafraîchissements par seconde, les cartes opaques et les règles système d’arrêt des animations. Les objets graphiques et buffers sont réutilisés ; aucun geste ni donnée de mouvement n’est enregistré.
+
+Le contrôle numérique des contours clairs donne un contraste minimal calculé de 4,68:1 pour le petit texte Muted. Cela ne constitue pas une certification de tous les écrans ou appareils. Les observations de la version finale sont consignées dans [la validation 0.10.4](../downloads/VALIDATION-0.10.4.md).
+
+## Surface d’eau pointillée de 0.10.3 — archive
 
 Les quatre onglets et les pages des réglages utilisent une nappe de plusieurs centaines de points répartis sur toute la surface du fond. Des vagues font onduler cette nappe comme de l’eau, avec une boucle de 12 secondes et une visibilité renforcée en clair comme en nuit. Le maillage s’adapte à la surface, avec une limite de 1 600 points, y compris sur les grands écrans. L’espacement de départ est de 18 dp ; il augmente si nécessaire pour respecter cette limite. Le rayon des points est de 1,35 dp. Les vagues combinent 18 et 5 dp de déplacement vertical, ainsi que 6 dp horizontalement. Les crêtes utilisent l’accent du thème : opacité maximale de 0,32 en Nuit et 0,14 en Clair, avec trois niveaux de luminosité. La teinte claire préserve le contraste des petits textes sans carte. Les cartes restent opaques. Le fond ne reçoit aucun geste et ne crée aucun élément interactif pour le lecteur d’écran.
 

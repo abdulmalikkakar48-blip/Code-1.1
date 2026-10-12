@@ -2,7 +2,7 @@
 
 Information updated on **12 October 2026**. This version is free and sells no subscriptions.
 
-These pages are also available offline in **☰ menu → Privacy and data → Terms of use / Subscriptions and refunds / Publisher information**, including from permission onboarding. They describe the current version and proposed plans, and are not final sales terms for a paid offer.
+These pages are also available offline in **☰ menu → Privacy and data → Terms of use / Subscriptions and cancellation / Publisher information**, including from permission onboarding. They describe the current version and proposed plans, and are not final sales terms for a paid offer.
 
 ## Terms of use
 
@@ -58,7 +58,13 @@ For a future subscription purchased through Google Play: open Play Store → pro
 
 Cancellation normally stops the next renewal; access usually remains available until the end of the paid period. Google Play shows the applicable end date. Uninstalling Selkie or deleting its data does not cancel a subscription.
 
-### Requesting a refund
+### No automatic refunds
+
+For a future paid plan: there is no automatic refund for a period already used. Simply cancelling does not automatically refund a month or period that has already elapsed. No goodwill gesture or discretionary refund is promised.
+
+This rule does not remove any mandatory rights, including withdrawal where applicable, statutory rights when the service does not conform to the contract, and repayment of incorrectly charged amounts. Applicable purchase-store rules must also be respected. The future plan’s terms must be finalised before it is sold.
+
+### Exercising your rights
 
 Cancelling a subscription and requesting a refund are separate actions. Cancellation does not automatically issue a refund.
 

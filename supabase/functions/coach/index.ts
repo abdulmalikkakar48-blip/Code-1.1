@@ -1,11 +1,13 @@
 /**
  * Edge Function Supabase « coach » à déployer séparément.
- * Secrets requis : OPENAI_API_KEY (serveur uniquement).
+ * Fournisseur serveur : COACH_AI_PROVIDER=openai (défaut) ou groq.
+ * Secret requis : OPENAI_API_KEY ou GROQ_API_KEY, uniquement pour le fournisseur choisi.
  * Variables natives Supabase : SUPABASE_URL et SUPABASE_ANON_KEY.
  * Un token d'authentification est requis, et le quota de 100 appels est atomique.
  */
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { allowedEmail, extractAnswer, InputError, normalizeInput } from "./protocol.ts";
+import { allowedEmail, InputError, normalizeInput } from "./protocol.ts";
+import { buildCoachProviderRequest, coachProviderHeaderMatches, extractCoachProviderAnswer, resolveCoachProvider } from "./provider.ts";
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -18,11 +20,13 @@ Deno.serve(async (request) => {
   if (request.method !== "POST") return json({ error: "METHOD_NOT_ALLOWED" }, 405);
   const url = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
-  const openaiKey = Deno.env.get("OPENAI_API_KEY");
+  const provider = resolveCoachProvider(name => Deno.env.get(name));
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   const allowed = Deno.env.get("COACH_ALLOWED_EMAILS");
-  if (!url || !anonKey || !openaiKey || !serviceKey || !allowed?.trim())
+  if (!url || !anonKey || !provider || !serviceKey || !allowed?.trim())
     return json({ error: "NOT_CONFIGURED" }, 503);
+  if (!coachProviderHeaderMatches(provider.provider, request.headers.get("X-Selkie-Coach-Provider")))
+    return json({ error: "PROVIDER_MISMATCH" }, 503);
   const bearer = request.headers.get("Authorization") ?? "";
   if (!bearer.startsWith("Bearer ")) return json({ error: "UNAUTHORIZED" }, 401);
 
@@ -65,27 +69,14 @@ Deno.serve(async (request) => {
   }
   let answered = false;
   try {
-    const completion = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${openaiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: Deno.env.get("OPENAI_MODEL") || "gpt-4.1-mini",
-        store: false,
-        max_output_tokens: 220,
-        instructions: "Tu es le coach de Selkie. Réponds en français en 2 à 5 phrases courtes, de manière encourageante, sans juger. Propose des actions simples pour réduire le scrolling. Ne prétends pas être un professionnel de santé.",
-        input: [
-          ...input.history.map(message => ({ role: message.role, content: message.text })),
-          { role: "user", content: input.question },
-        ],
-      }),
+    const providerRequest = buildCoachProviderRequest(provider, input);
+    const completion = await fetch(providerRequest.url, {
+      ...providerRequest.init,
       signal: AbortSignal.timeout(20000),
     });
     if (!completion.ok) return json({ error: "COACH_TEMPORARILY_UNAVAILABLE" }, 502);
     const result = await completion.json();
-    const answer = extractAnswer(result);
+    const answer = extractCoachProviderAnswer(result, provider.provider);
     if (!answer) return json({ error: "EMPTY_RESPONSE" }, 502);
     answered = true;
     return json({ answer, questionsRemaining: remaining });

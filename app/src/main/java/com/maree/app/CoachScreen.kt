@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -35,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -68,8 +70,16 @@ private val coachSituations: List<LocalCoachTip> get() = listOf(
 internal fun OnlineCoachTab() {
     val context = LocalContext.current
     val language = AppLanguage.current
+    val provider = BuildConfig.COACH_AI_PROVIDER
+    val providerName = when (provider) {
+        "groq" -> "Groq"
+        "openai" -> "OpenAI"
+        else -> tr("fournisseur non configuré", "unconfigured provider")
+    }
     val situations = remember(language) { coachSituations }
-    val client = remember { CoachClient(BuildConfig.SUPABASE_URL, BuildConfig.SUPABASE_PUBLIC_KEY) }
+    val client = remember(provider) {
+        CoachClient(BuildConfig.SUPABASE_URL, BuildConfig.SUPABASE_PUBLIC_KEY, provider = provider)
+    }
     val sessions = remember { CoachSessionStore(context) }
     val scope = rememberCoroutineScope()
     val scroll = rememberScrollState()
@@ -79,7 +89,7 @@ internal fun OnlineCoachTab() {
     var email by rememberSaveable { mutableStateOf("") }
     var code by remember { mutableStateOf("") }
     var codeSent by remember { mutableStateOf(false) }
-    var consent by remember { mutableStateOf(false) }
+    var consent by remember(provider) { mutableStateOf(false) }
     var busy by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
     var question by remember(language) { mutableStateOf("") }
@@ -124,14 +134,18 @@ internal fun OnlineCoachTab() {
         } else {
             AppCardSurface {
                 SectionLabel(tr("Coach IA", "AI coach"), tr("100 questions gratuites", "100 free questions"))
-                Text(tr("Tes messages et les derniers échanges sont transmis au serveur Selkie (Supabase), puis à OpenAI. ", "Your messages and recent conversation are sent to the Selkie server (Supabase), then to OpenAI. ") +
+                Text(tr("Tes messages et les derniers échanges sont transmis au serveur Selkie (Supabase), puis à $providerName. ", "Your messages and recent conversation are sent to the Selkie server (Supabase), then to $providerName. ") +
                     tr("Tes applications, points et défis ne sont pas envoyés. Évite les informations sensibles. ", "Your apps, points and challenges are not sent. Avoid sensitive information. ") +
                     tr("L’IA peut se tromper et ne remplace pas un professionnel de santé.", "AI can make mistakes and does not replace a health professional."),
                     color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 19.sp)
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(checked = consent, onCheckedChange = { if (!busy) consent = it }, enabled = !busy)
-                    Text(tr("J’accepte l’envoi nécessaire à mes échanges avec le coach.", "I agree to the transmission needed for my conversations with the coach."),
-                        color = MareePalette.Ink, fontSize = 14.sp, lineHeight = 20.sp)
+                Row(modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).toggleable(
+                    value = consent, enabled = !busy, role = Role.Checkbox,
+                    onValueChange = { consent = it }), verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(checked = consent, onCheckedChange = null, enabled = !busy)
+                    Text(tr("J’accepte l’envoi de mes échanges au serveur Selkie, puis à $providerName.",
+                        "I agree to send my conversation to the Selkie server, then to $providerName."),
+                        color = MareePalette.Ink, fontSize = 14.sp, lineHeight = 20.sp,
+                        modifier = Modifier.weight(1f))
                 }
                 if (session == null) {
                     Text(tr("Connecte-toi par e-mail pour conserver ton accès aux 100 questions. Le suivi du téléphone reste sans compte.", "Sign in by email to keep your access to the 100 questions. Phone tracking still works without an account."),

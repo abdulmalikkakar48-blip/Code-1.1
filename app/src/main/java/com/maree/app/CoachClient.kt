@@ -52,9 +52,10 @@ internal object CoachHttpsTransport : CoachTransport {
 internal class CoachClient(
     private val baseUrl: String,
     private val publicKey: String,
-    private val transport: CoachTransport = CoachHttpsTransport
+    private val transport: CoachTransport = CoachHttpsTransport,
+    private val provider: String = "openai"
 ) {
-    val configured: Boolean get() = validConfiguration(baseUrl, publicKey)
+    val configured: Boolean get() = validConfiguration(baseUrl, publicKey, provider)
 
     fun requestCode(email: String) {
         val address = checkedEmail(email)
@@ -94,6 +95,8 @@ internal class CoachClient(
         if (!configured) throw CoachError("NOT_CONFIGURED", tr("Le service IA doit être activé par l’éditeur.", "The publisher needs to activate the AI service."))
         val headers = mutableMapOf("apikey" to publicKey)
         if (token != null) headers["Authorization"] = "Bearer $token"
+        // Public provider name only. Provider credentials stay behind the server function.
+        if (path == "/functions/v1/coach") headers["X-Selkie-Coach-Provider"] = provider
         val response = transport.post(baseUrl.trimEnd('/') + path, headers, input.toString())
         val body = try { JSONObject(response.body) } catch (_: Exception) {
             throw CoachError("INVALID_RESPONSE", tr("Le service ne répond pas correctement. Réessaie plus tard.", "The service is not responding correctly. Try again later."))
@@ -110,6 +113,8 @@ internal class CoachClient(
                 "RATE_LIMITED" -> tr("Patiente un peu avant de réessayer.", "Please wait a little before trying again.")
                 "NOT_CONFIGURED" -> tr("L’éditeur doit terminer l’activation du service IA.", "The publisher needs to finish activating the AI service.")
                 "BETA_ACCESS_REQUIRED" -> tr("Ce compte n’a pas encore accès au test du coach.", "This account does not yet have access to the coach beta.")
+                "PROVIDER_MISMATCH" -> tr("Le fournisseur IA de cette application ne correspond pas à la configuration du serveur. L’éditeur doit corriger la configuration avant un nouvel échange.",
+                    "This app’s AI provider does not match the server configuration. The publisher must correct the configuration before a new conversation.")
                 else -> tr("Le service est momentanément indisponible. Réessaie plus tard.", "The service is temporarily unavailable. Try again later.")
             })
         }
@@ -132,7 +137,7 @@ internal class CoachClient(
     }
 
     companion object {
-        fun validConfiguration(url: String, key: String): Boolean = try {
+        fun validConfiguration(url: String, key: String, provider: String = "openai"): Boolean = try {
             val parsed = URI(url)
             val safeUrl = parsed.scheme == "https" && parsed.host?.endsWith(".supabase.co") == true &&
                 parsed.userInfo == null && parsed.port == -1 && parsed.query == null && parsed.fragment == null &&
@@ -143,7 +148,7 @@ internal class CoachClient(
                 parts.size == 3 && JSONObject(String(java.util.Base64.getUrlDecoder().decode(parts[1]), Charsets.UTF_8))
                     .optString("role") == "anon"
             }
-            safeUrl && safeKey
+            safeUrl && safeKey && provider in setOf("openai", "groq")
         } catch (_: Exception) { false }
     }
 }

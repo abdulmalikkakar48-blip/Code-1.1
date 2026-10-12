@@ -16,6 +16,12 @@ Les plafonds ont été recalibrés en version 0.6.0 ; voir [la justification](CA
 
 À 0 point, ajouter une application ou modifier sa limite reste bloqué dans **toutes** les offres. Réinitialiser une limite exige réellement 10 points. Un abonnement ne doit pas contourner ces règles.
 
+## Annulation et périodes déjà utilisées
+
+La page **menu ☰ → Confidentialité et données → Abonnements et résiliation** présente les conditions envisagées. Aucune vente n’est active dans le prototype.
+
+**Pas de remboursement automatique pour une période déjà utilisée.** Une simple annulation ne rembourse pas automatiquement un mois ou une période déjà écoulée. Aucun geste commercial ni remboursement discrétionnaire n’est promis. Cela ne peut pas exclure les droits obligatoires : rétractation lorsqu’elle s’applique, garanties légales en cas de non-conformité et restitution de sommes indûment prélevées. Les règles applicables du magasin doivent aussi être respectées. Les [conditions de test](CONDITIONS_UTILISATION.md) détaillent les distinctions numériques ; le contrat réel devra être finalisé et les règles actuelles vérifiées avant vente.
+
 ## Google Play Billing ou Stripe ?
 
 Pour des fonctions numériques consommées dans une application distribuée par Google Play, la règle générale connue impose **Google Play Billing**. Les offres Premium/Ultra sont des fonctions numériques. Google Play Billing est donc le parcours à préparer pour le lancement habituel sur Google Play.

@@ -14,6 +14,11 @@ fun quoted(value: String): String = "\"" + value.replace("\\", "\\\\").replace("
 
 val coachUrl = coachConfig("selkieSupabaseUrl", "SELKIE_SUPABASE_URL")
 val coachPublicKey = coachConfig("selkieSupabasePublicKey", "SELKIE_SUPABASE_PUBLIC_KEY")
+// Public provider identity for the consent screen; private API keys stay on the server.
+val coachProvider = coachConfig("selkieCoachProvider", "SELKIE_COACH_PROVIDER").ifEmpty { "openai" }
+require(coachProvider in setOf("openai", "groq")) {
+    "Coach : choisir le fournisseur public openai ou groq ; il doit correspondre au serveur."
+}
 val isPublicCoachKey = coachPublicKey.matches(Regex("sb_publishable_[A-Za-z0-9_-]{8,}")) || runCatching {
     val parts = coachPublicKey.split('.')
     require(parts.size == 3)
@@ -68,6 +73,7 @@ android {
         versionName = "0.10.4"
         buildConfigField("String", "SUPABASE_URL", quoted(coachUrl))
         buildConfigField("String", "SUPABASE_PUBLIC_KEY", quoted(coachPublicKey))
+        buildConfigField("String", "COACH_AI_PROVIDER", quoted(coachProvider))
     }
 
     buildTypes {

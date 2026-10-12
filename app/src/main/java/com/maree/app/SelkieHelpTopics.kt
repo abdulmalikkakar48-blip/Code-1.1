@@ -43,7 +43,7 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.DISCOVER, "coach_help", "Comment fonctionne le Coach ?",
         listOf("coach", "coach ia", "ia", "chatgpt", "intelligence artificielle", "comment fonctionne le coach", "coach gratuit", "coach hors ligne", "reponses preparees"),
         "Écris ta question dans Coach ou choisis un sujet de l’aide. Ce coach reconnaît des mots et expressions pour proposer des conseils préparés et expliquer Selkie. " +
-            "Il fonctionne gratuitement sur ton téléphone, sans compte ni Internet, mais il ne comprend pas toutes les questions et ce n’est pas ChatGPT. Un dialogue IA en ligne reste un service distinct, non activé."
+            "La saisie standard et l’aide fonctionnent gratuitement sur ton téléphone, sans compte ni Internet. La bibliothèque propose ${PlanType.FREE.coachQuestionCount} questions préparées en Gratuit, ${PlanType.PREMIUM.coachQuestionCount} en Premium et ${PlanType.ULTRA.coachQuestionCount} en Ultra. Ce coach ne comprend pas toutes les questions et ce n’est pas ChatGPT. Un dialogue IA en ligne reste un service distinct, non activé."
     ),
     help(
         SelkieHelpSection.DISCOVER, "coach_unknown", "Si le Coach ne comprend pas ?",
@@ -178,13 +178,13 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         "Les offres sont dans le menu ☰ → Abonnements. Gratuit permet 10 applications suivies. Premium est prévu à " +
             "${PlanType.PREMIUM.monthlyPriceEuros} €/mois ou ${PlanType.PREMIUM.annualPriceEuros} €/an, avec 50 applications et les défis personnalisés. " +
             "Ultra est prévu à ${PlanType.ULTRA.monthlyPriceEuros} €/mois ou ${PlanType.ULTRA.annualPriceEuros} €/an, sans plafond commercial sur les applications compatibles. " +
-            "Le Coach hors ligne et les défis proposés sont inclus dans toutes les offres. Le choix d’offre ici est une démonstration locale : aucun abonnement ni prélèvement. Les règles de points restent les mêmes, y compris à 0 point."
+            "La bibliothèque préparée comprend ${PlanType.FREE.coachQuestionCount} questions en Gratuit, ${PlanType.PREMIUM.coachQuestionCount} en Premium et ${PlanType.ULTRA.coachQuestionCount} en Ultra. La saisie standard, l’aide du Coach et les défis proposés sont inclus dans toutes les offres. Le choix d’offre ici est une démonstration locale : aucun abonnement ni prélèvement. Les règles de points restent les mêmes, y compris à 0 point."
     ),
     help(
         SelkieHelpSection.OFFERS, "ultra", "Que contient Ultra ?",
         listOf("ultra", "ultra premium", "prix ultra", "applications illimitees", "sans plafond", "tri du suivi", "recherche du suivi", "coach illimite"),
         "Ultra est prévu à ${PlanType.ULTRA.monthlyPriceEuros} €/mois ou ${PlanType.ULTRA.annualPriceEuros} €/an : pas de plafond commercial sur les applications compatibles, " +
-            "défis personnalisés, recherche et tri du suivi. Un dialogue IA en ligne illimité est envisagé mais n’est pas activé ; le Coach local fonctionne déjà. " +
+            "défis personnalisés, recherche et tri du suivi, et ${PlanType.ULTRA.coachQuestionCount} questions/réponses préparées dans le Coach. Un dialogue IA en ligne illimité est envisagé mais n’est pas activé ; le Coach local fonctionne déjà. " +
             "Aucun paiement n’est possible dans cette version de test, et Ultra ne contourne pas les règles de points."
     ),
     help(
@@ -205,7 +205,7 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.OFFERS, "cancel_subscription", "Comment arrêter un abonnement ?",
         listOf("resilier", "resiliation", "annuler mon abonnement", "annuler l abonnement", "arreter mon abonnement", "arreter l abonnement", "desabonner", "desabonnement", "annulation", "desinstaller selkie annule"),
         "Aucun abonnement réel n’est créé dans cette version. Pour un futur abonnement acheté sur Google Play : ouvre Play Store → ta photo de profil → Paiements et abonnements → Abonnements → Selkie → Annuler l’abonnement. " +
-            "Cela arrête le prochain renouvellement ; l’accès reste habituellement ouvert jusqu’à la fin de la période déjà payée. Désinstaller Selkie ou supprimer ses données n’annule pas un abonnement. Une résiliation ne signifie pas un remboursement automatique."
+            "Cela arrête le prochain renouvellement ; l’accès reste habituellement ouvert jusqu’à la fin de la période déjà payée. Désinstaller Selkie ou supprimer ses données n’annule pas un abonnement. Une résiliation ou un mois déjà utilisé ne signifie pas un remboursement automatique. Les droits obligatoires restent applicables : voir Confidentialité et données → Abonnements et résiliation."
     ),
     help(
         SelkieHelpSection.OFFERS, "restore_subscription", "Puis-je restaurer un achat ?",

@@ -1,6 +1,6 @@
 # Télécharger l’APK sur Android
 
-Fichier actuel : **Selkie-Android-0.10.4.apk**, environ 24 Mo, dans la branche `maree-apk-download`.
+Fichier actuel : **Selkie-Android-0.10.4.apk**, environ 26 Mo, dans la branche `maree-apk-download`.
 
 Les liens directs ont affiché une erreur 404 sur le téléphone de l’éditeur. Un téléchargement réussi depuis le cloud, qui dispose d’un accès GitHub au dépôt, ne prouve pas que le lien est accessible publiquement dans un autre navigateur. Il ne faut pas annoncer les liens raw comme des téléchargements publics garantis.
 
@@ -12,7 +12,7 @@ Les liens directs ont affiché une erreur 404 sur le téléphone de l’éditeur
 
 Si la page affiche encore 404 après connexion au bon compte, l’accès ou l’adresse effective du dépôt doit être vérifié avant de proposer un autre lien. Ne pas recommander de désinstaller l’application pour résoudre une erreur de téléchargement.
 
-Les [sources 0.10.4](../downloads/Selkie-Android-0.10.4-source.zip) et [contrôles 0.10.4](../downloads/VALIDATION-0.10.4.md) correspondent au nouveau fichier. VersionCode 19 ; 102 tests unitaires passent. Lint : 0 erreur, 4 avertissements, 1 information. Cet APK de test hors ligne ne vend aucun abonnement.
+Les [sources 0.10.4](../downloads/Selkie-Android-0.10.4-source.zip) et [contrôles 0.10.4](../downloads/VALIDATION-0.10.4.md) correspondent au nouveau fichier. VersionCode 19 ; 117 tests unitaires passent. Lint : 0 erreur, 4 avertissements, 1 information. Cet APK de test hors ligne ne vend aucun abonnement.
 
 ## Distribution sans connexion
 

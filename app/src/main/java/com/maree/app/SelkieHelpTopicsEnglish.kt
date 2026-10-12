@@ -24,7 +24,7 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.DISCOVER, "coach_help", "How does the Coach work?",
         listOf("coach", "ai coach", "ai", "chatgpt", "artificial intelligence", "how does the coach work", "free coach", "offline coach", "prepared replies"),
         "Write your question in Coach or choose a help topic. This coach recognizes words and phrases to offer prepared advice and explain Selkie. " +
-            "It works free on your phone, without an account or Internet, but it does not understand every question and it is not ChatGPT. Online AI chat remains a separate service that is not activated."
+            "Standard input and help work free on your phone, without an account or Internet. The library offers ${PlanType.FREE.coachQuestionCount} prepared questions in Free, ${PlanType.PREMIUM.coachQuestionCount} in Premium and ${PlanType.ULTRA.coachQuestionCount} in Ultra. This coach does not understand every question and it is not ChatGPT. Online AI chat remains a separate service that is not activated."
     ),
     englishHelp(
         SelkieHelpSection.DISCOVER, "coach_unknown", "What if the Coach does not understand?",
@@ -159,13 +159,13 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
         "Find the plans in the ☰ menu → Subscriptions. Free allows 10 tracked apps. Premium is planned at " +
             "€${PlanType.PREMIUM.monthlyPriceEuros}/month or €${PlanType.PREMIUM.annualPriceEuros}/year, with 50 apps and custom challenges. " +
             "Ultra is planned at €${PlanType.ULTRA.monthlyPriceEuros}/month or €${PlanType.ULTRA.annualPriceEuros}/year, with no commercial cap on compatible apps. " +
-            "The offline Coach and suggested challenges are included in every plan. Selecting a plan here is a local demo: no subscription or charge is created. Point rules stay the same, including at 0 points."
+            "The prepared library includes ${PlanType.FREE.coachQuestionCount} questions in Free, ${PlanType.PREMIUM.coachQuestionCount} in Premium and ${PlanType.ULTRA.coachQuestionCount} in Ultra. Standard input, Coach help and suggested challenges are included in every plan. Selecting a plan here is a local demo: no subscription or charge is created. Point rules stay the same, including at 0 points."
     ),
     englishHelp(
         SelkieHelpSection.OFFERS, "ultra", "What does Ultra include?",
         listOf("ultra", "ultra premium", "ultra price", "unlimited apps", "no cap", "tracking sort", "tracking search", "unlimited coach"),
         "Ultra is planned at €${PlanType.ULTRA.monthlyPriceEuros}/month or €${PlanType.ULTRA.annualPriceEuros}/year: no commercial cap on compatible apps, " +
-            "custom challenges, and search and sorting for tracking. Unlimited online AI chat is planned but not activated; the local Coach already works. " +
+            "custom challenges, search and sorting for tracking, and ${PlanType.ULTRA.coachQuestionCount} prepared Coach question-and-answer pairs. Unlimited online AI chat is planned but not activated; the local Coach already works. " +
             "No payments are possible in this test version, and Ultra does not bypass point rules."
     ),
     englishHelp(
@@ -186,7 +186,7 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.OFFERS, "cancel_subscription", "How do I stop a subscription?",
         listOf("cancel", "cancellation", "cancel my subscription", "cancel the subscription", "stop my subscription", "stop the subscription", "unsubscribe", "uninstall selkie cancel"),
         "No real subscription is created in this version. For a future subscription purchased on Google Play: open Play Store → your profile picture → Payments & subscriptions → Subscriptions → Selkie → Cancel subscription. " +
-            "This stops the next renewal; access usually remains available until the end of the period already paid for. Uninstalling Selkie or deleting its data does not cancel a subscription. Canceling does not mean an automatic refund."
+            "This stops the next renewal; access usually remains available until the end of the period already paid for. Uninstalling Selkie or deleting its data does not cancel a subscription. Cancelling or a month already used does not mean an automatic refund. Mandatory rights remain applicable: see Privacy and data → Subscriptions and cancellation."
     ),
     englishHelp(
         SelkieHelpSection.OFFERS, "restore_subscription", "Can I restore a purchase?",

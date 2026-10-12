@@ -33,7 +33,8 @@ data class OfflineCoachReply(
 class RuleCoach(
     topics: List<CoachTopic>? = null,
     private val random: Random = Random.Default,
-    private val language: AppLocale = AppLanguage.current
+    private val language: AppLocale = AppLanguage.current,
+    private val plan: PlanType = PlanType.FREE
 ) {
     private data class PreparedTopic(val topic: CoachTopic, val keywords: List<List<String>>)
     private val useQuestionLibrary = topics == null
@@ -70,7 +71,7 @@ class RuleCoach(
         val tokens = words(message)
         if (requiresHumanSupport(tokens)) return humanSupport()
         if (useQuestionLibrary) {
-            findPreparedCoachQuestion(message, language)?.let { question ->
+            findPreparedCoachQuestion(message, language, plan)?.let { question ->
                 return preparedQuestionReply(question, context)
             }
         }
@@ -101,7 +102,7 @@ class RuleCoach(
     /** Une question choisie dans la bibliothèque garde sa réponse complète et sa rubrique. */
     @Synchronized
     fun replyForPreparedQuestion(questionId: String, context: OfflineCoachContext): OfflineCoachReply {
-        val question = if (useQuestionLibrary) preparedCoachQuestionById(questionId, language) else null
+        val question = if (useQuestionLibrary) preparedCoachQuestionById(questionId, language, plan) else null
         return if (question == null) unknownReply(emptyList()) else preparedQuestionReply(question, context)
     }
 

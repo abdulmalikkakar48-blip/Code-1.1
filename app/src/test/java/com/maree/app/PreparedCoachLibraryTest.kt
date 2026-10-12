@@ -149,6 +149,165 @@ class PreparedCoachLibraryTest {
         }
     }
 
+    @Test fun tierCountsAreDerivedFromConcreteScenariosAndKeepEveryOriginalId() {
+        assertEquals(1152, preparedCoachQuestionCount())
+        assertEquals(5760, preparedCoachQuestionCount(PlanType.PREMIUM))
+        assertEquals(10368, preparedCoachQuestionCount(PlanType.ULTRA))
+        assertEquals(8, coachLibraryScenarios.size)
+        assertEquals(8, coachLibraryScenarios.map { it.id }.toSet().size)
+        assertEquals(4, coachLibraryScenarios.count { it.minimumPlan == PlanType.PREMIUM })
+        assertEquals(4, coachLibraryScenarios.count { it.minimumPlan == PlanType.ULTRA })
+        for (language in AppLocale.entries) {
+            val original = preparedCoachQuestionsFor(language)
+            for (plan in PlanType.entries) {
+                val questions = preparedCoachQuestionsFor(language, plan)
+                assertEquals(preparedCoachQuestionCount(plan), questions.size)
+                for (index in original.indices) assertEquals(original[index], questions[index])
+                assertSame(questions, preparedCoachQuestionsFor(language, plan))
+                assertEquals(preparedCoachSectionsFor(language), preparedCoachSectionsFor(language, plan))
+            }
+        }
+    }
+
+    @Test fun everyUltraQuestionAndAnswerIsDistinctAndTranslatedWithTheSameStableIdentity() {
+        val french = preparedCoachQuestionsFor(AppLocale.FRENCH, PlanType.ULTRA)
+        val english = preparedCoachQuestionsFor(AppLocale.ENGLISH, PlanType.ULTRA)
+        for (language in AppLocale.entries) {
+            val questions = preparedCoachQuestionsFor(language, PlanType.ULTRA)
+            val ids = HashSet<String>()
+            val texts = HashSet<String>()
+            val answers = HashSet<String>()
+            val sections = HashMap<String, Int>()
+            for (index in questions.indices) {
+                val entry = questions[index]
+                assertTrue("Duplicate ID: ${entry.id}", ids.add(entry.id))
+                assertTrue("Duplicate question: ${entry.id}", texts.add(normalizeForTest(entry.question)))
+                assertTrue("Duplicate answer: ${entry.id}", answers.add(entry.answer))
+                assertTrue(entry.answer.contains("\n1.") && entry.answer.contains("\n2.") &&
+                    entry.answer.contains("\n3."))
+                assertTrue(entry.answer.length >= 160)
+                sections[entry.sectionId] = (sections[entry.sectionId] ?: 0) + 1
+                val translated = if (language == AppLocale.FRENCH) english[index] else french[index]
+                assertEquals(entry.id, translated.id)
+                assertEquals(entry.topicId, translated.topicId)
+                assertEquals(entry.sectionId, translated.sectionId)
+                assertNotEquals(entry.question, translated.question)
+                assertNotEquals(entry.answer, translated.answer)
+            }
+            assertEquals(10368, ids.size)
+            assertEquals(8, sections.size)
+            assertTrue(sections.values.all { it == 1296 })
+            assertTrue(preparedCoachAnswerCacheStats(language).cachedAnswers <= 256)
+        }
+    }
+
+    @Test fun lookupAndSearchRejectScenariosOutsideTheSelectedPlan() {
+        val intentIds = preparedCoachQuestionsFor(AppLocale.FRENCH).take(24)
+            .map { it.id.substringAfter('.') }
+        for (scenario in coachLibraryScenarios) {
+            val minimumPlan = scenario.minimumPlan
+            // Check every coaching decision, in both source and answer languages.
+            for (intent in intentIds) {
+                val id = "${coachLibraryProfiles.first().id}~${scenario.id}.$intent"
+                val french = preparedCoachQuestionById(id, AppLocale.FRENCH, minimumPlan)!!
+                val english = preparedCoachQuestionById(id, AppLocale.ENGLISH, minimumPlan)!!
+                for (plan in PlanType.entries) for (language in AppLocale.entries) {
+                    val expected = if (language == AppLocale.FRENCH) french else english
+                    if (plan.ordinal >= minimumPlan.ordinal) {
+                        assertEquals(expected, preparedCoachQuestionById(id, language, plan))
+                        assertEquals(expected, findPreparedCoachQuestion(french.question, language, plan))
+                        assertEquals(expected, findPreparedCoachQuestion(english.question, language, plan))
+                    } else {
+                        assertNull(preparedCoachQuestionById(id, language, plan))
+                        assertNull(findPreparedCoachQuestion(french.question, language, plan))
+                        assertNull(findPreparedCoachQuestion(english.question, language, plan))
+                    }
+                }
+            }
+            for (plan in PlanType.entries) for (language in AppLocale.entries) {
+                val results = searchPreparedCoachQuestions(scenario.questionContext.forLanguage(language),
+                    language, limit = Int.MAX_VALUE, plan = plan)
+                if (plan.ordinal < minimumPlan.ordinal) assertTrue(results.isEmpty())
+                else {
+                    assertEquals(1152, results.size)
+                    assertTrue(results.all { it.id.contains("~${scenario.id}.") })
+                }
+            }
+        }
+        for (plan in PlanType.entries) {
+            assertNull(preparedCoachQuestionById("tiktok_short_videos~unknown.next_step", AppLocale.FRENCH, plan))
+            assertNull(preparedCoachQuestionById("tiktok_short_videos~shared_space.unknown", AppLocale.FRENCH, plan))
+        }
+    }
+
+    @Test fun libraryAndSearchGenerateAnswersOnlyForRowsActuallyRequested() {
+        for (language in AppLocale.entries) {
+            val before = preparedCoachAnswerCacheStats(language).generatedAnswers
+            val library = preparedCoachQuestionsFor(language, PlanType.ULTRA)
+            val all = searchPreparedCoachQuestions("", language, limit = Int.MAX_VALUE, plan = PlanType.ULTRA)
+            val section = searchPreparedCoachQuestions("", language, "relationships", Int.MAX_VALUE, PlanType.ULTRA)
+            val matching = searchPreparedCoachQuestions("tiktoc", language, limit = Int.MAX_VALUE, plan = PlanType.ULTRA)
+            assertEquals(10368, library.size)
+            assertEquals(10368, all.size)
+            assertEquals(1296, section.size)
+            assertEquals(216, matching.size)
+            assertEquals(before, preparedCoachAnswerCacheStats(language).generatedAnswers)
+            val page = (120 until 140).map { matching[it] }
+            assertEquals(20, page.size)
+            assertTrue(page.all { it.question.contains("TikTok", ignoreCase = true) })
+            val generated = preparedCoachAnswerCacheStats(language).generatedAnswers - before
+            assertTrue("A page must generate at most its 20 answers, not the whole result list", generated <= 20)
+            assertEquals(before + generated, preparedCoachAnswerCacheStats(language).generatedAnswers)
+            // Metadata is reused by another query; reading result counts still does not build answers.
+            assertFalse(searchPreparedCoachQuestions("notifi", language, limit = Int.MAX_VALUE,
+                plan = PlanType.ULTRA).isEmpty())
+            assertEquals(before + generated, preparedCoachAnswerCacheStats(language).generatedAnswers)
+        }
+    }
+
+    @Test fun constraintsChangeTheActionAndGoalRatherThanReusingAnIncompatibleBaseExercise() {
+        val settings = coachLibraryScenarios.first { it.id == "unchanged_settings" }
+        val noEquipment = coachLibraryScenarios.first { it.id == "no_equipment" }
+        val technicalProfiles = setOf("youtube_autoplay", "repeated_push_alerts", "home_screen_shortcuts",
+            "grayscale_visual_pull", "group_chat_noise", "unused_app_reinstallation")
+        for (base in coachLibraryProfiles) for (language in AppLocale.entries) {
+            val adapted = adaptedCoachLibraryProfile(base, settings)
+            assertFalse(adapted.goal.forLanguage(language).contains(base.goal.forLanguage(language)))
+            assertTrue(adapted.goal.forLanguage(language).contains(if (language == AppLocale.ENGLISH)
+                "all settings remain unchanged" else "tous les réglages restent inchangés"))
+            if (base.id in technicalProfiles)
+                assertFalse(adapted.smallAction.forLanguage(language).contains(base.smallAction.forLanguage(language)))
+        }
+        val paper = coachLibraryProfiles.first { it.id == "paper_reading" }
+        for (language in AppLocale.entries) {
+            val adapted = adaptedCoachLibraryProfile(paper, noEquipment)
+            assertFalse(adapted.smallAction.forLanguage(language).contains(paper.smallAction.forLanguage(language)))
+            assertTrue(adapted.smallAction.forLanguage(language).contains(if (language == AppLocale.ENGLISH)
+                "no book or purchase is required" else "aucun livre ni achat n'est requis"))
+            val plan = PlanType.ULTRA
+            fun answer(scenario: String, intent: String) = preparedCoachQuestionById(
+                "${paper.id}~$scenario.$intent", language, plan)!!.answer
+            assertTrue(answer("no_equipment", "tomorrow_plan").contains(if (language == AppLocale.ENGLISH)
+                "without needing a written note" else "sans exiger de note écrite"))
+            assertTrue(answer("low_energy", "prepare_space").contains(if (language == AppLocale.ENGLISH)
+                "without requiring purchases, preparation" else "sans exiger d'achat, de préparation"))
+            assertTrue(answer("unchanged_settings", "avoid_perfection").contains(if (language == AppLocale.ENGLISH)
+                "rather than the phone's configuration" else "plutôt que la configuration du téléphone"))
+            assertTrue(answer("essential_contact", "need_phone").contains(if (language == AppLocale.ENGLISH)
+                "without inserting a delay" else "sans ajouter de délai"))
+            assertTrue(answer("limited_time", "two_minutes").contains(if (language == AppLocale.ENGLISH)
+                "at most two minutes" else "deux minutes au maximum"))
+        }
+    }
+
+    @Test fun expandedTiersDoNotInterceptMedicalDistressOrGeneralKnowledgeMessages() {
+        for (plan in PlanType.entries) for (language in AppLocale.entries) for (message in listOf(
+            "Quelle est la capitale du Pérou ?", "What is the capital of Peru?",
+            "Quel médicament prendre pour une insomnie ?", "Which medicine should I take for insomnia?",
+            "TikTok me rend triste et je veux me faire du mal", "I want to hurt myself"
+        )) assertNull(message, findPreparedCoachQuestion(message, language, plan))
+    }
+
     private fun normalizeForTest(text: String): String = Normalizer.normalize(
         text.lowercase(Locale.ROOT).replace("œ", "oe").replace("æ", "ae"), Normalizer.Form.NFD)
         .replace(Regex("\\p{M}+"), "")

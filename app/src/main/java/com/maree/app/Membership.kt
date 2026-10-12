@@ -25,6 +25,8 @@ enum class PlanType(val maxTrackedApps: Int?, val monthlyPriceEuros: Int) {
     FREE(10, 0), PREMIUM(50, 10), ULTRA(null, 20);
 
     val canCreateCustomChallenges: Boolean get() = this != FREE
+    /** Size of the prepared library, not a monthly quota or a usage counter. */
+    val coachQuestionCount: Int get() = preparedCoachQuestionCount(this)
     /** Prix prévus, sans facturation active : l’année coûte douze mensualités. */
     val annualPriceEuros: Int get() = monthlyPriceEuros * 12
     fun priceEuros(period: BillingPeriod): Int = when (period) {

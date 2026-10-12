@@ -2,6 +2,7 @@ package com.maree.app
 
 import java.text.Normalizer
 import java.util.Collections
+import java.util.LinkedHashMap
 import java.util.Locale
 
 /** Both translations are authored together; no global language state or remote service is used. */
@@ -74,12 +75,70 @@ private val preparedSectionTexts = linkedMapOf(
     "consistency" to CoachLibraryText("Régularité", "Consistency")
 )
 
-private fun preparedAnswer(profile: CoachLibraryProfile, intent: String, language: AppLocale): String {
+private fun preparedAnswer(
+    profile: CoachLibraryProfile, intent: String, language: AppLocale, scenario: CoachLibraryScenario? = null
+): String {
     val situation = profile.situation.forLanguage(language)
     val action = profile.smallAction.forLanguage(language)
     val alternative = profile.alternative.forLanguage(language)
     val barrier = profile.barrier.forLanguage(language)
     val goal = profile.goal.forLanguage(language)
+    if (scenario != null) {
+        val adapted = if (language == AppLocale.ENGLISH) when (intent) {
+            "notice_trigger" -> "Notice the cue for optional use when doing so fits; necessary access comes first.\n\n1. Your context is: $situation\n2. Name the cue mentally, now or after handling a real need. Notice this obstacle without blame: $barrier\n3. At a suitable transition, try this response: $action"
+            "choose_alternative" -> "Choose a substitute that fits the present constraint, rather than forcing the original activity.\n\n1. Consider this available fallback: $alternative\n2. If a suitable opportunity exists, try its smallest entry point: $action\n3. If neither fits, postpone the attempt. The alternative should meet your need, not add a new obligation."
+            "handle_obstacle" -> "Prepare a response mentally without requiring equipment or a change of settings.\n\n1. Identify this likely friction: $barrier\n2. Keep a possible response in mind: $action\n3. If the situation prevents it, choose a compatible fallback or postpone: $alternative"
+            "realistic_goal" -> "Choose a realistic direction within the constraint, not a compulsory attempt today.\n\n1. Use this purpose as a starting point: $goal\n2. Look for a genuinely available opportunity for one observable choice: $action\n3. If no opportunity fits, keep the idea for later. Adjust from experience instead of making the requirement harsher."
+            "after_slip" -> "An automatic opening does not cancel the useful choices you already made.\n\n1. Name what happened without blaming yourself; essential contact or care is not a lapse in this exercise.\n2. Notice which constraint or friction mattered: $barrier\n3. At the next suitable moment, restart with this compatible step: $action\nYour direction can remain: $goal"
+            "measure_progress" -> "Measure a choice within your real constraint, without watching every minute.\n\n1. Your direction is: $goal\n2. Mentally note whether a suitable opportunity allowed this choice: $action\n3. Notice what helped, or why postponing was appropriate. Selkie counters only describe the current active tracking period; they do not necessarily represent a full day."
+            "tomorrow_plan" -> "Prepare a flexible idea for tomorrow without needing a written note or extra materials.\n\n1. Keep one likely opportunity in mind: $situation\n2. Remember a first step only if it fits tomorrow's responsibilities: $action\n3. Keep this fallback, or postpone if it is unavailable: $alternative\nLet the plan serve this direction: $goal"
+            "busy_day" -> "Use an existing opportunity without adding a task to a full day.\n\n1. Look for a transition that actually fits this context: $situation\n2. If a pause is available, keep only this small choice: $action\n3. If the day leaves no room, postpone rather than catch up. This fallback remains optional: $alternative"
+            "without_blocking" -> "Keep the current configuration and test a voluntary choice for optional content.\n\n1. Notice when automatic entertainment starts, after necessary access is handled: $situation\n2. Only if the opportunity fits, try this compatible response: $action\n3. Choose an available fallback or postpone: $alternative\nNo new block, deletion or change of settings is required; this does not guarantee every urge will disappear."
+            "prepare_space" -> "Look for what is already usable without requiring purchases, preparation or changes.\n\n1. Identify the practical friction: $barrier\n2. Consider this action only within your current resources and responsibilities: $action\n3. Locate an already available fallback, or keep it for a later opportunity: $alternative\nEssential access and accessibility remain available."
+            "finish_session" -> "Choose an ending for optional content without interrupting necessary use.\n\n1. Finish the essential task first, then ask whether the optional session still serves your chosen purpose.\n2. When a transition fits, use this action: $action\n3. Choose this fallback only if it is compatible now: $alternative\nKeep the purpose of the transition: $goal"
+            "keep_motivation" -> "Connect the constrained attempt to a benefit you actually want.\n\n1. Start with this purpose: $goal\n2. Name one benefit that fits your real day, such as rest, presence or returning to a useful task.\n3. At an available opportunity, make it concrete with this choice: $action\nLater, notice whether this fallback helped: $alternative"
+            "avoid_perfection" -> "An attempt can be smaller or postponed without abandoning its purpose.\n\n1. Keep this flexible direction: $goal\n2. Your compatible minimum is: $action\n3. If this obstacle appears, change the timing or approach rather than the phone's configuration: $barrier\nA missed opportunity is information, not a debt to catch up on."
+            "ask_support" -> "Ask for help only when the person and setting make it appropriate.\n\n1. Identify the difficulty you may want to explain: $barrier\n2. If someone trusted is available, agree on a small form of support that respects their time, your privacy and the constraint. Otherwise keep the plan your own.\n3. The action remains your choice: $action\nSupport never requires access to messages, passwords or private history."
+            "weekly_review" -> "Review opportunities and constraints rather than treating a week as a pass-or-fail test.\n\n1. At which suitable moments did this choice fit? $action\n2. Did this expected friction appear, and was postponing sometimes the right decision? $barrier\n3. What served this direction? $goal\nKeep one useful approach; change the timing if your circumstances require it."
+            "changed_routine" -> "Adapt the opportunity while respecting what the current situation permits.\n\n1. Identify what changed here: $situation\n2. Move this optional attempt to a genuinely suitable transition: $action\n3. Choose a compatible fallback or postpone: $alternative\nAn unavailable opportunity does not cancel the rest of the day."
+            "reduce_gradually" -> "Change one optional opening within the constraint rather than trying to change everything.\n\n1. Choose a suitable occurrence of this context: $situation\n2. Try one compatible response when the opportunity exists: $action\n3. Observe whether it serves this direction: $goal\nRepeat only at suitable moments; no catch-up or extra restriction is required."
+            "next_step" -> "Build on a useful choice without making the constraint harder to live with.\n\n1. Keep the part of this action that already fits: $action\n2. If there is genuinely more room, try a little more of this compatible fallback: $alternative\n3. Check that the change still serves this purpose: $goal\nOtherwise keep the smaller version; increasing effort is not compulsory."
+            "two_minutes" -> "Choose a step lasting at most two minutes, or only the time actually available.\n\n1. $action\n2. Stop whenever your responsibilities or comfort require it. Keep this fallback for a suitable moment: $alternative\n3. Use this direction, not a duration you must complete: $goal"
+            "low_energy" -> "The minimum can be a decision without movement, preparation or waiting.\n\n1. $action\n2. You can rest or stop immediately. This fallback is an option, not another obligation: $alternative\n3. Keep a manageable direction: $goal"
+            "delay_urge" -> "Delay only an optional opening; never delay essential contact, care or accessibility access.\n\n1. If a pause fits, notice the urge without promising to wait for a fixed duration.\n2. $action\n3. Handle necessary use first, then choose whether this alternative fits: $alternative"
+            "if_then" -> "Build a rule around optional use, with an exception for genuine needs.\n\n1. Your context is: $situation\n2. Keep in mind: “If I am about to open optional content and a pause fits, I will try this action.” $action\n3. Necessary contact, care and accessibility come first; a postponed attempt remains valid."
+            "weekly_experiment" -> "Observe a week without making daily practice compulsory.\n\n1. Choose a genuinely available opportunity for this action: $action\n2. After an attempt, note the actual obstacle: $barrier\n3. At the end of the week, keep what fits this direction: $goal\nThis suggested exercise does not automatically validate a Selkie challenge or award points."
+            "need_phone" -> "Necessary phone use comes before the optional exercise.\n\n1. Complete the essential call, message, route or accessibility task without inserting a delay.\n2. When a suitable transition exists, use this cue for optional content: $action\n3. If that fallback fits your responsibilities, choose it; otherwise postpone it: $alternative"
+            else -> error("Unknown prepared-coach intention: $intent")
+        } else when (intent) {
+            "notice_trigger" -> "Repère le déclencheur d'un usage facultatif seulement si cela convient ; les accès nécessaires passent avant.\n\n1. Ton contexte est : $situation\n2. Nomme le déclencheur mentalement, maintenant ou après avoir traité un vrai besoin. Observe cet obstacle sans te juger : $barrier\n3. À une transition adaptée, essaie cette réponse : $action"
+            "choose_alternative" -> "Choisis un remplacement compatible avec la contrainte actuelle, sans forcer l'activité prévue au départ.\n\n1. Envisage ce repli disponible : $alternative\n2. Si une occasion adaptée existe, essaie sa plus petite entrée : $action\n3. Si rien ne convient, reporte l'essai. L'alternative doit répondre à ton besoin, pas ajouter une obligation."
+            "handle_obstacle" -> "Prépare une réponse mentalement, sans exiger de matériel ni de changement de réglages.\n\n1. Repère cette difficulté probable : $barrier\n2. Garde une réponse possible en tête : $action\n3. Si la situation l'empêche, choisis un repli compatible ou reporte : $alternative"
+            "realistic_goal" -> "Choisis une direction réaliste dans la contrainte, pas un essai obligatoire aujourd'hui.\n\n1. Pars de cette intention : $goal\n2. Cherche une occasion réellement disponible pour un choix observable : $action\n3. Si aucune occasion ne convient, garde l'idée pour plus tard. Ajuste selon l'expérience au lieu de durcir l'exigence."
+            "after_slip" -> "Une ouverture automatique n'annule pas les choix utiles déjà faits.\n\n1. Nomme ce qui s'est passé sans te juger ; un contact essentiel ou un soin n'est pas un écart par rapport à cet essai.\n2. Repère la contrainte ou la difficulté qui a compté : $barrier\n3. Au prochain moment adapté, repars avec ce geste compatible : $action\nTa direction peut rester : $goal"
+            "measure_progress" -> "Mesure un choix dans ta contrainte réelle, sans surveiller chaque minute.\n\n1. Ta direction est : $goal\n2. Note mentalement si une occasion adaptée a permis ce choix : $action\n3. Repère ce qui a aidé, ou pourquoi reporter convenait. Les compteurs de Selkie décrivent seulement la période de suivi actif en cours, pas nécessairement une journée entière."
+            "tomorrow_plan" -> "Prépare une idée souple pour demain sans exiger de note écrite ni de matériel supplémentaire.\n\n1. Garde une occasion probable en tête : $situation\n2. Retiens un premier geste seulement s'il convient aux obligations de demain : $action\n3. Garde ce repli, ou reporte s'il est indisponible : $alternative\nLaisse le plan servir cette direction : $goal"
+            "busy_day" -> "Utilise une occasion existante sans ajouter de tâche à une journée pleine.\n\n1. Cherche une transition qui convient réellement à ce contexte : $situation\n2. Si une pause est disponible, garde seulement ce petit choix : $action\n3. Si la journée ne laisse aucune place, reporte au lieu de rattraper. Ce repli reste facultatif : $alternative"
+            "without_blocking" -> "Garde la configuration actuelle et essaie un choix volontaire pour le contenu facultatif.\n\n1. Repère le début du loisir automatique après avoir traité les accès nécessaires : $situation\n2. Seulement si l'occasion convient, essaie cette réponse compatible : $action\n3. Choisis un repli disponible ou reporte : $alternative\nAucun nouveau blocage, suppression ou changement de réglages n'est requis ; cela ne garantit pas la disparition de toutes les envies."
+            "prepare_space" -> "Repère ce qui est déjà utilisable sans exiger d'achat, de préparation ni de modification.\n\n1. Identifie la difficulté pratique : $barrier\n2. Envisage ce geste seulement avec tes ressources et obligations actuelles : $action\n3. Repère un repli déjà disponible, ou garde-le pour une occasion ultérieure : $alternative\nLes accès essentiels et l'accessibilité restent disponibles."
+            "finish_session" -> "Choisis une fin pour le contenu facultatif sans interrompre l'usage nécessaire.\n\n1. Termine d'abord la tâche essentielle, puis demande-toi si la session facultative sert encore ton intention.\n2. Lorsqu'une transition convient, utilise ce geste : $action\n3. Choisis ce repli seulement s'il est compatible maintenant : $alternative\nGarde l'intention de la transition : $goal"
+            "keep_motivation" -> "Relie l'essai adapté à un bénéfice que tu veux réellement retrouver.\n\n1. Pars de cette intention : $goal\n2. Nomme un bénéfice compatible avec ta vraie journée : repos, présence ou reprise d'une tâche utile.\n3. À une occasion disponible, rends-le concret avec ce choix : $action\nObserve ensuite si ce repli a aidé : $alternative"
+            "avoid_perfection" -> "Un essai peut être plus petit ou reporté sans abandonner son intention.\n\n1. Garde cette direction souple : $goal\n2. Ton minimum compatible est : $action\n3. Si cet obstacle apparaît, change le moment ou l'approche plutôt que la configuration du téléphone : $barrier\nUne occasion manquée donne une information, pas une dette à rattraper."
+            "ask_support" -> "Demande de l'aide seulement quand la personne et le lieu s'y prêtent.\n\n1. Repère la difficulté que tu pourrais expliquer : $barrier\n2. Si une personne de confiance est disponible, convenez d'une petite aide qui respecte son temps, ta vie privée et la contrainte. Sinon, garde le plan pour toi.\n3. Le geste reste ton choix : $action\nLe soutien n'exige jamais l'accès aux messages, mots de passe ou historiques privés."
+            "weekly_review" -> "Relis les occasions et les contraintes sans traiter la semaine comme un test réussi ou raté.\n\n1. À quels moments adaptés ce choix convenait-il ? $action\n2. Cette difficulté prévue est-elle apparue, et reporter était-il parfois la bonne décision ? $barrier\n3. Qu'est-ce qui a servi cette direction ? $goal\nGarde une approche utile ; change le moment si ta situation le demande."
+            "changed_routine" -> "Adapte l'occasion en respectant ce que la situation actuelle permet.\n\n1. Repère ce qui a changé ici : $situation\n2. Déplace cet essai facultatif à une transition réellement adaptée : $action\n3. Choisis un repli compatible ou reporte : $alternative\nUne occasion indisponible n'annule pas le reste de la journée."
+            "reduce_gradually" -> "Change une ouverture facultative dans la contrainte plutôt que tous les usages à la fois.\n\n1. Choisis une occasion adaptée de ce contexte : $situation\n2. Essaie une réponse compatible lorsque l'occasion existe : $action\n3. Observe si elle sert cette direction : $goal\nRépète seulement aux moments adaptés ; aucun rattrapage ni restriction supplémentaire n'est requis."
+            "next_step" -> "Construis sur un choix utile sans rendre la contrainte plus difficile à vivre.\n\n1. Garde la partie de ce geste qui convient déjà : $action\n2. Si davantage de place existe réellement, essaie un peu plus de ce repli compatible : $alternative\n3. Vérifie que le changement sert encore cette intention : $goal\nSinon, garde la petite version ; augmenter l'effort n'est pas obligatoire."
+            "two_minutes" -> "Choisis un geste de deux minutes au maximum, ou seulement du temps réellement disponible.\n\n1. $action\n2. Arrête dès que tes obligations ou ton confort le demandent. Garde ce repli pour un moment adapté : $alternative\n3. Vise cette direction, pas une durée à terminer : $goal"
+            "low_energy" -> "Le minimum peut être une décision sans déplacement, préparation ni attente.\n\n1. $action\n2. Tu peux te reposer ou arrêter immédiatement. Ce repli est une option, pas une obligation supplémentaire : $alternative\n3. Garde une direction accessible : $goal"
+            "delay_urge" -> "Reporte seulement une ouverture facultative ; ne retarde jamais un contact essentiel, un soin ou un accès d'accessibilité.\n\n1. Si une pause convient, remarque l'envie sans promettre d'attendre une durée fixe.\n2. $action\n3. Traite d'abord l'usage nécessaire, puis choisis si cette alternative convient : $alternative"
+            "if_then" -> "Prépare une règle pour l'usage facultatif, avec une exception pour les vrais besoins.\n\n1. Ton contexte est : $situation\n2. Retiens mentalement : « Si je vais ouvrir un contenu facultatif et qu'une pause convient, j'essaierai ce geste. » $action\n3. Les contacts nécessaires, les soins et l'accessibilité passent avant ; un essai reporté reste valable."
+            "weekly_experiment" -> "Observe une semaine sans rendre la pratique quotidienne obligatoire.\n\n1. Choisis une occasion réellement disponible pour ce geste : $action\n2. Après un essai, note la difficulté rencontrée : $barrier\n3. En fin de semaine, garde ce qui convient à cette direction : $goal\nCet exercice proposé ne valide pas automatiquement un défi Selkie et ne donne pas de points à lui seul."
+            "need_phone" -> "L'usage nécessaire du téléphone passe avant l'exercice facultatif.\n\n1. Termine l'appel, le message, le trajet ou l'usage d'accessibilité essentiel sans ajouter de délai.\n2. Lorsqu'une transition adaptée existe, utilise ce repère pour le contenu facultatif : $action\n3. Si ce repli convient à tes obligations, choisis-le ; sinon, reporte-le : $alternative"
+            else -> error("Unknown prepared-coach intention: $intent")
+        }
+        return adapted
+    }
     return if (language == AppLocale.ENGLISH) when (intent) {
         "notice_trigger" -> "$situation\n\n1. Before opening your phone, name the cue: place, time, feeling or an alert.\n2. Notice the obstacle without blaming yourself: $barrier\n3. At the next occurrence, try this instead of just counting minutes: $action"
         "two_minutes" -> "Start with one action, without promising to change the whole day.\n\n1. $action\n2. After two minutes, decide whether to continue with a useful alternative: $alternative\n3. Use this direction to choose, rather than a perfect score: $goal"
@@ -135,77 +194,203 @@ private fun preparedAnswer(profile: CoachLibraryProfile, intent: String, languag
     }
 }
 
-private data class PreparedCoachCatalog(
-    val questions: List<PreparedCoachQuestion>,
-    val byId: Map<String, PreparedCoachQuestion>,
-    val sections: List<PreparedCoachSection>,
-    val searchable: List<PreparedCoachSearchEntry>
-)
-
 private data class PreparedCoachSearchEntry(
-    val question: PreparedCoachQuestion,
+    val position: Int,
     val normalizedQuestion: String,
-    val tokens: List<String>
+    val tokens: IntArray
 )
 
-private fun buildPreparedCoachCatalog(language: AppLocale): PreparedCoachCatalog {
-    val sections = Collections.unmodifiableList(preparedSectionTexts.map { (id, label) ->
-        PreparedCoachSection(id, label.forLanguage(language))
-    })
-    val questions = Collections.unmodifiableList(coachLibraryProfiles.flatMap { profile ->
-        val section = requireNotNull(preparedSectionTexts[profile.sectionId]) {
-            "Unknown prepared-coach section: ${profile.sectionId}"
-        }.forLanguage(language)
-        preparedCoachIntents.map { intent ->
-            PreparedCoachQuestion(
-                id = "${profile.id}.${intent.id}",
-                sectionId = profile.sectionId,
-                sectionLabel = section,
-                topicId = profile.parentTopicId,
-                question = "${intent.question.forLanguage(language)} — ${profile.label.forLanguage(language)} ?",
-                answer = preparedAnswer(profile, intent.id, language)
-            )
+/** Shared, bounded caches retain only recently requested answers and adapted profiles. */
+private class PreparedCoachCache<K : Any, V : Any>(private val capacity: Int) {
+    private val values = LinkedHashMap<K, V>(16, 0.75f, true)
+    private var generatedValues = 0L
+
+    @Synchronized
+    fun getOrCreate(key: K, create: () -> V): V {
+        values[key]?.let { return it }
+        val value = create()
+        if (values.size >= capacity) {
+            val oldest = values.entries.iterator()
+            if (oldest.hasNext()) { oldest.next(); oldest.remove() }
         }
-    })
-    check(questions.map { it.id }.distinct().size == questions.size) { "Duplicate prepared-coach IDs" }
-    return PreparedCoachCatalog(questions, questions.associateBy { it.id }, sections,
-        questions.map { question ->
-            val normalizedQuestion = normalizePreparedCoachText(question.question)
-            PreparedCoachSearchEntry(question, normalizedQuestion,
-                (normalizedQuestion + " " + normalizePreparedCoachText(question.sectionLabel))
-                    .split(' ').distinct())
-        })
+        values[key] = value
+        generatedValues++
+        return value
+    }
+
+    @Synchronized
+    fun statistics(): PreparedCoachAnswerCacheStats = PreparedCoachAnswerCacheStats(generatedValues, values.size)
 }
 
-// Built once per language and retained. The publicly returned lists cannot be mutated by a caller.
-private val frenchPreparedCoachCatalog by lazy { buildPreparedCoachCatalog(AppLocale.FRENCH) }
-private val englishPreparedCoachCatalog by lazy { buildPreparedCoachCatalog(AppLocale.ENGLISH) }
+/** Counts permit checking pagination without timing-sensitive performance assertions. */
+internal data class PreparedCoachAnswerCacheStats(val generatedAnswers: Long, val cachedAnswers: Int)
+
+private fun scenarioForProfile(position: Int): CoachLibraryScenario? {
+    val group = position / coachLibraryProfiles.size
+    return if (group == 0) null else coachLibraryScenarios[group - 1]
+}
+
+private fun baseProfileAt(position: Int): CoachLibraryProfile =
+    coachLibraryProfiles[position % coachLibraryProfiles.size]
+
+private val adaptedProfiles = PreparedCoachCache<Int, CoachLibraryProfile>(64)
+private fun profileAt(position: Int): CoachLibraryProfile {
+    val scenario = scenarioForProfile(position) ?: return baseProfileAt(position)
+    return adaptedProfiles.getOrCreate(position) { adaptedCoachLibraryProfile(baseProfileAt(position), scenario) }
+}
+
+private val profilesByPlan by lazy {
+    PlanType.entries.associateWith { plan ->
+        val groups = listOf(0) + coachLibraryScenarios.mapIndexedNotNull { index, scenario ->
+            if (scenario.minimumPlan.ordinal <= plan.ordinal) index + 1 else null
+        }
+        groups.flatMap { group -> coachLibraryProfiles.indices.map { group * coachLibraryProfiles.size + it } }
+    }
+}
+
+private val normalizedIntentPrefixes by lazy {
+    AppLocale.entries.associateWith { language -> preparedCoachIntents.map {
+        normalizePreparedCoachText(it.question.forLanguage(language)) + " "
+    } }
+}
+private val normalizedBaseLabels by lazy {
+    AppLocale.entries.associateWith { language -> coachLibraryProfiles.map {
+        normalizePreparedCoachText(it.label.forLanguage(language))
+    } }
+}
+
+/** Derived from authored content, never from a commercial quota or spelling aliases. */
+fun preparedCoachQuestionCount(plan: PlanType = PlanType.FREE): Int =
+    profilesByPlan.getValue(plan).size * preparedCoachIntents.size
+
+private fun preparedQuestionText(profilePosition: Int, intentPosition: Int, language: AppLocale): String {
+    val base = baseProfileAt(profilePosition)
+    val intent = preparedCoachIntents[intentPosition].question.forLanguage(language)
+    val scenario = scenarioForProfile(profilePosition)
+    return if (scenario == null) "$intent — ${base.label.forLanguage(language)} ?"
+    else "$intent — ${base.label.forLanguage(language)} : ${scenario.questionContext.forLanguage(language)} ?"
+}
+
+private class PreparedCoachCatalog(private val language: AppLocale) {
+    val sections: List<PreparedCoachSection> = Collections.unmodifiableList(preparedSectionTexts.map { (id, text) ->
+        PreparedCoachSection(id, text.forLanguage(language))
+    })
+    private val answers = PreparedCoachCache<Int, PreparedCoachQuestion>(256)
+    // Compact token IDs share vocabulary across questions; a global search never rebuilds an evicted section.
+    private val searchProfiles = mutableMapOf<Int, List<PreparedCoachSearchEntry>>()
+    private val tokenIds = linkedMapOf<String, Int>()
+    private val views: Map<PlanType, List<PreparedCoachQuestion>> = PlanType.entries.associateWith { plan ->
+        val profilePositions = profilesByPlan.getValue(plan)
+        Collections.unmodifiableList(object : AbstractList<PreparedCoachQuestion>() {
+            override val size: Int get() = profilePositions.size * preparedCoachIntents.size
+            override fun get(index: Int): PreparedCoachQuestion {
+                if (index !in 0 until size) throw IndexOutOfBoundsException("Question index: $index")
+                return question(profilePositions[index / preparedCoachIntents.size] * preparedCoachIntents.size +
+                    index % preparedCoachIntents.size)
+            }
+        })
+    }
+
+    fun questions(plan: PlanType): List<PreparedCoachQuestion> = views.getValue(plan)
+
+    fun answerCacheStats(): PreparedCoachAnswerCacheStats = answers.statistics()
+
+    fun indexedQuestions(size: Int, positionAt: (Int) -> Int): List<PreparedCoachQuestion> =
+        Collections.unmodifiableList(object : AbstractList<PreparedCoachQuestion>() {
+            override val size: Int = size
+            override fun get(index: Int): PreparedCoachQuestion {
+                if (index !in 0 until size) throw IndexOutOfBoundsException("Question index: $index")
+                return question(positionAt(index))
+            }
+        })
+
+    fun question(position: Int): PreparedCoachQuestion = answers.getOrCreate(position) {
+        val profilePosition = position / preparedCoachIntents.size
+        val intentPosition = position % preparedCoachIntents.size
+        val profile = profileAt(profilePosition)
+        val intent = preparedCoachIntents[intentPosition]
+        PreparedCoachQuestion("${profile.id}.${intent.id}", profile.sectionId,
+            preparedSectionTexts.getValue(profile.sectionId).forLanguage(language), profile.parentTopicId,
+            preparedQuestionText(profilePosition, intentPosition, language),
+            preparedAnswer(profile, intent.id, language, scenarioForProfile(profilePosition)))
+    }
+
+    @Synchronized
+    fun searchable(profilePosition: Int): List<PreparedCoachSearchEntry> = searchProfiles.getOrPut(profilePosition) {
+        val section = normalizePreparedCoachText(preparedSectionTexts.getValue(baseProfileAt(profilePosition).sectionId)
+            .forLanguage(language))
+        preparedCoachIntents.indices.map { intentPosition ->
+            val normalized = normalizePreparedCoachText(preparedQuestionText(profilePosition, intentPosition, language))
+            PreparedCoachSearchEntry(profilePosition * preparedCoachIntents.size + intentPosition, normalized,
+                (normalized + " " + section).split(' ').distinct()
+                    .map { token -> tokenIds.getOrPut(token) { tokenIds.size } }.toIntArray())
+        }
+    }
+
+    @Synchronized
+    fun matchingTokens(token: String): IntArray = tokenIds.entries.asSequence()
+        .filter { it.key == token || (token.length >= 3 && it.key.startsWith(token)) }
+        .map { it.value }.toList().toIntArray()
+
+    @Synchronized
+    fun exactToken(token: String): Int? = tokenIds[token]
+}
+
+// Two language catalogues share all plan views; answers are generated only when requested.
+private val frenchPreparedCoachCatalog by lazy { PreparedCoachCatalog(AppLocale.FRENCH) }
+private val englishPreparedCoachCatalog by lazy { PreparedCoachCatalog(AppLocale.ENGLISH) }
 private fun preparedCoachCatalog(language: AppLocale): PreparedCoachCatalog =
     if (language == AppLocale.ENGLISH) englishPreparedCoachCatalog else frenchPreparedCoachCatalog
 
-fun preparedCoachQuestionsFor(language: AppLocale): List<PreparedCoachQuestion> =
-    preparedCoachCatalog(language).questions
+fun preparedCoachQuestionsFor(language: AppLocale, plan: PlanType = PlanType.FREE): List<PreparedCoachQuestion> =
+    preparedCoachCatalog(language).questions(plan)
 
-fun preparedCoachSectionsFor(language: AppLocale): List<PreparedCoachSection> =
+internal fun preparedCoachAnswerCacheStats(language: AppLocale): PreparedCoachAnswerCacheStats =
+    preparedCoachCatalog(language).answerCacheStats()
+
+fun preparedCoachSectionsFor(language: AppLocale, plan: PlanType = PlanType.FREE): List<PreparedCoachSection> =
     preparedCoachCatalog(language).sections
 
-fun preparedCoachQuestionById(id: String, language: AppLocale): PreparedCoachQuestion? =
-    preparedCoachCatalog(language).byId[id]
-
-private val preparedCoachQuestionIdsByText by lazy {
-    val index = linkedMapOf<String, String>()
-    for (language in AppLocale.entries) for (question in preparedCoachQuestionsFor(language)) {
-        val normalized = normalizePreparedCoachText(question.question)
-        val existing = index.put(normalized, question.id)
-        check(existing == null || existing == question.id) { "Ambiguous prepared-coach question" }
+fun preparedCoachQuestionById(
+    id: String, language: AppLocale, plan: PlanType = PlanType.FREE
+): PreparedCoachQuestion? {
+    val parts = id.split('.', limit = 2)
+    if (parts.size != 2) return null
+    val intent = preparedCoachIntents.indexOfFirst { it.id == parts[1] }
+    if (intent < 0) return null
+    val profileParts = parts[0].split('~', limit = 2)
+    val base = coachLibraryProfiles.indexOfFirst { it.id == profileParts[0] }
+    if (base < 0) return null
+    val group = if (profileParts.size == 1) 0 else {
+        val scenario = coachLibraryScenarios.indexOfFirst { it.id == profileParts[1] }
+        if (scenario < 0 || coachLibraryScenarios[scenario].minimumPlan.ordinal > plan.ordinal) return null
+        scenario + 1
     }
-    index.toMap()
+    return preparedCoachCatalog(language).question((group * coachLibraryProfiles.size + base) *
+        preparedCoachIntents.size + intent)
 }
 
 /** Only complete authored questions are intercepted; a topic name keeps its usual engine behavior. */
-fun findPreparedCoachQuestion(message: String, language: AppLocale): PreparedCoachQuestion? {
-    val id = preparedCoachQuestionIdsByText[normalizePreparedCoachText(message)] ?: return null
-    return preparedCoachQuestionById(id, language)
+fun findPreparedCoachQuestion(
+    message: String, language: AppLocale, plan: PlanType = PlanType.FREE
+): PreparedCoachQuestion? {
+    val normalized = normalizePreparedCoachText(message)
+    if (normalized.isEmpty()) return null
+    for (sourceLanguage in AppLocale.entries) {
+        val intentPositions = preparedCoachIntents.indices.filter { index ->
+            normalized.startsWith(normalizedIntentPrefixes.getValue(sourceLanguage)[index])
+        }
+        if (intentPositions.isEmpty()) continue
+        for (profilePosition in profilesByPlan.getValue(plan)) {
+            if (!normalized.contains(normalizedBaseLabels.getValue(sourceLanguage)[profilePosition % coachLibraryProfiles.size]))
+                continue
+            for (intentPosition in intentPositions) {
+                if (normalized == normalizePreparedCoachText(preparedQuestionText(profilePosition, intentPosition, sourceLanguage)))
+                    return preparedCoachCatalog(language).question(profilePosition * preparedCoachIntents.size + intentPosition)
+            }
+        }
+    }
+    return null
 }
 
 private val preparedSearchStopWords = setOf("a", "ai", "au", "aux", "avec", "ce", "ces", "cet",
@@ -221,24 +406,35 @@ fun searchPreparedCoachQuestions(
     query: String,
     language: AppLocale,
     sectionId: String? = null,
-    limit: Int = 60
+    limit: Int = 60,
+    plan: PlanType = PlanType.FREE
 ): List<PreparedCoachQuestion> {
     if (limit <= 0) return emptyList()
     val catalog = preparedCoachCatalog(language)
     val normalized = normalizePreparedCoachText(query)
     val tokens = normalized.split(' ').filter { it.isNotEmpty() && it !in preparedSearchStopWords }.distinct()
-    return catalog.searchable.asSequence()
-        .filter { entry -> sectionId == null || entry.question.sectionId == sectionId }
-        .filter { entry -> tokens.all { sought -> entry.tokens.any { word ->
-            word == sought || (sought.length >= 3 && word.startsWith(sought))
-        } } }
-        .map { entry -> entry.question to if (tokens.isEmpty()) 0 else
-            tokens.fold(0) { total, token -> total + if (token in entry.tokens) 3 else 1 } +
-                if (entry.normalizedQuestion.contains(normalized)) 5 else 0 }
+    val profiles = profilesByPlan.getValue(plan)
+        .filter { sectionId == null || baseProfileAt(it).sectionId == sectionId }
+    if (tokens.isEmpty()) return catalog.indexedQuestions(
+        minOf(limit, profiles.size * preparedCoachIntents.size)
+    ) { index -> profiles[index / preparedCoachIntents.size] * preparedCoachIntents.size +
+        index % preparedCoachIntents.size }
+    val searchable = profiles.map(catalog::searchable)
+    val matchingTokens = tokens.map(catalog::matchingTokens)
+    if (matchingTokens.any { it.isEmpty() }) return emptyList()
+    val exactTokens = tokens.map(catalog::exactToken)
+    val positions = searchable.asSequence().flatMap { it.asSequence() }
+        .filter { entry -> matchingTokens.all { matches -> matches.any { it in entry.tokens } } }
+        .map { entry ->
+            val score = exactTokens.fold(0) { total, token ->
+                total + if (token != null && token in entry.tokens) 3 else 1
+            }
+            entry.position to (score + if (entry.normalizedQuestion.contains(normalized)) 5 else 0)
+        }
         .sortedByDescending { it.second }
-        .map { it.first }
-        .take(limit.coerceAtMost(catalog.questions.size))
-        .toList()
+        .take(limit.coerceAtMost(preparedCoachQuestionCount(plan)))
+        .map { it.first }.toList().toIntArray()
+    return catalog.indexedQuestions(positions.size) { positions[it] }
 }
 
 private val preparedWordAliases = mapOf("tiktoc" to "tiktok", "tikto" to "tiktok", "youtub" to "youtube",

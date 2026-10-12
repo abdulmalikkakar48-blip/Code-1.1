@@ -4,7 +4,7 @@
 
 ## Ce qui est livré dans le prototype
 
-Les trois pages légales FR/EN, l’export local JSON sans phrases du coach ni jetons, l’effacement confirmé avec retrait des alertes et les améliorations de contraste et de libellés sont intégrés. L’APK hors ligne n’a pas de permission Internet. Les prix sont uniquement proposés en démonstration : 10 €/mois ou 120 €/an pour Premium, 20 €/mois ou 240 €/an pour Ultra, sans réduction ni achat actif. Les 102 tests unitaires passent ; Lint indique 0 erreur, 4 avertissements et 1 information. Cela ne remplace pas les essais d’accessibilité et de fonctionnement sur téléphone.
+Les trois pages légales FR/EN, l’export local JSON sans phrases du coach ni jetons, l’effacement confirmé avec retrait des alertes et les améliorations de contraste et de libellés sont intégrés. L’APK hors ligne n’a pas de permission Internet. Les prix sont uniquement proposés en démonstration : 10 €/mois ou 120 €/an pour Premium, 20 €/mois ou 240 €/an pour Ultra, sans réduction ni achat actif. Les 117 tests unitaires passent ; Lint indique 0 erreur, 4 avertissements et 1 information. Cela ne remplace pas les essais d’accessibilité et de fonctionnement sur téléphone.
 
 Le [bilan des 19 points](BILAN_CONFORMITE_FRANCE.md) distingue 9 en place, 6 à compléter ou valider et 4 hors du périmètre actuel. Consulter les [politiques](CONFIDENTIALITE.md), les [conditions et remboursements](CONDITIONS_UTILISATION.md), le [registre et la procédure de droits](REGISTRE_TRAITEMENTS.md), les [actifs et licences](DROITS_ET_ACTIFS.md) et les [pages statiques à héberger](../legal-site/README.md). Les pages sont prêtes pour un futur hébergement après finalisation du responsable, de Gmail et du prestataire ; aucune URL publique Play n’existe encore.
 

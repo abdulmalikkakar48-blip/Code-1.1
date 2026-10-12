@@ -54,6 +54,7 @@ class CoachClientTest {
             assertEquals("$url/functions/v1/coach", endpoint)
             assertEquals("Bearer user-access", headers["Authorization"])
             assertEquals(key, headers["apikey"])
+            assertEquals("openai", headers["X-Selkie-Coach-Provider"])
             sent = JSONObject(body)
             CoachHttpResult(200, "{\"answer\":\"Pose ton téléphone.\",\"questionsRemaining\":99}")
         })
@@ -91,6 +92,71 @@ class CoachClientTest {
             CoachHttpResult(200, "{\"access_token\":\"new-access\",\"refresh_token\":\"new-refresh\"}")
         })
         assertEquals(CoachSession("new-access", "new-refresh", session.email), client.refresh(session))
+    }
+
+    @Test fun unknownProvidersAreRejectedBeforeAuthenticationOrMessageTransport() {
+        var requests = 0
+        for (provider in listOf("", "unknown", "Groq", "groq\nAuthorization: injected", "gsk_example_not_a_provider_name")) {
+            val client = CoachClient(url, key, CoachTransport { _, _, _ ->
+                requests++; CoachHttpResult(200, "{}")
+            }, provider = provider)
+            assertFalse(provider, client.configured)
+            assertFalse(CoachClient.validConfiguration(url, key, provider))
+            assertEquals("NOT_CONFIGURED", failure { client.requestCode(session.email) }.code)
+            assertEquals("NOT_CONFIGURED", failure { client.ask(session, "Help me", emptyList()) }.code)
+        }
+        assertEquals(0, requests)
+    }
+
+    @Test fun groqProviderNameIsSentOnlyToTheCoachFunctionAndNeverToAuthRoutes() {
+        val endpoints = mutableListOf<String>()
+        val client = CoachClient(url, key, CoachTransport { endpoint, headers, _ ->
+            endpoints += endpoint
+            if (endpoint == "$url/functions/v1/coach") {
+                assertEquals("groq", headers["X-Selkie-Coach-Provider"])
+                CoachHttpResult(200, "{\"answer\":\"Take a short break.\",\"questionsRemaining\":99}")
+            } else {
+                assertTrue(endpoint, endpoint.startsWith("$url/auth/v1/"))
+                assertFalse(headers.containsKey("X-Selkie-Coach-Provider"))
+                CoachHttpResult(200, "{\"access_token\":\"new-access\",\"refresh_token\":\"new-refresh\"}")
+            }
+        }, provider = "groq")
+        client.requestCode(session.email)
+        client.verifyCode(session.email, "123456")
+        client.refresh(session)
+        assertEquals("Take a short break.", client.ask(session, "Help me", emptyList()).answer)
+        assertEquals(listOf("$url/auth/v1/otp", "$url/auth/v1/verify",
+            "$url/auth/v1/token?grant_type=refresh_token", "$url/functions/v1/coach"), endpoints)
+    }
+
+    @Test fun supportedProviderNamesArePublicMetadataWithoutProviderApiCredentials() {
+        for (provider in listOf("openai", "groq")) {
+            assertTrue(CoachClient.validConfiguration(url, key, provider))
+            val client = CoachClient(url, key, CoachTransport { endpoint, headers, body ->
+                assertEquals("$url/functions/v1/coach", endpoint)
+                assertEquals(provider, headers["X-Selkie-Coach-Provider"])
+                assertEquals(setOf("apikey", "Authorization", "X-Selkie-Coach-Provider"), headers.keys)
+                assertEquals(key, headers["apikey"])
+                assertEquals("Bearer user-access", headers["Authorization"])
+                val input = JSONObject(body)
+                assertEquals(setOf("question", "history"), input.keySet())
+                CoachHttpResult(200, "{\"answer\":\"Take a short break.\",\"questionsRemaining\":99}")
+            }, provider = provider)
+            client.ask(session, "Help me", emptyList())
+        }
+    }
+
+    @Test fun providerMismatchReportsPublisherConfigurationWithoutTryingAnotherProvider() {
+        var requests = 0
+        val client = CoachClient(url, key, CoachTransport { _, headers, _ ->
+            requests++
+            assertEquals("groq", headers["X-Selkie-Coach-Provider"])
+            CoachHttpResult(409, "{\"error\":\"PROVIDER_MISMATCH\"}")
+        }, provider = "groq")
+        val error = failure { client.ask(session, "Help me", emptyList()) }
+        assertEquals("PROVIDER_MISMATCH", error.code)
+        assertTrue(error.message.orEmpty().contains("configuration"))
+        assertEquals(1, requests)
     }
 
     private fun failure(action: () -> Unit): CoachError {

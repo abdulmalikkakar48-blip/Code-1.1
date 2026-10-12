@@ -2,7 +2,7 @@
 
 Information mise à jour le **12 octobre 2026**. Cette version est gratuite et ne vend aucun abonnement.
 
-Ces pages sont aussi disponibles hors ligne dans **le menu ☰ → Confidentialité et données → Conditions d’utilisation / Abonnements et remboursements / Éditeur et mentions**, y compris depuis l’accueil des autorisations. Elles décrivent la version actuelle et les projets d’offres, sans constituer des conditions de vente définitives pour une offre payante.
+Ces pages sont aussi disponibles hors ligne dans **le menu ☰ → Confidentialité et données → Conditions d’utilisation / Abonnements et résiliation / Éditeur et mentions**, y compris depuis l’accueil des autorisations. Elles décrivent la version actuelle et les projets d’offres, sans constituer des conditions de vente définitives pour une offre payante.
 
 ## Conditions d’utilisation
 
@@ -58,7 +58,13 @@ Pour un futur abonnement acheté via Google Play : ouvre Play Store → photo de
 
 L’annulation arrête normalement le prochain renouvellement ; l’accès reste habituellement disponible jusqu’à la fin de la période déjà payée. Google Play indique l’échéance applicable. Désinstaller Selkie ou effacer ses données n’annule pas un abonnement.
 
-### Demander un remboursement
+### Pas de remboursement automatique
+
+Pour une future offre payante : pas de remboursement automatique pour une période déjà utilisée. Une simple annulation ne rembourse pas automatiquement un mois ou une période déjà écoulée. Aucun geste commercial ni remboursement discrétionnaire n’est promis.
+
+Cette règle ne retire aucun droit obligatoire, notamment la rétractation lorsqu’elle s’applique, les garanties légales en cas de non-conformité et la restitution de sommes indûment prélevées. Les règles applicables du magasin d’achat doivent également être respectées. Les conditions de la future offre devront être finalisées avant sa vente.
+
+### Faire valoir tes droits
 
 Annuler un abonnement et demander un remboursement sont deux démarches différentes. Une annulation n’entraîne pas automatiquement un remboursement.
 

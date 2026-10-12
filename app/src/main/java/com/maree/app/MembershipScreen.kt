@@ -138,6 +138,11 @@ private fun MembershipPlanCard(option: PlanType, selected: Boolean, period: Bill
             )
             OfferFeature(tr("Défis quotidiens inclus", "Daily challenges included"), tr("Des défis sur plusieurs jours pour retrouver du temps.", "Challenges spanning several days to reclaim your time."))
             OfferFeature(tr("Coach et aide Selkie inclus", "Coach and Selkie help included"), tr("Conseils et réponses sur l’application, sans compte ni frais par message.", "Tips and answers about the app, with no account or per-message fees."))
+            OfferFeature(
+                tr("${option.coachQuestionCount} questions-réponses préparées", "${option.coachQuestionCount} prepared question-answer pairs"),
+                tr("Bibliothèque en français et en anglais, utilisable hors ligne. C’est un choix de contenus, pas un quota de messages ; la saisie libre et l’aide restent accessibles dans toutes les offres.",
+                    "A French and English library you can use offline. This is a content library, not a message quota; free-text input and help remain available on every plan.")
+            )
             if (option.canCreateCustomChallenges) {
                 OfferFeature(tr("Tes propres défis", "Your own challenges"),
                     tr("3 étapes chaque jour · durée de 2 à 365 jours · +0,25 point une fois le défi terminé.", "3 steps each day · 2 to 365 days · +0.25 point when the challenge is completed."))

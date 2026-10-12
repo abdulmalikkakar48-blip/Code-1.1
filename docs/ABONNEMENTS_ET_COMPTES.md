@@ -18,7 +18,9 @@ Pour un achat réellement effectué via Google Play : ouvrir **Google Play → p
 
 ## Remboursement et informations légales
 
-**Menu ☰ → Confidentialité et données → Abonnements et remboursements** explique les projets d’offres, l’annulation et les demandes de remboursement ; les conditions d’utilisation et les mentions de l’éditeur sont disponibles sur la même page. Une démonstration gratuite ne constitue pas un achat à rembourser.
+**Menu ☰ → Confidentialité et données → Abonnements et résiliation** explique les projets d’offres, l’annulation et les demandes de remboursement ; les conditions d’utilisation et les mentions de l’éditeur sont disponibles sur la même page. Une démonstration gratuite ne constitue pas un achat à rembourser.
+
+**Pas de remboursement automatique pour une période déjà utilisée.** Une simple annulation ne déclenche pas de remboursement automatique d’un mois ou d’une période déjà écoulée. Aucun geste commercial ni remboursement discrétionnaire n’est promis. Les droits obligatoires restent applicables, notamment la rétractation lorsqu’elle s’applique, les garanties légales en cas de non-conformité et la restitution de sommes indûment prélevées ; les règles applicables du magasin doivent être respectées.
 
 Pour un futur achat Google Play réel, retrouver la commande dans l’historique du compte utilisé et suivre l’option de demande de remboursement lorsqu’elle est proposée, ou écrire à **1kabdm@gmail.com** avec le numéro de commande, la date et le problème. Ne pas envoyer de RIB, de carte bancaire ou de mot de passe. L’examen dépend du contrat et du droit applicable ; un remboursement n’est pas garanti par cette page.
 

@@ -59,7 +59,8 @@ private fun TopicButtons(ids: List<String>, topics: Map<String, CoachTopic>, ena
 }
 
 @Composable
-internal fun CoachTab(snapshot: MareeSnapshot, monitoringActive: Boolean, getName: (String) -> String) {
+internal fun CoachTab(snapshot: MareeSnapshot, monitoringActive: Boolean, getName: (String) -> String,
+    onOffers: (() -> Unit)? = null) {
     var online by rememberSaveable { mutableStateOf(false) }
     val configured = BuildConfig.SUPABASE_URL.isNotBlank() && BuildConfig.SUPABASE_PUBLIC_KEY.isNotBlank()
     BackHandler(enabled = online) { online = false }
@@ -72,7 +73,7 @@ internal fun CoachTab(snapshot: MareeSnapshot, monitoringActive: Boolean, getNam
         }
     } else {
         OfflineCoachTab(snapshot, monitoringActive, getName,
-            onOnline = if (configured) ({ online = true }) else null)
+            onOnline = if (configured) ({ online = true }) else null, onOffers = onOffers)
     }
 }
 
@@ -81,11 +82,13 @@ private fun OfflineCoachTab(
     snapshot: MareeSnapshot,
     monitoringActive: Boolean,
     getName: (String) -> String,
-    onOnline: (() -> Unit)?
+    onOnline: (() -> Unit)?,
+    onOffers: (() -> Unit)?
 ) {
     val context = LocalContext.current
     val language = AppLanguage.current
-    val engine = remember(language) { RuleCoach(language = language) }
+    val plan = snapshot.plan
+    val engine = remember(language, plan) { RuleCoach(language = language, plan = plan) }
     val history = remember { OfflineCoachHistory(context) }
     val scope = rememberCoroutineScope()
     val focus = LocalFocusManager.current
@@ -98,8 +101,8 @@ private fun OfflineCoachTab(
     val coachContext = OfflineCoachContext(snapshot.pointUnits, monitoringActive,
         snapshot.apps.map { OfflineCoachApp(appNames[it.packageName] ?: it.packageName, it.usedMillis) })
     var question by remember(language) { mutableStateOf("") }
-    var answeredQuestion by remember(language) { mutableStateOf("") }
-    var answer by remember(language) { mutableStateOf<OfflineCoachReply?>(null) }
+    var answeredQuestion by remember(language, plan) { mutableStateOf("") }
+    var answer by remember(language, plan) { mutableStateOf<OfflineCoachReply?>(null) }
     var saving by remember { mutableStateOf(false) }
     var saveUnknown by remember { mutableStateOf(history.enabled) }
     var saved by remember { mutableStateOf(history.entries()) }
@@ -111,21 +114,24 @@ private fun OfflineCoachTab(
     val helpSections = remember(language) { helpEntries.groupBy { it.section } }
     var helpSection by rememberSaveable { mutableStateOf(helpSections.keys.first().name) }
     var chooseHelpSection by remember { mutableStateOf(false) }
-    val preparedQuestions = remember(language) { preparedCoachQuestionsFor(language) }
-    val preparedSections = remember(language) { preparedCoachSectionsFor(language) }
+    val preparedQuestions = remember(language, plan) { preparedCoachQuestionsFor(language, plan) }
+    val preparedSections = remember(language, plan) { preparedCoachSectionsFor(language, plan) }
     var showLibrary by rememberSaveable { mutableStateOf(false) }
-    var libraryQuery by remember(language) { mutableStateOf("") }
-    var librarySection by rememberSaveable { mutableStateOf("all") }
-    var chooseLibrarySection by remember { mutableStateOf(false) }
-    var libraryPage by remember(language) { mutableStateOf(0) }
-    val libraryResults = remember(language, libraryQuery, librarySection) {
+    var libraryQuery by remember(language, plan) { mutableStateOf("") }
+    var librarySection by rememberSaveable(language, plan) { mutableStateOf("all") }
+    var chooseLibrarySection by remember(language, plan) { mutableStateOf(false) }
+    var libraryPage by remember(language, plan) { mutableStateOf(0) }
+    val libraryResults = remember(language, plan, libraryQuery, librarySection) {
         searchPreparedCoachQuestions(libraryQuery, language,
-            sectionId = librarySection.takeUnless { it == "all" }, limit = preparedQuestions.size)
+            sectionId = librarySection.takeUnless { it == "all" }, limit = preparedQuestions.size, plan = plan)
     }
     val pageSize = 20
     val lastPage = ((libraryResults.size - 1).coerceAtLeast(0)) / pageSize
     val currentPage = libraryPage.coerceIn(0, lastPage)
-    val visibleQuestions = libraryResults.drop(currentPage * pageSize).take(pageSize)
+    val visibleQuestions = remember(language, plan, libraryResults, currentPage) {
+        val start = currentPage * pageSize
+        (start until minOf(start + pageSize, libraryResults.size)).map { libraryResults[it] }
+    }
     val visibleAnswer = answer.takeIf { question.trim() == answeredQuestion }
 
     fun storeAction(action: () -> Boolean) {
@@ -174,8 +180,12 @@ private fun OfflineCoachTab(
         verticalArrangement = Arrangement.spacedBy(18.dp)
     ) {
         item {
-            ScreenHeading("COACH", tr("Un conseil, un petit pas.", "One tip, one small step."),
-                tr("Tes questions en haut. Mes conseils juste dessous.", "Your questions above. My advice just below."))
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                ScreenHeading("COACH", tr("Un conseil, un petit pas.", "One tip, one small step."),
+                    tr("Tes questions en haut. Mes conseils juste dessous.", "Your questions above. My advice just below."))
+                StatusPill(tr("${plan.displayName} · ${preparedQuestions.size} questions-réponses préparées",
+                    "${plan.displayName} · ${preparedQuestions.size} prepared question-answer pairs"))
+            }
         }
         item {
             AppCardSurface {
@@ -215,8 +225,8 @@ private fun OfflineCoachTab(
                         submit(it.label, it.id, returnToQuestion = true)
                     }
                 }
-                Text(tr("Conseils écrits à l’avance · gratuits et hors ligne. Le coach ne peut pas répondre à toutes les questions nouvelles.",
-                    "Prepared advice · free and offline. The coach cannot answer every new question."),
+                Text(tr("Conseils écrits à l’avance · hors ligne · sans frais par message. Le coach ne peut pas répondre à toutes les questions nouvelles.",
+                    "Prepared advice · offline · no per-message fees. The coach cannot answer every new question."),
                     color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
                 if (!monitoringActive) Text(tr("Le suivi est en pause : les durées ne sont pas utilisées dans les conseils.",
                     "Tracking is paused: recorded usage is not used in advice."),
@@ -232,10 +242,19 @@ private fun OfflineCoachTab(
         }
         if (showLibrary) item {
             AppCardSurface {
-                SectionLabel(tr("La bibliothèque du coach", "The coach library"))
+                SectionLabel(tr("La bibliothèque du coach", "The coach library"), plan.displayName)
                 Text(tr("Des situations concrètes pour trouver un conseil utile. Choisis une question : elle s’affichera en haut, avec sa réponse juste dessous.",
                     "Real-life situations to find useful advice. Choose a question: it will appear above, with its answer just below."),
                     color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
+                Text(tr("${preparedQuestions.size} questions-réponses préparées dans cette offre. Ce nombre décrit la bibliothèque : tes messages ne sont pas décomptés. La saisie libre et l’aide Selkie restent disponibles dans toutes les offres.",
+                    "${preparedQuestions.size} prepared question-answer pairs in this plan. This is the library size: your messages are not counted down. Free-text input and Selkie help remain available on every plan."),
+                    color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 20.sp)
+                if (onOffers != null) TextButton(onClick = onOffers) {
+                    Text(tr("Voir les offres du coach", "View coach plans"))
+                }
+                if (BuildConfig.DEBUG) Text(tr("Les offres de cet APK sont des démonstrations gratuites. Aucun paiement n’est activé.",
+                    "The plans in this APK are free demonstrations. Payments are not enabled."),
+                    color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
                 OutlinedTextField(value = libraryQuery, onValueChange = {
                     libraryQuery = it.take(120); libraryPage = 0
                 }, label = { Text(tr("Rechercher une question", "Search questions")) }, singleLine = true,

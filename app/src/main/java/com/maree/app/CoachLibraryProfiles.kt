@@ -447,3 +447,261 @@ val coachLibraryProfiles: List<CoachLibraryProfile> = listOf(
 )
 
 private fun profileText(fr: String, en: String): CoachLibraryText = CoachLibraryText(fr, en)
+
+/** Practical constraints change the proposed exercise, rather than just its spelling. */
+internal data class CoachLibraryScenario(
+    val id: String,
+    val minimumPlan: PlanType,
+    val label: CoachLibraryText,
+    val questionContext: CoachLibraryText,
+    val situation: CoachLibraryText,
+    val smallAction: CoachLibraryText,
+    val alternative: CoachLibraryText,
+    val barrier: CoachLibraryText,
+    val goal: CoachLibraryText
+)
+
+internal val coachLibraryScenarios: List<CoachLibraryScenario> = listOf(
+    CoachLibraryScenario(
+        id = "shared_space", minimumPlan = PlanType.PREMIUM,
+        label = profileText("Dans un lieu partagé", "In a shared space"),
+        questionContext = profileText("quand je partage la pièce et dois rester discret", "when I share the space and need to be considerate"),
+        situation = profileText("La pièce et les objets ne sont pas tous à toi ; une pause doit respecter le calme et les usages des autres.", "The room and its items are not all yours; a break needs to respect other people's quiet and use of the space."),
+        smallAction = profileText("Choisis un geste silencieux qui concerne seulement ton téléphone ou tes affaires. Garde les objets communs à leur place et ne demande pas aux autres de suivre ta règle.", "Choose a quiet action involving only your phone or belongings. Leave shared items where they are and do not ask others to follow your rule."),
+        alternative = profileText("Depuis ta place, remarque un détail autour de toi ou réfléchis silencieusement à la prochaine étape. Si une conversation convient au lieu et que l'autre personne est disponible, elle reste une option choisie.", "From where you are, notice one detail nearby or silently think about the next step. If a conversation suits the space and the other person is available, it remains a deliberate option."),
+        barrier = profileText("Déplacer un objet commun, lancer un son ou solliciter quelqu'un peut gêner les autres, même si cela t'aiderait dans un lieu privé.", "Moving a shared item, playing a sound or involving someone can disturb others even if it would help in a private space."),
+        goal = profileText("Essaie une seule transition discrète que tu peux décider pour toi-même. Le calme du lieu et les besoins d'accessibilité restent prioritaires.", "Try one quiet transition you can choose for yourself. The space's quiet and accessibility needs remain priorities.")
+    ),
+    CoachLibraryScenario(
+        id = "essential_contact", minimumPlan = PlanType.PREMIUM,
+        label = profileText("En restant joignable", "While staying reachable"),
+        questionContext = profileText("quand je dois pouvoir recevoir un contact essentiel", "when I need to receive essential contact"),
+        situation = profileText("Tu attends un contact ou une information indispensable ; réduire le loisir ne doit pas empêcher de le recevoir ou d'y répondre.", "You are expecting essential contact or information; reducing entertainment must not prevent you from receiving or responding to it."),
+        smallAction = profileText("Repère le canal dont tu as besoin et garde ses alertes, son accès et tes outils d'accessibilité disponibles. Traite d'abord le besoin essentiel ; interromps seulement le contenu facultatif une fois son usage terminé.", "Identify the channel you need and keep its alerts, access and your accessibility tools available. Handle the essential need first; pause only optional content once its purpose is finished."),
+        alternative = profileText("Choisis une étape courte sur place que tu peux interrompre dès le contact attendu. Si un message utile arrive, réponds puis retrouve ton point de reprise ; ce contact n'est pas un écart par rapport à cet essai.", "Choose a short step where you are that you can stop as soon as the expected contact arrives. If a useful message comes, respond and return to your restart point; that contact is not a lapse in this exercise."),
+        barrier = profileText("Un même téléphone, groupe ou signal peut mêler loisir et contact indispensable. Couper tout le canal ou éloigner le téléphone sans vérifier sa réception peut supprimer l'accès dont tu as besoin.", "The same phone, group or alert can mix entertainment with essential contact. Silencing the whole channel or moving the phone without checking reception can remove the access you need."),
+        goal = profileText("Réduis une consultation facultative tout en gardant une réponse fiable aux besoins réels. Une interruption nécessaire peut faire partie d'une journée réussie.", "Reduce one optional check while keeping a reliable response to real needs. A necessary interruption can be part of a successful day.")
+    ),
+    CoachLibraryScenario(
+        id = "changed_setup", minimumPlan = PlanType.PREMIUM,
+        label = profileText("Avec une installation différente", "With a different setup"),
+        questionContext = profileText("quand je voyage ou que mes repères habituels ont changé", "when I am travelling or my usual cues have changed"),
+        situation = profileText("Le lieu, les horaires ou les ressources ont changé. Le bureau, le point de charge ou la personne de ta routine habituelle ne sont peut-être pas disponibles.", "The place, schedule or resources have changed. Your usual desk, charging spot or companion may not be available."),
+        smallAction = profileText("Repère une transition réellement présente ici, comme la fin d'une tâche utile. À cette transition, décide si le contenu facultatif est terminé, sans attendre de retrouver toute ton installation habituelle.", "Find a transition that actually exists here, such as finishing a useful task. At that transition, decide whether optional content is finished without waiting to recreate your whole usual setup."),
+        alternative = profileText("Choisis un petit geste possible depuis ta place avec ce qui est déjà accessible, ou garde un instant sans nouveau contenu. En déplacement, reste attentif au trajet et conserve les informations et fonctions nécessaires.", "Choose a small action you can take from where you are with what is already accessible, or spend a moment without new content. While travelling, stay aware of your route and keep necessary information and functions available."),
+        barrier = profileText("Attendre le bon lieu ou la bonne heure peut laisser le téléphone décider à ta place. Les trajets et les lieux inconnus peuvent aussi demander un usage utile de l'écran.", "Waiting for the right place or time can leave the phone deciding for you. Journeys and unfamiliar places can also require useful screen use."),
+        goal = profileText("Garde un repère portable : une transition et un choix volontaire. Adapte le moyen au lieu actuel, sans exiger la même organisation que chez toi.", "Keep a portable cue: one transition and one deliberate choice. Adapt the method to your current surroundings without requiring the same setup as at home.")
+    ),
+    CoachLibraryScenario(
+        id = "limited_time", minimumPlan = PlanType.PREMIUM,
+        label = profileText("Avec très peu de temps", "With very little time"),
+        questionContext = profileText("quand je n'ai que quelques secondes disponibles", "when I only have a few seconds available"),
+        situation = profileText("Tu as moins de temps que pour l'exercice complet. Une petite décision doit pouvoir s'arrêter sans ajouter de retard à tes obligations.", "You have less time than the complete exercise needs. A small decision needs to end without making you late for your responsibilities."),
+        smallAction = profileText("Choisis une seule décision : quitter un contenu facultatif dont le but est déjà atteint, ou nommer mentalement le point où reprendre ton activité. Tu peux t'arrêter dès que le temps disponible est écoulé.", "Choose just one decision: end optional content whose purpose is already finished, or mentally name where to resume your activity. You can stop as soon as your available time is up."),
+        alternative = profileText("Garde seulement le prochain pas en tête, sans le réaliser maintenant. Reprends-le à la prochaine transition disponible ; inutile de finir une page, une partie ou une sortie pour que cet essai compte.", "Keep only the next step in mind without carrying it out now. Return to it at the next available transition; you do not need to finish a page, a game or an outing for this attempt to count."),
+        barrier = profileText("Un objectif prévu en minutes peut sembler impossible dans un court intervalle. Vouloir finir toute l'activité peut transformer une pause utile en nouvelle contrainte.", "A goal planned in minutes can seem impossible in a short gap. Trying to finish the whole activity can turn a useful pause into another demand."),
+        goal = profileText("Fais un choix observable dans le temps réellement disponible. Ne rattrape pas l'exercice en ajoutant du retard ou en supprimant un besoin essentiel.", "Make one observable choice within the time actually available. Do not catch up on the exercise by making yourself late or removing an essential need.")
+    ),
+    CoachLibraryScenario(
+        id = "low_energy", minimumPlan = PlanType.ULTRA,
+        label = profileText("Avec peu d'énergie", "With little energy"),
+        questionContext = profileText("quand même une petite activité me demande trop d'effort", "when even a small activity takes too much effort"),
+        situation = profileText("Te lever, préparer du matériel ou prendre plusieurs décisions demande aujourd'hui plus d'effort que tu ne souhaites fournir.", "Standing up, preparing materials or making several decisions takes more effort today than you want to spend."),
+        smallAction = profileText("Depuis une position confortable, arrête seulement une interaction facultative dont le but est terminé. Si ce geste demande déjà trop d'effort, décide simplement de ne pas lancer un nouveau contenu ; le repos suffit.", "From a comfortable position, stop only an optional interaction whose purpose is finished. If that already takes too much effort, simply choose not to start new content; resting is enough."),
+        alternative = profileText("Reste dans une position qui te convient, sans matériel ni déplacement. Tu peux remarquer un détail familier ou ne rien ajouter pendant un instant ; aucun exercice physique ni résultat à produire n'est nécessaire.", "Stay in a position that suits you without equipment or movement. You can notice one familiar detail or add nothing for a moment; no physical exercise or output is needed."),
+        barrier = profileText("Une alternative présentée comme facile peut encore exiger de marcher, ranger ou préparer quelque chose. Ajouter une obligation quand l'énergie manque peut rendre la reprise plus difficile.", "An alternative described as easy can still require walking, tidying or preparing something. Adding a demand when energy is low can make restarting harder."),
+        goal = profileText("Protège un bref repos choisi et garde tes accès utiles. Un essai sans déplacement ni préparation est suffisant ; tu peux reporter l'activité plus exigeante.", "Protect a brief, chosen rest and keep useful access available. An attempt without movement or preparation is enough; you can postpone the more demanding activity.")
+    ),
+    CoachLibraryScenario(
+        id = "caring_for_someone", minimumPlan = PlanType.ULTRA,
+        label = profileText("En s'occupant de quelqu'un", "While caring for someone"),
+        questionContext = profileText("quand une personne dépend de ma présence ou de mon attention", "when someone depends on my presence or attention"),
+        situation = profileText("Tu t'occupes d'une personne et dois pouvoir répondre à ses besoins. Ton petit essai peut être interrompu à tout moment.", "You are caring for someone and need to respond to their needs. Your small experiment can be interrupted at any time."),
+        smallAction = profileText("Réponds d'abord au besoin de la personne. Lorsqu'un intervalle est réellement disponible, quitte seulement le contenu facultatif et garde les moyens de contact et de supervision nécessaires ; ne t'éloigne pas pour cet exercice.", "Respond to the person's need first. When a gap is actually available, leave only optional content and keep necessary contact and supervision available; do not move away for this exercise."),
+        alternative = profileText("Si la situation le permet, prends un instant sur place sans nouveau contenu, en gardant ton attention disponible. Le besoin de la personne reprend immédiatement la priorité ; tu peux noter mentalement où reprendre plus tard.", "If the situation allows, spend a moment where you are without new content while keeping your attention available. The person's need immediately takes priority; you can mentally note where to resume later."),
+        barrier = profileText("Une pause planifiée peut être interrompue, et quitter la pièce ou ranger le téléphone peut être incompatible avec ton rôle. Ces besoins réels ne sont pas un manque de volonté.", "A planned break can be interrupted, and leaving the room or putting the phone away may conflict with your role. These real needs are not a lack of willpower."),
+        goal = profileText("Réduis un usage facultatif dans un intervalle sûr, sans retarder une réponse ni réduire la présence nécessaire. Reporter l'essai est une décision valable.", "Reduce optional use during a safe gap without delaying a response or reducing necessary presence. Postponing the attempt is a valid decision.")
+    ),
+    CoachLibraryScenario(
+        id = "unchanged_settings", minimumPlan = PlanType.ULTRA,
+        label = profileText("Sans changer les réglages", "Without changing settings"),
+        questionContext = profileText("quand je ne peux pas ou ne veux pas modifier mon téléphone", "when I cannot or do not want to change my phone"),
+        situation = profileText("Tu gardes les réglages, les icônes, les applications et les notifications tels quels. L'essai porte sur une décision d'usage, sans restriction technique.", "You are keeping settings, icons, apps and notifications as they are. The experiment concerns a usage decision without a technical restriction."),
+        smallAction = profileText("Avant une ouverture facultative, nomme ce que tu veux faire et ce qui marquera la fin. Une fois ce but atteint, quitte le contenu choisi sans toucher aux réglages ni supprimer une application.", "Before an optional opening, name what you want to do and what will mark its end. Once that purpose is met, leave the chosen content without touching settings or deleting an app."),
+        alternative = profileText("Choisis une tâche déjà accessible, ou garde quelques instants sans nouveau contenu. Un signal peut rester présent sans obliger à ouvrir un fil non urgent ; réponds aux besoins essentiels selon tes obligations.", "Choose a task already available or spend a few moments without new content. An alert can stay present without requiring you to open a non-urgent feed; respond to essential needs according to your responsibilities."),
+        barrier = profileText("Les signaux et raccourcis restent visibles, et le téléphone ne fera pas la pause à ta place. Le choix volontaire peut aider sans garantir que toutes les ouvertures automatiques disparaissent.", "Alerts and shortcuts remain visible, and the phone will not create the pause for you. A deliberate choice can help without guaranteeing that every automatic opening disappears."),
+        goal = profileText("Essaie une seule ouverture avec un but et une fin choisis, en conservant exactement ta configuration. Mesure ce choix, sans attendre qu'un réglage te protège automatiquement.", "Try one opening with a chosen purpose and ending while keeping your configuration exactly as it is. Observe that choice without expecting a setting to protect you automatically.")
+    ),
+    CoachLibraryScenario(
+        id = "no_equipment", minimumPlan = PlanType.ULTRA,
+        label = profileText("Sans matériel ni achat", "Without equipment or purchases"),
+        questionContext = profileText("quand le matériel prévu est absent et que je ne veux rien acheter", "when the planned materials are missing and I do not want to buy anything"),
+        situation = profileText("Le livre, la feuille ou le matériel prévu n'est pas disponible. Tu peux garder l'intention de la pause sans acheter ni préparer un remplacement.", "The planned book, paper or equipment is unavailable. You can keep the purpose of the break without buying or preparing a replacement."),
+        smallAction = profileText("Choisis un premier pas qui n'utilise aucun nouvel objet : remarque un détail, imagine une petite idée ou décide mentalement de la prochaine étape. Utilise un outil déjà accessible uniquement s'il répond directement au besoin.", "Choose a first step needing no new item: notice one detail, imagine a small idea or mentally decide the next step. Use an already accessible tool only if it directly meets the need."),
+        alternative = profileText("Sans rien préparer, imagine une forme, rappelle-toi un passage connu ou réfléchis à une étape de l'activité. Sinon, garde simplement un instant sans fil d'actualité ; inutile d'aller chercher du matériel.", "Without preparing anything, imagine a shape, recall a familiar passage or think about one step of the activity. Otherwise, simply spend a moment without a feed; you do not need to fetch equipment."),
+        barrier = profileText("Le matériel absent peut faire croire que seul l'écran reste possible. Chercher un achat ou tout préparer risque d'ajouter une nouvelle tâche au lieu d'offrir une pause.", "Missing equipment can make it seem that only the screen remains possible. Seeking a purchase or preparing everything can add a new task instead of offering a break."),
+        goal = profileText("Fais une pause choisie avec ce qui existe déjà, même sans produire ni terminer l'activité prévue. Garde l'activité équipée pour un moment où ses ressources seront déjà disponibles.", "Take a chosen break with what already exists, even without producing or finishing the planned activity. Save the equipped activity for a time when its resources are already available.")
+    )
+)
+
+/**
+ * The present exercise follows the constraint. An incompatible original exercise is a later
+ * option, never a prerequisite for completing the constrained one. Topic and section stay stable.
+ */
+internal fun adaptedCoachLibraryProfile(
+    base: CoachLibraryProfile,
+    scenario: CoachLibraryScenario
+): CoachLibraryProfile {
+    val constrainedAction = constrainedLibraryAction(base, scenario)
+    val direction = constrainedLibraryDirection(base, scenario)
+    return base.copy(
+        id = "${base.id}~${scenario.id}",
+        label = profileText("${base.label.fr} — ${scenario.label.fr}", "${base.label.en} — ${scenario.label.en}"),
+        situation = profileText("${base.situation.fr} ${scenario.situation.fr}", "${base.situation.en} ${scenario.situation.en}"),
+        smallAction = profileText(
+            "${scenario.smallAction.fr}\n\n${constrainedAction.fr} Préserve les contacts essentiels et tes outils d'accessibilité pendant cet essai.",
+            "${scenario.smallAction.en}\n\n${constrainedAction.en} Preserve essential contact and your accessibility tools during this exercise."
+        ),
+        alternative = profileText(
+            "${scenario.alternative.fr} Applique ce repli à ton contexte : ${base.label.fr}.",
+            "${scenario.alternative.en} Apply this fallback to your context: ${base.label.en}."
+        ),
+        barrier = profileText("${base.barrier.fr} ${scenario.barrier.fr}", "${base.barrier.en} ${scenario.barrier.en}"),
+        goal = profileText("${scenario.goal.fr}\n\n${direction.fr}", "${scenario.goal.en}\n\n${direction.en}")
+    )
+}
+
+private fun constrainedLibraryAction(base: CoachLibraryProfile, scenario: CoachLibraryScenario): CoachLibraryText {
+    // These original exercises change the device. Replace them outright in the no-settings case.
+    if (scenario.id == "unchanged_settings") {
+        val replacement = when (base.id) {
+            "youtube_autoplay" -> profileText("À la fin de la vidéo choisie, arrête manuellement la lecture ou quitte la vidéo, sans changer la lecture automatique.", "At the end of the chosen video, manually stop playback or leave the video without changing autoplay.")
+            "repeated_push_alerts" -> profileText("À une alerte, distingue une demande essentielle d'une promotion. Traite le besoin essentiel ; garde la consultation de loisir pour le moment choisi, sans modifier les notifications.", "When an alert arrives, distinguish an essential request from a promotion. Handle the essential need; keep the entertainment check for your chosen time without changing notifications.")
+            "home_screen_shortcuts" -> profileText("Avant de toucher une icône visible, nomme l'outil dont tu as réellement besoin. Ouvre uniquement cet outil, sans déplacer ni remplacer les raccourcis.", "Before touching a visible icon, name the tool you actually need. Open only that tool without moving or replacing shortcuts.")
+            "grayscale_visual_pull" -> profileText("Laisse les couleurs telles quelles. Avant d'ouvrir une application attirante, choisis une tâche précise ; quand elle est terminée, quitte son contenu sans changer l'affichage.", "Leave the colours as they are. Before opening a tempting app, choose a specific task; when it is finished, leave its content without changing the display.")
+            "group_chat_noise" -> profileText("Lis uniquement les informations dont tu as besoin dans le groupe, puis quitte la conversation sans la mettre en sourdine. Reste disponible pour les messages essentiels selon tes obligations.", "Read only the information you need in the group, then leave the conversation without muting it. Stay available for essential messages according to your responsibilities.")
+            "unused_app_reinstallation" -> profileText("Garde l'application installée et nomme sa fonction utile avant de l'ouvrir. Une fois cette fonction utilisée, quitte le contenu facultatif sans supprimer l'application.", "Keep the app installed and name its useful function before opening it. Once that function is used, leave optional content without deleting the app.")
+            else -> null
+        }
+        if (replacement != null) return replacement
+        return profileText(
+            "Pour ${base.label.fr}, tu peux essayer ce geste sans modifier la configuration, s'il convient à ton lieu et préserve tes accès essentiels : ${base.smallAction.fr}",
+            "For ${base.label.en}, you can try this action without changing the configuration if it suits your surroundings and preserves essential access: ${base.smallAction.en}"
+        )
+    }
+
+    return when (scenario.id) {
+        "shared_space" -> profileText(
+            "Pour ${base.label.fr}, commence en silence depuis ta place : identifie la consultation facultative ou la petite étape personnelle que tu veux choisir. Réserve les échanges parlés et les changements d'espace à un moment où ils conviennent aux personnes présentes.",
+            "For ${base.label.en}, start quietly from where you are: identify the optional check or small personal step you want to choose. Save spoken exchanges and changes to the space for a time when they suit the people present."
+        )
+        "essential_contact" -> profileText(
+            "Pour ${base.label.fr}, sépare la fonction indispensable du contenu facultatif avant de décider de fermer quoi que ce soit. Si le même écran ou groupe sert au contact attendu, garde-le accessible et quitte seulement le loisir lorsque cela préserve sa réception.",
+            "For ${base.label.en}, separate the essential function from optional content before deciding to close anything. If the same screen or group serves the expected contact, keep it accessible and leave only entertainment when that preserves reception."
+        )
+        "changed_setup" -> profileText(
+            "Pour ${base.label.fr}, cherche ici un point de reprise que tu peux reconnaître sans ton ancien matériel ni un réglage nouveau. Choisis le prochain geste possible dans ce lieu ; si aucun ne convient, garde seulement la décision pour plus tard.",
+            "For ${base.label.en}, find a restart point here that you can recognise without your old equipment or a new setting. Choose the next action possible in these surroundings; if none fits, keep only the decision for later."
+        )
+        "limited_time" -> profileText(
+            "Pour ${base.label.fr}, nomme seulement la prochaine étape ou la fin du contenu facultatif. N'attends pas de terminer toute l'activité : ce repère suffit maintenant, et l'activité peut reprendre quand tu auras le temps.",
+            "For ${base.label.en}, name only the next step or the ending of optional content. Do not wait to finish the whole activity: this cue is enough now, and the activity can resume when you have time."
+        )
+        "low_energy" -> profileText(
+            "Pour ${base.label.fr}, garde uniquement le choix de ne pas enchaîner un nouveau contenu facultatif, depuis ta position actuelle. Tu n'as pas besoin de te lever, de ranger ou de terminer une activité pour commencer cet essai.",
+            "For ${base.label.en}, keep only the choice not to start more optional content from your current position. You do not need to stand up, tidy anything or finish an activity to begin this attempt."
+        )
+        "caring_for_someone" -> profileText(
+            "Pour ${base.label.fr}, choisis ton point de reprise mentalement si une pause est possible. Garde tout déplacement, échange non nécessaire ou activité longue pour un moment où les besoins et la supervision de la personne sont réellement couverts.",
+            "For ${base.label.en}, mentally choose your restart point if a pause is possible. Save any movement away, unnecessary conversation or lengthy activity for a time when the person's needs and supervision are actually covered."
+        )
+        "no_equipment" -> when (base.id) {
+            "paper_reading", "reading_distracted" -> profileText("Pour cette lecture, rappelle-toi une idée d'un texte connu, ou lis quelques lignes d'un texte déjà accessible si tu en as un. Sans texte disponible, choisis seulement ce que tu aimerais lire plus tard ; aucun livre ni achat n'est requis.", "For this reading context, recall an idea from a familiar text, or read a few lines of an already accessible text if you have one. Without a text available, simply choose what you would like to read later; no book or purchase is required.")
+            "creative_hobby" -> profileText("Pour le loisir créatif, imagine quelques formes ou une petite idée sans la dessiner ni la publier. Une idée imaginée suffit ; inutile de chercher une feuille, un instrument ou un autre matériel.", "For the creative hobby, imagine a few shapes or one small idea without drawing or posting it. An imagined idea is enough; you do not need to find paper, an instrument or other equipment.")
+            "cook_without_feed" -> profileText("Pour la cuisine, décide mentalement d'une étape possible avec les ingrédients et outils déjà présents. S'ils manquent, reporte la préparation ; quitte seulement le contenu de loisir, sans manipuler l'écran pendant un geste de cuisine.", "For cooking, mentally choose one step possible with ingredients and tools already present. If they are missing, postpone preparation; leave only entertainment content without handling the screen during a cooking task.")
+            "short_outdoor_walk", "gentle_movement" -> profileText("Pour cette pause de mouvement, choisis seulement un repère autour de toi depuis une position adaptée. Sortir ou bouger reste facultatif et dépend de ton confort et du lieu ; cette pause peut rester immobile.", "For this movement break, simply choose one cue around you from a suitable position. Going out or moving remains optional and depends on your comfort and surroundings; this break can stay still.")
+            else -> profileText(
+                "Pour ${base.label.fr}, garde le premier pas comme une décision mentale : choisis ce qui serait utile avec les ressources déjà présentes. Si l'activité ne peut pas commencer sans matériel, reporte-la et garde une pause sans nouveau contenu.",
+                "For ${base.label.en}, keep the first step as a mental decision: choose what would help with resources already present. If the activity cannot start without equipment, postpone it and keep a break without new content."
+            )
+        }
+        else -> error("Unknown prepared-coach scenario: ${scenario.id}")
+    }
+}
+
+private fun constrainedLibraryDirection(base: CoachLibraryProfile, scenario: CoachLibraryScenario): CoachLibraryText {
+    // Every no-settings goal is authored for voluntary use; none quotes an original directive.
+    if (scenario.id == "unchanged_settings") return unchangedSettingsLibraryDirection(base)
+    val condition = when (scenario.id) {
+        "shared_space" -> profileText("dans un moment où le lieu, les personnes et tes besoins d'accessibilité le permettent", "at a time when the space, people and your accessibility needs allow it")
+        "essential_contact" -> profileText("uniquement si la réception et la réponse au contact essentiel restent fiables", "only if receiving and responding to essential contact remain reliable")
+        "changed_setup" -> profileText("avec un moyen réellement disponible dans le lieu actuel, ou plus tard si ce moyen manque", "with a method actually available in your current surroundings, or later if it is missing")
+        "limited_time" -> profileText("plus tard, quand le temps nécessaire est disponible sans retarder tes obligations", "later, when the needed time is available without delaying your responsibilities")
+        "low_energy" -> profileText("plus tard, si l'effort te convient ; le repos choisi suffit aujourd'hui", "later, if the effort suits you; chosen rest is enough today")
+        "caring_for_someone" -> profileText("plus tard, seulement quand les besoins et la supervision de la personne restent couverts", "later, only when the person's needs and supervision remain covered")
+        "no_equipment" -> profileText("plus tard si le matériel est déjà disponible, sans achat requis ; la pause actuelle peut rester sans matériel", "later if equipment is already available, with no purchase required; the present break can stay equipment-free")
+        else -> error("Unknown prepared-coach scenario: ${scenario.id}")
+    }
+    return profileText(
+        "Pour ${base.label.fr}, la direction d'origine reste une option ${condition.fr} : « ${base.goal.fr} » Ce n'est pas une obligation pour l'essai actuel.",
+        "For ${base.label.en}, the original direction remains an option ${condition.en}: “${base.goal.en}” It is not a requirement for the present attempt."
+    )
+}
+
+private fun unchangedSettingsLibraryDirection(base: CoachLibraryProfile): CoachLibraryText {
+    val purpose = when (base.id) {
+        "tiktok_short_videos" -> profileText("Choisis une session de vidéos et son point de fin avant de commencer, puis quitte manuellement le fil à ce point.", "Choose a video session and its ending before starting, then manually leave the feed at that point.")
+        "instagram_comparison" -> profileText("Ouvre Instagram pour une intention que tu choisis, comme répondre à un ami. Quand ce besoin est satisfait, quitte le fil plutôt que de chercher de nouvelles comparaisons.", "Open Instagram for a purpose you choose, such as replying to a friend. When that need is met, leave the feed rather than seeking new comparisons.")
+        "youtube_autoplay" -> profileText("Regarde une vidéo choisie et décide toi-même de la fin : arrête la lecture ou quitte la vidéo sans suivre automatiquement la recommandation suivante.", "Watch a chosen video and decide its ending yourself: stop playback or leave the video without automatically following the next recommendation.")
+        "snapchat_streak_pressure" -> profileText("Choisis un échange utile ou agréable avec une personne, puis quitte l'application quand cet échange est terminé. Le compteur ne décide pas de ta prochaine ouverture.", "Choose a useful or enjoyable exchange with someone, then leave the app when that exchange is finished. The counter does not decide your next opening.")
+        "whatsapp_repeated_checks" -> profileText("Consulte une conversation pour lire ou répondre à une information utile, puis quitte-la quand le besoin est traité. Une réponse nécessaire reste prioritaire ; une vérification sans nouveauté peut attendre.", "Check a conversation to read or reply to useful information, then leave when the need is handled. A necessary response stays a priority; a check with nothing new can wait.")
+        "games_extra_round" -> profileText("Choisis à l'avance le nombre de parties ou un point de fin adapté, puis décide de quitter le jeu à ce point sans lancer une partie supplémentaire par réflexe.", "Choose the number of rounds or a suitable ending in advance, then choose to leave the game at that point without starting another round out of habit.")
+        "wake_up_notifications" -> profileText("Choisis un premier geste du matin qui compte pour toi, avant le fil de loisir si les besoins essentiels le permettent. Termine manuellement toute consultation qui n'a plus de but utile.", "Choose a first morning action that matters to you, before an entertainment feed if essential needs allow it. Manually end any check that no longer has a useful purpose.")
+        "breakfast_scroll" -> profileText("Choisis une petite partie du petit-déjeuner pour goûter le repas. Après une consultation utile, quitte le fil facultatif pour retrouver ce moment, sans changer les alertes.", "Choose a small part of breakfast to taste your food. After a useful check, leave the optional feed to return to that moment without changing alerts.")
+        "commute_waiting" -> profileText("Utilise l'écran pour les informations de transport nécessaires, puis quitte le loisir quand ce besoin est traité. Garde ton attention disponible pour le trajet et ses changements.", "Use the screen for necessary travel information, then leave entertainment when that need is handled. Keep your attention available for your journey and any changes.")
+        "after_school_decompression" -> profileText("Choisis comment tu veux souffler après les cours, puis décide de la place d'une session de loisir et de sa fin. La détente reste un choix, sans nouvelle restriction du téléphone.", "Choose how you want to unwind after class, then decide where an entertainment session fits and how it ends. Unwinding remains a choice without a new phone restriction.")
+        "evening_second_screen" -> profileText("Choisis le programme ou l'activité que tu veux suivre. Quitte manuellement le contenu de l'autre écran quand il ne sert pas cette intention, en gardant les fonctions utiles accessibles.", "Choose the programme or activity you want to follow. Manually leave content on the other screen when it does not serve that intention while keeping useful functions accessible.")
+        "bedtime_videos" -> profileText("Choisis le moment où le divertissement laisse place au coucher, puis ferme manuellement la vidéo à ce moment. Garde le réveil et les contacts nécessaires disponibles sans changer la configuration.", "Choose when entertainment gives way to bedtime, then manually close the video at that moment. Keep your alarm and necessary contact available without changing the configuration.")
+        "boredom_empty_minutes" -> profileText("Laisse un bref moment vide si cela te convient, ou choisis une activité pour une raison précise. Un fil facultatif peut se terminer dès qu'il ne répond plus à cette raison.", "Leave a brief moment empty if that suits you, or choose an activity for a specific reason. An optional feed can end as soon as it no longer serves that reason.")
+        "stress_avoidance" -> profileText("Choisis une étape assez petite de la tâche qui te pèse, ou une pause avec une fin que tu peux reconnaître. Quitte le contenu de loisir quand tu décides de reprendre cette étape.", "Choose a small enough step of the task weighing on you, or a break with an ending you can recognise. Leave entertainment content when you choose to return to that step.")
+        "loneliness_feed" -> profileText("Choisis un échange réel quand il convient aux deux personnes, plutôt qu'une suite de publications sans but. L'application peut rester utile pour ce contact ; quitte seulement le fil qui ne le sert pas.", "Choose a real exchange when it suits both people rather than a stream of posts without a purpose. The app can remain useful for that contact; leave only the feed that does not serve it.")
+        "fomo_updates" -> profileText("Choisis l'information que tu veux réellement connaître et vérifie-la à un moment compatible avec tes obligations. Quand tu l'as obtenue, quitte le fil sans chercher à épuiser toutes les nouveautés.", "Choose the information you actually want to know and check it at a time compatible with your responsibilities. When you have it, leave the feed without trying to exhaust every update.")
+        "tired_automatic_scroll" -> profileText("Choisis du repos lorsque tu en as besoin. Tu peux terminer manuellement le contenu facultatif ou simplement ne pas en lancer un autre, sans ajouter de tâche à accomplir.", "Choose rest when you need it. You can manually end optional content or simply not start more without adding a task to complete.")
+        "frustration_reopening" -> profileText("Après une contrariété, choisis seulement la prochaine action ou une pause volontaire. Termine le contenu qui ne sert plus ce choix au lieu de rouvrir plusieurs applications sans intention.", "After an annoyance, choose only the next action or a deliberate break. End content that no longer serves that choice instead of reopening several apps without an intention.")
+        "homework_start" -> profileText("Choisis un exercice précis et son premier pas faisable. Termine manuellement la consultation de loisir lorsque tu décides de commencer, tout en gardant les recherches utiles possibles.", "Choose a specific exercise and its first feasible step. Manually end the entertainment check when you decide to start while keeping useful research possible.")
+        "revision_break" -> profileText("Choisis un point clair où reprendre la révision et une fin pour le loisir de la pause. Reviens volontairement à ce point quand la pause choisie se termine.", "Choose a clear place to resume studying and an ending for entertainment during the break. Deliberately return to that point when your chosen break ends.")
+        "remote_work_tabs" -> profileText("Choisis la prochaine phrase ou étape du travail. Quand tu reprends cette tâche, quitte manuellement le contenu de loisir sans modifier les outils ni leurs réglages.", "Choose the next sentence or step of your work. When you resume that task, manually leave entertainment content without changing tools or their settings.")
+        "work_message_interruptions" -> profileText("Garde un point de reprise clair pour le travail. Traite les messages nécessaires selon tes obligations, puis quitte les échanges facultatifs lorsqu'ils ne servent plus un besoin réel.", "Keep a clear restart point for work. Handle necessary messages according to your responsibilities, then leave optional exchanges when they no longer serve a real need.")
+        "reading_distracted" -> profileText("Choisis une petite portion de lecture que tu peux suivre. Après une consultation nécessaire, quitte le contenu facultatif et retrouve le dernier point que tu avais compris.", "Choose a small portion of reading you can follow. After a necessary check, leave optional content and return to the last point you understood.")
+        "group_study" -> profileText("Choisis ta prochaine contribution à l'exercice commun. Garde les recherches utiles disponibles et termine ton propre contenu de loisir, sans imposer une règle aux autres téléphones.", "Choose your next contribution to the shared exercise. Keep useful research available and end your own entertainment content without imposing a rule on other people's phones.")
+        "repeated_push_alerts" -> profileText("Choisis de traiter les alertes utiles selon leur besoin réel. Une promotion peut rester présente sans ouvrir son fil ; les notifications et les moyens de contact restent inchangés.", "Choose to handle useful alerts according to their actual need. A promotion can stay present without opening its feed; notifications and contact methods remain unchanged.")
+        "home_screen_shortcuts" -> profileText("Choisis l'outil nécessaire avant de toucher une icône. Ouvre-le pour cette tâche, puis quitte le contenu facultatif une fois le but atteint, en gardant chaque raccourci à sa place.", "Choose the necessary tool before touching an icon. Open it for that task, then leave optional content once the purpose is met while keeping every shortcut in place.")
+        "phone_on_desk" -> profileText("Choisis une courte étape de travail malgré la présence du téléphone. Ne l'ouvre que pour un besoin précis ; après ce besoin, quitte le contenu facultatif et retrouve ton point de reprise.", "Choose a short work step despite the phone being present. Open it only for a specific need; after that need, leave optional content and return to your restart point.")
+        "bedside_charger" -> profileText("Tu peux conserver ton point de charge actuel ; choisis une fin manuelle au divertissement avant le repos. Le réveil, les appels et les outils nécessaires restent accessibles.", "You can keep your current charging spot; choose a manual end to entertainment before resting. Your alarm, calls and necessary tools stay accessible.")
+        "grayscale_visual_pull" -> profileText("Garde les couleurs telles quelles et choisis une tâche précise avant l'ouverture. Quand elle est terminée, quitte manuellement le contenu attirant sans changer l'affichage ni l'accessibilité.", "Keep colours as they are and choose a specific task before opening. When it is finished, manually leave tempting content without changing the display or accessibility.")
+        "unused_app_reinstallation" -> profileText("Garde l'application installée et choisis seulement la fonction qui t'est utile. Une fois ce besoin traité, quitte le contenu facultatif ; aucune suppression n'est nécessaire.", "Keep the app installed and choose only the function useful to you. Once that need is handled, leave optional content; no removal is needed.")
+        "family_meal" -> profileText("Choisis un petit moment d'attention au repas et aux personnes présentes. Après les usages nécessaires du téléphone, quitte le contenu facultatif pour retrouver ce moment.", "Choose a small moment of attention to the meal and people present. After necessary phone use, leave optional content to return to that moment.")
+        "friend_conversation" -> profileText("Choisis de suivre une réponse de ton ami jusqu'au bout, si la conversation est disponible. Termine seulement le contenu qui détourne ton attention, en gardant les contacts nécessaires possibles.", "Choose to follow one of your friend's replies to the end if the conversation is available. End only content that diverts your attention while keeping necessary contact possible.")
+        "group_chat_noise" -> profileText("Reste dans le groupe et lis les informations qui répondent à ton besoin, puis quitte manuellement la conversation. Garde ses alertes telles quelles et réponds aux demandes essentielles.", "Stay in the group and read information that meets your need, then manually leave the conversation. Keep its alerts as they are and respond to essential requests.")
+        "instant_reply_pressure" -> profileText("Choisis quand répondre en fonction du besoin réel et de tes obligations. Une fois la réponse utile envoyée, quitte les échanges facultatifs sans changer les moyens de contact.", "Choose when to reply according to the real need and your responsibilities. Once the useful reply is sent, leave optional exchanges without changing contact methods.")
+        "social_outing_recording" -> profileText("Choisis ce que tu veux garder de la sortie, puis décide de la fin des photos ou de la publication. Quitte ce contenu pour retrouver la scène présente lorsque cela te convient.", "Choose what you want to keep from the outing, then decide when photographs or posting end. Leave that content to return to the present scene when that suits you.")
+        "shared_weekend_activity" -> profileText("Choisis un petit moment partagé qui convient aux personnes présentes. Termine ton propre contenu de loisir pour y participer, sans imposer de changement aux téléphones des autres.", "Choose a small shared moment that suits the people present. End your own entertainment content to take part without imposing changes on anyone else's phone.")
+        "paper_reading" -> profileText("Choisis une petite lecture réellement accessible et son premier passage. Termine le contenu facultatif au moment où tu décides de lire ; aucune nouvelle restriction du téléphone n'est nécessaire.", "Choose a small reading session that is actually accessible and its first passage. End optional content when you choose to read; no new phone restriction is needed.")
+        "short_outdoor_walk" -> profileText("Choisis une courte promenade adaptée si elle est possible, puis garde ton attention sur le trajet. Termine le contenu facultatif et conserve l'accès aux informations et contacts utiles.", "Choose a suitable short walk if possible, then keep your attention on the route. End optional content and preserve access to useful information and contact.")
+        "gentle_movement" -> profileText("Choisis une pause de mouvement qui te convient, ou une pause immobile si tu préfères. Termine le contenu facultatif lorsque tu prends cette pause, sans changer la configuration.", "Choose a movement break that suits you, or a still break if you prefer. End optional content when you take that break without changing the configuration.")
+        "cook_without_feed" -> profileText("Utilise l'écran pour l'étape utile de la recette, puis quitte le loisir avant les gestes de cuisine. La fin est une décision manuelle ; le téléphone reste disponible pour un besoin réel.", "Use the screen for the useful recipe step, then leave entertainment before cooking tasks. Ending is a manual decision; the phone stays available for a real need.")
+        "creative_hobby" -> profileText("Choisis une petite idée créative ou un geste faisable avec ce qui est présent. Termine le contenu facultatif lorsque tu veux essayer cette idée, sans chercher à produire quelque chose à publier.", "Choose one small creative idea or an action possible with what is present. End optional content when you want to try that idea without aiming to produce something to post.")
+        "small_tidy_up" -> profileText("Choisis une zone limitée de tes propres affaires si le rangement convient au moment. Termine le contenu facultatif quand tu commences cette étape et décide toi-même si tu continues.", "Choose a limited area of your own belongings if tidying suits the moment. End optional content when you start that step and decide for yourself whether to continue.")
+        "realistic_daily_budget" -> profileText("Choisis un moment d'usage facultatif et une fin que tu peux essayer dans ta vraie journée. Termine manuellement à ce point, sans transformer le repère en blocage du téléphone.", "Choose one optional-use moment and an ending you can try during your actual day. Manually end at that point without turning the cue into a phone block.")
+        "limit_reached_next_step" -> profileText("Après une limite atteinte, choisis seulement la prochaine portion de temps à protéger. Termine le contenu facultatif lorsque tu reprends l'activité choisie, sans chercher à récupérer toute la journée.", "After reaching a limit, choose only the next portion of time to protect. End optional content when you return to the chosen activity without trying to recover the whole day.")
+        "restart_after_lapse" -> profileText("Choisis une prochaine action assez simple après l'écart. Termine volontairement le contenu qui ne la sert pas et observe cette reprise, sans durcir les réglages.", "Choose a simple enough next action after a lapse. Deliberately end content that does not serve it and notice that restart without tightening settings.")
+        "multi_day_challenge_habit" -> profileText("Choisis un repère et un premier pas faisable pour la prochaine journée de l'habitude. Termine manuellement le contenu facultatif lorsque tu décides de reprendre ce pas.", "Choose a cue and a feasible first step for the next day of the habit. Manually end optional content when you choose to return to that step.")
+        "notice_small_wins" -> profileText("Repère un moment où tu as terminé un contenu facultatif pour retrouver une activité choisie. Garde ce choix comme exemple à répéter, même sans modification du téléphone.", "Notice one moment when you ended optional content to return to a chosen activity. Keep that choice as an example to repeat even without a phone change.")
+        "weekend_routine_change" -> profileText("Choisis un repère souple du week-end et une fin manuelle pour une session de loisir. Retrouve une activité choisie à ce repère sans chercher à reproduire toute la semaine.", "Choose a flexible weekend cue and a manual ending for an entertainment session. Return to a chosen activity at that cue without trying to reproduce the whole week.")
+        else -> profileText("Choisis un besoin utile et un point où le contenu facultatif peut se terminer. Quitte-le manuellement lorsque ce besoin est traité.", "Choose a useful need and a point where optional content can end. Leave it manually when that need is handled.")
+    }
+    return profileText(
+        "Dans le contexte « ${base.label.fr} » : ${purpose.fr} Les fonctions essentielles et tes outils d'accessibilité restent disponibles ; tous les réglages restent inchangés.",
+        "In the context of “${base.label.en}”: ${purpose.en} Essential functions and your accessibility tools stay available; all settings remain unchanged."
+    )
+}

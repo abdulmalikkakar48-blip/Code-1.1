@@ -1,18 +1,24 @@
 # Selkie — application Android de réduction du temps d'écran
 
-## Version 0.10.4 — confidentialité, export et informations légales
+## Version 0.10.4 — Coach par offre, animation claire et confidentialité
 
-**Menu ☰ → Confidentialité et données** regroupe désormais trois pages FR/EN : **Conditions d’utilisation**, **Abonnements et remboursements**, **Éditeur et mentions**. Elles restent accessibles avant les autorisations. L’export JSON met les réglages et la progression à ta disposition, sans phrases du coach ni jetons de connexion ; la copie exportée reste séparée des données de l’application. L’effacement confirme ses écritures et retire les alertes. Les contours, libellés et commandes accessibles sont améliorés ; une vérification complète sur téléphone reste nécessaire.
+**Menu ☰ → Confidentialité et données** regroupe désormais trois pages FR/EN : **Conditions d’utilisation**, **Abonnements et résiliation**, **Éditeur et mentions**. Elles restent accessibles avant les autorisations. L’export JSON met les réglages et la progression à ta disposition, sans phrases du coach ni jetons de connexion ; la copie exportée reste séparée des données de l’application. L’effacement confirme ses écritures et retire les alertes. Les contours, libellés et commandes accessibles sont améliorés ; une vérification complète sur téléphone reste nécessaire.
 
 L’APK de test fonctionne hors ligne **sans permission Internet**. Les liens, la messagerie et le fournisseur de fichiers que tu choisis restent des services distincts. Les prix proposés sont inchangés, sans réduction : Premium 10 €/mois ou 120 €/an ; Ultra 20 €/mois ou 240 €/an. Les offres restent des démonstrations gratuites : aucun achat, compte serveur ou dialogue IA distant n’est actif.
 
 Le [bilan des 19 points](docs/BILAN_CONFORMITE_FRANCE.md) distingue **9 en place, 6 à compléter ou valider, 4 hors du périmètre actuel**. Il concerne ce prototype et ne constitue ni une certification ni une garantie contre les amendes. L’éditeur public reste à choisir ; Gmail, les droits sur les actifs et la diffusion doivent être finalisés. Voir le [guide de l’éditeur](docs/CONFIDENTIALITE_AVANT_PUBLICATION.md), le [registre et les demandes de droits](docs/REGISTRE_TRAITEMENTS.md), les [actifs et licences](docs/DROITS_ET_ACTIFS.md) et les [pages à héberger](legal-site/README.md). Aucune publication Play ni politique hébergée n’est annoncée ; les textes officiels actuels n’ont pas pu être vérifiés en ligne.
 
-**102 tests unitaires réussis. Android Lint : 0 erreur, 4 avertissements, 1 information.**
+En mode Clair, 48 petites étoiles, losanges et anneaux dérivent et scintillent ; le mode Nuit conserve les vagues de points. Le réglage Android de réduction des animations reste respecté. Le Coach conserve la question en haut et la réponse en bas. Sa bibliothèque préparée propose par langue 1 152 questions en Gratuit, 5 760 en Premium et 10 368 en Ultra ; l’aide et la saisie standard restent accessibles gratuitement. Les conseils supplémentaires combinent situations, contraintes concrètes et intentions, sans modèle génératif.
 
-[Page de l’APK Selkie 0.10.4 — environ 24 Mo, accès GitHub requis](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.10.4.apk) · [Sources exactes](downloads/Selkie-Android-0.10.4-source.zip) · [Validation](downloads/VALIDATION-0.10.4.md).
+Une connexion serveur Groq est préparée comme option pour un vrai dialogue IA, avec un éventuel quota gratuit à vérifier. Aucun compte, clé, service Supabase ou appel réel n’est activé. Le fournisseur public choisi pour le consentement devra correspondre à la configuration du serveur, sans repli automatique vers une API payante. Voir [l’option avec quota gratuit](docs/IA_AVEC_QUOTA_GRATUIT.md).
 
-**English:** Privacy and data now groups Terms of use, Subscriptions and refunds, and Publisher information. Export settings and progress as JSON, without Coach messages or sign-in tokens. Deletion is confirmed and alerts are removed. This offline APK has no Internet permission or real purchases. All 102 unit tests pass; Lint reports no errors, four warnings and one informational finding. Public-release and legal requirements remain to be finalised.
+La page Abonnements et résiliation précise qu’une période déjà utilisée ou une simple annulation ne donne pas lieu à un remboursement automatique. Elle conserve les droits obligatoires applicables ; aucune clause générale supprimant ces droits n’a été ajoutée.
+
+**117 tests unitaires réussis. Android Lint : 0 erreur, 4 avertissements, 1 information.**
+
+[Page de l’APK Selkie 0.10.4 — environ 26 Mo, accès GitHub requis](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.10.4.apk) · [Sources exactes](downloads/Selkie-Android-0.10.4-source.zip) · [Validation](downloads/VALIDATION-0.10.4.md).
+
+**English:** Privacy and data now groups Terms of use, Subscriptions and cancellation, and Publisher information. Export settings and progress as JSON, without Coach messages or sign-in tokens. Deletion is confirmed and alerts are removed. This offline APK has no Internet permission or real purchases. All 117 unit tests pass; Lint reports no errors, four warnings and one informational finding. Public-release and legal requirements remain to be finalised.
 
 ## Version 0.10.3 — surface d’eau pointillée
 

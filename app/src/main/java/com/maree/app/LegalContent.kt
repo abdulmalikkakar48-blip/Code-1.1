@@ -3,7 +3,7 @@ package com.maree.app
 /** Informational pages for this free test version, distinct from future sales terms. */
 internal enum class LegalDocument(private val frenchTitle: String, private val englishTitle: String) {
     TERMS("Conditions d’utilisation", "Terms of use"),
-    SUBSCRIPTIONS("Abonnements et remboursements", "Subscriptions and refunds"),
+    SUBSCRIPTIONS("Abonnements et résiliation", "Subscriptions and cancellation"),
     PUBLISHER("Éditeur et mentions", "Publisher information");
 
     val title: String get() = tr(frenchTitle, englishTitle)
@@ -123,7 +123,17 @@ internal object LegalContent {
                 "Cancellation normally stops the next renewal; access usually remains available until the end of the paid period. Google Play shows the applicable end date. Uninstalling Selkie or deleting its data does not cancel a subscription."
             )
         )),
-        PrivacySection(tr("Demander un remboursement", "Requesting a refund"), listOf(
+        PrivacySection(tr("Pas de remboursement automatique", "No automatic refunds"), listOf(
+            tr(
+                "Pour une future offre payante : pas de remboursement automatique pour une période déjà utilisée. Une simple annulation ne rembourse pas automatiquement un mois ou une période déjà écoulée. Aucun geste commercial ni remboursement discrétionnaire n’est promis.",
+                "For a future paid plan: there is no automatic refund for a period already used. Simply cancelling does not automatically refund a month or period that has already elapsed. No goodwill gesture or discretionary refund is promised."
+            ),
+            tr(
+                "Cette règle ne retire aucun droit obligatoire, notamment la rétractation lorsqu’elle s’applique, les garanties légales en cas de non-conformité et la restitution de sommes indûment prélevées. Les règles applicables du magasin d’achat doivent également être respectées. Les conditions de la future offre devront être finalisées avant sa vente.",
+                "This rule does not remove any mandatory rights, including withdrawal where applicable, statutory rights when the service does not conform to the contract, and repayment of incorrectly charged amounts. Applicable purchase-store rules must also be respected. The future plan’s terms must be finalised before it is sold."
+            )
+        )),
+        PrivacySection(tr("Faire valoir tes droits", "Exercising your rights"), listOf(
             tr(
                 "Annuler un abonnement et demander un remboursement sont deux démarches différentes. Une annulation n’entraîne pas automatiquement un remboursement.",
                 "Cancelling a subscription and requesting a refund are separate actions. Cancellation does not automatically issue a refund."

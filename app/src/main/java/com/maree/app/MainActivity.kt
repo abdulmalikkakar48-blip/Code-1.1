@@ -466,7 +466,8 @@ private fun MareeApp() {
                             )
                             3 -> CoachTab(snapshot,
                                 monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
-                                getName = { appLabel(context, it) })
+                                getName = { appLabel(context, it) },
+                                onOffers = { openMenuPage(SettingsPage.SUBSCRIPTIONS) })
                         }
                     }
                 }

@@ -94,9 +94,9 @@ Requests about your rights normally receive a response within one month of recei
 
 ## A possible future online AI Coach
 
-AI dialogue using Supabase and OpenAI is prepared in the code, but is separate from the local Coach and is not enabled. If offered in the future, information and agreement will come before email sign-in and sending messages. It would use your email address, account, session tokens and a question counter.
+AI dialogue using Supabase and a provider to be chosen (OpenAI or Groq) is prepared in the code, but is separate from the local Coach and is not enabled. If offered in the future, information and agreement will come before email sign-in and sending messages. It would use your email address, account, session tokens and a question counter.
 
-This service would send your question and up to twelve previous messages to Supabase, then to OpenAI for a response, without automatically attaching tracked apps, points or challenges. The code asks the API not to store responses, without guaranteeing that providers retain no technical data. Conversations would stay in the app’s memory; session tokens would be kept locally until you sign out or delete data. These actions would not delete the account or server quota: their deletion could be requested from the controller.
+This service would send your question and up to twelve previous messages to Supabase, then to the configured AI provider for a response, without automatically attaching tracked apps, points or challenges. The OpenAI route asks its API not to store responses; this does not guarantee no technical retention or describe another provider’s practices. Those practices must be specified before activation. Conversations would stay in the app’s memory; session tokens would be kept locally until you sign out or delete data. These actions would not delete the account or server quota: their deletion could be requested from the controller.
 
 Legal bases, the project region, contracts, retention periods and any transfers outside the EEA must be specified before this service opens. An online build would need Internet permission; that permission alone would not establish that an AI service is active.
 
