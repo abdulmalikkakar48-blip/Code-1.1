@@ -4,7 +4,7 @@
 
 Les offres annuelles correspondent désormais à douze mensualités : **Premium 10 €/mois ou 120 €/an**, **Ultra 20 €/mois ou 240 €/an**. Les textes de remise et d’économie sont retirés des offres et des réponses du Coach, en français et en anglais. Les fonctions des offres sont identiques pour les deux durées ; les achats restent inactifs dans cet APK de test.
 
-[Télécharger Selkie 0.9.3](downloads/Selkie-Android-0.9.3.apk) · [Sources exactes](downloads/Selkie-Android-0.9.3-source.zip) · [Validation](downloads/VALIDATION-0.9.3.md) · [Offres actuelles](docs/ABONNEMENTS_ET_COMPTES.md).
+[Télécharger Selkie 0.9.3](https://raw.githubusercontent.com/abdulmalikkakar48-blip/Code-1.1/edba21b9ec032c167019441783be9bafe10c8bf6/downloads/Selkie-Android-0.9.3.apk) · [Sources exactes](downloads/Selkie-Android-0.9.3-source.zip) · [Validation](downloads/VALIDATION-0.9.3.md) · [Offres actuelles](docs/ABONNEMENTS_ET_COMPTES.md).
 
 Les versions ci-dessous sont des archives ; leurs anciens tarifs ne sont pas ceux de la version actuelle.
 
