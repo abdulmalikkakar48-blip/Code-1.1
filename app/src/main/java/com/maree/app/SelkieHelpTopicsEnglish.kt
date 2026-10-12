@@ -10,9 +10,9 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
     ),
     englishHelp(
         SelkieHelpSection.DISCOVER, "navigation", "Where can I find each section?",
-        listOf("navigation", "sections", "tabs", "where to find", "icons", "bottom buttons", "home", "more menu", "app screens"),
-        "The five tabs are at the bottom: Home for your apps and points; Daily for a break idea and your overview; Challenges to complete your daily steps; " +
-            "Coach for advice and help; More for permissions, pausing tracking, privacy, account information and plans."
+        listOf("navigation", "sections", "tabs", "where to find", "icons", "bottom buttons", "home", "more menu", "top menu", "hamburger menu", "three lines", "app screens"),
+        "The four tabs are at the bottom: Home for your apps and points; Daily for a break idea and your overview; Challenges to complete your daily steps; Coach for advice and help. " +
+            "The ☰ menu at the top groups Language, Appearance, Android access, Subscriptions, Selkie rules, and Privacy and data."
     ),
     englishHelp(
         SelkieHelpSection.DISCOVER, "daily", "What is in the Daily tab?",
@@ -67,25 +67,25 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.TRACKING, "permissions", "Which permissions are needed?",
         listOf("permission", "permissions", "authorization", "usage access", "usage data access", "overlay", "display over other apps", "appear on top"),
         "Usage access measures time and identifies the app in use; permission to display over other apps shows the break screen. " +
-            "Both are required to enable tracking. Set them on the initial welcome screen or in More → Enable tracking / Manage permissions. You can explore the app and use Challenges and Coach without enabling tracking."
+            "Both are required to enable tracking. Set them on the initial welcome screen or in the ☰ menu → Android access → Turn on tracking / Manage permissions. You can explore the app and use Challenges and Coach without enabling tracking."
     ),
     englishHelp(
         SelkieHelpSection.TRACKING, "notifications_permission", "Are alerts required?",
         listOf("selkie alerts", "selkie notifications", "allow notifications", "deny notifications", "optional alerts", "before the limit", "80 percent", "warn before the limit"),
         "Notifications are optional. When allowed, Selkie can warn you when about 80% of the limit has been used and make its tracking service visible. " +
-            "Without them, tracking and the break screen can still work with the two required permissions. In More, choose Enable optional alerts, or adjust their visibility in Android settings."
+            "Without them, tracking and the break screen can still work with the two required permissions. In the ☰ menu → Android access, choose Turn on optional alerts, or adjust their visibility in Android settings."
     ),
     englishHelp(
         SelkieHelpSection.TRACKING, "battery", "Tracking stops or uses battery",
         listOf("battery", "power saving", "battery saver", "tracking stops", "tracking does not work", "tracking doesn t work", "blocking does not work", "background tracking", "battery optimization"),
-        "In More, check that tracking is active and both Android permissions are granted. Some phones restrict background apps: in Settings → Apps → Selkie → Battery, " +
-            "check the restrictions for your model, then reopen Selkie. A tracking service uses resources; its battery use and continuity depend on the phone. You can pause it from More."
+        "In the ☰ menu → Android access, check that tracking is active and both Android permissions are granted. Some phones restrict background apps: in Settings → Apps → Selkie → Battery, " +
+            "check the restrictions for your model, then reopen Selkie. A tracking service uses resources; its battery use and continuity depend on the phone. You can pause it in the ☰ menu → Android access."
     ),
     englishHelp(
         SelkieHelpSection.TRACKING, "pause_tracking", "Pause or resume tracking",
         listOf("pause tracking", "tracking pause", "stop tracking service", "disable tracking", "resume tracking", "enable tracking", "tracking paused"),
-        "In More, choose Pause tracking: monitoring and break screens stop, but your saved apps, limits and locks are kept. " +
-            "To resume, choose Enable tracking and check the Android permissions. On resuming, Android may provide usage for the day: pausing the service does not guarantee that all those minutes are excluded from the counters."
+        "In the ☰ menu → Android access, choose Pause tracking: monitoring and break screens stop, but your saved apps, limits and locks are kept. " +
+            "To resume, choose Turn on tracking and check the Android permissions. On resuming, Android may provide usage for the day: pausing the service does not guarantee that all those minutes are excluded from the counters."
     ),
     englishHelp(
         SelkieHelpSection.TRACKING, "usage", "What do the displayed minutes measure?",
@@ -102,7 +102,7 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
     englishHelp(
         SelkieHelpSection.POINTS, "points", "What are my points for?",
         listOf("points", "balance", "discipline points", "honor points", "honour points", "how many points", "point rules"),
-        "You start with 100 points. They reflect your progress and Selkie’s rules: resetting costs 10 points; a detected reopening of a locked app costs 5 points. " +
+        "Open the ☰ menu → Selkie rules to review the rules. You start with 100 points. They reflect your progress and Selkie’s rules: resetting costs 10 points; a detected reopening of a locked app costs 5 points. " +
             "You can earn points through the discipline bonus and challenges. The balance cannot fall below zero; at 0 points, adding an app or changing a limit is blocked on every plan. Points are not money."
     ),
     englishHelp(
@@ -156,7 +156,7 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
     englishHelp(
         SelkieHelpSection.OFFERS, "premium", "What does Premium include?",
         listOf("premium", "plans", "free plan", "free", "plan differences", "how many apps", "app limit", "premium price", "subscription", "subscriptions", "plan prices", "subscription prices"),
-        "Free allows 10 tracked apps. Premium is planned at " +
+        "Find the plans in the ☰ menu → Subscriptions. Free allows 10 tracked apps. Premium is planned at " +
             "€${PlanType.PREMIUM.monthlyPriceEuros}/month or €${PlanType.PREMIUM.annualPriceEuros}/year, with 50 apps and custom challenges. " +
             "Ultra is planned at €${PlanType.ULTRA.monthlyPriceEuros}/month or €${PlanType.ULTRA.annualPriceEuros}/year, with no commercial cap on compatible apps. " +
             "The offline Coach and suggested challenges are included in every plan. Selecting a plan here is a local demo: no subscription or charge is created. Point rules stay the same, including at 0 points."
@@ -222,21 +222,21 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
     englishHelp(
         SelkieHelpSection.PRIVACY, "privacy", "Where are my data and privacy information?",
         listOf("privacy", "privacy policy", "personal data", "my data", "gdpr", "cnil", "controller", "first and last name", "full name", "my real name", "private life", "messages read"),
-        "Read the policy in More → Privacy and data. Your tracked apps, limits, points and challenges stay on your phone; the local Coach does not send your questions to the publisher. " +
+        "Read the policy in the ☰ menu → Privacy and data. Your tracked apps, limits, points and challenges stay on your phone; the local Coach does not send your questions to the publisher. " +
             "Selkie does not read your messages, photos or screen content. The policy must identify the actual data controller and provide a way to contact them: here, " +
             "${PrivacyIdentity.controllerName}, ${PrivacyIdentity.contactEmail}. It describes this version; opening accounts or payments will require an update."
     ),
     englishHelp(
         SelkieHelpSection.PRIVACY, "delete_data", "How do I delete my data?",
         listOf("delete my data", "delete all my data", "erase my data", "erase all my data", "data deletion", "delete everything", "start from zero", "delete my account", "erase my account"),
-        "In More → Privacy and data → Delete my data, confirm to stop tracking and delete settings, points, challenges, local choices and saved Coach questions. " +
+        "In the ☰ menu → Privacy and data → Delete my data, confirm to stop tracking and delete settings, points, challenges, local choices and saved Coach questions. " +
             "This is irreversible; points return to their initial value the next time you use the app. Android statistics and permissions are unchanged. " +
             "No active server account is deleted here, and this deletion would not cancel a future Google Play subscription."
     ),
     englishHelp(
         SelkieHelpSection.PRIVACY, "contact", "How do I contact Selkie?",
         listOf("contact", "contact us", "email", "e mail", "support", "assistance", "write to the developer", "email address", "report a problem"),
-        "For a question or problem, write to ${PrivacyIdentity.contactEmail}. The Contact by email button is in More → Privacy and data. " +
+        "For a question or problem, write to ${PrivacyIdentity.contactEmail}. The Contact by email button is in the ☰ menu → Privacy and data. " +
             "Explain the problem and, if useful, include your Selkie version and phone model. Avoid sending passwords, banking details or screenshots containing private information. " +
             "Coach phrases are not automatically sent to this address."
     )

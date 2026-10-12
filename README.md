@@ -1,5 +1,15 @@
 # Selkie — application Android de réduction du temps d'écran
 
+## Version 0.10.1 — menu en haut de l’application
+
+Le bouton **☰ en haut à droite** ouvre un menu organisé : **Réglages** (Langue, Apparence, Accès Android), **Offres** (Abonnements) et **Informations** (Règles de Selkie, Confidentialité et données). Chaque choix ouvre une page dédiée ; les boutons Retour et les quatre onglets du bas permettent de revenir à l’utilisation quotidienne. Le badge de l’offre et l’accès Premium depuis Défis ouvrent directement Abonnements.
+
+La barre du bas contient **Accueil, Quotidien, Défis et Coach**. Le coach hors ligne, ses 1 152 questions par langue, les deux cartes question/réponse, le mode Nuit, les points, les données et les prix sans réduction restent conservés. La politique complète et l’effacement sont accessibles dans Confidentialité et données. Le résumé initial des autorisations conserve aussi son lien de confidentialité.
+
+[Page de l’APK Selkie 0.10.1 — accès GitHub requis](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.10.1.apk) · [Sources exactes](downloads/Selkie-Android-0.10.1-source.zip) · [Validation](downloads/VALIDATION-0.10.1.md) · [Menu](docs/MENU.md).
+
+**English:** Tap **☰ at the top right** for Settings (Language, Appearance, Android access), Plans (Subscriptions) and Information (Selkie rules, Privacy and data). Home, Daily, Challenges and Coach stay in the bottom bar. Accounts and real purchases remain inactive in this test APK.
+
 ## Version 0.10.0 — bibliothèque du coach et mode nuit
 
 Le Coach ajoute **1 152 questions et réponses préparées par langue**, classées en huit rubriques, avec recherche et pagination. Elles combinent 48 situations concrètes et 24 types de conseils ; les alias ne sont pas comptés comme des questions supplémentaires. Les 67 sujets existants et les 38 questions d’aide Selkie restent disponibles. La question se trouve dans une carte en haut, et la réponse dans une autre carte immédiatement dessous. Une réponse ancienne est masquée quand la question est modifiée.
@@ -94,14 +104,14 @@ Plafonds : **10 applications en Gratuit**, **50 en Premium** et **aucun plafond 
 
 Pour commencer la distribution et les paiements, ouvre [le guide de démarrage](docs/DEMARRER_PUBLICATION.md). Il mène aux étapes [Google Play](docs/PUBLICATION_GOOGLE_PLAY.md) et [abonnements](docs/ABONNEMENTS.md). Le travail porte sur Android ; la version iPhone est reportée. L’APK reste une version de test ; aucun paiement ni coach IA n’est connecté.
 
-**Version actuelle : 0.10.0 (APK de test et code source).** Interface française et anglaise, apparence claire ou nuit.
+**Version actuelle : 0.10.1 (APK de test et code source).** Interface française et anglaise, apparence claire ou nuit.
 
 Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Material 3, `minSdk 29` (Android 10), `targetSdk 34`, package `com.maree.app`, Gradle 8.7, AGP 8.5.2, Kotlin 1.9.24.
 
 ## Mise à jour 0.4.0
 
 - La règle de 0 point s’applique à toutes les offres : aucun ajout ou changement de limite à 0 point. Une réinitialisation exige réellement ses 10 points ; le retrait d’une application et l’effacement des données restent disponibles.
-- Offres recalibrées en 0.6.0 : Gratuit, 10 applications ; Premium, 50 applications pour 10 €/mois ; Ultra, toutes les applications compatibles du téléphone sans plafond commercial pour 20 €/mois. L’APK de test affiche un mode démonstration gratuit dans Plus, pour tester les limites et les fonctions locales. Il ne vend aucun abonnement et n’effectue aucun paiement.
+- Offres recalibrées en 0.6.0 : Gratuit, 10 applications ; Premium, 50 applications pour 10 €/mois ; Ultra, toutes les applications compatibles du téléphone sans plafond commercial pour 20 €/mois. L’APK de test affiche un mode démonstration gratuit dans le menu ☰ → Abonnements, pour tester les limites et les fonctions locales. Il ne vend aucun abonnement et n’effectue aucun paiement.
 - Défis → Mes défis : Premium et Ultra permettent de créer un titre avec exactement trois étapes et une durée choisie de 2 à 365 jours. Les trois étapes doivent être cochées pour valider une journée. Les jours peuvent être espacés ; ces défis sont indépendants de la rotation standard de 21 jours. La récompense totale est de 0,25 point une seule fois après la durée choisie. Elle n’augmente pas le compteur de bonus des défis Selkie.
 - Les points sont enregistrés en quarts entiers, pour conserver exactement 0,25 / 0,50 / 0,75 point. Les anciens soldes sont migrés une fois sans perte ni double crédit. Les cases du jour et la progression survivent à la relance.
 - Ultra ajoute la recherche dans les applications suivies et le tri par nom, temps passé ou proximité de la limite. Le coach IA illimité par messages est prévu pour Ultra, mais reste à développer et à financer.
@@ -153,7 +163,7 @@ La politique est une information pour la version locale, pas une certification j
 1. Créer un dépôt GitHub vide et y envoyer **le contenu** de ce répertoire (`app/`, `.github/`, etc.).
 2. Ouvrir l'onglet **Actions**, sélectionner **Construire l'APK Android**, puis lancer **Run workflow** (ou envoyer un commit sur `main`).
 3. À la fin de la tâche `android`, récupérer l'artefact `Selkie-build-to-sign` ; il contient `app-debug.apk`. C’est un fichier intermédiaire qui utilise la clé temporaire du runner.
-4. Pour distribuer une mise à jour, signer ce fichier avec la clé fixe sauvegardée, selon [la procédure de signature](docs/SIGNATURE_ANDROID.md). Le fichier de test actuel est [Selkie-Android-0.10.0.apk](downloads/Selkie-Android-0.10.0.apk), pour Android 10+.
+4. Pour distribuer une mise à jour, signer ce fichier avec la clé fixe sauvegardée, selon [la procédure de signature](docs/SIGNATURE_ANDROID.md). Le fichier de test actuel est [Selkie-Android-0.10.1.apk](downloads/Selkie-Android-0.10.1.apk), pour Android 10+.
 5. Ouvrir Selkie, lire les explications, puis activer les accès nécessaires au suivi. Les notifications sont facultatives, et le mode découverte reste disponible.
 
 Le projet a été compilé dans l'environnement cloud. L'APK de test est généré dans `app/build/outputs/apk/debug/app-debug.apk`. Le wrapper Gradle 8.7 est inclus, avec vérification SHA-256 de sa distribution ; GitHub Actions utilise ce wrapper pour compiler, exécuter les tests unitaires et lancer Android Lint.

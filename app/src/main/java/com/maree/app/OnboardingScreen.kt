@@ -114,7 +114,7 @@ fun OnboardingScreen(
                 TextButton(onClick = onExplore, modifier = Modifier.fillMaxWidth()) {
                     Text(tr("Découvrir sans suivi", "Explore without tracking"), fontWeight = FontWeight.Medium)
                 }
-                Text(tr("Tu pourras activer le suivi plus tard dans Plus. En attendant, aucune application n’est surveillée ou bloquée.", "You can turn on tracking later in More. Until then, no apps are monitored or blocked."),
+                Text(tr("Tu pourras activer le suivi plus tard dans le menu ☰ → Accès Android. En attendant, aucune application n’est surveillée ou bloquée.", "You can turn on tracking later in the ☰ menu → Android access. Until then, no apps are monitored or blocked."),
                     color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
             }
         }

@@ -1,4 +1,4 @@
-# Coach à conseils préparés — Selkie 0.10.0
+# Coach à conseils préparés — Selkie 0.10.1
 
 Le Coach est accessible sans compte, connexion, crédit API ni abonnement. Il propose une bibliothèque de **1 152 questions et réponses préparées par langue**, en plus des 67 sujets existants : 29 sujets de conseils avec trois variantes et 38 questions d’aide avec une réponse complète chacune. Il ne contient pas ChatGPT ni un modèle génératif. Les abonnements restent en démonstration, et le dialogue IA distant reste facultatif, séparé et non configuré.
 
@@ -16,7 +16,7 @@ Les réponses sont composées à partir de textes préparés pour chaque situati
 
 ## Français et anglais
 
-Choisis Français ou English à l’accueil ou dans Plus. Chaque langue contient les mêmes 1 152 questions de bibliothèque, 67 sujets et 125 réponses antérieures, dont 38 questions d’aide complètes. Les identifiants et rubriques correspondent entre les langues. Le moteur reconnaît les expressions connues des deux langues, mais répond dans la langue choisie. Les données mesurées restent identiques, avec le séparateur de points adapté. La question et la réponse en mémoire ainsi que les menus sont recréés à la bascule ; les phrases enregistrées sur option restent dans leur langue d’origine. Voir [les langues](LANGUES.md).
+Choisis Français ou English à l’accueil ou dans menu ☰ → Langue. Chaque langue contient les mêmes 1 152 questions de bibliothèque, 67 sujets et 125 réponses antérieures, dont 38 questions d’aide complètes. Les identifiants et rubriques correspondent entre les langues. Le moteur reconnaît les expressions connues des deux langues, mais répond dans la langue choisie. Les données mesurées restent identiques, avec le séparateur de points adapté. La question et la réponse en mémoire ainsi que les menus sont recréés à la bascule ; les phrases enregistrées sur option restent dans leur langue d’origine. Voir [les langues](LANGUES.md).
 
 ## Fonctionnement
 
@@ -45,4 +45,4 @@ source /workspace/.cloud-setup/activate.sh
 ./gradlew --no-daemon --max-workers=2 :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
 ```
 
-Les tests vérifient le nombre et l’unicité des questions et réponses, la correspondance des deux langues, la recherche, la résolution des questions, les trois étapes, les formulations reconnues, variantes, suggestions, contexte réel et priorité de la détresse. Une revue du contenu couvre les 48 situations et les 24 intentions ; le mode nuit possède aussi des tests de persistance et de contraste. Les contrôles observés pour cet APK sont consignés dans [la validation 0.10.0](../downloads/VALIDATION-0.10.0.md). Sur téléphone, essayer aussi le clavier, le défilement, les boutons de sujets, l’option locale, son effacement et la mise à jour. Ne pas décrire les essais sur Samsung comme faits tant qu’ils n’ont pas été observés.
+Les tests vérifient le nombre et l’unicité des questions et réponses, la correspondance des deux langues, la recherche, la résolution des questions, les trois étapes, les formulations reconnues, variantes, suggestions, contexte réel et priorité de la détresse. Une revue du contenu couvre les 48 situations et les 24 intentions ; le mode nuit possède aussi des tests de persistance et de contraste. Les contrôles observés pour cet APK sont consignés dans [la validation 0.10.1](../downloads/VALIDATION-0.10.1.md). Sur téléphone, essayer aussi le clavier, le défilement, les boutons de sujets, l’option locale, son effacement et la mise à jour. Ne pas décrire les essais sur Samsung comme faits tant qu’ils n’ont pas été observés.

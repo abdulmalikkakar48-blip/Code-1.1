@@ -2,7 +2,7 @@
 
 Information mise à jour le **12 octobre 2026**. Elle décrit le suivi et le Coach à règles locaux. Le dialogue IA en ligne préparé dans le code est distinct et n’est pas activé.
 
-Selkie aide à réduire le temps d’écran. Les données de suivi restent sur l’appareil et aucun compte n’est nécessaire. Cette information peut être consultée hors ligne dans l’application, avant toute autorisation et depuis les réglages. Sa consultation ou son affichage n’active pas le suivi et aucune case d’acceptation obligatoire n’est demandée.
+Selkie aide à réduire le temps d’écran. Les données de suivi restent sur l’appareil et aucun compte n’est nécessaire. Cette information peut être consultée hors ligne dans l’application, avant toute autorisation et depuis **le menu ☰ en haut → Confidentialité et données**. Sa consultation ou son affichage n’active pas le suivi et aucune case d’acceptation obligatoire n’est demandée.
 
 ## Responsable et contact
 

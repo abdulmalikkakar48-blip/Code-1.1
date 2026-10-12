@@ -52,6 +52,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -153,6 +156,8 @@ private fun MareeApp() {
     var showSetup by rememberSaveable { mutableStateOf(!setupComplete) }
     var showPrivacy by rememberSaveable { mutableStateOf(false) }
     var tab by rememberSaveable { mutableIntStateOf(0) }
+    var settingsPage by rememberSaveable { mutableStateOf<SettingsPage?>(null) }
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
     var notificationAsked by rememberSaveable { mutableStateOf(false) }
     var installed by remember { mutableStateOf<List<InstalledApp>?>(null) }
     var installedLoadFailed by remember { mutableStateOf(false) }
@@ -170,6 +175,14 @@ private fun MareeApp() {
     var infoMessage by remember { mutableStateOf<String?>(null) }
     var deleteConfirmation by remember { mutableStateOf(false) }
     var deleting by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) { if (tab !in 0..3) tab = 0 }
+    fun openMenuPage(page: SettingsPage) {
+        scope.launch {
+            drawerState.close()
+            if (page == SettingsPage.PRIVACY) showPrivacy = true else settingsPage = page
+        }
+    }
 
     fun display(text: String) { scope.launch { snackbars.showSnackbar(text) } }
     fun refresh() { refreshKey++ }
@@ -211,6 +224,7 @@ private fun MareeApp() {
         monitoringEnabled = enableMonitoring
         showSetup = false
         tab = 0
+        settingsPage = null
         if (enableMonitoring) MonitorService.start(context) else MonitorService.stop(context)
         if (pendingAdd && enableMonitoring) showPicker = true
         pendingAdd = false
@@ -220,6 +234,11 @@ private fun MareeApp() {
     BackHandler(enabled = showSetup && setupComplete && !showPrivacy) {
         showSetup = false
         pendingAdd = false
+    }
+    BackHandler(enabled = !showSetup && setupComplete && !showPrivacy &&
+        settingsPage != null && !drawerState.isOpen) { settingsPage = null }
+    BackHandler(enabled = !showSetup && setupComplete && !showPrivacy && drawerState.isOpen) {
+        scope.launch { drawerState.close() }
     }
     LaunchedEffect(showPicker, installedLoadKey) {
         if (!showPicker) return@LaunchedEffect
@@ -272,122 +291,139 @@ private fun MareeApp() {
             onComplete = { finishSetup(true) },
             onExplore = { finishSetup(false) }
         )
-        else -> Scaffold(
-            containerColor = Background,
-            snackbarHost = { SnackbarHost(snackbars) },
-            bottomBar = {
-                val extraNavHeight = (LocalDensity.current.fontScale - 1f).coerceAtLeast(0f) * 28f
-                NavigationBar(containerColor = MareePalette.NavigationBackground, tonalElevation = 0.dp,
-                    modifier = Modifier.heightIn(min = (80f + extraNavHeight).dp)) {
-                    listOf(
-                        Triple(tr("Accueil", "Home"), R.drawable.ic_nav_home, 0),
-                        Triple(tr("Quotidien", "Daily"), R.drawable.ic_nav_daily, 1),
-                        Triple(tr("Défis", "Challenges"), R.drawable.ic_nav_challenges, 2),
-                        Triple(tr("Coach", "Coach"), R.drawable.ic_nav_coach, 3),
-                        Triple(tr("Plus", "More"), R.drawable.ic_nav_more, 4)
-                    ).forEach { (name, icon, index) ->
-                        NavigationBarItem(
-                            selected = tab == index, onClick = { tab = index },
-                            icon = { Icon(painterResource(icon), contentDescription = null, modifier = Modifier.size(23.dp)) },
-                            label = { Text(name, fontSize = 11.sp, lineHeight = 13.sp,
-                                fontWeight = FontWeight.Medium, maxLines = 2,
-                                textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis) },
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MareePalette.OnHeroAccent, selectedTextColor = MareePalette.HeroAccent,
-                                indicatorColor = MareePalette.HeroAccent, unselectedIconColor = MareePalette.NavigationMuted,
-                                unselectedTextColor = MareePalette.NavigationMuted
-                            )
-                        )
-                    }
-                }
+        else -> ModalNavigationDrawer(
+            drawerState = drawerState,
+            drawerContent = {
+                SelkieMenuSheet(selectedPage = settingsPage,
+                    onSelect = ::openMenuPage,
+                    onClose = { scope.launch { drawerState.close() } })
             }
-        ) { inner ->
-            Column(Modifier.fillMaxSize().padding(inner)) {
-                Row(
-                    Modifier.fillMaxWidth().padding(start = 22.dp, end = 22.dp, top = 16.dp, bottom = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                        BrandIcon(40.dp)
-                        Spacer(Modifier.width(12.dp))
-                        Text(stringResource(R.string.app_name), color = Cream, fontSize = 23.sp,
-                            fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f))
-                    }
-                    TextButton(onClick = { tab = 4 }) {
-                        StatusPill(snapshot.plan.displayName)
+        ) {
+            Scaffold(
+                containerColor = Background,
+                snackbarHost = { SnackbarHost(snackbars) },
+                bottomBar = {
+                    val extraNavHeight = (LocalDensity.current.fontScale - 1f).coerceAtLeast(0f) * 28f
+                    NavigationBar(containerColor = MareePalette.NavigationBackground, tonalElevation = 0.dp,
+                        modifier = Modifier.heightIn(min = (80f + extraNavHeight).dp)) {
+                        listOf(
+                            Triple(tr("Accueil", "Home"), R.drawable.ic_nav_home, 0),
+                            Triple(tr("Quotidien", "Daily"), R.drawable.ic_nav_daily, 1),
+                            Triple(tr("Défis", "Challenges"), R.drawable.ic_nav_challenges, 2),
+                            Triple(tr("Coach", "Coach"), R.drawable.ic_nav_coach, 3)
+                        ).forEach { (name, icon, index) ->
+                            NavigationBarItem(
+                                selected = settingsPage == null && tab == index,
+                                onClick = { settingsPage = null; tab = index },
+                                icon = { Icon(painterResource(icon), contentDescription = null, modifier = Modifier.size(23.dp)) },
+                                label = { Text(name, fontSize = 11.sp, lineHeight = 13.sp,
+                                    fontWeight = FontWeight.Medium, maxLines = 2,
+                                    textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis) },
+                                colors = NavigationBarItemDefaults.colors(
+                                    selectedIconColor = MareePalette.OnHeroAccent, selectedTextColor = MareePalette.HeroAccent,
+                                    indicatorColor = MareePalette.HeroAccent, unselectedIconColor = MareePalette.NavigationMuted,
+                                    unselectedTextColor = MareePalette.NavigationMuted
+                                )
+                            )
+                        }
                     }
                 }
-                when (tab) {
-                    0 -> HomeTab(
-                        snapshot = snapshot,
-                        active = monitoringEnabled && permissions.readyForMonitoring,
-                        onSetup = { showSetup = true },
-                        onChallenges = { tab = 2 },
-                        onAdd = ::addApplication, onEdit = { editApp = it },
-                        onRemove = { removeApp = it },
-                        onReset = {
-                            if (monitoringEnabled && permissions.readyForMonitoring) resetApp = it
-                            else { showSetup = true }
-                        },
-                        getName = { appLabel(context, it) }
-                    )
-                    1 -> DailyTab(snapshot, onCoach = { tab = 3 }, getName = { appLabel(context, it) }, onAddApp = ::addApplication,
-                        monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
-                        onActivateTracking = { showSetup = true })
-                    2 -> ChallengeTab(snapshot,
-                        onComplete = { index ->
-                            if (store.completeChallenge(index)) {
-                                snapshot = store.readSnapshot(lastReading)
-                                refresh()
-                            }
-                        },
-                        onOffers = { tab = 4 },
-                        onCreateCustom = { title, steps, duration ->
-                            store.createCustomChallenge(title, steps, duration).also { issue ->
-                                if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
-                            }
-                        },
-                        onToggleCustomStep = { id, index, checked ->
-                            store.setCustomChallengeStep(id, index, checked).also { issue ->
-                                if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
-                            }
-                        },
-                        onValidateCustom = { id ->
-                            store.validateCustomChallengeToday(id).also { issue ->
-                                if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
-                            }
-                        },
-                        onDeleteCustom = { id ->
-                            store.deleteCustomChallenge(id).also { issue ->
-                                if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
-                            }
+            ) { inner ->
+                Column(Modifier.fillMaxSize().padding(inner)) {
+                    Row(
+                        Modifier.fillMaxWidth().padding(start = 22.dp, end = 22.dp, top = 16.dp, bottom = 20.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
+                            BrandIcon(40.dp)
+                            Spacer(Modifier.width(12.dp))
+                            Text(stringResource(R.string.app_name), color = Cream, fontSize = 23.sp,
+                                fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.weight(1f))
                         }
-                    )
-                    3 -> CoachTab(snapshot,
-                        monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
-                        getName = { appLabel(context, it) })
-                    else -> MoreTab(
-                        active = monitoringEnabled && permissions.readyForMonitoring,
-                        notificationsGranted = permissions.notificationsGranted,
-                        onSetup = { showSetup = true },
-                        onPause = {
-                            setup.setMonitoringEnabled(false)
-                            monitoringEnabled = false
-                            MonitorService.stop(context)
-                            refresh()
-                        },
-                        onNotifications = ::askNotifications,
-                        onPrivacy = { showPrivacy = true },
-                        plan = snapshot.plan,
-                        onDemoPlan = { plan ->
-                            store.setDemoPlan(plan)
-                            snapshot = store.readSnapshot(lastReading)
-                            refresh()
-                        },
-                        onAccount = { infoMessage = tr("Cette version fonctionne sans compte ; ton suivi reste sur ce téléphone. Un compte Selkie est prévu pour retrouver tes droits d’abonnement, avec un seul téléphone connecté à la fois. Il n’est pas encore actif : il demande un serveur de connexion et une vérification des achats Google Play. Tes points et défis ne sont pas synchronisés.", "This version works without an account; your tracking stays on this phone. A Selkie account is planned to restore subscription access, with only one phone signed in at a time. Accounts are not active yet: they need an authentication server and Google Play purchase verification. Your points and challenges are not synced.") }
-                    )
+                        TextButton(onClick = { openMenuPage(SettingsPage.SUBSCRIPTIONS) }) {
+                            StatusPill(snapshot.plan.displayName)
+                        }
+                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                            Icon(painterResource(R.drawable.ic_menu),
+                                contentDescription = tr("Ouvrir le menu", "Open menu"), tint = Cream)
+                        }
+                    }
+                    val currentPage = settingsPage
+                    if (currentPage != null) {
+                        TextButton(onClick = { settingsPage = null },
+                            modifier = Modifier.padding(horizontal = 12.dp)) {
+                            Text(tr("‹ Retour", "‹ Back"))
+                        }
+                        key(currentPage) {
+                            SettingsPageContent(page = currentPage, snapshot = snapshot,
+                                monitoring = monitoringEnabled && permissions.readyForMonitoring,
+                                notificationsGranted = permissions.notificationsGranted,
+                                onSetup = { showSetup = true }, onStart = { showSetup = true },
+                                onStop = {
+                                    setup.setMonitoringEnabled(false)
+                                    monitoringEnabled = false
+                                    MonitorService.stop(context)
+                                    refresh()
+                                },
+                                onNotifications = ::askNotifications,
+                                onPlan = { plan ->
+                                    store.setDemoPlan(plan)
+                                    snapshot = store.readSnapshot(lastReading)
+                                    refresh()
+                                })
+                        }
+                    } else when (tab) {
+                        0 -> HomeTab(
+                            snapshot = snapshot,
+                            active = monitoringEnabled && permissions.readyForMonitoring,
+                            onSetup = { showSetup = true },
+                            onChallenges = { tab = 2 },
+                            onAdd = ::addApplication, onEdit = { editApp = it },
+                            onRemove = { removeApp = it },
+                            onReset = {
+                                if (monitoringEnabled && permissions.readyForMonitoring) resetApp = it
+                                else { showSetup = true }
+                            },
+                            getName = { appLabel(context, it) }
+                        )
+                        1 -> DailyTab(snapshot, onCoach = { tab = 3 }, getName = { appLabel(context, it) }, onAddApp = ::addApplication,
+                            monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
+                            onActivateTracking = { showSetup = true })
+                        2 -> ChallengeTab(snapshot,
+                            onComplete = { index ->
+                                if (store.completeChallenge(index)) {
+                                    snapshot = store.readSnapshot(lastReading)
+                                    refresh()
+                                }
+                            },
+                            onOffers = { openMenuPage(SettingsPage.SUBSCRIPTIONS) },
+                            onCreateCustom = { title, steps, duration ->
+                                store.createCustomChallenge(title, steps, duration).also { issue ->
+                                    if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
+                                }
+                            },
+                            onToggleCustomStep = { id, index, checked ->
+                                store.setCustomChallengeStep(id, index, checked).also { issue ->
+                                    if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
+                                }
+                            },
+                            onValidateCustom = { id ->
+                                store.validateCustomChallengeToday(id).also { issue ->
+                                    if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
+                                }
+                            },
+                            onDeleteCustom = { id ->
+                                store.deleteCustomChallenge(id).also { issue ->
+                                    if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
+                                }
+                            }
+                        )
+                        3 -> CoachTab(snapshot,
+                            monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
+                            getName = { appLabel(context, it) })
+                    }
                 }
             }
         }
@@ -485,6 +521,7 @@ private fun MareeApp() {
                         storeGeneration++
                         setupComplete = false
                         showPrivacy = false
+                        settingsPage = null
                         showSetup = true
                         showPicker = false
                         pendingAdd = false
@@ -758,46 +795,6 @@ private fun ChallengeTab(
                 }
             }
         }
-        Spacer(Modifier.height(18.dp))
-    }
-}
-
-@Composable
-private fun MoreTab(
-    active: Boolean, notificationsGranted: Boolean, onSetup: () -> Unit, onPause: () -> Unit,
-    onNotifications: () -> Unit, onPrivacy: () -> Unit, plan: PlanType,
-    onDemoPlan: (PlanType) -> Unit, onAccount: () -> Unit
-) {
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())
-        .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
-        ScreenHeading(tr("TES RÉGLAGES", "YOUR SETTINGS"), tr("À ta façon.", "Your way."), tr("Ton suivi, tes données, tes choix.", "Your tracking, your data, your choices."))
-        LanguageSelector()
-        AppearanceSelector()
-        AppCardSurface {
-            SectionLabel(tr("Le suivi", "Tracking"), if (active) tr("Actif", "Active") else tr("En pause", "Paused"))
-            Text(if (active) tr("Les limites de tes applications sont surveillées.", "Your app limits are being monitored.")
-                else tr("Aucune application n’est surveillée ou bloquée.", "No apps are being monitored or blocked."),
-                color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
-            PrimaryAction(if (active) tr("Gérer les autorisations", "Manage permissions") else tr("Activer le suivi", "Turn on tracking"),
-                onClick = onSetup, modifier = Modifier.fillMaxWidth())
-            if (active) TextButton(onClick = onPause) { Text(tr("Mettre le suivi en pause", "Pause tracking")) }
-            if (!notificationsGranted) {
-                HorizontalDivider(color = MareePalette.Outline)
-                TextButton(onClick = onNotifications) { Text(tr("Activer les alertes facultatives", "Turn on optional alerts")) }
-            }
-        }
-        AppCardSurface {
-            Text(tr("Tes données, sous ton contrôle", "Your data, under your control"), fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
-            Text(tr("Ton suivi reste sur ton téléphone. Consulte les informations de confidentialité ou efface tes données.", "Your tracking stays on your phone. Read the privacy information or delete your data."),
-                color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
-            OutlinedButton(onClick = onPrivacy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
-                shape = RoundedCornerShape(14.dp)) { Text(tr("Confidentialité et données", "Privacy and data")) }
-            TextButton(onClick = onAccount) { Text(tr("Compte et changement de téléphone", "Account and switching phones"), fontSize = 13.sp) }
-        }
-        Spacer(Modifier.height(4.dp))
-        MembershipSection(plan, onDemoPlan)
-        Text("Selkie · ${BuildConfig.VERSION_NAME}", color = Muted, fontSize = 12.sp,
-            modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
         Spacer(Modifier.height(18.dp))
     }
 }

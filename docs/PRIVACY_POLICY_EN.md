@@ -4,7 +4,7 @@ Information updated on **12 October 2026**. This policy covers local tracking an
 
 Selkie helps you reduce your screen time. In this version, tracking data stays on your device and tracking does not require an account. The local Coach uses prepared advice, without an account or sending data over the Internet. You can read this information without granting tracking access.
 
-The policy is available offline in the app, before granting permissions and from settings. Viewing it does not start tracking, and there is no mandatory acceptance checkbox. French and English display the same policy; selecting English does not enable a new online service.
+The policy is available offline in the app, before granting permissions and from **the ☰ menu at the top → Privacy and data**. Viewing it does not start tracking, and there is no mandatory acceptance checkbox. French and English display the same policy; selecting English does not enable a new online service.
 
 ## Who is responsible?
 

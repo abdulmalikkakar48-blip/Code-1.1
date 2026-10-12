@@ -1,5 +1,11 @@
 # Selkie : version de travail retenue le 12 octobre 2026
 
+## Version de travail 0.10.1
+
+La référence utilise un menu ☰ en haut à droite : Réglages (Langue, Apparence, Accès Android), Offres (Abonnements), Informations (Règles de Selkie, Confidentialité et données). Chaque entrée ouvre sa page ; la barre du bas conserve Accueil, Quotidien, Défis et Coach. Le badge et l’accès Premium des défis ouvrent Abonnements. L’aide FR/EN utilise ces chemins. Le suivi, les points, les défis, le coach et les prix sans réduction restent conservés.
+
+APK et sources : `downloads/Selkie-Android-0.10.1.apk` et `downloads/Selkie-Android-0.10.1-source.zip`, versionCode 16, signature de test identique à 0.10.0. [Validation 0.10.1](../downloads/VALIDATION-0.10.1.md), [Menu](MENU.md). Aucun paiement ou compte serveur n’est activé. Les sections suivantes sont les archives.
+
 ## Version de travail 0.10.0
 
 Le Coach possède une bibliothèque de 1 152 questions/réponses par langue, composée de 48 situations × 24 types de conseils et répartie en huit rubriques. Question en haut, réponse séparée dessous, recherche et pagination. Le mode Nuit noir et bleu est sélectionnable dans Plus → Apparence (Clair, Nuit, Comme le téléphone). Le français, l’anglais, le logo, les règles et les prix sans réduction restent conservés.

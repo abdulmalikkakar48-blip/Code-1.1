@@ -29,9 +29,9 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
     ),
     help(
         SelkieHelpSection.DISCOVER, "navigation", "Où trouver chaque rubrique ?",
-        listOf("navigation", "rubriques", "onglets", "ou trouver", "les icones", "boutons en bas", "accueil", "menu plus", "ecrans de l application"),
-        "Les cinq onglets sont en bas : Accueil pour tes applications et tes points ; Quotidien pour une idée de pause et ton bilan ; Défis pour valider les journées ; " +
-            "Coach pour les conseils et l’aide ; Plus pour les autorisations, la pause du suivi, la confidentialité, les informations de compte et les offres."
+        listOf("navigation", "rubriques", "onglets", "ou trouver", "les icones", "boutons en bas", "accueil", "menu plus", "menu en haut", "menu hamburger", "trois traits", "ecrans de l application"),
+        "Les quatre onglets sont en bas : Accueil pour tes applications et tes points ; Quotidien pour une idée de pause et ton bilan ; Défis pour valider les journées ; Coach pour les conseils et l’aide. " +
+            "Le menu ☰ en haut regroupe Langue, Apparence, Accès Android, Abonnements, Règles de Selkie et Confidentialité et données."
     ),
     help(
         SelkieHelpSection.DISCOVER, "daily", "Que trouve-t-on dans Quotidien ?",
@@ -86,24 +86,24 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.TRACKING, "permissions", "Quelles autorisations faut-il ?",
         listOf("autorisation", "autorisations", "permission", "permissions", "acces utilisation", "acces aux donnees d utilisation", "superposition", "par dessus", "apparaitre au dessus"),
         "L’accès aux données d’utilisation sert à mesurer les durées et reconnaître l’application ouverte ; l’affichage par-dessus les autres applications sert à montrer l’écran de pause. " +
-            "Ces deux accès sont nécessaires pour activer le suivi. Choisis-les sur l’écran d’accueil initial ou dans Plus → Activer le suivi / Gérer les autorisations. Tu peux découvrir l’application, utiliser les défis et le Coach sans activer le suivi."
+            "Ces deux accès sont nécessaires pour activer le suivi. Choisis-les sur l’écran d’accueil initial ou dans le menu ☰ → Accès Android → Activer le suivi / Gérer les autorisations. Tu peux découvrir l’application, utiliser les défis et le Coach sans activer le suivi."
     ),
     help(
         SelkieHelpSection.TRACKING, "notifications_permission", "Les alertes sont-elles obligatoires ?",
         listOf("alertes de selkie", "notifications de selkie", "autoriser les notifications", "refuser les notifications", "alertes facultatives", "avant la limite", "80 pour cent", "prevenir avant la limite"),
         "Les notifications sont facultatives. Avec elles, Selkie peut prévenir lorsqu’environ 80 % de la limite est utilisé et rendre visible son service de suivi. " +
-            "Sans elles, le suivi et l’écran de pause peuvent fonctionner avec les deux accès nécessaires. Dans Plus, choisis Activer les alertes facultatives, ou règle leur visibilité dans les paramètres Android."
+            "Sans elles, le suivi et l’écran de pause peuvent fonctionner avec les deux accès nécessaires. Dans le menu ☰ → Accès Android, choisis Activer les alertes facultatives, ou règle leur visibilité dans les paramètres Android."
     ),
     help(
         SelkieHelpSection.TRACKING, "battery", "Le suivi s’arrête ou consomme de la batterie",
         listOf("batterie", "economie d energie", "economiseur de batterie", "suivi s arrete", "suivi ne fonctionne pas", "blocage ne marche pas", "suivi en arriere plan", "optimisation de batterie"),
-        "Vérifie dans Plus que le suivi est actif et que ses deux accès Android sont accordés. Certains téléphones limitent les applications en arrière-plan : dans Paramètres → Applications → Selkie → Batterie, " +
-            "vérifie les restrictions selon ton modèle, puis rouvre Selkie. Un service de suivi utilise des ressources ; sa consommation et sa continuité dépendent du téléphone. Tu peux le mettre en pause depuis Plus."
+        "Vérifie dans le menu ☰ → Accès Android que le suivi est actif et que ses deux accès Android sont accordés. Certains téléphones limitent les applications en arrière-plan : dans Paramètres → Applications → Selkie → Batterie, " +
+            "vérifie les restrictions selon ton modèle, puis rouvre Selkie. Un service de suivi utilise des ressources ; sa consommation et sa continuité dépendent du téléphone. Tu peux le mettre en pause dans le menu ☰ → Accès Android."
     ),
     help(
         SelkieHelpSection.TRACKING, "pause_tracking", "Mettre le suivi en pause ou le reprendre",
         listOf("mettre le suivi en pause", "pause du suivi", "arreter le suivi", "desactiver le suivi", "reprendre le suivi", "activer le suivi", "suivi en pause"),
-        "Dans Plus, choisis Mettre le suivi en pause : la surveillance et les écrans de pause s’arrêtent, mais tes applications, limites et verrous enregistrés restent conservés. " +
+        "Dans le menu ☰ → Accès Android, choisis Mettre le suivi en pause : la surveillance et les écrans de pause s’arrêtent, mais tes applications, limites et verrous enregistrés restent conservés. " +
             "Pour reprendre, choisis Activer le suivi et vérifie les accès Android. À la reprise, Android peut fournir l’usage de la journée : une pause du service ne garantit pas que toutes ces minutes seront exclues des compteurs."
     ),
     help(
@@ -121,7 +121,7 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
     help(
         SelkieHelpSection.POINTS, "points", "À quoi servent mes points ?",
         listOf("points", "solde", "capital discipline", "points d honneur", "combien de points", "regles des points"),
-        "Tu commences avec 100 points. Ils suivent ta progression et les règles de Selkie : une réinitialisation coûte 10 points ; une réouverture détectée d’une application verrouillée coûte 5 points. " +
+        "Consulte le menu ☰ → Règles de Selkie pour retrouver les règles. Tu commences avec 100 points. Ils suivent ta progression et les règles de Selkie : une réinitialisation coûte 10 points ; une réouverture détectée d’une application verrouillée coûte 5 points. " +
             "Tu peux en gagner avec le bonus de discipline et les défis. Le solde ne descend pas sous zéro ; à 0 point, ajouter une application ou modifier une limite est bloqué pour toutes les offres. Les points ne sont pas de l’argent."
     ),
     help(
@@ -175,7 +175,7 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
     help(
         SelkieHelpSection.OFFERS, "premium", "Que contient Premium ?",
         listOf("premium", "offres", "offre gratuite", "gratuit", "difference des offres", "combien d applications", "limite d applications", "prix premium", "abonnement", "abonnements", "prix des offres", "prix des abonnements"),
-        "Gratuit permet 10 applications suivies. Premium est prévu à " +
+        "Les offres sont dans le menu ☰ → Abonnements. Gratuit permet 10 applications suivies. Premium est prévu à " +
             "${PlanType.PREMIUM.monthlyPriceEuros} €/mois ou ${PlanType.PREMIUM.annualPriceEuros} €/an, avec 50 applications et les défis personnalisés. " +
             "Ultra est prévu à ${PlanType.ULTRA.monthlyPriceEuros} €/mois ou ${PlanType.ULTRA.annualPriceEuros} €/an, sans plafond commercial sur les applications compatibles. " +
             "Le Coach hors ligne et les défis proposés sont inclus dans toutes les offres. Le choix d’offre ici est une démonstration locale : aucun abonnement ni prélèvement. Les règles de points restent les mêmes, y compris à 0 point."
@@ -241,21 +241,21 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
     help(
         SelkieHelpSection.PRIVACY, "privacy", "Où sont mes données et la confidentialité ?",
         listOf("confidentialite", "politique de confidentialite", "donnees personnelles", "mes donnees", "rgpd", "cnil", "responsable", "nom et prenom", "nom prenom", "mon vrai nom", "vie privee", "messages lus"),
-        "Lis la politique dans Plus → Confidentialité et données. Tes applications suivies, limites, points et défis restent sur le téléphone ; le Coach local ne transmet pas tes questions à l’éditeur. " +
+        "Lis la politique dans le menu ☰ → Confidentialité et données. Tes applications suivies, limites, points et défis restent sur le téléphone ; le Coach local ne transmet pas tes questions à l’éditeur. " +
             "Selkie ne lit ni tes messages, ni tes photos, ni le contenu de l’écran. La politique doit permettre d’identifier le responsable réel et de le contacter : ici, " +
             "${PrivacyIdentity.controllerName}, ${PrivacyIdentity.contactEmail}. Elle décrit cette version ; l’ouverture de comptes ou paiements nécessitera une mise à jour."
     ),
     help(
         SelkieHelpSection.PRIVACY, "delete_data", "Comment effacer mes données ?",
         listOf("effacer mes donnees", "effacer toutes mes donnees", "supprimer mes donnees", "supprimer toutes mes donnees", "effacement", "tout effacer", "repartir de zero", "suppression de donnees", "effacer mon compte", "supprimer mon compte"),
-        "Dans Plus → Confidentialité et données → Effacer mes données, confirme pour arrêter le suivi et supprimer les réglages, points, défis, choix locaux et questions du Coach sauvegardées. " +
+        "Dans le menu ☰ → Confidentialité et données → Effacer mes données, confirme pour arrêter le suivi et supprimer les réglages, points, défis, choix locaux et questions du Coach sauvegardées. " +
             "C’est irréversible ; les points reviennent à leur valeur initiale à la prochaine utilisation. Les statistiques et autorisations Android restent inchangées. " +
             "Aucun compte serveur actif n’est supprimé ici, et cet effacement n’annulerait pas un futur abonnement Google Play."
     ),
     help(
         SelkieHelpSection.PRIVACY, "contact", "Comment contacter Selkie ?",
         listOf("contact", "contacter", "email", "e mail", "courriel", "support", "assistance", "ecrire au developpeur", "adresse mail", "signaler un probleme"),
-        "Pour une question ou un problème, écris à ${PrivacyIdentity.contactEmail}. Le bouton Contacter par e-mail se trouve dans Plus → Confidentialité et données. " +
+        "Pour une question ou un problème, écris à ${PrivacyIdentity.contactEmail}. Le bouton Contacter par e-mail se trouve dans le menu ☰ → Confidentialité et données. " +
             "Explique le problème et, si utile, la version de Selkie et ton modèle de téléphone. Évite d’envoyer des mots de passe, coordonnées bancaires ou captures contenant des informations privées. " +
             "Les phrases du Coach ne sont pas transmises automatiquement à cette adresse."
     )

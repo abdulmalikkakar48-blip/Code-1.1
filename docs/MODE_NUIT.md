@@ -1,6 +1,6 @@
-# Apparence — Selkie 0.10.0
+# Apparence — Selkie 0.10.1
 
-Dans **Plus → Apparence**, choisir **Clair**, **Nuit** ou **Comme le téléphone**. Le clair reste le choix initial pour conserver le design existant. Nuit utilise un fond presque noir, des surfaces bleu marine et des accents bleus clairs. Comme le téléphone suit le réglage d’apparence d’Android.
+Dans **le menu ☰ en haut → Apparence**, choisir **Clair**, **Nuit** ou **Comme le téléphone**. Le clair reste le choix initial pour conserver le design existant. Nuit utilise un fond presque noir, des surfaces bleu marine et des accents bleus clairs. Comme le téléphone suit le réglage d’apparence d’Android.
 
 Les textes, cartes, menus, dialogues, boutons, navigation et barres système utilisent des couleurs cohérentes et adaptées à l’apparence. Le logo garde son fond existant pour rester lisible ; l’écran rouge de blocage conserve son rôle. Le changement de thème conserve les points, les limites, les validations et les abonnements de démonstration. Il n’active aucun suivi, compte ou paiement.
 
