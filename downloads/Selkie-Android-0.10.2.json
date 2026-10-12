@@ -1,0 +1,138 @@
+{
+  "versionName": "0.10.2",
+  "versionCode": 17,
+  "applicationId": "com.maree.app",
+  "bytes": 24065850,
+  "sha256": "993f1a54499c3cc29dc71d05b2dda29cbb468461a23c99ef363b98c885675022",
+  "minSdkVersion": 29,
+  "targetSdkVersion": 34,
+  "tests": {
+    "tests": 97,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Fatal": 0,
+    "Error": 0,
+    "Warning": 3,
+    "Information": 1
+  },
+  "supportedLanguages": [
+    "fr",
+    "en"
+  ],
+  "preparedCoachQuestionsPerLanguage": 1152,
+  "preparedCoachContexts": 48,
+  "preparedCoachIntents": 24,
+  "preparedCoachSections": 8,
+  "preparedCoachContentMethod": "Curated context texts combined with 24 distinct advice templates; not a generative model",
+  "offlineCoachTopicsPerLanguage": 67,
+  "offlineCoachRepliesPerLanguage": 125,
+  "appHelpQuestionsPerLanguage": 38,
+  "themeModes": [
+    "light",
+    "dark",
+    "system"
+  ],
+  "defaultThemeMode": "light",
+  "annualDiscount": false,
+  "plannedPricesEuros": {
+    "Premium": {
+      "monthly": 10,
+      "annual": 120
+    },
+    "Ultra": {
+      "monthly": 20,
+      "annual": 240
+    }
+  },
+  "onlineCoachConfigured": false,
+  "accountServerConfigured": false,
+  "playBillingEnabled": false,
+  "certificateSha256": "9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50",
+  "signaturePolicy": "Existing development certificate retained; test APK, not a Play release",
+  "primaryTabs": [
+    "home",
+    "daily",
+    "challenges",
+    "coach"
+  ],
+  "menuDestinations": [
+    "language",
+    "appearance",
+    "androidAccess",
+    "subscriptions",
+    "rules",
+    "privacy"
+  ],
+  "menuPlacement": "Top right hamburger icon",
+  "sourceCommit": "eecdba6c425ba161375db07c41f07a92234ed529",
+  "sourceArchive": {
+    "file": "Selkie-Android-0.10.2-source.zip",
+    "bytes": 654493,
+    "sha256": "796f3acb79384b930fe8a14bc05687b90544a91ac171ae906d6ea7453f748330",
+    "files": 99
+  },
+  "emulatorChecks": {
+    "androidApi": 34,
+    "screenPixels": [
+      480,
+      800
+    ],
+    "updateInstalled": true,
+    "dataAndPreferencesRetainedObserved": true,
+    "headerMenuButtonObserved": true,
+    "fourPrimaryTabsObserved": true,
+    "menuOpenedObserved": true,
+    "privacyFromMenuObserved": true,
+    "nightPaletteObserved": true,
+    "geometryHomeObserved": true,
+    "completeAppFlowVerified": false,
+    "physicalPhoneTested": false,
+    "systemAnimationSettingRestored": true,
+    "notes": "Final dotted home, menu, privacy destination and movement observed on Android 14 emulator. Language switching observations for 0.10.1 remain in that version’s validation; physical phone and complete app flow not tested."
+  },
+  "geometricBackground": {
+    "shapes": 4,
+    "loopSeconds": 24,
+    "maxUpdatesPerSecond": 20,
+    "drawOnlyStateUpdates": true,
+    "staticWhenSystemAnimationsDisabled": true,
+    "pausesOutsideResumedLifecycle": true,
+    "storesMovementData": false,
+    "emulatorMotionCheck": {
+      "changedPixelsAnimationsEnabled": 1971,
+      "changedPixelsAnimationsDisabled": 0,
+      "changedPixelsAfterReenabling": 2036,
+      "animationsMoveObserved": true,
+      "reducedMotionStaticObserved": true,
+      "motionResumesObserved": true
+    },
+    "rendering": "Dotted outlines with a travelling sinusoidal ripple and gentle centre drift",
+    "particles": 144,
+    "contours": {
+      "largeCircle": 48,
+      "smallCircle": 32,
+      "roundedTriangle": 36,
+      "diamond": 28
+    },
+    "waveAmplitudesDp": [
+      5.5,
+      4,
+      3.5,
+      3
+    ],
+    "maxCentreDriftDp": 6,
+    "opacity": {
+      "light": {
+        "primary": 0.1,
+        "secondary": 0.08
+      },
+      "night": {
+        "primary": 0.18,
+        "secondary": 0.14
+      }
+    }
+  }
+}
