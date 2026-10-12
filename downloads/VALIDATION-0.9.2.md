@@ -24,3 +24,10 @@ Français / English est disponible dès l’accueil et dans Plus → Langue / La
 Le moteur reconnaît les expressions prévues des deux langues et répond dans la langue choisie. Les conversations en mémoire sont recréées à la bascule. Les phrases sauvegardées sur option, textes personnalisés et anciens avertissements restent dans leur langue d’origine. Le suivi actualise sa notification persistante sans être redémarré.
 
 **Aucun paiement, compte serveur, restauration d’achat ou dialogue IA distant n’est activé.** Les paramètres publics Supabase compilés sont vides. Le futur serveur IA vise encore des réponses françaises ; cette version ajoute l’anglais au Coach local, sans prétendre un service distant bilingue. Le contact, le phoque, les couleurs et les règles des points sont conservés. Voir [les langues](../docs/LANGUES.md) et [la politique anglaise](../docs/PRIVACY_POLICY_EN.md).
+
+## Sources conservées
+
+- Commit exact du code : `067f8f1bb62e540e27b52d9c2ccf738ac81ff014`.
+- Archive : `Selkie-Android-0.9.2-source.zip`, 608843 octets, 87 fichiers.
+- SHA-256 : `a844ff20dd8c725ba3fc8e684c644cd79d0014350c226f05a01a4714b5893760`.
+- CRC ZIP et égalité de chaque fichier avec le commit vérifiés ; script Gradle exécutable conservé. Aucun APK, cache de compilation ou fichier de signature privée dans les sources.
