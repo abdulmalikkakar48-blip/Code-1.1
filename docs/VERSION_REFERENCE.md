@@ -1,5 +1,9 @@
 # Selkie : version de travail retenue le 12 octobre 2026
 
+## Préparation serveur : candidat Llama 3.3 70B
+
+Groq propose désormais le candidat configurable `llama-3.3-70b-versatile` par défaut dans le code serveur ; le précédent modèle 8B reste un choix explicite. Aucune connexion ni gratuité illimitée n’est annoncée. Voir [l’option IA et ses vérifications nécessaires](IA_AVEC_QUOTA_GRATUIT.md). Aucun code Android n’a changé : l’APK 0.10.4 et son archive exacte restent ceux validés au commit source indiqué dans leur manifeste. Le code serveur actuel est celui de la branche ; les artefacts 0.10.4 conservent leur historique exact.
+
 ## Version de travail 0.10.4
 
 Le mode Clair utilise désormais 48 étoiles, losanges et anneaux animés, tandis que Nuit garde les vagues de points. La bibliothèque Coach est répartie par offre : Gratuit 1 152, Premium 5 760, Ultra 10 368 questions/réponses préparées par langue. La saisie et les FAQ restent gratuites. La page de résiliation ne promet aucun remboursement automatique, mais préserve les droits obligatoires.

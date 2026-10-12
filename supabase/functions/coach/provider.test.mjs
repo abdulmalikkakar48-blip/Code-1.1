@@ -34,9 +34,13 @@ test('Groq explicitly selects its own server key and configurable model', () => 
     model: 'meta-llama/llama-4-scout-17b-16e-instruct' });
   assert.deepEqual(names, ['COACH_AI_PROVIDER', 'GROQ_API_KEY', 'GROQ_MODEL']);
   assert.equal(resolveCoachProvider(read({ COACH_AI_PROVIDER: 'groq', GROQ_API_KEY: groqFixture })).model,
-    'llama-3.1-8b-instant');
+    'llama-3.3-70b-versatile');
   assert.equal(resolveCoachProvider(read({ OPENAI_API_KEY: openaiFixture, OPENAI_MODEL: 'gpt-4.1' })).model,
     'gpt-4.1');
+  const smallModel = resolveCoachProvider(read({ COACH_AI_PROVIDER: 'groq', GROQ_API_KEY: groqFixture,
+    GROQ_MODEL: 'llama-3.1-8b-instant' }));
+  assert.equal(JSON.parse(buildCoachProviderRequest(smallModel, input).init.body).model,
+    'llama-3.1-8b-instant');
 });
 
 test('invalid selection or missing selected credentials fails without a fallback', () => {
@@ -102,7 +106,7 @@ test('Groq uses the fixed chat endpoint and bounded non-streaming conversation',
   assert.equal(request.init.method, 'POST');
   assert.equal(request.init.headers.Authorization, `Bearer ${groqFixture}`);
   assert.deepEqual(Object.keys(body).sort(), ['max_completion_tokens', 'messages', 'model', 'stream']);
-  assert.equal(body.model, 'llama-3.1-8b-instant');
+  assert.equal(body.model, 'llama-3.3-70b-versatile');
   assert.equal(body.max_completion_tokens, 220);
   assert.equal(body.stream, false);
   assert.deepEqual(body.messages, [{ role: 'system', content: openaiBody.instructions }, ...openaiBody.input]);

@@ -26,7 +26,7 @@ L’activation peut se faire depuis les tableaux de bord ou avec la CLI Supabase
 | Fournisseur | Sélection serveur | Secret serveur | Modèle configurable | Défaut du code |
 | --- | --- | --- | --- | --- |
 | OpenAI | `COACH_AI_PROVIDER=openai` | `OPENAI_API_KEY` | `OPENAI_MODEL` | `gpt-4.1-mini` |
-| Groq | `COACH_AI_PROVIDER=groq` | `GROQ_API_KEY` | `GROQ_MODEL` | `llama-3.1-8b-instant` |
+| Groq | `COACH_AI_PROVIDER=groq` | `GROQ_API_KEY` | `GROQ_MODEL` | `llama-3.3-70b-versatile` |
 
 Une variable `COACH_AI_PROVIDER` absente conserve OpenAI pour les configurations existantes. Une valeur inconnue, une clé sélectionnée absente ou un modèle mal formé rendent le serveur non configuré, avant tout débit du quota Selkie. Les modèles par défaut ne garantissent pas leur disponibilité actuelle : vérifier le catalogue et les droits du compte avant activation. Les URL sont fixées dans le code ; aucune URL de fournisseur ne peut être fournie par le téléphone ou une variable de configuration. Aucun basculement automatique vers OpenAI n’a lieu si Groq échoue.
 

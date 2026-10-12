@@ -22,7 +22,7 @@ export function resolveCoachProvider(
   if (!apiKey || /\s/.test(apiKey)) return null;
   const configuredModel = readEnv(provider === "groq" ? "GROQ_MODEL" : "OPENAI_MODEL");
   const model = configuredModel === undefined
-    ? provider === "groq" ? "llama-3.1-8b-instant" : "gpt-4.1-mini"
+    ? provider === "groq" ? "llama-3.3-70b-versatile" : "gpt-4.1-mini"
     : configuredModel.trim();
   if (!/^[a-zA-Z0-9][a-zA-Z0-9_.:/-]{0,127}$/.test(model)) return null;
   return { provider, apiKey, model };

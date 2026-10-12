@@ -4,6 +4,14 @@ Selkie dispose d’un adaptateur serveur optionnel pour **Groq**, en plus d’Op
 
 L’adaptateur est prêt à configurer, mais **aucun compte, clé, déploiement ni appel réel n’a été réalisé**. Groq est une option à évaluer, pas un fournisseur définitivement choisi. L’existence d’une offre gratuite ne garantit ni une IA gratuite illimitée, ni la disponibilité permanente d’un modèle, ni l’absence de frais d’infrastructure.
 
+## Choix préparé pour le coach
+
+Le modèle Groq par défaut est maintenant `llama-3.3-70b-versatile`, candidat pour des réponses plus nuancées que le précédent modèle 8B. Cette préférence n’est pas le résultat d’un essai comparatif en direct : aucun compte ni clé n’est configuré. Le modèle plus petit `llama-3.1-8b-instant` reste sélectionnable explicitement avec `GROQ_MODEL`. Changer de modèle ne change pas le nom du fournisseur annoncé dans le consentement. Aucun basculement automatique vers un modèle ou fournisseur payant n’est ajouté.
+
+Groq (avec un Q) est le service qui exécute ces modèles ; Grok (avec un K) est une autre IA, de xAI. La gratuité d’un chatbot pour un particulier ne signifie pas que son API est gratuite pour une application. Gemini et d’autres services peuvent également proposer des quotas selon leur offre, mais leur disponibilité, leurs conditions applicables en France, le traitement des données et leurs frais doivent être vérifiés avant de les retenir. Il n’y a pas de fournisseur « meilleur et gratuit pour toujours » établi dans cette préparation.
+
+Avant activation, confirmer le modèle et son quota dans le compte puis comparer ses réponses sur des questions françaises et anglaises représentatives : conseils concrets, explication des règles de Selkie et limites médicales. Comparer aussi la latence, les erreurs, les limites de tokens et les conditions de traitement des données. Le nombre de paramètres ne constitue pas une garantie de qualité, de sûreté ou de gratuité.
+
 ## Vérifier l’offre avant activation
 
 Avec le titulaire autorisé du compte, consulter les pages officielles et les conditions du compte :
@@ -12,7 +20,7 @@ Avec le titulaire autorisé du compte, consulter les pages officielles et les co
 - [Limites de requêtes et de tokens](https://console.groq.com/docs/rate-limits) : relever les quotas réellement appliqués au compte et au modèle.
 - [Traitement des données](https://console.groq.com/docs/your-data) : vérifier conservation, utilisation, contrats et transferts.
 
-Ces pages n’ont pas pu être consultées depuis cet environnement le 12 octobre 2026, car ce domaine est bloqué par sa politique réseau. Les limites, conditions et disponibilités actuelles ne sont donc pas certifiées par ce guide. Le nom `llama-3.1-8b-instant` est le défaut configurable du code et doit être confirmé avant activation ; le changer via `GROQ_MODEL` si nécessaire.
+Ces pages n’ont pas pu être consultées depuis cet environnement le 12 octobre 2026, car ce domaine est bloqué par sa politique réseau. Les limites, conditions et disponibilités actuelles ne sont donc pas certifiées par ce guide. Le nom `llama-3.3-70b-versatile` est le défaut configurable du code et doit être confirmé avant activation ; le changer via `GROQ_MODEL` si nécessaire.
 
 ## Configuration uniquement sur le serveur
 

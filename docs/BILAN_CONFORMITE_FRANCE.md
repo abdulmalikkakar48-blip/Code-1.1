@@ -4,13 +4,15 @@ Bilan technique et documentaire du 12 octobre 2026. Périmètre : APK de test gr
 
 La capture est une liste de contrôle générale. Elle ne constitue pas une source de droit et ses 19 points ne sont pas 19 obligations identiques pour chaque application française. Les règles dépendent des traitements, du public, du statut de l’éditeur, du service et de la présence réelle de ventes. Une application gratuite n’est pas automatiquement exemptée des règles sur les données, les pratiques trompeuses ou les droits d’auteur.
 
+La préparation serveur a été réexaminée après le choix d’un candidat Llama 3.3 70B via Groq. Ce changement n’active aucune IA et ne transmet aucune donnée : le compte, la clé et le serveur restent non configurés. Le périmètre de l’APK local 0.10.4 et le décompte ci-dessous restent identiques. Les conditions des fournisseurs et les textes officiels actuels restent à vérifier ; ce bilan n’est pas une validation d’une future version connectée.
+
 ## Résultat pour le prototype corrigé
 
 **9 points en place, 6 à compléter ou valider, 4 hors du périmètre actuel.** « En place » signifie un élément ou contrôle identifié dans cette version, avec les limites précisées ci-dessous ; cela ne certifie pas tous les écrans ou une publication commerciale. Les résultats de compilation et les tests effectués sont dans [la validation de cette version](../downloads/VALIDATION-0.10.4.md).
 
 | Nº | Point de la capture | État | Preuve, portée et suite |
 | --- | --- | --- | --- |
-| 1 | Check colour contrast | En place | Tests des couples de texte ≥4,5:1 et nouveau rôle de contours de contrôle ≥3:1 ; points d’eau limités pour préserver les petits textes. La revue de tous les rendus et grandes tailles de texte reste incluse dans le contrôle d’accessibilité. |
+| 1 | Check colour contrast | En place | Tests des couples de texte ≥4,5:1 et nouveau rôle de contours de contrôle ≥3:1 ; vagues nocturnes et formes claires limitées pour préserver les petits textes. La revue de tous les rendus et grandes tailles de texte reste incluse dans le contrôle d’accessibilité. |
 | 2 | Alt text on images | En place | Équivalent natif : boutons icônes nommés ; logo décoratif accompagné du nom Selkie ; icônes d’applications accompagnées de leurs noms. Une image décorative n’a pas besoin d’une annonce répétée. |
 | 3 | Refund policy | Hors périmètre actuel | Aucun paiement ni abonnement réel. Une page Abonnements et résiliation explique les futures demandes, distingue résiliation et remboursement sans promettre de remboursement automatique, et rappelle les droits de rétractation sous conditions. Elle devra être adaptée au vrai contrat avant vente. |
 | 4 | Privacy policy page | À compléter ou valider | Politique FR/EN accessible avant le suivi ; données, finalités, bases, conservation, droits et contact décrits, export et effacement disponibles. Restent le responsable public définitif, la messagerie/transferts, le public mineur et l’adresse publique de politique pour Play. |
