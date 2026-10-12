@@ -16,3 +16,10 @@ L’année coûte douze mensualités : Premium 10 €/mois ou 120 €/an ; Ultra
 Aucun essai de cette version sur téléphone ou émulateur n’a été effectué. L’installation et la présentation des deux durées et langues restent à essayer sur le Samsung.
 
 Les langues, le suivi, les points, les défis et le design restent conservés. Aucun paiement réel ni compte serveur n’est activé ; les essais d’offres restent gratuits. Voir [les offres actuelles](../docs/ABONNEMENTS_ET_COMPTES.md).
+
+## Sources conservées
+
+- Commit exact du code : `87e6b479edda685c6e91e2653eb99eeab7607092`.
+- Archive : `Selkie-Android-0.9.3-source.zip`, 608945 octets, 87 fichiers.
+- SHA-256 : `9e351209bdadd2ca5d27f9041867e7baf80a3256b631da11e7c9973fcdb7606d`.
+- CRC ZIP et égalité de chaque fichier avec le commit vérifiés ; script Gradle exécutable conservé. Aucun APK, cache de compilation ou fichier de signature privée dans les sources.
