@@ -2,7 +2,7 @@
 
 ## Version de travail 0.10.1
 
-La référence utilise un menu ☰ en haut à droite : Réglages (Langue, Apparence, Accès Android), Offres (Abonnements), Informations (Règles de Selkie, Confidentialité et données). Chaque entrée ouvre sa page ; la barre du bas conserve Accueil, Quotidien, Défis et Coach. Le badge et l’accès Premium des défis ouvrent Abonnements. L’aide FR/EN utilise ces chemins. Le suivi, les points, les défis, le coach et les prix sans réduction restent conservés.
+La référence utilise un menu ☰ en haut à droite : Réglages (Langue, Apparence, Accès Android), Offres (Abonnements), Informations (Règles de Selkie, Confidentialité et données). Chaque entrée ouvre sa page ; la barre du bas conserve Accueil, Quotidien, Défis et Coach. Le badge et l’accès Premium des défis ouvrent Abonnements. L’aide FR/EN utilise ces chemins. Le suivi, les points, les défis, le coach et les prix sans réduction restent conservés. Le fond ajoute des formes géométriques aux mouvements lents, adaptées au thème et au réglage Android des animations.
 
 APK et sources : `downloads/Selkie-Android-0.10.1.apk` et `downloads/Selkie-Android-0.10.1-source.zip`, versionCode 16, signature de test identique à 0.10.0. [Validation 0.10.1](../downloads/VALIDATION-0.10.1.md), [Menu](MENU.md). Aucun paiement ou compte serveur n’est activé. Les sections suivantes sont les archives.
 

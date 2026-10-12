@@ -16,3 +16,5 @@ La barre du bas contient Accueil, Quotidien, Défis et Coach. Choisir un onglet 
 La confidentialité garde son écran autonome et son retour, y compris depuis l’accueil des autorisations. L’effacement demande la confirmation existante, arrête le suivi et revient à l’accueil initial. L’activation du suivi repasse par les explications et les autorisations ; le menu ne contourne pas leur contrôle.
 
 Les titres et pages suivent la langue et l’apparence choisies. Les IDs des pages restent les mêmes entre les langues. Les prix ne changent pas et aucune remise annuelle, vente ou connexion serveur n’est ajoutée. Les offres restent des démonstrations locales.
+
+Les écrans principaux et les pages des réglages utilisent un fond géométrique discret. Il reste derrière le contenu et les cartes ; la politique, l’accueil des autorisations et l’écran rouge gardent leur présentation lisible.

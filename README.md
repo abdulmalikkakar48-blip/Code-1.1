@@ -1,14 +1,14 @@
 # Selkie — application Android de réduction du temps d'écran
 
-## Version 0.10.1 — menu en haut de l’application
+## Version 0.10.1 — menu organisé et fond géométrique
 
-Le bouton **☰ en haut à droite** ouvre un menu organisé : **Réglages** (Langue, Apparence, Accès Android), **Offres** (Abonnements) et **Informations** (Règles de Selkie, Confidentialité et données). Chaque choix ouvre une page dédiée ; les boutons Retour et les quatre onglets du bas permettent de revenir à l’utilisation quotidienne. Le badge de l’offre et l’accès Premium depuis Défis ouvrent directement Abonnements.
+Le bouton **☰ en haut à droite** ouvre un menu organisé : **Réglages** (Langue, Apparence, Accès Android), **Offres** (Abonnements) et **Informations** (Règles de Selkie, Confidentialité et données). Chaque choix ouvre une page dédiée ; les boutons Retour et les quatre onglets du bas permettent de revenir à l’utilisation quotidienne. Le badge de l’offre et l’accès Premium depuis Défis ouvrent directement Abonnements. Des cercles, un triangle et un losange se déplacent doucement en arrière-plan. Les couleurs suivent le thème ; les cartes restent opaques et les réglages Android de suppression des animations sont respectés.
 
 La barre du bas contient **Accueil, Quotidien, Défis et Coach**. Le coach hors ligne, ses 1 152 questions par langue, les deux cartes question/réponse, le mode Nuit, les points, les données et les prix sans réduction restent conservés. La politique complète et l’effacement sont accessibles dans Confidentialité et données. Le résumé initial des autorisations conserve aussi son lien de confidentialité.
 
 [Page de l’APK Selkie 0.10.1 — accès GitHub requis](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.10.1.apk) · [Sources exactes](downloads/Selkie-Android-0.10.1-source.zip) · [Validation](downloads/VALIDATION-0.10.1.md) · [Menu](docs/MENU.md).
 
-**English:** Tap **☰ at the top right** for Settings (Language, Appearance, Android access), Plans (Subscriptions) and Information (Selkie rules, Privacy and data). Home, Daily, Challenges and Coach stay in the bottom bar. Accounts and real purchases remain inactive in this test APK.
+**English:** Tap **☰ at the top right** for Settings (Language, Appearance, Android access), Plans (Subscriptions) and Information (Selkie rules, Privacy and data). Home, Daily, Challenges and Coach stay in the bottom bar. Soft geometric shapes drift behind the screens, respecting Android’s animation setting. Accounts and real purchases remain inactive in this test APK.
 
 ## Version 0.10.0 — bibliothèque du coach et mode nuit
 

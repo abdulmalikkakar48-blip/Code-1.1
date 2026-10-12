@@ -80,6 +80,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -291,138 +292,141 @@ private fun MareeApp() {
             onComplete = { finishSetup(true) },
             onExplore = { finishSetup(false) }
         )
-        else -> ModalNavigationDrawer(
-            drawerState = drawerState,
-            drawerContent = {
-                SelkieMenuSheet(selectedPage = settingsPage,
-                    onSelect = ::openMenuPage,
-                    onClose = { scope.launch { drawerState.close() } })
-            }
-        ) {
-            Scaffold(
-                containerColor = Background,
-                snackbarHost = { SnackbarHost(snackbars) },
-                bottomBar = {
-                    val extraNavHeight = (LocalDensity.current.fontScale - 1f).coerceAtLeast(0f) * 28f
-                    NavigationBar(containerColor = MareePalette.NavigationBackground, tonalElevation = 0.dp,
-                        modifier = Modifier.heightIn(min = (80f + extraNavHeight).dp)) {
-                        listOf(
-                            Triple(tr("Accueil", "Home"), R.drawable.ic_nav_home, 0),
-                            Triple(tr("Quotidien", "Daily"), R.drawable.ic_nav_daily, 1),
-                            Triple(tr("Défis", "Challenges"), R.drawable.ic_nav_challenges, 2),
-                            Triple(tr("Coach", "Coach"), R.drawable.ic_nav_coach, 3)
-                        ).forEach { (name, icon, index) ->
-                            NavigationBarItem(
-                                selected = settingsPage == null && tab == index,
-                                onClick = { settingsPage = null; tab = index },
-                                icon = { Icon(painterResource(icon), contentDescription = null, modifier = Modifier.size(23.dp)) },
-                                label = { Text(name, fontSize = 11.sp, lineHeight = 13.sp,
-                                    fontWeight = FontWeight.Medium, maxLines = 2,
-                                    textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis) },
-                                colors = NavigationBarItemDefaults.colors(
-                                    selectedIconColor = MareePalette.OnHeroAccent, selectedTextColor = MareePalette.HeroAccent,
-                                    indicatorColor = MareePalette.HeroAccent, unselectedIconColor = MareePalette.NavigationMuted,
-                                    unselectedTextColor = MareePalette.NavigationMuted
-                                )
-                            )
-                        }
-                    }
+        else -> Box(Modifier.fillMaxSize().background(Background)) {
+            SelkieGeometryBackground(Modifier.fillMaxSize())
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                drawerContent = {
+                    SelkieMenuSheet(selectedPage = settingsPage,
+                        onSelect = ::openMenuPage,
+                        onClose = { scope.launch { drawerState.close() } })
                 }
-            ) { inner ->
-                Column(Modifier.fillMaxSize().padding(inner)) {
-                    Row(
-                        Modifier.fillMaxWidth().padding(start = 22.dp, end = 22.dp, top = 16.dp, bottom = 20.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                            BrandIcon(40.dp)
-                            Spacer(Modifier.width(12.dp))
-                            Text(stringResource(R.string.app_name), color = Cream, fontSize = 23.sp,
-                                fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.weight(1f))
-                        }
-                        TextButton(onClick = { openMenuPage(SettingsPage.SUBSCRIPTIONS) }) {
-                            StatusPill(snapshot.plan.displayName)
-                        }
-                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                            Icon(painterResource(R.drawable.ic_menu),
-                                contentDescription = tr("Ouvrir le menu", "Open menu"), tint = Cream)
+            ) {
+                Scaffold(
+                    containerColor = Color.Transparent,
+                    snackbarHost = { SnackbarHost(snackbars) },
+                    bottomBar = {
+                        val extraNavHeight = (LocalDensity.current.fontScale - 1f).coerceAtLeast(0f) * 28f
+                        NavigationBar(containerColor = MareePalette.NavigationBackground, tonalElevation = 0.dp,
+                            modifier = Modifier.heightIn(min = (80f + extraNavHeight).dp)) {
+                            listOf(
+                                Triple(tr("Accueil", "Home"), R.drawable.ic_nav_home, 0),
+                                Triple(tr("Quotidien", "Daily"), R.drawable.ic_nav_daily, 1),
+                                Triple(tr("Défis", "Challenges"), R.drawable.ic_nav_challenges, 2),
+                                Triple(tr("Coach", "Coach"), R.drawable.ic_nav_coach, 3)
+                            ).forEach { (name, icon, index) ->
+                                NavigationBarItem(
+                                    selected = settingsPage == null && tab == index,
+                                    onClick = { settingsPage = null; tab = index },
+                                    icon = { Icon(painterResource(icon), contentDescription = null, modifier = Modifier.size(23.dp)) },
+                                    label = { Text(name, fontSize = 11.sp, lineHeight = 13.sp,
+                                        fontWeight = FontWeight.Medium, maxLines = 2,
+                                        textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis) },
+                                    colors = NavigationBarItemDefaults.colors(
+                                        selectedIconColor = MareePalette.OnHeroAccent, selectedTextColor = MareePalette.HeroAccent,
+                                        indicatorColor = MareePalette.HeroAccent, unselectedIconColor = MareePalette.NavigationMuted,
+                                        unselectedTextColor = MareePalette.NavigationMuted
+                                    )
+                                )
+                            }
                         }
                     }
-                    val currentPage = settingsPage
-                    if (currentPage != null) {
-                        TextButton(onClick = { settingsPage = null },
-                            modifier = Modifier.padding(horizontal = 12.dp)) {
-                            Text(tr("‹ Retour", "‹ Back"))
-                        }
-                        key(currentPage) {
-                            SettingsPageContent(page = currentPage, snapshot = snapshot,
-                                monitoring = monitoringEnabled && permissions.readyForMonitoring,
-                                notificationsGranted = permissions.notificationsGranted,
-                                onSetup = { showSetup = true }, onStart = { showSetup = true },
-                                onStop = {
-                                    setup.setMonitoringEnabled(false)
-                                    monitoringEnabled = false
-                                    MonitorService.stop(context)
-                                    refresh()
-                                },
-                                onNotifications = ::askNotifications,
-                                onPlan = { plan ->
-                                    store.setDemoPlan(plan)
-                                    snapshot = store.readSnapshot(lastReading)
-                                    refresh()
-                                })
-                        }
-                    } else when (tab) {
-                        0 -> HomeTab(
-                            snapshot = snapshot,
-                            active = monitoringEnabled && permissions.readyForMonitoring,
-                            onSetup = { showSetup = true },
-                            onChallenges = { tab = 2 },
-                            onAdd = ::addApplication, onEdit = { editApp = it },
-                            onRemove = { removeApp = it },
-                            onReset = {
-                                if (monitoringEnabled && permissions.readyForMonitoring) resetApp = it
-                                else { showSetup = true }
-                            },
-                            getName = { appLabel(context, it) }
-                        )
-                        1 -> DailyTab(snapshot, onCoach = { tab = 3 }, getName = { appLabel(context, it) }, onAddApp = ::addApplication,
-                            monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
-                            onActivateTracking = { showSetup = true })
-                        2 -> ChallengeTab(snapshot,
-                            onComplete = { index ->
-                                if (store.completeChallenge(index)) {
-                                    snapshot = store.readSnapshot(lastReading)
-                                    refresh()
-                                }
-                            },
-                            onOffers = { openMenuPage(SettingsPage.SUBSCRIPTIONS) },
-                            onCreateCustom = { title, steps, duration ->
-                                store.createCustomChallenge(title, steps, duration).also { issue ->
-                                    if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
-                                }
-                            },
-                            onToggleCustomStep = { id, index, checked ->
-                                store.setCustomChallengeStep(id, index, checked).also { issue ->
-                                    if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
-                                }
-                            },
-                            onValidateCustom = { id ->
-                                store.validateCustomChallengeToday(id).also { issue ->
-                                    if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
-                                }
-                            },
-                            onDeleteCustom = { id ->
-                                store.deleteCustomChallenge(id).also { issue ->
-                                    if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
-                                }
+                ) { inner ->
+                    Column(Modifier.fillMaxSize().padding(inner)) {
+                        Row(
+                            Modifier.fillMaxWidth().padding(start = 22.dp, end = 22.dp, top = 16.dp, bottom = 20.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
+                                BrandIcon(40.dp)
+                                Spacer(Modifier.width(12.dp))
+                                Text(stringResource(R.string.app_name), color = Cream, fontSize = 23.sp,
+                                    fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.weight(1f))
                             }
-                        )
-                        3 -> CoachTab(snapshot,
-                            monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
-                            getName = { appLabel(context, it) })
+                            TextButton(onClick = { openMenuPage(SettingsPage.SUBSCRIPTIONS) }) {
+                                StatusPill(snapshot.plan.displayName)
+                            }
+                            IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                                Icon(painterResource(R.drawable.ic_menu),
+                                    contentDescription = tr("Ouvrir le menu", "Open menu"), tint = Cream)
+                            }
+                        }
+                        val currentPage = settingsPage
+                        if (currentPage != null) {
+                            TextButton(onClick = { settingsPage = null },
+                                modifier = Modifier.padding(horizontal = 12.dp)) {
+                                Text(tr("‹ Retour", "‹ Back"))
+                            }
+                            key(currentPage) {
+                                SettingsPageContent(page = currentPage, snapshot = snapshot,
+                                    monitoring = monitoringEnabled && permissions.readyForMonitoring,
+                                    notificationsGranted = permissions.notificationsGranted,
+                                    onSetup = { showSetup = true }, onStart = { showSetup = true },
+                                    onStop = {
+                                        setup.setMonitoringEnabled(false)
+                                        monitoringEnabled = false
+                                        MonitorService.stop(context)
+                                        refresh()
+                                    },
+                                    onNotifications = ::askNotifications,
+                                    onPlan = { plan ->
+                                        store.setDemoPlan(plan)
+                                        snapshot = store.readSnapshot(lastReading)
+                                        refresh()
+                                    })
+                            }
+                        } else when (tab) {
+                            0 -> HomeTab(
+                                snapshot = snapshot,
+                                active = monitoringEnabled && permissions.readyForMonitoring,
+                                onSetup = { showSetup = true },
+                                onChallenges = { tab = 2 },
+                                onAdd = ::addApplication, onEdit = { editApp = it },
+                                onRemove = { removeApp = it },
+                                onReset = {
+                                    if (monitoringEnabled && permissions.readyForMonitoring) resetApp = it
+                                    else { showSetup = true }
+                                },
+                                getName = { appLabel(context, it) }
+                            )
+                            1 -> DailyTab(snapshot, onCoach = { tab = 3 }, getName = { appLabel(context, it) }, onAddApp = ::addApplication,
+                                monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
+                                onActivateTracking = { showSetup = true })
+                            2 -> ChallengeTab(snapshot,
+                                onComplete = { index ->
+                                    if (store.completeChallenge(index)) {
+                                        snapshot = store.readSnapshot(lastReading)
+                                        refresh()
+                                    }
+                                },
+                                onOffers = { openMenuPage(SettingsPage.SUBSCRIPTIONS) },
+                                onCreateCustom = { title, steps, duration ->
+                                    store.createCustomChallenge(title, steps, duration).also { issue ->
+                                        if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
+                                    }
+                                },
+                                onToggleCustomStep = { id, index, checked ->
+                                    store.setCustomChallengeStep(id, index, checked).also { issue ->
+                                        if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
+                                    }
+                                },
+                                onValidateCustom = { id ->
+                                    store.validateCustomChallengeToday(id).also { issue ->
+                                        if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
+                                    }
+                                },
+                                onDeleteCustom = { id ->
+                                    store.deleteCustomChallenge(id).also { issue ->
+                                        if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
+                                    }
+                                }
+                            )
+                            3 -> CoachTab(snapshot,
+                                monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
+                                getName = { appLabel(context, it) })
+                        }
                     }
                 }
             }
