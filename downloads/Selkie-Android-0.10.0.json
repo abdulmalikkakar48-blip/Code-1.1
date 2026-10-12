@@ -1,0 +1,76 @@
+{
+  "versionName": "0.10.0",
+  "versionCode": 15,
+  "applicationId": "com.maree.app",
+  "bytes": 23980740,
+  "sha256": "79608623cfb9379b81793b19be484d75a09910e2acd182ddd7c9f2007d9bced6",
+  "minSdkVersion": 29,
+  "targetSdkVersion": 34,
+  "tests": {
+    "tests": 97,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Fatal": 0,
+    "Error": 0,
+    "Warning": 2,
+    "Information": 1
+  },
+  "supportedLanguages": [
+    "fr",
+    "en"
+  ],
+  "preparedCoachQuestionsPerLanguage": 1152,
+  "preparedCoachContexts": 48,
+  "preparedCoachIntents": 24,
+  "preparedCoachSections": 8,
+  "preparedCoachContentMethod": "Curated context texts combined with 24 distinct advice templates; not a generative model",
+  "offlineCoachTopicsPerLanguage": 67,
+  "offlineCoachRepliesPerLanguage": 125,
+  "appHelpQuestionsPerLanguage": 38,
+  "themeModes": [
+    "light",
+    "dark",
+    "system"
+  ],
+  "defaultThemeMode": "light",
+  "annualDiscount": false,
+  "plannedPricesEuros": {
+    "Premium": {
+      "monthly": 10,
+      "annual": 120
+    },
+    "Ultra": {
+      "monthly": 20,
+      "annual": 240
+    }
+  },
+  "onlineCoachConfigured": false,
+  "accountServerConfigured": false,
+  "playBillingEnabled": false,
+  "certificateSha256": "9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50",
+  "signaturePolicy": "Existing development certificate retained; test APK, not a Play release",
+  "sourceCommit": "90c595407dfbf1601f0f69eb6225980cb711f4a3",
+  "sourceArchive": {
+    "file": "Selkie-Android-0.10.0-source.zip",
+    "bytes": 644032,
+    "sha256": "75ab07f47c088667bdf0d1ce34df260d0cb6867d9feba5dbd10cfd46b52c2322",
+    "files": 94
+  },
+  "emulatorChecks": {
+    "androidApi": 34,
+    "screenPixels": [
+      480,
+      800
+    ],
+    "updateInstalled": true,
+    "questionAndAnswerCardsObserved": "English Sleep suggestion",
+    "nightHomeObserved": true,
+    "nightHomeMethod": "Local test preference set directly, then app relaunched; picker flow not verified",
+    "completeTouchFlowVerified": false,
+    "limitations": "Repeated ANRs on software emulator; library touch flow, theme picker and language switching not fully verified",
+    "physicalPhoneTested": false
+  }
+}
