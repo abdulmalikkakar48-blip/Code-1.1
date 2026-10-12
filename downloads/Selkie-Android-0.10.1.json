@@ -1,0 +1,113 @@
+{
+  "versionName": "0.10.1",
+  "versionCode": 16,
+  "applicationId": "com.maree.app",
+  "bytes": 25379742,
+  "sha256": "79d459e077628b382a98ca3ff68e129d2b41a159562247732ded471b1450e9de",
+  "minSdkVersion": 29,
+  "targetSdkVersion": 34,
+  "tests": {
+    "tests": 97,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Fatal": 0,
+    "Error": 0,
+    "Warning": 3,
+    "Information": 1
+  },
+  "supportedLanguages": [
+    "fr",
+    "en"
+  ],
+  "preparedCoachQuestionsPerLanguage": 1152,
+  "preparedCoachContexts": 48,
+  "preparedCoachIntents": 24,
+  "preparedCoachSections": 8,
+  "preparedCoachContentMethod": "Curated context texts combined with 24 distinct advice templates; not a generative model",
+  "offlineCoachTopicsPerLanguage": 67,
+  "offlineCoachRepliesPerLanguage": 125,
+  "appHelpQuestionsPerLanguage": 38,
+  "themeModes": [
+    "light",
+    "dark",
+    "system"
+  ],
+  "defaultThemeMode": "light",
+  "annualDiscount": false,
+  "plannedPricesEuros": {
+    "Premium": {
+      "monthly": 10,
+      "annual": 120
+    },
+    "Ultra": {
+      "monthly": 20,
+      "annual": 240
+    }
+  },
+  "onlineCoachConfigured": false,
+  "accountServerConfigured": false,
+  "playBillingEnabled": false,
+  "certificateSha256": "9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50",
+  "signaturePolicy": "Existing development certificate retained; test APK, not a Play release",
+  "primaryTabs": [
+    "home",
+    "daily",
+    "challenges",
+    "coach"
+  ],
+  "menuDestinations": [
+    "language",
+    "appearance",
+    "androidAccess",
+    "subscriptions",
+    "rules",
+    "privacy"
+  ],
+  "menuPlacement": "Top right hamburger icon",
+  "sourceCommit": "4afe4d3df9ba3fa6c0cb130355e6daeca457dd2c",
+  "sourceArchive": {
+    "file": "Selkie-Android-0.10.1-source.zip",
+    "bytes": 652026,
+    "sha256": "6dba7bf72cc31913324d79a8889ec19adfa873a62c8a009a88660add3ad8f72d",
+    "files": 98
+  },
+  "emulatorChecks": {
+    "androidApi": 34,
+    "screenPixels": [
+      480,
+      800
+    ],
+    "updateInstalled": true,
+    "headerMenuButtonObserved": true,
+    "fourPrimaryTabsObserved": true,
+    "menuOpenedObserved": true,
+    "languagePageFromMenuObserved": true,
+    "englishToFrenchSwitchObserved": true,
+    "nightPaletteObserved": true,
+    "completeAppFlowVerified": false,
+    "physicalPhoneTested": false,
+    "notes": "Menu and language paths observed before adding the decorative drawing. Final home, movement, stopping and restarting observed on emulator; physical phone and complete app flow not tested.",
+    "geometryHomeObserved": true,
+    "systemAnimationSettingRestored": true
+  },
+  "geometricBackground": {
+    "shapes": 4,
+    "loopSeconds": 24,
+    "maxUpdatesPerSecond": 20,
+    "drawOnlyStateUpdates": true,
+    "staticWhenSystemAnimationsDisabled": true,
+    "pausesOutsideResumedLifecycle": true,
+    "storesMovementData": false,
+    "emulatorMotionCheck": {
+      "changedPixelsAnimationsEnabled": 2887,
+      "changedPixelsAnimationsDisabled": 0,
+      "changedPixelsAfterReenabling": 2975,
+      "animationsMoveObserved": true,
+      "reducedMotionStaticObserved": true,
+      "motionResumesObserved": true
+    }
+  }
+}
