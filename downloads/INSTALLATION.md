@@ -1,3 +1,15 @@
+# Installer la version de référence Selkie 0.10.4
+
+[Ouvrir la page de l’APK actuel — environ 26 Mo](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.10.4.apk) dans Chrome connecté à un compte GitHub ayant accès au dépôt, puis choisir **Download raw file**. Ce lien ouvre GitHub ; l’aperçu de fichiers de ChatGPT n’est pas nécessaire.
+
+Android 10+ ; versionCode 19. Même certificat que 0.10.3 et les versions de développement depuis 0.8.1. La mise à jour a réussi sur l’émulateur Android 14 ; les essais sur Samsung réel restent nécessaires. Autoriser l’installation depuis Chrome si Android le demande. Un certificat différent peut empêcher une mise à jour ; ne pas désinstaller avant d’avoir compris qu’une désinstallation efface les données locales.
+
+Clair : étoiles, losanges et anneaux animés ; Nuit : vagues de points. Coach préparé par offre, export et pages légales FR/EN. Aucune vente ou IA distante active. [Validation actuelle](VALIDATION-0.10.4.md) et [sources exactes](Selkie-Android-0.10.4-source.zip). Les APK versionnés précédents restent conservés.
+
+## Archive de la refonte 0.8.0
+
+Les informations suivantes concernent uniquement cette archive et son ancienne signature.
+
 # Installer la refonte Selkie
 
 [Télécharger Selkie-Android.apk](https://github.com/abdulmalikkakar48-blip/Code-1.1/raw/maree-apk-download/downloads/Selkie-Android.apk).

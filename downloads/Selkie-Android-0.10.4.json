@@ -1,0 +1,250 @@
+{
+  "versionName": "0.10.4",
+  "versionCode": 19,
+  "applicationId": "com.maree.app",
+  "bytes": 25659490,
+  "sha256": "8a0de3103aa2a5d5f14a063006065683873375e66acef1027a8c21634d8c3260",
+  "minSdkVersion": 29,
+  "targetSdkVersion": 34,
+  "tests": {
+    "tests": 117,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Fatal": 0,
+    "Error": 0,
+    "Warning": 4,
+    "Information": 1
+  },
+  "supportedLanguages": [
+    "fr",
+    "en"
+  ],
+  "preparedCoachQuestionsPerLanguage": 1152,
+  "preparedCoachContexts": 48,
+  "preparedCoachIntents": 24,
+  "preparedCoachSections": 8,
+  "preparedCoachContentMethod": "Prepared context, intent and practical-constraint texts; combined advice, not a generative model or independently authored essays",
+  "offlineCoachTopicsPerLanguage": 67,
+  "offlineCoachRepliesPerLanguage": 125,
+  "appHelpQuestionsPerLanguage": 38,
+  "themeModes": [
+    "light",
+    "dark",
+    "system"
+  ],
+  "defaultThemeMode": "light",
+  "annualDiscount": false,
+  "plannedPricesEuros": {
+    "Premium": {
+      "monthly": 10,
+      "annual": 120
+    },
+    "Ultra": {
+      "monthly": 20,
+      "annual": 240
+    }
+  },
+  "onlineCoachConfigured": false,
+  "accountServerConfigured": false,
+  "playBillingEnabled": false,
+  "certificateSha256": "9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50",
+  "signaturePolicy": "Existing development certificate retained; test APK, not a Play release",
+  "primaryTabs": [
+    "home",
+    "daily",
+    "challenges",
+    "coach"
+  ],
+  "menuDestinations": [
+    "language",
+    "appearance",
+    "androidAccess",
+    "subscriptions",
+    "rules",
+    "privacy"
+  ],
+  "menuPlacement": "Top right hamburger icon",
+  "sourceCommit": "3037178bce09cf93e163b4a5561efa33e8baa1f2",
+  "sourceArchive": {
+    "file": "Selkie-Android-0.10.4-source.zip",
+    "bytes": 745584,
+    "sha256": "731a4372d158d1b8a4ebd60af4d2223956fb50507be7f947e33d413b0176c1c4",
+    "files": 116
+  },
+  "emulatorChecks": {
+    "androidApi": 34,
+    "screenPixels": [
+      480,
+      800
+    ],
+    "physicalPhoneTested": false,
+    "completeAppFlowVerified": false,
+    "earlierCandidate0104": {
+      "updateInstalled": true,
+      "pointsLanguageThemeRetainedObserved": true,
+      "threeLegalPagesAndBackObserved": true,
+      "androidDocumentPickerObserved": true,
+      "jsonSavedAndVerified": true,
+      "exportedJsonBytes": 6065,
+      "note": "Observed before the final daylight-animation and Coach-plan additions; final APK checks recorded separately.",
+      "apkSha256": "1d639aadcd0372b544255a552955c4d60544c42f21d562e7d99c993be886be10"
+    },
+    "finalApk": {
+      "updateInstalled": true,
+      "installedApkHashMatches": true,
+      "pointsLanguageThemePlanRetainedObserved": true,
+      "nightWaterHomeObserved": true,
+      "lightShapesHomeObserved": true,
+      "lightMotionStopAndResumeObserved": true,
+      "systemAnimationScaleRestored": true,
+      "freeCoachCountObserved": 1152,
+      "premiumAndUltraUiObserved": false,
+      "premiumAndUltraAccessUnitTested": true,
+      "physicalPhoneTested": false,
+      "completeAppFlowVerified": false,
+      "questionAboveAnswerObserved": true,
+      "offlineSendReplyObserved": true
+    }
+  },
+  "waterParticleBackground": {
+    "rendering": "Full-viewport dotted water surface; travelling vertical and horizontal waves",
+    "baseSpacingDp": 18,
+    "maxParticles": 1600,
+    "dotRadiusDp": 1.35,
+    "verticalWaveAmplitudesDp": [
+      18,
+      5
+    ],
+    "horizontalWaveAmplitudeDp": 6,
+    "loopSeconds": 12,
+    "maxUpdatesPerSecond": 20,
+    "maxOpacity": {
+      "night": 0.32
+    },
+    "intensityLevels": [
+      0.65,
+      0.82,
+      1
+    ],
+    "nativeDrawBatchesPerFrame": 3,
+    "reusesPointBuffersAndPaints": true,
+    "drawOnlyStateUpdates": true,
+    "staticWhenSystemAnimationsDisabled": true,
+    "pausesOutsideResumedLifecycle": true,
+    "storesMovementData": false,
+    "appliesToTheme": "night",
+    "previousMotionValidation": {
+      "version": "0.10.3",
+      "file": "VALIDATION-0.10.3.md"
+    }
+  },
+  "internetPermissionDeclared": false,
+  "preparedCoachQuestionsPerLanguageByPlan": {
+    "FREE": 1152,
+    "PREMIUM": 5760,
+    "ULTRA": 10368
+  },
+  "preparedCoachConstraintVariants": {
+    "FREE": 1,
+    "PREMIUM": 5,
+    "ULTRA": 9
+  },
+  "privacyControls": {
+    "fullPolicyLanguages": [
+      "fr",
+      "en"
+    ],
+    "fullPolicySections": 14,
+    "legalPages": [
+      "terms",
+      "subscriptionsAndCancellation",
+      "publisher"
+    ],
+    "localJsonExport": true,
+    "exportIncludesCoachMessages": false,
+    "exportIncludesSessionTokens": false,
+    "exportCopiesRemainSeparate": true,
+    "checkedDeletionPersistence": true,
+    "clearsTrackingAlerts": true,
+    "mandatoryConsentToPolicy": false,
+    "cookieBanner": false
+  },
+  "legalChecklist": {
+    "total": 19,
+    "inPlaceForPrototype": 9,
+    "needsCompletionOrValidation": 6,
+    "outsideCurrentScope": 4,
+    "publicPublisherConfirmed": false,
+    "gmailProcessingReviewed": false,
+    "publicPrivacyPolicyHosted": false,
+    "currentOfficialSourcesVerified": false,
+    "complianceCertified": false
+  },
+  "lightShapeBackground": {
+    "shapeCount": 48,
+    "stars": 24,
+    "diamonds": 16,
+    "rings": 8,
+    "diameterRangeDp": [
+      6,
+      14
+    ],
+    "strokeWidthDp": 0.95,
+    "opacityByteRange": [
+      16,
+      30
+    ],
+    "loopSeconds": 12,
+    "maxUpdatesPerSecond": 20,
+    "cellGutterDp": 2,
+    "nonOverlappingCellBounds": true,
+    "staticWhenSystemAnimationsDisabled": true,
+    "pausesOutsideResumedLifecycle": true,
+    "storesMovementData": false,
+    "mutedTextMinimumContrastCalculated": 4.684,
+    "note": "Render observations are recorded separately; contrast calculation is not an accessibility certification.",
+    "emulatorMotionChecks": {
+      "initialAnimatorDurationScale": "0",
+      "enabled": {
+        "changedPixelsExcludingTop40": 2728,
+        "totalPixels": 364800,
+        "meanChannelDifference": 0.09702576754385965
+      },
+      "disabled": {
+        "changedPixelsExcludingTop40": 0,
+        "totalPixels": 364800,
+        "meanChannelDifference": 0.0
+      },
+      "reenabled": {
+        "changedPixelsExcludingTop40": 3023,
+        "totalPixels": 364800,
+        "meanChannelDifference": 0.1104861111111111
+      },
+      "restoredAnimatorDurationScale": "0"
+    }
+  },
+  "serverLocalTests": {
+    "tests": 14,
+    "failures": 0,
+    "skipped": 0,
+    "providerRequestLiveTested": false,
+    "typescriptStrictProtocolAndProviderPassed": true,
+    "handlerDeployed": false
+  },
+  "onlineCoachSupportedProviders": [
+    "openai",
+    "groq"
+  ],
+  "onlineCoachPublicProviderInApk": "openai",
+  "onlineCoachProviderConsentHeaderCheckedBeforeQuota": true,
+  "automaticPaidProviderFallback": false,
+  "freeApiQuotaAndModelAvailabilityVerified": false,
+  "preparedCoachProfilesByPlan": {
+    "FREE": 48,
+    "PREMIUM": 240,
+    "ULTRA": 432
+  }
+}
