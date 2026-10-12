@@ -37,4 +37,4 @@ jobs:
           if-no-files-found: error
       - name: Expliquer la signature de distribution
         run: |
-          echo "Cet artefact utilise la clé debug temporaire du runner. Signer avec la clé fixe sauvegardée avant distribution ; voir docs/SIGNATURE_ANDROID.md." >> "$GITHUB_STEP_SUMMARY"
+          echo "Cet artefact utilise la clé debug temporaire du runner et ne remplace pas directement l’APK de test du cloud. Une mise à jour doit conserver le certificat de l’installation existante et augmenter le versionCode. La préparation Google Play utilise une clé de téléversement distincte ; voir docs/SIGNATURE_ANDROID.md." >> "$GITHUB_STEP_SUMMARY"

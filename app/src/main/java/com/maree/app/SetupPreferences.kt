@@ -28,8 +28,11 @@ class SetupPreferences internal constructor(private val prefs: SharedPreferences
         prefs.edit().putBoolean("monitoringEnabled", enabled && isCompleted()).apply()
     }
 
-    fun reset() {
-        prefs.edit().remove("completed").remove("monitoringEnabled").apply()
+    /** L'effacement global doit vérifier la persistance des choix d'accueil et de suivi. */
+    fun reset(): Boolean = try {
+        prefs.edit().clear().commit()
+    } catch (_: Exception) {
+        false
     }
 }
 

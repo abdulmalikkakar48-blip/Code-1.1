@@ -1,5 +1,10 @@
 # Conserver la signature Android de Selkie
 
+## Version de test actuelle 0.10.4
+
+L’APK `Selkie-Android-0.10.4.apk` (versionCode 19) conserve le certificat de développement du cloud `9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50`, identique à celui de 0.10.3. Son installation en mise à jour a réussi sur l’émulateur Android 14. Pour les prochaines versions de cette installation, réutiliser la même clé et augmenter le versionCode ; ne pas remplacer cette clé par celle d’un runner Actions ou par la clé fixe historique ci-dessous. Une publication Play nécessite une préparation distincte et une clé de téléversement sauvegardée. Voir [la validation courante](../downloads/VALIDATION-0.10.4.md).
+
+
 ## Exception de test 0.8.1
 
 L’éditeur a demandé de distribuer immédiatement le correctif de l’icône, en acceptant une réinstallation. La sauvegarde de la clé fixe ci-dessous n’est pas accessible dans cet environnement. `downloads/Selkie-Android-0.8.1.apk` utilise donc la clé de développement déjà disponible ici ; son certificat est documenté dans [sa validation](../downloads/VALIDATION-0.8.1.md). Aucune nouvelle clé n’a été générée. Ce fichier ne remplace pas directement une installation 0.8.0 signée avec la clé fixe : sa désinstallation efface les données locales.

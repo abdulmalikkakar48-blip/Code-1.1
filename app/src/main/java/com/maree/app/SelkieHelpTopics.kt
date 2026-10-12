@@ -242,7 +242,7 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.PRIVACY, "privacy", "Où sont mes données et la confidentialité ?",
         listOf("confidentialite", "politique de confidentialite", "donnees personnelles", "mes donnees", "rgpd", "cnil", "responsable", "nom et prenom", "nom prenom", "mon vrai nom", "vie privee", "messages lus"),
         "Lis la politique dans le menu ☰ → Confidentialité et données. Tes applications suivies, limites, points et défis restent sur le téléphone ; le Coach local ne transmet pas tes questions à l’éditeur. " +
-            "Selkie ne lit ni tes messages, ni tes photos, ni le contenu de l’écran. La politique doit permettre d’identifier le responsable réel et de le contacter : ici, " +
+            "Selkie ne lit ni les messages de tes autres applications, ni tes photos, ni le contenu de l’écran. La politique doit permettre d’identifier le responsable réel et de le contacter : ici, " +
             "${PrivacyIdentity.controllerName}, ${PrivacyIdentity.contactEmail}. Elle décrit cette version ; l’ouverture de comptes ou paiements nécessitera une mise à jour."
     ),
     help(

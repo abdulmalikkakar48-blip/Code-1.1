@@ -32,6 +32,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -52,7 +54,8 @@ internal fun ScreenHeading(eyebrow: String, title: String, description: String? 
             Text(eyebrow, color = MareePalette.Teal, style = MaterialTheme.typography.labelMedium,
                 letterSpacing = 1.4.sp, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
         }
-        Text(title, color = MareePalette.Ink, style = MaterialTheme.typography.headlineMedium)
+        Text(title, color = MareePalette.Ink, style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.semantics { heading() })
         if (description != null) Text(description, color = MareePalette.Muted,
             style = MaterialTheme.typography.bodyMedium)
     }
@@ -74,7 +77,7 @@ internal fun SectionLabel(title: String, trailing: String? = null) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalAlignment = Alignment.CenterVertically) {
         Text(title, color = MareePalette.Ink, style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.weight(1f))
+            modifier = Modifier.weight(1f).semantics { heading() })
         if (trailing != null) Text(trailing, color = MareePalette.Muted,
             style = MaterialTheme.typography.bodySmall)
     }

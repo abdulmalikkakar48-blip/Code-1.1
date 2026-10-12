@@ -1,5 +1,19 @@
 # Selkie — application Android de réduction du temps d'écran
 
+## Version 0.10.4 — confidentialité, export et informations légales
+
+**Menu ☰ → Confidentialité et données** regroupe désormais trois pages FR/EN : **Conditions d’utilisation**, **Abonnements et remboursements**, **Éditeur et mentions**. Elles restent accessibles avant les autorisations. L’export JSON met les réglages et la progression à ta disposition, sans phrases du coach ni jetons de connexion ; la copie exportée reste séparée des données de l’application. L’effacement confirme ses écritures et retire les alertes. Les contours, libellés et commandes accessibles sont améliorés ; une vérification complète sur téléphone reste nécessaire.
+
+L’APK de test fonctionne hors ligne **sans permission Internet**. Les liens, la messagerie et le fournisseur de fichiers que tu choisis restent des services distincts. Les prix proposés sont inchangés, sans réduction : Premium 10 €/mois ou 120 €/an ; Ultra 20 €/mois ou 240 €/an. Les offres restent des démonstrations gratuites : aucun achat, compte serveur ou dialogue IA distant n’est actif.
+
+Le [bilan des 19 points](docs/BILAN_CONFORMITE_FRANCE.md) distingue **9 en place, 6 à compléter ou valider, 4 hors du périmètre actuel**. Il concerne ce prototype et ne constitue ni une certification ni une garantie contre les amendes. L’éditeur public reste à choisir ; Gmail, les droits sur les actifs et la diffusion doivent être finalisés. Voir le [guide de l’éditeur](docs/CONFIDENTIALITE_AVANT_PUBLICATION.md), le [registre et les demandes de droits](docs/REGISTRE_TRAITEMENTS.md), les [actifs et licences](docs/DROITS_ET_ACTIFS.md) et les [pages à héberger](legal-site/README.md). Aucune publication Play ni politique hébergée n’est annoncée ; les textes officiels actuels n’ont pas pu être vérifiés en ligne.
+
+**102 tests unitaires réussis. Android Lint : 0 erreur, 4 avertissements, 1 information.**
+
+[Page de l’APK Selkie 0.10.4 — environ 24 Mo, accès GitHub requis](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.10.4.apk) · [Sources exactes](downloads/Selkie-Android-0.10.4-source.zip) · [Validation](downloads/VALIDATION-0.10.4.md).
+
+**English:** Privacy and data now groups Terms of use, Subscriptions and refunds, and Publisher information. Export settings and progress as JSON, without Coach messages or sign-in tokens. Deletion is confirmed and alerts are removed. This offline APK has no Internet permission or real purchases. All 102 unit tests pass; Lint reports no errors, four warnings and one informational finding. Public-release and legal requirements remain to be finalised.
+
 ## Version 0.10.3 — surface d’eau pointillée
 
 Le fond devient une **nappe de points répartie sur toute sa surface**, animée comme de l’eau. Les vagues et les points sont plus visibles, en clair comme en nuit ; les cartes restent opaques pour garder les textes lisibles. La boucle de mouvement dure 12 secondes. Le réglage Android de suppression des animations et la pause quand l’activité quitte le premier plan sont conservés.
@@ -90,7 +104,7 @@ Le code Android intègre désormais une conversation authentifiée par code e-ma
 
 ## Version de référence pour la suite
 
-Depuis le 11 octobre 2026, la **refonte moderne à signature fixe** est la base retenue par l’éditeur pour toutes les prochaines modifications. Le code, l’APK prêt à installer et les sources sont conservés sur la branche `maree-apk-download`. Voir [la version de référence et le travail restant](docs/VERSION_REFERENCE.md).
+La refonte moderne retenue le 11 octobre 2026 reste la base du design. Son APK 0.8.0 à signature fixe est une archive ; les versions de test depuis 0.8.1, dont 0.10.4, utilisent la clé de développement existante. Le code, les APK et les sources sont conservés sur `maree-apk-download`. Voir [la version de référence et le travail restant](docs/VERSION_REFERENCE.md).
 
 ## Refonte moderne et signature fixe
 
@@ -124,7 +138,7 @@ Plafonds : **10 applications en Gratuit**, **50 en Premium** et **aucun plafond 
 
 Pour commencer la distribution et les paiements, ouvre [le guide de démarrage](docs/DEMARRER_PUBLICATION.md). Il mène aux étapes [Google Play](docs/PUBLICATION_GOOGLE_PLAY.md) et [abonnements](docs/ABONNEMENTS.md). Le travail porte sur Android ; la version iPhone est reportée. L’APK reste une version de test ; aucun paiement ni coach IA n’est connecté.
 
-**Version actuelle : 0.10.3 (APK de test et code source).** Interface française et anglaise, apparence claire ou nuit.
+**Version actuelle : 0.10.4 (APK de test et code source).** Interface française et anglaise, apparence claire ou nuit.
 
 Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Material 3, `minSdk 29` (Android 10), `targetSdk 34`, package `com.maree.app`, Gradle 8.7, AGP 8.5.2, Kotlin 1.9.24.
 
@@ -173,7 +187,7 @@ La politique est une information pour la version locale, pas une certification j
 
 ## Ce qui reste à activer / développer
 
-- **Coach IA** : client de conversation et authentification par code e-mail implémentés dans le code Android ; serveur Supabase/OpenAI préparé avec quota des 100 questions. Les services et accès ne sont pas encore configurés, donc aucun dialogue réel n’est actif. L’APK publié reste antérieur à ce client. Voir [l’activation](docs/ACTIVER_COACH_IA.md).
+- **Coach IA** : client de conversation et authentification par code e-mail implémentés dans le code Android ; serveur Supabase/OpenAI préparé avec quota des 100 questions. Les services et accès ne sont pas encore configurés, donc aucun dialogue réel n’est actif. Le client conditionnel est présent dans 0.10.4, avec ses identifiants publics vides et sans permission Internet dans l’APK hors ligne ; aucun compte ou service n’a été créé. Voir [l’activation](docs/ACTIVER_COACH_IA.md).
 - **Premium et Ultra** : les prix de lancement prévus sont affichés, avec un mode de démonstration gratuit dans l’APK debug. Aucun abonnement n’est vendu. Avant commercialisation, remplacer le statut de démonstration local par des droits vérifiés côté serveur, Google Play Billing ou l’équivalent Galaxy Store et des comptes développeur actifs. Le mode de démonstration ne doit pas servir de validation d’abonnement. Pour les abonnements numériques sur Google Play, utiliser Google Play Billing dans le parcours standard. Stripe sert surtout au site web ; les programmes de paiement alternatif demandent une éligibilité et des règles spécifiques. Voir [le guide des abonnements](docs/ABONNEMENTS.md).
 - **Compte email et sauvegarde cloud** : tables RLS Supabase préparées mais pas encore reliées à l'APK. Les données actuelles sont locales dans `SharedPreferences` et `allowBackup=false`.
 - **Tests sur un téléphone Samsung réel et distribution** : nécessaires avant mise en production.
@@ -183,7 +197,7 @@ La politique est une information pour la version locale, pas une certification j
 1. Créer un dépôt GitHub vide et y envoyer **le contenu** de ce répertoire (`app/`, `.github/`, etc.).
 2. Ouvrir l'onglet **Actions**, sélectionner **Construire l'APK Android**, puis lancer **Run workflow** (ou envoyer un commit sur `main`).
 3. À la fin de la tâche `android`, récupérer l'artefact `Selkie-build-to-sign` ; il contient `app-debug.apk`. C’est un fichier intermédiaire qui utilise la clé temporaire du runner.
-4. Pour distribuer une mise à jour, signer ce fichier avec la clé fixe sauvegardée, selon [la procédure de signature](docs/SIGNATURE_ANDROID.md). Le fichier de test actuel est [Selkie-Android-0.10.3.apk](downloads/Selkie-Android-0.10.3.apk), pour Android 10+.
+4. Pour une mise à jour de l’APK de test actuel, recompiler avec **la clé de développement existante**, conserver son certificat indiqué ci-dessous et augmenter le versionCode au-delà de celui installé. Ne pas créer une nouvelle clé ni utiliser la clé fixe de l’archive 0.8.0. La clé du runner seule ne garantit pas une mise à jour compatible. L’APK de test actuel est [Selkie-Android-0.10.4.apk](downloads/Selkie-Android-0.10.4.apk), pour Android 10+.
 5. Ouvrir Selkie, lire les explications, puis activer les accès nécessaires au suivi. Les notifications sont facultatives, et le mode découverte reste disponible.
 
 Le projet a été compilé dans l'environnement cloud. L'APK de test est généré dans `app/build/outputs/apk/debug/app-debug.apk`. Le wrapper Gradle 8.7 est inclus, avec vérification SHA-256 de sa distribution ; GitHub Actions utilise ce wrapper pour compiler, exécuter les tests unitaires et lancer Android Lint.
@@ -274,6 +288,10 @@ supabase/                   → migration SQL et fonction coach (préparation)
 
 Le moteur de suivi fonctionne en local. L'APK ne contient pas de clé API, n'envoie pas les statistiques à un serveur et ne sollicite pas de paiement. Le backend Supabase est fourni à titre de code de préparation ; aucune fonction cloud n'est exécutée par cette version de l'APK.
 
-L’APK distribué dans `downloads/Selkie-Android.apk` utilise la nouvelle signature fixe. Les prochaines mises à jour doivent réutiliser cette même clé. Les compilations GitHub Actions produisent seulement un fichier intermédiaire à signer : leur clé debug propre au runner ne doit pas remplacer la clé fixe. La clé privée et son mot de passe sont sauvegardés séparément et ne sont pas enregistrés dans le dépôt. Voir [la procédure](docs/SIGNATURE_ANDROID.md).
+## Signature des tests actuels et anciennes archives
+
+Selkie 0.10.4 utilise la clé de développement existante, certificat SHA-256 `9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50`. Les prochaines mises à jour de cette chaîne doivent réutiliser cette clé, avec un versionCode supérieur au précédent, sans générer de nouvelle clé. Vérifier le certificat avec `apksigner` avant distribution ; la clé du runner GitHub Actions peut être différente et ne suffit pas à garantir la compatibilité. La clé privée et ses secrets restent hors du dépôt et des archives sources.
+
+`downloads/Selkie-Android.apk` (0.8.0) et la procédure `tools/sign_apk.py` à clé fixe appartiennent à l’ancienne chaîne de signature ; son certificat `c3def…` est incompatible avec celui des tests actuels. Voir [l’ancienne procédure](docs/SIGNATURE_ANDROID.md). Pour une future publication Google Play, préparer une clé d’importation dédiée et la configuration Play App Signing séparément : la clé de test n’est pas une clé de production. Aucun changement de clé ni compte Play n’est effectué par ces instructions.
 
 Les tests de la version 0.4.0 couvrent aussi la migration unique des soldes, les quarts exacts, la règle de 0 point pour chaque offre, les plafonds et le retour à Gratuit, le coût complet d’une réinitialisation et les défis personnels (durées de 2 et 7 jours, trois étapes persistées, récompense unique, relance, suppression et effacement). Le schéma Supabase préparatoire représente encore l’abonnement par un booléen : les droits des trois offres et les quotas du futur coach devront être reliés à une vérification d’achat côté serveur avant leur commercialisation.

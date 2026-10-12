@@ -1,5 +1,15 @@
 # Selkie : version de travail retenue le 12 octobre 2026
 
+## Version de travail 0.10.4
+
+La page Confidentialité et données donne accès aux conditions d’utilisation, aux abonnements et remboursements, et aux mentions de l’éditeur, en français et en anglais, avant ou après les autorisations. L’export JSON contient les réglages et la progression sans phrases du coach ni jetons ; les copies exportées se suppriment séparément. L’effacement est confirmé et retire les alertes. Les contrastes des contrôles et leurs libellés sont améliorés. L’APK hors ligne ne déclare pas la permission Internet.
+
+VersionCode 19. [Page de l’APK Selkie 0.10.4 — accès GitHub requis](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.10.4.apk), [sources exactes](../downloads/Selkie-Android-0.10.4-source.zip) et [validation 0.10.4](../downloads/VALIDATION-0.10.4.md). Les 102 tests unitaires passent ; Lint indique 0 erreur, 4 avertissements et 1 information. Les essais complets sur téléphone restent nécessaires. Prix inchangés sans réduction : Premium 10 €/mois ou 120 €/an ; Ultra 20 €/mois ou 240 €/an. Aucun compte serveur, achat ou dialogue IA distant n’est actif.
+
+La clé de test actuelle a pour certificat SHA-256 `9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50`. Une future mise à jour doit réutiliser cette clé de développement, avec un versionCode supérieur à 19, sans nouvelle clé. L’ancienne signature fixe 0.8.0 est distincte ; la future clé d’importation Google Play devra aussi être préparée séparément.
+
+Le [bilan de 19 points](BILAN_CONFORMITE_FRANCE.md) compte 9 en place, 6 à compléter ou valider et 4 hors périmètre pour ce test ; ce n’est ni une certification ni une garantie contre les amendes. L’éditeur public n’est pas choisi. Les [vérifications opérateur](CONFIDENTIALITE_AVANT_PUBLICATION.md), le [registre et les droits](REGISTRE_TRAITEMENTS.md), les [actifs](DROITS_ET_ACTIFS.md) et les [pages à héberger](../legal-site/README.md) documentent la suite. Aucune publication Play, URL de politique hébergée ou vérification des lois consolidées de 2026 n’est annoncée. Les sections suivantes sont les archives.
+
 ## Version de travail 0.10.3
 
 Le fond est une surface d’eau pointillée : plusieurs centaines de points couvrent la surface et ondulent ensemble, avec un mouvement plus visible en clair comme en nuit. La boucle dure 12 secondes ; le dessin natif réutilise ses tableaux et ses peintures. L’arrêt hors du cycle RESUMED et le respect des animations Android restent conservés. Le menu, les quatre onglets, le coach, les données, les règles et les prix sans réduction sont identiques.
@@ -67,7 +77,7 @@ Les artefacts 0.8.0 ci-dessous restent une archive. La signature de test 0.8.1 n
 
 L’éditeur a choisi de conserver la nouvelle refonte comme base du travail à venir, même si sa première installation nécessite de désinstaller l’ancienne application.
 
-## Référence exacte
+## Référence exacte de l’archive 0.8.0
 
 - Branche de travail : `maree-apk-download`.
 - Code adopté : commit `51331aa`, qui contient la refonte Android du commit `58a8f0d46e4f49d281adb3f5d9bbcc1cfba95fff` et sa publication à signature fixe.
@@ -79,7 +89,7 @@ L’éditeur a choisi de conserver la nouvelle refonte comme base du travail à 
 
 Le code adopte la navigation sombre, la menthe lumineuse, les nouveaux titres et l’accueil avec ses deux compteurs. Conserver cette refonte lors des prochaines modifications ; ne pas repartir de l’ancien APK ou des anciennes captures.
 
-Pour une future mise à jour, augmenter le versionCode et signer avec la même clé fixe selon [la procédure](SIGNATURE_ANDROID.md). La clé privée est sauvegardée séparément : le certificat public ne permet pas de signer une nouvelle compilation. Ne jamais ajouter une clé privée ou son mot de passe au dépôt ou à l’archive des sources.
+Cette ancienne chaîne 0.8.0 utilise la [procédure historique à clé fixe](SIGNATURE_ANDROID.md), distincte de la clé des versions de test actuelles décrite en tête de document. Son certificat ne permet pas une mise à jour de la chaîne 0.8.1–0.10.4. Une clé privée ou son mot de passe ne doit jamais être ajouté au dépôt ou à l’archive des sources.
 
 ## Avancement
 

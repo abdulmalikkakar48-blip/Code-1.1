@@ -175,6 +175,81 @@ class Store internal constructor(private val prefs: SharedPreferences) {
      */
     fun clearPersonalData(): Boolean = synchronized(lock) { prefs.edit().clear().commit() }
 
+    /** Copie structurée des seules données métier stockées, sans lecture Android ni mutation. */
+    internal fun exportLocalState(): JSONObject = synchronized(lock) {
+        val apps = JSONArray()
+        readApps().forEach { app ->
+            apps.put(JSONObject().apply {
+                put("packageName", app.packageName)
+                put("limitMinutes", app.limitMinutes)
+                put("baselineUsageMillis", app.baselineMillis)
+                put("lockedUntilEpochMillis", app.lockedUntil)
+                put("warningLocalDay", app.warnedOn)
+                put("lastPenaltyAtEpochMillis", app.lastPenaltyAt)
+            })
+        }
+        val cycleNumber = prefs.getLong("challengeNumber", 0)
+        val series = (cycleNumber % 2).toInt()
+        val completed = checked()
+        val dates = readChallengeDays()
+        val standardChallenges = JSONArray()
+        CHALLENGES.forEachIndexed { index, title ->
+            val validatedDates = dates[index].orEmpty()
+            standardChallenges.put(JSONObject().apply {
+                put("index", index)
+                put("title", title)
+                put("inCurrentSeries", index / 10 == series)
+                put("requiredDays", CHALLENGE_REQUIRED_DAYS)
+                put("validatedDates", JSONArray(validatedDates.map { it.toString() }))
+                put("completedDays", if (index in completed) CHALLENGE_REQUIRED_DAYS else validatedDates.size)
+                put("completed", index in completed)
+            })
+        }
+        val customChallenges = JSONArray()
+        readCustomChallenges().forEach { challenge ->
+            customChallenges.put(JSONObject().apply {
+                put("id", challenge.id)
+                put("title", challenge.title)
+                put("steps", JSONArray(challenge.steps))
+                put("requiredDays", challenge.requiredDays)
+                put("createdAtEpochMillis", challenge.createdAt)
+                put("validatedDates", JSONArray(challenge.days.map { it.toString() }))
+                put("completedDays", challenge.days.size)
+                put("completed", challenge.completed)
+                put("rewardClaimed", challenge.rewardClaimed)
+                put("dailyChecklist", JSONObject().apply {
+                    put("localDate", challenge.stepDate?.toString() ?: JSONObject.NULL)
+                    put("checkedStepIndexes", JSONArray(challenge.checkedSteps.sorted()))
+                })
+            })
+        }
+        JSONObject().apply {
+            put("points", JSONObject().apply {
+                put("value", points())
+                put("quarterUnits", pointUnits())
+                put("unitsPerPoint", POINT_UNITS_PER_POINT)
+            })
+            put("membership", JSONObject().apply {
+                put("plan", planType().name)
+                put("selectionMode", "local_demo")
+            })
+            put("tracking", JSONObject().apply {
+                put("trackedApps", apps)
+                put("usageLocalDay", prefs.getString("day", ""))
+                put("disciplinePeriodStartedAtEpochMillis", prefs.getLong("periodStart", 0))
+                put("disciplinePeriodBreached", prefs.getBoolean("periodBreach", false))
+            })
+            put("standardChallenges", JSONObject().apply {
+                put("cycleStartedAtEpochMillis", prefs.getLong("challengeStart", 0))
+                put("cycleNumber", cycleNumber)
+                put("currentSeries", series)
+                put("totalCompletedChallenges", prefs.getInt("completedCount", 0))
+                put("challenges", standardChallenges)
+            })
+            put("customChallenges", customChallenges)
+        }
+    }
+
     /** Une éventuelle brèche de la période ne disparaît pas quand on retire l'application. */
     private fun recordBreach() = prefs.edit().putBoolean("periodBreach", true).apply()
 

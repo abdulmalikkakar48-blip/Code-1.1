@@ -24,6 +24,7 @@ class MonitorService : Service() {
         private const val SERVICE_CHANNEL = "maree_suivi"
         private const val ALERT_CHANNEL = "maree_alertes"
         private const val SERVICE_NOTIFICATION = 10
+        private const val APP_ALERT_NOTIFICATION = 11
 
         fun start(context: Context) {
             if (!SetupPreferences(context).isMonitoringEnabled()) return
@@ -37,6 +38,20 @@ class MonitorService : Service() {
 
         fun stop(context: Context) {
             context.stopService(Intent(context, MonitorService::class.java))
+            clearAlerts(context)
+        }
+
+        /** Les notifications appartiennent à Selkie ; aucune statistique Android n'est modifiée. */
+        fun clearAlerts(context: Context) {
+            context.getSystemService(NotificationManager::class.java)?.cancelAll()
+        }
+
+        fun clearAppAlert(context: Context, packageName: String) {
+            context.getSystemService(NotificationManager::class.java)?.let { manager ->
+                manager.cancel(packageName, APP_ALERT_NOTIFICATION)
+                // Retire aussi une alerte émise par une ancienne version de l'application.
+                manager.cancel(packageName.hashCode())
+            }
         }
     }
 
@@ -49,6 +64,7 @@ class MonitorService : Service() {
     private var previousForeground: String? = null
     private var hasPreviousForeground = false
     private var notificationLocale: AppLocale? = null
+    @Volatile private var destroyed = false
 
     override fun onCreate() {
         super.onCreate()
@@ -109,6 +125,7 @@ class MonitorService : Service() {
     } catch (_: Exception) { pkg.substringAfterLast('.') }
 
     private fun monitor() {
+        if (destroyed) return
         if (!setup.isMonitoringEnabled() || !reader.hasPermission() || !Settings.canDrawOverlays(this)) {
             previousForeground = null
             hasPreviousForeground = false
@@ -118,7 +135,7 @@ class MonitorService : Service() {
         val packages = store.packages()
         val usage = reader.read(packages)
         // Une lecture Android lente peut se terminer après une pause ou une suppression des données.
-        if (!setup.isMonitoringEnabled()) {
+        if (destroyed || !setup.isMonitoringEnabled()) {
             main.post { overlay.hide(); stopSelf() }
             return
         }
@@ -134,14 +151,17 @@ class MonitorService : Service() {
         hasPreviousForeground = true
         val currentPoints = store.points()
         main.post {
-            if (!setup.isMonitoringEnabled()) {
+            if (destroyed || !setup.isMonitoringEnabled() || !PermissionStatus.read(this).readyForMonitoring) {
                 overlay.hide()
                 stopSelf()
                 return@post
             }
             refreshNotificationLanguage()
-            for ((pkg, remaining) in tick.warnings) alert(label(pkg), remaining, pkg.hashCode())
-            if (locked != null && store.packages().contains(locked.packageName)) {
+            val trackedPackages = store.packages()
+            for ((pkg, remaining) in tick.warnings) {
+                if (pkg in trackedPackages) alert(pkg, remaining)
+            }
+            if (locked != null && locked.packageName in trackedPackages) {
                 overlay.show(label(locked.packageName), locked.lockedUntil, currentPoints)
             } else {
                 overlay.hide()
@@ -149,10 +169,11 @@ class MonitorService : Service() {
         }
     }
 
-    private fun alert(name: String, remaining: Int, id: Int) {
+    private fun alert(packageName: String, remaining: Int) {
         if (Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(
                 this, Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED) return
+        val name = label(packageName)
         val message = tr("Plus que $remaining min sur $name", "Only $remaining min left on $name")
         val notification: Notification = NotificationCompat.Builder(this, ALERT_CHANNEL)
             .setSmallIcon(R.drawable.ic_notification)
@@ -161,7 +182,8 @@ class MonitorService : Service() {
             .setAutoCancel(true)
             .build()
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        manager.notify(id, notification)
+        // Le tag identifie exactement l'application et ne peut pas remplacer la notification du service.
+        manager.notify(packageName, APP_ALERT_NOTIFICATION, notification)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -173,8 +195,11 @@ class MonitorService : Service() {
     }
     override fun onBind(intent: Intent?): IBinder? = null
     override fun onDestroy() {
+        destroyed = true
         worker.shutdownNow()
-        if (::overlay.isInitialized) main.post { overlay.hide() }
+        main.removeCallbacksAndMessages(null)
+        if (::overlay.isInitialized) overlay.hide()
+        clearAlerts(this)
         super.onDestroy()
     }
 }

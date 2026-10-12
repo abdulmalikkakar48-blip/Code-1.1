@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -88,6 +89,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.compose.ui.text.font.FontWeight
@@ -103,6 +105,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 
 private val Background get() = MareePalette.Background
 private val CardColor get() = MareePalette.Surface
@@ -194,6 +197,27 @@ private fun MareeApp() {
     val notificationRequest = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { refreshPermissions() }
+    val exportDocument = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/json")
+    ) { destination ->
+        if (destination != null) {
+            val exportStore = store
+            scope.launch {
+                try {
+                    withContext(Dispatchers.IO) {
+                        LocalDataExport.write(context.contentResolver, destination, LocalDataExport.json(exportStore))
+                    }
+                    snackbars.showSnackbar(tr("Ton export a été enregistré dans le fichier choisi.",
+                        "Your export was saved to the file you chose."))
+                } catch (cancelled: CancellationException) {
+                    throw cancelled
+                } catch (_: Exception) {
+                    snackbars.showSnackbar(tr("L’export n’a pas pu être enregistré. Vérifie le fichier choisi et réessaie.",
+                        "The export could not be saved. Check the chosen file and try again."))
+                }
+            }
+        }
+    }
 
     fun openSettings(intent: Intent) {
         try { settingsRequest.launch(intent) }
@@ -276,10 +300,22 @@ private fun MareeApp() {
     }
 
     when {
-        showPrivacy -> PrivacyScreen(
-            onBack = { showPrivacy = false },
-            onDeleteData = { deleteConfirmation = true }
-        )
+        showPrivacy -> Box(Modifier.fillMaxSize()) {
+            PrivacyScreen(
+                onBack = { showPrivacy = false },
+                onDeleteData = { deleteConfirmation = true },
+                onExportData = {
+                    try {
+                        exportDocument.launch("Selkie-donnees-${LocalDate.now()}.json")
+                    } catch (_: Exception) {
+                        display(tr("Le sélecteur de fichiers Android n’est pas disponible. Réessaie depuis un autre appareil.",
+                            "The Android file picker is unavailable. Try again on another device."))
+                    }
+                }
+            )
+            SnackbarHost(snackbars, Modifier.align(Alignment.BottomCenter)
+                .navigationBarsPadding().padding(16.dp))
+        }
         showSetup || !setupComplete -> OnboardingScreen(
             status = permissions,
             onUsagePermission = { openSettings(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)) },
@@ -345,7 +381,12 @@ private fun MareeApp() {
                                     fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis,
                                     modifier = Modifier.weight(1f))
                             }
-                            TextButton(onClick = { openMenuPage(SettingsPage.SUBSCRIPTIONS) }) {
+                            TextButton(onClick = { openMenuPage(SettingsPage.SUBSCRIPTIONS) },
+                                modifier = Modifier.semantics {
+                                    contentDescription = tr(
+                                        "Ouvrir les abonnements. Offre actuelle : ${snapshot.plan.displayName}",
+                                        "Open subscriptions. Current plan: ${snapshot.plan.displayName}")
+                                }) {
                                 StatusPill(snapshot.plan.displayName)
                             }
                             IconButton(onClick = { scope.launch { drawerState.open() } }) {
@@ -470,7 +511,10 @@ private fun MareeApp() {
             title = { Text(tr("Retirer ${appLabel(context, item.packageName)} ?", "Remove ${appLabel(context, item.packageName)}?")) },
             text = { Text(tr("Cette application et son verrou seront supprimés de Selkie.", "This app and its lock will be removed from Selkie.")) },
             confirmButton = { Button(onClick = {
-                store.removeApp(item.packageName); removeApp = null; refresh()
+                store.removeApp(item.packageName)
+                MonitorService.clearAppAlert(context, item.packageName)
+                removeApp = null
+                refresh()
             }) { Text(tr("Retirer", "Remove")) } },
             dismissButton = { TextButton(onClick = { removeApp = null }) { Text(tr("Annuler", "Cancel")) } })
     }
@@ -508,16 +552,17 @@ private fun MareeApp() {
             confirmButton = { Button(enabled = !deleting, onClick = {
                 scope.launch {
                     deleting = true
-                    setup.reset()
+                    setup.setMonitoringEnabled(false)
                     monitoringEnabled = false
                     MonitorService.stop(context)
                     val cleared = withContext(Dispatchers.IO) {
+                        val onboarding = setup.reset()
                         val local = store.clearPersonalData()
                         val coach = try { CoachSessionStore(context).clear(); true } catch (_: CoachError) { false }
                         val offlineCoach = OfflineCoachHistory(context).clear()
                         val language = AppLanguage.reset(context)
                         val appearance = AppAppearance.reset(context)
-                        local && coach && offlineCoach && language && appearance
+                        onboarding && local && coach && offlineCoach && language && appearance
                     }
                     deleting = false
                     deleteConfirmation = false
@@ -533,6 +578,8 @@ private fun MareeApp() {
                         tab = 0
                         refresh()
                     } else {
+                        setupComplete = setup.isCompleted()
+                        refresh()
                         infoMessage = tr("L’effacement n’a pas pu être enregistré. Le suivi est arrêté. Réessaie depuis Confidentialité.", "Deletion could not be saved. Tracking has stopped. Try again from Privacy.")
                     }
                 }
@@ -878,10 +925,16 @@ private fun MinutesDialog(
                     textAlign = TextAlign.Center)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     OutlinedButton(onClick = { minutes = (minutes - 5).coerceAtLeast(5) },
+                        modifier = Modifier.semantics {
+                            contentDescription = tr("Diminuer la limite de 5 minutes", "Decrease the limit by 5 minutes")
+                        },
                         enabled = minutes > 5) { Text("−", fontSize = 20.sp) }
                     Text("$minutes min", fontSize = 27.sp, fontWeight = FontWeight.Bold,
                         modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
                     OutlinedButton(onClick = { minutes = (minutes + 5).coerceAtMost(1440) },
+                        modifier = Modifier.semantics {
+                            contentDescription = tr("Augmenter la limite de 5 minutes", "Increase the limit by 5 minutes")
+                        },
                         enabled = minutes < 1440) { Text("+", fontSize = 20.sp) }
                 }
             }

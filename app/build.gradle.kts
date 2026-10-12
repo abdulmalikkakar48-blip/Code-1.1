@@ -32,7 +32,31 @@ require(coachUrl.isEmpty() == coachPublicKey.isEmpty()) {
     "Coach : configurer ensemble l’URL du projet et sa clé publique, ou laisser les deux vides."
 }
 
+// Only an explicitly configured online coach needs the app's own network permission.
+// The base manifest stays offline; generate the configured manifest in ignored build outputs.
+val generatedCoachManifest = layout.buildDirectory.file("generated/selkieManifest/AndroidManifest.xml")
+val generateCoachManifest = tasks.register("generateCoachManifest") {
+    val template = layout.projectDirectory.file("src/main/AndroidManifest.xml")
+    inputs.file(template)
+    inputs.property("onlineCoachConfigured", coachUrl.isNotEmpty())
+    outputs.file(generatedCoachManifest)
+    doLast {
+        val base = template.asFile.readText(Charsets.UTF_8)
+        val marker = "    <uses-permission android:name=\"android.permission.PACKAGE_USAGE_STATS\""
+        val manifest = if (coachUrl.isEmpty()) base else {
+            check(base.contains(marker))
+            base.replace(marker, "    <uses-permission android:name=\"android.permission.INTERNET\" />\n\n" + marker)
+        }
+        generatedCoachManifest.get().asFile.apply {
+            parentFile.mkdirs()
+            writeText(manifest, Charsets.UTF_8)
+        }
+    }
+}
+tasks.matching { it.name == "preBuild" }.configureEach { dependsOn(generateCoachManifest) }
+
 android {
+    sourceSets.getByName("main").manifest.srcFile(generatedCoachManifest)
     namespace = "com.maree.app"
     compileSdk = 34
 
@@ -40,8 +64,8 @@ android {
         applicationId = "com.maree.app"
         minSdk = 29
         targetSdk = 34
-        versionCode = 18
-        versionName = "0.10.3"
+        versionCode = 19
+        versionName = "0.10.4"
         buildConfigField("String", "SUPABASE_URL", quoted(coachUrl))
         buildConfigField("String", "SUPABASE_PUBLIC_KEY", quoted(coachPublicKey))
     }

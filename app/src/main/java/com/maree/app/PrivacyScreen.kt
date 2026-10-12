@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -40,15 +42,23 @@ import kotlinx.coroutines.launch
 
 /** Résumé lisible dès le premier lancement ; toutes les sections sont consultables hors ligne. */
 @Composable
-fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit) {
-    BackHandler(onBack = onBack)
+fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit, onExportData: () -> Unit) {
     val context = LocalContext.current
     val snackbars = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var fullPolicy by rememberSaveable { mutableStateOf(false) }
+    var legalDocument by rememberSaveable { mutableStateOf<LegalDocument?>(null) }
+    val listState = rememberLazyListState()
+    val currentDocument = legalDocument
+    if (currentDocument != null) {
+        LegalInformationScreen(currentDocument, onBack = { legalDocument = null })
+        return
+    }
+    BackHandler(onBack = onBack)
     Scaffold(containerColor = MareePalette.Background,
         snackbarHost = { SnackbarHost(snackbars) }) { inner ->
         LazyColumn(
+            state = listState,
             modifier = Modifier.fillMaxSize().padding(inner)
                 .statusBarsPadding().navigationBarsPadding(),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 20.dp),
@@ -70,11 +80,37 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit) {
                     PrivacyFact(tr("Ce qui est enregistré", "What is saved"),
                         tr("Tes applications suivies, tes limites, tes points et tes défis restent sur ton appareil.", "Your tracked apps, limits, points and challenges stay on your device."))
                     PrivacyFact(tr("Ce qui reste privé", "What stays private"),
-                        tr("Selkie ne lit ni tes messages, ni tes photos, ni le contenu de ton écran. Les durées sont consultées uniquement après ton autorisation.", "Selkie does not read your messages, photos or screen content. Usage times are accessed only after you give permission."))
+                        tr("Selkie ne lit ni les messages de tes autres applications, ni tes photos, ni le contenu de ton écran. Les durées sont consultées uniquement après ton autorisation.", "Selkie does not read messages from your other apps, photos or screen content. Usage times are accessed only after you give permission."))
                     PrivacyFact(tr("Tu gardes le contrôle", "You stay in control"),
                         tr("Arrête le suivi dans le menu ☰ → Accès Android ou efface tes données ci-dessous. Pour retirer un accès, utilise les réglages Android.", "Stop tracking in the ☰ menu → Android access or erase your data below. Use Android settings to revoke access."))
                     PrivacyFact(tr("Le Coach, aujourd’hui", "The coach today"),
                         tr("Le coach à conseils préparés fonctionne sans compte ni envoi. Les questions non comprises restent sur ce téléphone uniquement si tu actives leur enregistrement ; tu peux les consulter et les effacer dans Coach. Un futur dialogue IA en ligne demanderait ton accord pour transmettre les échanges. Les paiements restent inactifs.", "The coach uses prepared advice, without an account or sending messages anywhere. Unrecognised questions stay on this phone only if you enable saving; you can view and erase them in Coach. A future online AI chat would ask for your agreement before transmitting messages. Payments remain inactive."))
+                }
+            }
+            item {
+                AppCardSurface {
+                    SectionLabel(tr("Conditions et informations légales", "Terms and legal information"))
+                    Text(tr("Cette version est un test gratuit. Consulte ses conditions, les informations sur les offres et le contact actuel.",
+                        "This is a free test version. Read its terms, plan information and current contact details."),
+                        color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium)
+                    LegalDocument.entries.forEach { document ->
+                        OutlinedButton(onClick = { legalDocument = document },
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+                            shape = RoundedCornerShape(14.dp)) { Text(document.title) }
+                    }
+                }
+            }
+            item {
+                AppCardSurface {
+                    SectionLabel(tr("Une copie de tes données", "A copy of your data"))
+                    Text(tr("Enregistre un fichier JSON de tes réglages et de ta progression à l’endroit que tu choisis. Il peut contenir des informations privées. Les phrases du coach sont exclues. Une copie exportée doit être supprimée séparément si tu le souhaites.",
+                        "Save a JSON file of your settings and progress in a location you choose. It may contain private information. Coach messages are excluded. Delete any exported copy separately if you wish."),
+                        color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium)
+                    OutlinedButton(onClick = onExportData,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+                        shape = RoundedCornerShape(14.dp)) {
+                        Text(tr("Exporter mes données", "Export my data"))
+                    }
                 }
             }
             item {

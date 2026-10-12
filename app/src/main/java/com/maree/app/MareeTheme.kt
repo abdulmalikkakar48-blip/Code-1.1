@@ -85,6 +85,8 @@ internal object MareePalette {
     val Amber: Color get() = Teal
     val Sand: Color get() = Subtle
     val Outline: Color get() = Color(colors.outline)
+    // Control borders need more contrast than decorative card separators.
+    val ControlOutline: Color get() = Color(colors.muted)
     val Danger: Color get() = Color(colors.danger)
     val OnDanger: Color get() = Color(colors.onDanger)
     val HeroBackground: Color get() = Color(colors.heroBackground)
@@ -107,7 +109,7 @@ private fun mareeScheme(night: Boolean) =
         background = MareePalette.Background, onBackground = MareePalette.Ink,
         surface = MareePalette.Surface, onSurface = MareePalette.Ink,
         surfaceVariant = MareePalette.Subtle, onSurfaceVariant = MareePalette.Muted,
-        outline = MareePalette.Outline, error = MareePalette.Danger, onError = MareePalette.OnDanger,
+        outline = MareePalette.ControlOutline, error = MareePalette.Danger, onError = MareePalette.OnDanger,
         inverseSurface = Color(0xFFDDE6F4), inverseOnSurface = Color(0xFF142237),
         inversePrimary = Color(0xFF174D88), surfaceTint = MareePalette.Teal
     ) else lightColorScheme(
@@ -120,7 +122,7 @@ private fun mareeScheme(night: Boolean) =
         background = MareePalette.Background, onBackground = MareePalette.Ink,
         surface = MareePalette.Surface, onSurface = MareePalette.Ink,
         surfaceVariant = MareePalette.Subtle, onSurfaceVariant = MareePalette.Muted,
-        outline = MareePalette.Outline, error = MareePalette.Danger, onError = MareePalette.OnDanger
+        outline = MareePalette.ControlOutline, error = MareePalette.Danger, onError = MareePalette.OnDanger
     )
 
 private val MareeTypography = Typography(

@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
@@ -33,6 +35,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -192,7 +198,8 @@ private fun OfflineCoachTab(
             AppCardSurface {
                 SectionLabel(tr("La réponse du coach", "The coach’s answer"))
                 if (visibleAnswer != null) {
-                    Text(visibleAnswer.text, color = MareePalette.Ink, fontSize = 16.sp, lineHeight = 24.sp)
+                    Text(visibleAnswer.text, color = MareePalette.Ink, fontSize = 16.sp, lineHeight = 24.sp,
+                        modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
                     if (visibleAnswer.suggestions.isNotEmpty()) TopicButtons(visibleAnswer.suggestions, topics, !saving) {
                         submit(it.label, it.id, returnToQuestion = true)
                     }
@@ -325,12 +332,16 @@ private fun OfflineCoachTab(
         if (showSettings) item {
             AppCardSurface {
                 SectionLabel(tr("Questions non comprises", "Unrecognised questions"))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(checked = saveUnknown, enabled = !saving, onCheckedChange = { enabled ->
+                Row(modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).toggleable(
+                    value = saveUnknown,
+                    enabled = !saving,
+                    role = Role.Checkbox,
+                    onValueChange = { enabled ->
                         val generation = history.generation()
                         storeAction { history.setEnabled(enabled, expectedGeneration = generation) }
-                    })
-                    Text(tr("Les garder sur ce téléphone", "Keep them on this phone"), color = MareePalette.Ink, fontSize = 14.sp,
+                    }), verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(checked = saveUnknown, enabled = !saving, onCheckedChange = null)
+                    Text(tr("Conserver les questions non comprises sur ce téléphone", "Keep unrecognised questions on this phone"), color = MareePalette.Ink, fontSize = 14.sp,
                         modifier = Modifier.weight(1f), lineHeight = 21.sp)
                 }
                 Text(tr("Option désactivée au départ. Jusqu’à 50 questions pour tes propres repères ; les plus anciennes sont remplacées. Rien n’est transmis à l’éditeur. Désactiver cette option les efface. Évite d’y écrire des informations privées.", "Off by default. Keep up to 50 questions for your own reference; the oldest are replaced. Nothing is sent to the publisher. Turning this off deletes them. Avoid entering private information."),

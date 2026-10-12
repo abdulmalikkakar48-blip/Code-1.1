@@ -47,8 +47,25 @@ class SetupPreferencesTest {
         val prefs = BooleanPreferences()
         val setup = SetupPreferences(prefs)
         setup.complete()
-        setup.reset()
+        assertTrue(setup.reset())
 
+        assertFalse(SetupPreferences(prefs).isCompleted())
+        assertFalse(SetupPreferences(prefs).isMonitoringEnabled())
+    }
+
+    @Test
+    fun failedDeletionIsReportedAndCanBeRetriedWithoutRestartingPausedMonitoring() {
+        val prefs = BooleanPreferences()
+        val setup = SetupPreferences(prefs)
+        setup.complete()
+        setup.setMonitoringEnabled(false)
+        prefs.failCommit = true
+
+        assertFalse(setup.reset())
+        assertFalse(SetupPreferences(prefs).isMonitoringEnabled())
+
+        prefs.failCommit = false
+        assertTrue(setup.reset())
         assertFalse(SetupPreferences(prefs).isCompleted())
         assertFalse(SetupPreferences(prefs).isMonitoringEnabled())
     }
@@ -73,6 +90,7 @@ class SetupPreferencesTest {
 
 private class BooleanPreferences : SharedPreferences {
     private val values = mutableMapOf<String, Boolean>()
+    var failCommit = false
 
     override fun getBoolean(key: String, defValue: Boolean): Boolean = values[key] ?: defValue
     override fun contains(key: String): Boolean = values.containsKey(key)
@@ -93,6 +111,7 @@ private class BooleanPreferences : SharedPreferences {
         override fun remove(key: String) = apply { changes[key] = null }
         override fun clear() = apply { clear = true }
         override fun commit(): Boolean {
+            if (failCommit) return false
             if (clear) values.clear()
             changes.forEach { (key, value) ->
                 if (value == null) values.remove(key) else values[key] = value

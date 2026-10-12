@@ -95,7 +95,7 @@ fun OnboardingScreen(
             AppCardSurface {
                 Text(tr("Tes données restent sur ton téléphone", "Your data stays on your phone"), fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold, color = MareePalette.Ink)
-                Text(tr("Selkie ne lit ni tes messages, ni tes photos, ni le contenu de ton écran.", "Selkie does not read your messages, photos, or screen content."),
+                Text(tr("Selkie ne lit ni les messages de tes autres applications, ni tes photos, ni le contenu de ton écran.", "Selkie does not read messages from your other apps, photos, or screen content."),
                     color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
                 TextButton(onClick = onPrivacy) { Text(tr("Lire la confidentialité", "Read the privacy policy")) }
             }

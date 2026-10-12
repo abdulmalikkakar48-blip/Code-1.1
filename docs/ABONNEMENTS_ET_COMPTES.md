@@ -1,6 +1,6 @@
-# Offres et comptes Selkie — décisions de la version 0.9.3
+# Offres et comptes Selkie — version de test 0.10.4
 
-Les offres sont accessibles dans **le menu ☰ en haut → Abonnements**. Ce sont des **démonstrations gratuites** dans cet APK. Il ne crée, ne facture, ne renouvelle et ne résilie aucun abonnement. Les choix mensuel et annuel servent à présenter les tarifs prévus ; ils ne déclenchent pas un achat.
+Les tarifs sans réduction fixés en 0.9.3 sont conservés. Les offres sont accessibles dans **le menu ☰ en haut → Abonnements**. Ce sont des **démonstrations gratuites** dans cet APK. Il ne crée, ne facture, ne renouvelle et ne résilie aucun abonnement. Les choix mensuel et annuel servent à présenter les tarifs prévus ; ils ne déclenchent pas un achat.
 
 | Offre | Mensuel prévu | Annuel prévu, payé en une fois | Applications compatibles |
 | --- | --- | --- | --- |
@@ -15,6 +15,14 @@ L’année coûte douze mensualités, sans réduction. Les fonctions d’une off
 Le modèle prévu est un renouvellement automatique chaque mois pour le mensuel, chaque année pour l’annuel, sauf annulation. La durée, le montant et la prochaine échéance doivent être présentés avant l’achat.
 
 Pour un achat réellement effectué via Google Play : ouvrir **Google Play → profil → Paiements et abonnements → Abonnements → Selkie → Annuler l’abonnement**. Vérifier le compte Google utilisé pour l’achat si l’abonnement n’apparaît pas. Le lien « Gérer mes abonnements Google Play » ouvre la page de gestion, pas un paiement Selkie. Après une résiliation ordinaire, l’accès reste normalement disponible jusqu’à la fin de la période payée ; la page Google Play indique l’échéance exacte. Désinstaller Selkie ou effacer ses données ne résilie pas un abonnement. Une annulation ne constitue pas automatiquement une demande de remboursement.
+
+## Remboursement et informations légales
+
+**Menu ☰ → Confidentialité et données → Abonnements et remboursements** explique les projets d’offres, l’annulation et les demandes de remboursement ; les conditions d’utilisation et les mentions de l’éditeur sont disponibles sur la même page. Une démonstration gratuite ne constitue pas un achat à rembourser.
+
+Pour un futur achat Google Play réel, retrouver la commande dans l’historique du compte utilisé et suivre l’option de demande de remboursement lorsqu’elle est proposée, ou écrire à **1kabdm@gmail.com** avec le numéro de commande, la date et le problème. Ne pas envoyer de RIB, de carte bancaire ou de mot de passe. L’examen dépend du contrat et du droit applicable ; un remboursement n’est pas garanti par cette page.
+
+En France, la rétractation à distance est en principe de 14 jours, sous conditions et exceptions. Elle ne doit pas être considérée comme automatiquement perdue à l’ouverture de l’application. Les [conditions de test FR/EN](CONDITIONS_UTILISATION.md) détaillent les distinctions entre service et contenu numérique. Les futures CGV devront être adaptées au vrai vendeur et au vrai contrat avant toute vente ; les textes légaux actuels n’ont pas pu être vérifiés en ligne en 2026.
 
 ## Un compte est utile, mais distinct du paiement
 
@@ -33,4 +41,4 @@ Cette version ne propose pas encore ce compte : aucun serveur de comptes Selkie 
 5. Ajouter dans l’application la connexion, la déconnexion, le changement d’appareil, la restauration d’achat et la suppression du compte. La suppression d’un compte ne doit pas être présentée comme la résiliation Google Play.
 6. Adapter la politique aux services réellement déployés : responsable, e-mail dédié, données de compte et d’achat, destinataires, région, durées et suppression. Tester deux téléphones, une reconnexion, une perte d’appareil et un achat de test avant vente.
 
-Le responsable actuellement déclaré reste **Abdul Malik Kakar**, avec **1kabdm@gmail.com** comme contact. Si son père devient effectivement l’éditeur et le responsable, les informations et les contrats doivent correspondre à ce rôle réel. L’identité du responsable doit être claire ; un simple nom d’application et une adresse de contact ne remplacent pas cette identification.
+Le responsable actuellement déclaré pour le test reste **Abdul Malik Kakar**, avec **1kabdm@gmail.com** comme contact. L’éditeur de la future diffusion publique n’a pas encore été choisi. Confirmer l’identité, la capacité à contracter et les mentions applicables du véritable vendeur avant diffusion ou vente ; aucune identité de parent ou d’entreprise n’est présumée. Le [bilan de lancement](BILAN_CONFORMITE_FRANCE.md) et les [vérifications opérateur](CONFIDENTIALITE_AVANT_PUBLICATION.md) précisent les points restants. Aucun compte vendeur, paiement, site public ou publication Play n’est créé par cette documentation.

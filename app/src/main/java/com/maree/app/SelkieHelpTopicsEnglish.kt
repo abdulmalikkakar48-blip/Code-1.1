@@ -223,7 +223,7 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.PRIVACY, "privacy", "Where are my data and privacy information?",
         listOf("privacy", "privacy policy", "personal data", "my data", "gdpr", "cnil", "controller", "first and last name", "full name", "my real name", "private life", "messages read"),
         "Read the policy in the ☰ menu → Privacy and data. Your tracked apps, limits, points and challenges stay on your phone; the local Coach does not send your questions to the publisher. " +
-            "Selkie does not read your messages, photos or screen content. The policy must identify the actual data controller and provide a way to contact them: here, " +
+            "Selkie does not read messages from your other apps, photos or screen content. The policy must identify the actual data controller and provide a way to contact them: here, " +
             "${PrivacyIdentity.controllerName}, ${PrivacyIdentity.contactEmail}. It describes this version; opening accounts or payments will require an update."
     ),
     englishHelp(

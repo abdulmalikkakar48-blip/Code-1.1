@@ -1,6 +1,7 @@
 package com.maree.app
 
 import android.content.SharedPreferences
+import androidx.compose.ui.graphics.toArgb
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -88,6 +89,18 @@ class AppAppearanceTest {
         assertReadableRoles("night", SelkieNightColors)
     }
 
+    @Test fun controlBordersMeetNonTextContrastInBothAppearances() {
+        listOf(ThemeMode.LIGHT to SelkieLightColors, ThemeMode.DARK to SelkieNightColors)
+            .forEach { (mode, colors) ->
+                assertTrue(AppAppearance.set(AppearanceMemoryPreferences(), mode))
+                val outline = MareePalette.ControlOutline.toArgb().toLong() and 0xffffffffL
+                listOf(colors.background, colors.surface, colors.subtle, colors.softAccent)
+                    .forEach { background ->
+                        assertContrast("${mode.tag} control border", outline, background, minimum = 3.0)
+                    }
+            }
+    }
+
     @Test fun sealBackgroundIsPreservedWhenNightModeIsSelected() {
         val original = MareePalette.BrandBackground
         assertTrue(AppAppearance.set(AppearanceMemoryPreferences(), ThemeMode.DARK))
@@ -115,11 +128,11 @@ class AppAppearanceTest {
         assertContrast(name, colors.navigationMuted, colors.navigationBackground)
     }
 
-    private fun assertContrast(name: String, foreground: Long, background: Long) {
+    private fun assertContrast(name: String, foreground: Long, background: Long, minimum: Double = 4.5) {
         val lighter = max(luminance(foreground), luminance(background))
         val darker = min(luminance(foreground), luminance(background))
         val ratio = (lighter + 0.05) / (darker + 0.05)
-        assertTrue("$name text ${foreground.toString(16)} on ${background.toString(16)}: $ratio", ratio >= 4.5)
+        assertTrue("$name ${foreground.toString(16)} on ${background.toString(16)}: $ratio", ratio >= minimum)
     }
 
     private fun luminance(argb: Long): Double {
