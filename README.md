@@ -1,5 +1,15 @@
 # Selkie — application Android de réduction du temps d'écran
 
+## Version 0.10.3 — surface d’eau pointillée
+
+Le fond devient une **nappe de points répartie sur toute sa surface**, animée comme de l’eau. Les vagues et les points sont plus visibles, en clair comme en nuit ; les cartes restent opaques pour garder les textes lisibles. La boucle de mouvement dure 12 secondes. Le réglage Android de suppression des animations et la pause quand l’activité quitte le premier plan sont conservés.
+
+Le menu ☰, les quatre onglets, le coach, les données, les règles et les prix sans réduction restent identiques. Aucun compte, paiement ou dialogue IA distant n’est activé. Compilation et 97 tests unitaires réussis, Android Lint sans erreur. Le fond et son mouvement, son arrêt et sa reprise ont été observés en clair et en nuit sur émulateur ; les essais sur téléphone restent à faire.
+
+[Page de l’APK Selkie 0.10.3 — environ 25 Mo, accès GitHub requis](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.10.3.apk) · [Sources exactes](downloads/Selkie-Android-0.10.3-source.zip) · [Validation](downloads/VALIDATION-0.10.3.md) · [Apparence](docs/MODE_NUIT.md).
+
+**English:** A field of dots now covers the background and moves like a water surface. The waves are more visible in Light and Night modes, while cards remain opaque. The 12-second loop respects Android’s animation setting and pauses outside the foreground. Coach content, menus and planned prices stay the same. The build and all 97 unit tests pass with no Lint errors. Movement, stopping and resuming were observed in both modes on an emulator; physical-phone testing remains pending.
+
 ## Version 0.10.2 — formes en points et onde douce
 
 Le fond dessine désormais **144 points** répartis sur deux cercles, un triangle arrondi et un losange. Une onde serpente sur leurs contours, avec une dérive légère et une boucle de 24 secondes. Les points restent discrets, en clair comme en nuit ; les cartes restent opaques. Le réglage Android des animations et la pause hors de l’activité visible sont conservés.
@@ -114,7 +124,7 @@ Plafonds : **10 applications en Gratuit**, **50 en Premium** et **aucun plafond 
 
 Pour commencer la distribution et les paiements, ouvre [le guide de démarrage](docs/DEMARRER_PUBLICATION.md). Il mène aux étapes [Google Play](docs/PUBLICATION_GOOGLE_PLAY.md) et [abonnements](docs/ABONNEMENTS.md). Le travail porte sur Android ; la version iPhone est reportée. L’APK reste une version de test ; aucun paiement ni coach IA n’est connecté.
 
-**Version actuelle : 0.10.2 (APK de test et code source).** Interface française et anglaise, apparence claire ou nuit.
+**Version actuelle : 0.10.3 (APK de test et code source).** Interface française et anglaise, apparence claire ou nuit.
 
 Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Material 3, `minSdk 29` (Android 10), `targetSdk 34`, package `com.maree.app`, Gradle 8.7, AGP 8.5.2, Kotlin 1.9.24.
 
@@ -173,7 +183,7 @@ La politique est une information pour la version locale, pas une certification j
 1. Créer un dépôt GitHub vide et y envoyer **le contenu** de ce répertoire (`app/`, `.github/`, etc.).
 2. Ouvrir l'onglet **Actions**, sélectionner **Construire l'APK Android**, puis lancer **Run workflow** (ou envoyer un commit sur `main`).
 3. À la fin de la tâche `android`, récupérer l'artefact `Selkie-build-to-sign` ; il contient `app-debug.apk`. C’est un fichier intermédiaire qui utilise la clé temporaire du runner.
-4. Pour distribuer une mise à jour, signer ce fichier avec la clé fixe sauvegardée, selon [la procédure de signature](docs/SIGNATURE_ANDROID.md). Le fichier de test actuel est [Selkie-Android-0.10.2.apk](downloads/Selkie-Android-0.10.2.apk), pour Android 10+.
+4. Pour distribuer une mise à jour, signer ce fichier avec la clé fixe sauvegardée, selon [la procédure de signature](docs/SIGNATURE_ANDROID.md). Le fichier de test actuel est [Selkie-Android-0.10.3.apk](downloads/Selkie-Android-0.10.3.apk), pour Android 10+.
 5. Ouvrir Selkie, lire les explications, puis activer les accès nécessaires au suivi. Les notifications sont facultatives, et le mode découverte reste disponible.
 
 Le projet a été compilé dans l'environnement cloud. L'APK de test est généré dans `app/build/outputs/apk/debug/app-debug.apk`. Le wrapper Gradle 8.7 est inclus, avec vérification SHA-256 de sa distribution ; GitHub Actions utilise ce wrapper pour compiler, exécuter les tests unitaires et lancer Android Lint.

@@ -1,5 +1,11 @@
 # Selkie : version de travail retenue le 12 octobre 2026
 
+## Version de travail 0.10.3
+
+Le fond est une surface d’eau pointillée : plusieurs centaines de points couvrent la surface et ondulent ensemble, avec un mouvement plus visible en clair comme en nuit. La boucle dure 12 secondes ; le dessin natif réutilise ses tableaux et ses peintures. L’arrêt hors du cycle RESUMED et le respect des animations Android restent conservés. Le menu, les quatre onglets, le coach, les données, les règles et les prix sans réduction sont identiques.
+
+VersionCode 18. [Page de l’APK Selkie 0.10.3 — accès GitHub requis](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.10.3.apk), [sources exactes](../downloads/Selkie-Android-0.10.3-source.zip) et [validation 0.10.3](../downloads/VALIDATION-0.10.3.md). Compilation et 97 tests unitaires réussis, Lint sans erreur. Mouvement, arrêt et reprise observés sur émulateur dans les deux thèmes ; essais sur téléphone encore nécessaires. Aucun compte serveur, paiement ou dialogue IA distant n’est activé. Les sections suivantes sont les archives.
+
 ## Version de travail 0.10.2
 
 Le fond utilise 144 points : deux cercles de 48 et 32 points, un triangle arrondi de 36 points et un losange de 28 points. Une onde se propage le long des contours ; les formes dérivent doucement, jusqu’à 6 dp, dans une boucle de 24 secondes. Le menu ☰ et les quatre onglets, le coach, les données, les règles et les prix sans réduction restent conservés. Les réglages Android des animations et l’arrêt hors du cycle RESUMED restent pris en compte.

@@ -1,4 +1,4 @@
-# Français et anglais — Selkie 0.10.2
+# Français et anglais — Selkie 0.10.3
 
 L’application propose les deux langues. Le choix **Français / English** est accessible dès l’accueil initial et dans **le menu ☰ en haut → Langue / Language**. Il est enregistré uniquement sur le téléphone. Sans choix enregistré, Selkie démarre en anglais si le téléphone est en anglais, en français sinon. Changer la langue n’efface pas les points, limites, validations ou défis personnels et n’active aucun accès Android, compte ou paiement.
 
@@ -17,3 +17,5 @@ Les textes des écrans utilisent `tr(fr, en)` et les catalogues du Coach utilise
 Les tests vérifient le choix initial et enregistré, le catalogue anglais, les questions reconnues, les réponses inconnues, les points et compteurs réels, les messages de détresse et le filtre local de phrases privées dans les deux langues. La compilation Android et Lint ne remplacent pas les essais sur téléphone : bascule FR/EN à l’accueil et dans le menu ☰ → Langue / Language, relance, notification du suivi, clavier, menus d’aide, défis et politique complète. Le rendu et la persistance sur Samsung ne doivent être annoncés comme observés qu’après cet essai.
 
 La version 0.10.2 modifie uniquement le fond géométrique en points ; les langues, les textes et les chemins du menu restent conservés. Compilation et 97 tests unitaires passent ; les essais sur téléphone restent nécessaires.
+
+La version 0.10.3 remplace ce fond par une surface d’eau pointillée, plus visible en clair et en nuit. Les langues, les textes et les chemins du menu restent identiques. Compilation et 97 tests unitaires passent. Le fond et son mouvement ont été observés dans les deux thèmes sur émulateur ; les essais sur téléphone restent nécessaires.

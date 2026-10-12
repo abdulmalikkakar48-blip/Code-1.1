@@ -34,6 +34,7 @@ internal fun SelkieGeometryBackground(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val phase = remember { mutableFloatStateOf(0f) }
+    val water = remember { SelkieWaterParticleField() }
     var motionAllowed by remember { mutableStateOf(ValueAnimator.areAnimatorsEnabled()) }
 
     DisposableEffect(context, lifecycle) {
@@ -68,7 +69,7 @@ internal fun SelkieGeometryBackground(modifier: Modifier = Modifier) {
             val started = withFrameNanos { it }
             while (isActive) {
                 withFrameNanos { now ->
-                    phase.floatValue = ((initial + (now - started) / 24_000_000_000.0) % 1.0).toFloat()
+                    phase.floatValue = ((initial + (now - started) / 12_000_000_000.0) % 1.0).toFloat()
                 }
                 // Slow decoration needs fewer redraws than interactive UI animations.
                 delay(50L)
@@ -77,9 +78,8 @@ internal fun SelkieGeometryBackground(modifier: Modifier = Modifier) {
     }
     Canvas(modifier.clipToBounds().clearAndSetSemantics { }) {
         // Reading phase here invalidates drawing, rather than the screens or their layout.
-        val primary = MareePalette.Teal.copy(alpha = if (AppAppearance.isNight) 0.18f else 0.10f)
-        val secondary = MareePalette.Muted.copy(alpha = if (AppAppearance.isNight) 0.14f else 0.08f)
-        drawSelkieGeometryParticles(phase.floatValue, primary, secondary)
+        val waterColor = MareePalette.Teal.copy(alpha = if (AppAppearance.isNight) 0.32f else 0.14f)
+        water.draw(this, phase.floatValue, waterColor)
     }
 }
 

@@ -1,4 +1,4 @@
-# Menu — Selkie 0.10.2
+# Menu — Selkie 0.10.3
 
 Le bouton ☰ se trouve en haut à droite sur les quatre onglets et les pages des réglages. Il ouvre un panneau avec six entrées réparties en trois groupes.
 
@@ -17,4 +17,4 @@ La confidentialité garde son écran autonome et son retour, y compris depuis l�
 
 Les titres et pages suivent la langue et l’apparence choisies. Les IDs des pages restent les mêmes entre les langues. Les prix ne changent pas et aucune remise annuelle, vente ou connexion serveur n’est ajoutée. Les offres restent des démonstrations locales.
 
-Les écrans principaux et les pages des réglages utilisent un fond géométrique discret en points, avec une onde douce sur les contours. Il reste derrière le contenu et les cartes ; la politique, l’accueil des autorisations et l’écran rouge gardent leur présentation lisible.
+Les écrans principaux et les pages des réglages utilisent un fond de points répartis sur toute la surface, qui ondule comme de l’eau. Le mouvement est plus visible en clair et en nuit. Il reste derrière le contenu et les cartes ; la politique, l’accueil des autorisations et l’écran rouge gardent leur présentation lisible.
