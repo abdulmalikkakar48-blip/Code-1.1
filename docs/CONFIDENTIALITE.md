@@ -1,6 +1,6 @@
 # Confidentialité de Selkie
 
-Information mise à jour le **11 octobre 2026**. Elle décrit le suivi et le Coach à règles locaux. Le dialogue IA en ligne préparé dans le code est distinct et n’est pas activé.
+Information mise à jour le **12 octobre 2026**. Elle décrit le suivi et le Coach à règles locaux. Le dialogue IA en ligne préparé dans le code est distinct et n’est pas activé.
 
 Selkie aide à réduire le temps d’écran. Les données de suivi restent sur l’appareil et aucun compte n’est nécessaire. Cette information peut être consultée hors ligne dans l’application, avant toute autorisation et depuis les réglages. Sa consultation ou son affichage n’active pas le suivi et aucune case d’acceptation obligatoire n’est demandée.
 
@@ -8,7 +8,7 @@ Selkie aide à réduire le temps d’écran. Les données de suivi restent sur l
 
 **Responsable du traitement : Abdul Malik Kakar**, éditeur de Selkie à titre personnel (personne physique).
 
-Contact confidentialité : **abdulmalikkakar48@gmail.com**.
+Contact confidentialité : **1kabdm@gmail.com**.
 
 ## Données utilisées
 
@@ -17,7 +17,7 @@ Contact confidentialité : **abdulmalikkakar48@gmail.com**.
 - Les identifiants des applications choisies, leurs limites, les durées de référence servant aux réinitialisations, les dates de verrouillage, d’alerte et de pénalité, le solde de points et ses quarts de point, les défis accomplis, les dates locales des validations quotidiennes et les dates des cycles de progression sont enregistrés dans les données privées de Selkie sur l’appareil.
 - Les titres des défis personnels, leurs trois étapes, la durée choisie, les cases du jour et leur progression sont enregistrés localement. Le choix d’offre dans le mode démonstration est également conservé ; il ne constitue pas un abonnement et ne donne lieu à aucun paiement.
 
-Le **Coach local** reconnaît environ quarante sujets et choisit parmi des conseils préparés. Il fonctionne hors ligne, sans compte et sans API d’IA. Les phrases saisies sont traitées uniquement sur le téléphone. Les points et les durées réelles des applications suivies peuvent adapter les conseils ; ces données ne quittent pas l’appareil. Il ne s’agit pas d’un modèle d’IA capable de répondre à toute question nouvelle.
+Le **Coach local** choisit des conseils et des réponses sur Selkie dans un catalogue préparé. Il fonctionne hors ligne, sans compte et sans API d’IA. Les phrases saisies sont traitées uniquement sur le téléphone. Les points et les durées réelles des applications suivies peuvent adapter les conseils ; ces données ne quittent pas l’appareil. Il ne s’agit pas d’un modèle d’IA capable de répondre à toute question nouvelle.
 
 La conversation reste uniquement en mémoire pendant l’ouverture de l’onglet Coach. La conservation des phrases non comprises est une **option désactivée par défaut**. Si elle est activée explicitement, au plus **cinquante phrases distinctes, de huit cents caractères maximum chacune**, sont gardées dans le stockage privé du téléphone. L’utilisateur peut les consulter et les effacer sur ce téléphone. Elles ne sont pas transmises automatiquement à l’éditeur et aucun export automatique n’est proposé. Les messages reconnus comme sensibles ou liés à une crise ne sont pas enregistrés ; la détection automatique peut être imparfaite, il faut éviter de saisir des informations privées.
 

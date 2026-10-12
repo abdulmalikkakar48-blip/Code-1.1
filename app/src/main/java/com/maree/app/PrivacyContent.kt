@@ -3,14 +3,14 @@ package com.maree.app
 /** Identité et contact fournis par l’éditeur pour la confidentialité. */
 object PrivacyIdentity {
     const val controllerName = "Abdul Malik Kakar"
-    const val contactEmail = "abdulmalikkakar48@gmail.com"
+    const val contactEmail = "1kabdm@gmail.com"
 }
 
 data class PrivacySection(val title: String, val paragraphs: List<String>)
 
 /** Texte embarqué : sa consultation ne dépend d'aucun serveur ni compte. */
 object PrivacyContent {
-    const val updatedOn = "11 octobre 2026"
+    const val updatedOn = "12 octobre 2026"
     const val introduction = "Selkie t’aide à réduire ton temps d’écran. Dans cette version, " +
         "tes données de suivi restent sur ton appareil et le suivi ne demande pas de compte. " +
         "Le Coach local utilise des conseils préparés, sans compte ni envoi sur Internet. " +
@@ -40,7 +40,7 @@ object PrivacyContent {
                 "Selkie ne lit pas tes messages, le contenu de tes écrans, tes contacts, tes photos " +
                     "ou ta position. Il n’y a pas de synchronisation du suivi, de publicité, de " +
                     "mesure d’audience ni de paiement actif.",
-                "Le Coach local reconnaît environ quarante sujets pour choisir des conseils préparés. " +
+                "Le Coach local choisit des conseils et des réponses sur Selkie dans un catalogue préparé. " +
                     "Les phrases saisies et, lorsque le conseil le nécessite, tes points et les durées " +
                     "des applications suivies sont utilisés uniquement sur le téléphone. Ce coach " +
                     "n’est pas un modèle d’IA et ne peut pas répondre à toutes les questions nouvelles.",

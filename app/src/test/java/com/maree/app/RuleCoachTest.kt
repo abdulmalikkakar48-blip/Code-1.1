@@ -117,7 +117,7 @@ class RuleCoachTest {
         for ((message, expected) in listOf(
             "Je passe mes soirées sur Tiktoc !" to "tiktok",
             "Le soir, je n’arrive pas à dormir" to "sleep",
-            "Comment gagner des POINTS D’HONNEUR ?" to "points",
+            "Comment gagner des POINTS D’HONNEUR ?" to "earn_points",
             "Je veux réinitialiser TikTok" to "reset",
             "Réinitialiser TikTok" to "reset",
             "Je veux créer mon défi personnalisé" to "custom_challenges",
@@ -152,5 +152,78 @@ class RuleCoachTest {
             assertFalse(reply.text.contains("35,25"))
             assertFalse(reply.text.contains("Suivi enregistré"))
         }
+    }
+
+    @Test fun appHelpAnswersNaturalQuestionsAboutNavigationAndSubscriptions() {
+        val coach = RuleCoach(random = Random(4))
+        for ((message, expected) in listOf(
+            "Quels sont les onglets de Selkie ?" to "navigation",
+            "Où aller pour mes exercices quotidiens ?" to "daily",
+            "Comment ajouter TikTok ?" to "add_app",
+            "Je veux suivre YouTube" to "add_app",
+            "Combien de temps ai-je utilisé TikTok ?" to "usage",
+            "Comment retirer TikTok du suivi ?" to "remove_app",
+            "Comment retirer TikTok ?" to "remove_app",
+            "Comment modifier la limite de TikTok ?" to "limits",
+            "Pourquoi TikTok est bloqué ?" to "red_screen",
+            "Comment annuler mon abonnement premium ?" to "cancel_subscription",
+            "Je veux résilier Premium" to "cancel_subscription",
+            "Est-ce renouvelé tous les mois ?" to "subscription_monthly",
+            "Combien coûte l'abonnement par an ?" to "subscription_annual",
+            "Comment restaurer mon achat Premium ?" to "restore_subscription",
+            "Comment payer mon abonnement Premium ?" to "payments"
+        )) {
+            assertEquals(message, expected, coach.reply(message, context).topicId)
+        }
+    }
+
+    @Test fun appHelpExplainsPrivacyContactAndAccountsWithoutPretendingToPerformActions() {
+        val coach = RuleCoach(random = Random(12))
+        for ((message, expected) in listOf(
+            "Où est la politique de confidentialité ?" to "privacy",
+            "Comment contacter Selkie par email ?" to "contact",
+            "Est-ce que je dois créer un compte ?" to "account",
+            "Je veux effacer toutes mes données" to "delete_data",
+            "Puis-je utiliser un seul compte sur plusieurs téléphones ?" to "single_device"
+        )) {
+            val reply = coach.reply(message, context)
+            assertEquals(message, expected, reply.topicId)
+            assertFalse(message, reply.unrecognized)
+            assertFalse(message, reply.sensitive)
+            assertFalse(message, reply.text.contains("Suivi enregistré"))
+        }
+    }
+
+    @Test fun unrecognizedAppQuestionsOfferHelpAndOtherUnknownQuestionsOfferAdvice() {
+        val coach = RuleCoach()
+        for (message in listOf("Selkie peut-elle traduire des poèmes ?", "L'application peut-elle dessiner un dinosaure ?")) {
+            val reply = coach.reply(message, context)
+            assertTrue(message, reply.unrecognized)
+            assertEquals(4, reply.suggestions.size)
+            assertTrue(message, reply.suggestions.all { id -> coachTopics.any { it.id == id && it.appHelp } })
+            assertTrue(message, reply.text.contains("question sur Selkie"))
+            reply.suggestions.forEach { id -> assertEquals(id, coach.replyForTopic(id, context).topicId) }
+        }
+        val unrelated = coach.reply("Je regarde les dinosaures dans le musée", context)
+        assertTrue(unrelated.unrecognized)
+        assertEquals(4, unrelated.suggestions.size)
+        assertTrue(unrelated.suggestions.all { id -> coachTopics.any { it.id == id && !it.appHelp } })
+    }
+
+    @Test fun brandAndVagueNavigationWordsDoNotReplaceSleepEmotionOrAppAdvice() {
+        val coach = RuleCoach()
+        for ((message, expected) in listOf(
+            "Selkie, je n'arrive pas à dormir" to "sleep",
+            "Où trouver des conseils pour dormir ?" to "sleep",
+            "Je suis seul et je regarde Selkie" to "loneliness",
+            "Je passe mes soirées sur TikTok" to "tiktok",
+            "Je passe trop de temps sur TikTok" to "tiktok"
+        )) {
+            assertEquals(message, expected, coach.reply(message, context).topicId)
+        }
+        assertTrue(coach.reply("J'aimerais compter des poissons", context).unrecognized)
+        val distress = coach.reply("Comment annuler Selkie ? Je veux me faire du mal", context)
+        assertTrue(distress.sensitive)
+        assertTrue(distress.suggestions.isEmpty())
     }
 }

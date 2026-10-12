@@ -1,4 +1,10 @@
-# Selkie : version retenue le 11 octobre 2026
+# Selkie : version de travail retenue le 12 octobre 2026
+
+## Version de travail 0.9.1
+
+Le coach conserve les conseils hors ligne et ajoute une aide consultable : 38 questions classées en sept rubriques, 29 sujets de conseils, 67 sujets et 125 réponses au total. Le nouveau contact est 1kabdm@gmail.com. Les offres présentent le choix mensuel et annuel : Premium 10 €/mois ou 110 €/an ; Ultra 20 €/mois ou 220 €/an. Une page explique la résiliation Google Play. Aucun paiement ni compte serveur n’est actif ; la restriction future à un téléphone connecté exige une vérification serveur.
+
+APK et sources : `downloads/Selkie-Android-0.9.1.apk` et `downloads/Selkie-Android-0.9.1-source.zip`, versionCode 12, package `com.maree.app`, signature de test identique à 0.8.1/0.9.0. Voir [validation](../downloads/VALIDATION-0.9.1.md), [fonctionnement du coach](COACH_HORS_LIGNE.md) et [offres et comptes](ABONNEMENTS_ET_COMPTES.md). Les versions précédentes restent archivées.
 
 ## Version de travail 0.9.0
 

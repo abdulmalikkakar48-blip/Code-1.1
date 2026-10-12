@@ -9,7 +9,8 @@ data class CoachTopic(
     val label: String,
     val keywords: List<String>,
     val replies: List<String>,
-    val appAliases: List<String> = emptyList()
+    val appAliases: List<String> = emptyList(),
+    val appHelp: Boolean = false
 )
 
 data class OfflineCoachApp(val name: String, val trackedMillis: Long)
@@ -45,12 +46,22 @@ class RuleCoach(
     fun reply(message: String, context: OfflineCoachContext): OfflineCoachReply {
         val tokens = words(message)
         if (requiresHumanSupport(tokens)) return humanSupport()
-        val scored = prepared.map { it to score(tokens, it.keywords) }
+        val appContext = hasAppContext(tokens)
+        val requestedAction = requestedAppAction(tokens)
+        val scored = prepared.map { preparedTopic ->
+            val keywords = preparedTopic.keywords.filter { keyword ->
+                // Le nom de Selkie situe une question ; il n'en donne pas la réponse.
+                !(keyword in brandKeywords && tokens.size > 1) &&
+                    !(preparedTopic.topic.appHelp && keyword in genericNavigationKeywords && !appContext)
+            }
+            val actionScore = if (preparedTopic.topic.id == requestedAction) 12 else 0
+            preparedTopic to score(tokens, keywords) + actionScore
+        }
         // Le score prime ; à égalité, une demande d'action prime sur un nom d'app.
         val best = scored.maxWithOrNull(compareBy<Pair<PreparedTopic, Int>> { it.second }
             .thenBy { if (it.first.topic.id in actionTopics) 1 else 0 })
         return if (best != null && best.second > 0) knownReply(best.first.topic, context)
-        else unknownReply(tokens)
+        else unknownReply(tokens, appContext)
     }
 
     @Synchronized
@@ -92,15 +103,53 @@ class RuleCoach(
         return OfflineCoachReply(topic.id, text)
     }
 
-    private fun unknownReply(tokens: List<String>): OfflineCoachReply {
-        val near = prepared.map { it.topic.id to nearbyScore(tokens, it.keywords) }
+    private fun unknownReply(tokens: List<String>, appContext: Boolean = false): OfflineCoachReply {
+        val candidates = prepared.filter { if (appContext) it.topic.appHelp else !it.topic.appHelp }
+            .ifEmpty { prepared }
+        val near = candidates.map { it.topic.id to nearbyScore(tokens, it.keywords) }
             .filter { it.second > 0 }.sortedByDescending { it.second }.map { it.first }
-        val available = prepared.map { it.topic.id }
-        val suggestions = (near + defaultSuggestions.filter { it in available } + available)
+        val available = candidates.map { it.topic.id }
+        val defaults = if (appContext) defaultHelpSuggestions else defaultSuggestions
+        val suggestions = (near + defaults.filter { it in available } + available)
             .distinct().take(4)
         return OfflineCoachReply(null,
-            "Je n’ai pas encore de conseil prévu pour cette phrase. Je réponds à partir de conseils écrits à l’avance. Choisis un sujet ci-dessous ou reformule ta question.",
+            if (appContext) "Je n’ai pas encore de réponse prévue pour cette question sur Selkie. Choisis une rubrique d’aide ci-dessous ou reformule ta question."
+            else "Je n’ai pas encore de conseil prévu pour cette phrase. Je réponds à partir de conseils écrits à l’avance. Choisis un sujet ci-dessous ou reformule ta question.",
             suggestions = suggestions, unrecognized = true)
+    }
+
+    private fun hasAppContext(tokens: List<String>): Boolean = tokens.any { it in appContextWords }
+
+    /** Les verbes seuls sont ambigus : une action doit aussi désigner sa cible. */
+    private fun requestedAppAction(tokens: List<String>): String? {
+        val namedApp = prepared.any { entry ->
+            entry.topic.appAliases.any { containsWords(tokens, words(it)) }
+        }
+        val appTarget = tokens.any { it in appTargetWords } || namedApp
+        val subscriptionTarget = tokens.any { it in subscriptionWords }
+        val pointTarget = tokens.any { it in pointWords }
+        return when {
+            pointTarget && tokens.any { it in gainingWords } -> "earn_points"
+            pointTarget && tokens.any { it in losingWords } -> "lose_points"
+            subscriptionTarget && tokens.any { it in cancellationWords } &&
+                tokens.none { it in challengeWords } -> "cancel_subscription"
+            subscriptionTarget && tokens.any { it in restorationWords } &&
+                tokens.none { it in pointWords || it in challengeWords } -> "restore_subscription"
+            subscriptionTarget && tokens.any { it in paymentWords } -> "payments"
+            appTarget && tokens.any { it in addingWords } &&
+                (namedApp || tokens.none { it in pointWords }) -> "add_app"
+            appTarget && tokens.any { it in limitWords } &&
+                tokens.any { it in editingWords } -> "limits"
+            appTarget && tokens.any { it in blockedWords } -> "red_screen"
+            appTarget && tokens.any { it in removalWords } &&
+                (tokens.any { it in trackingWords } ||
+                    (tokens.any { it in trackedRemovalWords } && "telephone" !in tokens)) -> "remove_app"
+            appTarget && tokens.any { it in removalWords } -> "uninstall"
+            appTarget && tokens.any { it in durationWords } &&
+                (tokens.any { it in measurementQuestionWords } ||
+                    tokens.any { it in viewingWords }) -> "usage"
+            else -> null
+        }
     }
 
     private fun score(tokens: List<String>, keywords: List<List<String>>): Int = keywords.sumOf { keyword ->
@@ -131,10 +180,40 @@ class RuleCoach(
         sensitive = true)
 
     companion object {
-        private val pointTopics = setOf("points", "exceeded", "relapse", "streak")
+        private val pointTopics = setOf("points", "earn_points", "lose_points", "zero_points", "discipline_bonus",
+            "exceeded", "relapse", "streak")
         private val actionTopics = setOf("reset", "limits", "add_app", "permissions", "custom_challenges",
             "challenges", "pause_tracking", "usage", "red_screen", "points", "premium")
         private val defaultSuggestions = listOf("tiktok", "sleep", "boredom", "points")
+        private val defaultHelpSuggestions = listOf("app_overview", "navigation", "premium", "privacy")
+        private val brandKeywords = setOf(listOf("selkie"), listOf("maree"))
+        private val genericNavigationKeywords = setOf(
+            listOf("ou", "trouver"), listOf("ou", "aller"), listOf("ou", "ouvrir"),
+            listOf("comment", "ca", "marche"), listOf("comment", "faire"), listOf("comment", "utiliser")
+        )
+        private val appContextWords = setOf("selkie", "maree", "application", "applications", "app", "apps",
+            "suivi", "premium", "ultra", "abonnement", "abonnements", "compte", "confidentialite", "rgpd",
+            "renouvele", "renouvellement", "prelevement")
+        private val appTargetWords = setOf("application", "applications", "app", "apps", "suivi")
+        private val subscriptionWords = setOf("abonnement", "abonnements", "premium", "ultra", "achat", "achats")
+        private val cancellationWords = setOf("annuler", "resilier", "resiliation", "annulation", "desabonner", "desabonnement")
+        private val challengeWords = setOf("defi", "defis", "challenge", "challenges")
+        private val pointWords = setOf("point", "points", "solde")
+        private val gainingWords = setOf("gagner", "regagner", "obtenir", "recuperer", "augmenter")
+        private val losingWords = setOf("perdre", "perdu", "perds", "perd", "retires")
+        private val restorationWords = setOf("restaurer", "restauration", "recuperer", "retrouver")
+        private val paymentWords = setOf("payer", "paiement", "paiements", "acheter", "facturation", "prelevement")
+        private val addingWords = setOf("ajouter", "ajoute", "suivre", "selectionner")
+        private val limitWords = setOf("limite", "limites")
+        private val editingWords = setOf("modifier", "changer", "regler", "fixer", "choisir")
+        private val blockedWords = setOf("bloque", "bloquee", "bloques", "bloquees", "verrouille", "verrouillee")
+        private val removalWords = setOf("retirer", "supprimer", "enlever", "desinstaller")
+        private val trackedRemovalWords = setOf("retirer", "enlever")
+        private val trackingWords = setOf("suivi", "selkie", "maree")
+        private val durationWords = setOf("temps", "minutes", "minute", "duree", "utilisation", "usage")
+        private val measurementQuestionWords = setOf("combien", "quelle", "quel")
+        private val viewingWords = setOf("voir", "consulter", "afficher", "trouver")
+        private val noFuzzyKeywords = setOf("compte", "compteur", "profil")
         private val harmWords = setOf("automutilation", "automutiler", "suicide", "suicidaire")
         private val typoAliases = mapOf(
             "tiktoc" to "tiktok", "tikto" to "tiktok", "youtub" to "youtube",
@@ -176,7 +255,7 @@ class RuleCoach(
                     val actual = tokens[start + offset]
                     if (expected == actual) true else {
                         changed++
-                        changed <= 1 && expected.length >= 6 && actual.length >= 5 &&
+                        changed <= 1 && expected.length >= 6 && expected !in noFuzzyKeywords && actual.length >= 5 &&
                             expected.take(2) == actual.take(2) && withinOneEdit(expected, actual)
                     }
                 }

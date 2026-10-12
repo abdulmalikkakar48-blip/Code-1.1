@@ -7,11 +7,22 @@ const val CUSTOM_MIN_DAYS = 2
 const val CUSTOM_MAX_DAYS = 365
 const val MAX_ACTIVE_CUSTOM_CHALLENGES = 10
 
+enum class BillingPeriod(val label: String, val priceSuffix: String) {
+    MONTHLY("Mensuel", "/ mois"), ANNUAL("Annuel", "/ an")
+}
+
 /** null représente l’absence de plafond commercial sur les applications compatibles. */
 enum class PlanType(val maxTrackedApps: Int?, val monthlyPriceEuros: Int) {
     FREE(10, 0), PREMIUM(50, 10), ULTRA(null, 20);
 
     val canCreateCustomChallenges: Boolean get() = this != FREE
+    /** Prix prévus, sans facturation active : l’année coûte onze mensualités. */
+    val annualPriceEuros: Int get() = monthlyPriceEuros * 11
+    val annualSavingEuros: Int get() = monthlyPriceEuros * 12 - annualPriceEuros
+    fun priceEuros(period: BillingPeriod): Int = when (period) {
+        BillingPeriod.MONTHLY -> monthlyPriceEuros
+        BillingPeriod.ANNUAL -> annualPriceEuros
+    }
     val displayName: String get() = when (this) {
         FREE -> "Gratuit"
         PREMIUM -> "Premium"

@@ -2,6 +2,7 @@ package com.maree.app
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -98,9 +101,13 @@ private fun OfflineCoachTab(
     var showSettings by rememberSaveable { mutableStateOf(false) }
     var showSaved by remember { mutableStateOf(false) }
     var notice by remember { mutableStateOf<String?>(null) }
+    var showHelp by rememberSaveable { mutableStateOf(false) }
+    val helpSections = remember { selkieHelpEntries.groupBy { it.section } }
+    var helpSection by rememberSaveable { mutableStateOf(helpSections.keys.first().label) }
+    var chooseHelpSection by remember { mutableStateOf(false) }
 
     LaunchedEffect(turns.size, nextId) {
-        if (turns.isNotEmpty()) scroll.animateScrollToItem(2 + turns.size)
+        if (turns.isNotEmpty()) scroll.animateScrollToItem(3 + turns.size)
         else scroll.scrollToItem(0)
     }
 
@@ -148,18 +155,49 @@ private fun OfflineCoachTab(
         }
         item {
             AppCardSurface {
-                StatusPill("40 sujets · conseils préparés")
-                Text("Écris ce qui te pose problème. Je reconnais des sujets connus et propose un conseil écrit à l’avance ; je ne suis pas ChatGPT.",
+                StatusPill("${coachTopics.size} sujets · conseils et aide Selkie")
+                Text("Pose une question sur tes habitudes ou sur Selkie : points, limites, défis, offres et confidentialité. Je choisis des réponses écrites à l’avance pour les sujets connus.",
                     color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
                 if (!monitoringActive) Text("Le suivi est en pause : les durées ne seront pas utilisées dans mes conseils.",
                     color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 19.sp)
             }
         }
-        if (turns.isEmpty()) item {
-            AppCardSurface {
-                SectionLabel("Par où commencer ?")
-                TopicButtons(listOf("tiktok", "sleep", "boredom", "points"), topics, !saving) {
-                    submit(it.label, it.id)
+        item {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                if (turns.isEmpty() && !showHelp) AppCardSurface {
+                    SectionLabel("Un conseil pour ta journée")
+                    TopicButtons(listOf("tiktok", "sleep", "boredom", "points"), topics, !saving) {
+                        submit(it.label, it.id)
+                    }
+                }
+                OutlinedButton(onClick = { showHelp = !showHelp }, modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp)) {
+                    Text(if (showHelp) "Masquer l’aide Selkie" else "Comprendre Selkie · ${selkieHelpTopics.size} questions")
+                }
+                if (showHelp) AppCardSurface {
+                    SectionLabel("L’aide de l’application")
+                    Text("Choisis une rubrique, puis une question. Tu peux aussi écrire directement dans la discussion.",
+                        color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
+                    Box {
+                        TextButton(onClick = { chooseHelpSection = true }) {
+                            Text("$helpSection ▾")
+                        }
+                        DropdownMenu(expanded = chooseHelpSection,
+                            onDismissRequest = { chooseHelpSection = false }) {
+                            helpSections.keys.forEach { section ->
+                                DropdownMenuItem(text = { Text(section.label) }, onClick = {
+                                    helpSection = section.label
+                                    chooseHelpSection = false
+                                })
+                            }
+                        }
+                    }
+                    val entries = helpSections.entries.firstOrNull { it.key.label == helpSection }?.value
+                        ?: helpSections.values.first()
+                    TopicButtons(entries.map { it.topic.id }, topics, !saving) {
+                        submit(it.label, it.id)
+                        showHelp = false
+                    }
                 }
             }
         }

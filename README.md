@@ -1,5 +1,15 @@
 # Selkie — application Android de réduction du temps d'écran
 
+## Version 0.9.1 — aide Selkie et offres annuelles
+
+Le même Coach répond désormais aux questions sur l’application et propose des conseils de temps d’écran : **38 questions d’aide dans sept rubriques et 29 sujets de conseils**, soit 67 sujets et 125 réponses préparées. Dans **Coach → Comprendre Selkie**, les réponses sur les limites, points, défis, données, offres et comptes sont consultables directement. Les demandes reconnues sur l’application proposent une aide adaptée ; les conseils restent disponibles hors ligne.
+
+[Télécharger Selkie 0.9.1](downloads/Selkie-Android-0.9.1.apk) · [Sources exactes](downloads/Selkie-Android-0.9.1-source.zip) · [Validation](downloads/VALIDATION-0.9.1.md).
+
+Le contact devient **1kabdm@gmail.com**. Les tarifs prévus sont **Premium 10 €/mois ou 110 €/an**, **Ultra 20 €/mois ou 220 €/an**, avec l’équivalent d’un mois offert sur l’année. L’aide explique le renouvellement et la résiliation Google Play ; désinstaller l’application n’annule pas un abonnement acheté. Les offres restent des démonstrations gratuites : aucun paiement réel n’est intégré. Un compte avec un seul téléphone connecté à la fois est prévu, mais aucun service de comptes ou de restauration des achats n’est actif. Voir [les décisions et les étapes restantes](docs/ABONNEMENTS_ET_COMPTES.md).
+
+La signature de test est identique à celles des APK 0.8.1 et 0.9.0. Le suivi, les points, les défis, le phoque et le design retenu sont conservés.
+
 ## Version 0.9.0 — coach gratuit hors ligne
 
 Le Coach propose désormais un champ de discussion utilisable sans compte ni service à activer : 40 sujets, 120 conseils préparés, fautes légères reconnues, variantes et boutons de suggestions. Il peut utiliser les points et compteurs locaux réels. Il s’agit d’un coach à règles, explicitement présenté comme tel ; le dialogue IA distant reste à activer séparément.
@@ -80,7 +90,7 @@ Les points sont attribués après des défis entièrement terminés : **+5 point
 
 ## Mise à jour 0.2.1
 
-La politique affiche **Abdul Malik Kakar** comme responsable à titre personnel, avec le contact **abdulmalikkakar48@gmail.com**, tous deux fournis par l’éditeur. La mise à jour conserve le fonctionnement et les données de la version 0.2.0.
+La politique affiche **Abdul Malik Kakar** comme responsable à titre personnel, avec le contact **1kabdm@gmail.com**, tous deux fournis par l’éditeur. La mise à jour conserve le fonctionnement et les données de la version 0.2.0.
 
 ## Mise à jour 0.2.0
 

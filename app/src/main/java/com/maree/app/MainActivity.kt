@@ -389,7 +389,7 @@ private fun MareeApp() {
                             snapshot = store.readSnapshot(lastReading)
                             refresh()
                         },
-                        onAccount = { infoMessage = "Selkie fonctionne sans compte : pas d’inscription et tes données restent sur ton téléphone. Un compte pourra être proposé plus tard, uniquement pour une sauvegarde facultative." }
+                        onAccount = { infoMessage = "Cette version fonctionne sans compte ; ton suivi reste sur ce téléphone. Un compte Selkie est prévu pour retrouver tes droits d’abonnement, avec un seul téléphone connecté à la fois. Il n’est pas encore actif : il demande un serveur de connexion et une vérification des achats Google Play. Tes points et défis ne sont pas synchronisés." }
                     )
                 }
             }
@@ -790,7 +790,7 @@ private fun MoreTab(
                 color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
             OutlinedButton(onClick = onPrivacy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                 shape = RoundedCornerShape(14.dp)) { Text("Confidentialité et données") }
-            TextButton(onClick = onAccount) { Text("Sans compte · et la sauvegarde ?", fontSize = 13.sp) }
+            TextButton(onClick = onAccount) { Text("Compte et changement de téléphone", fontSize = 13.sp) }
         }
         Spacer(Modifier.height(4.dp))
         MembershipSection(plan, onDemoPlan)

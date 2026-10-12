@@ -1,7 +1,7 @@
 package com.maree.app
 
-/** Conseils préparés, utilisés uniquement sur le téléphone par le coach à règles. */
-internal val coachTopics: List<CoachTopic> = listOf(
+/** Conseils préparés, séparés des réponses de référence sur le fonctionnement de Selkie. */
+internal val coachAdviceTopics: List<CoachTopic> = listOf(
     CoachTopic(
         id = "tiktok", label = "TikTok",
         keywords = listOf("tiktok", "tik tok", "tiktoc", "pour toi", "scroll tiktok"),
@@ -216,105 +216,6 @@ internal val coachTopics: List<CoachTopic> = listOf(
         )
     ),
     CoachTopic(
-        id = "add_app", label = "Ajouter une application au suivi",
-        keywords = listOf("ajouter une application", "ajouter une app", "ajouter au suivi", "suivre une application", "suivre une app", "bouton ajouter", "selectionner une application"),
-        replies = listOf(
-            "Dans Accueil, appuie sur Ajouter, choisis une application compatible et fixe sa limite. Il faut un solde supérieur à 0 point pour l’ajouter.",
-            "Selkie permet de suivre 10 applications en Gratuit et 50 en Premium. Ultra n’a pas de plafond commercial pour les applications compatibles ; l’ajout reste bloqué à 0 point.",
-            "Si une application n’apparaît pas dans la liste, elle peut ne pas être compatible avec le suivi. Vérifie aussi les autorisations depuis Plus avant d’activer le suivi."
-        )
-    ),
-    CoachTopic(
-        id = "limits", label = "Fixer une limite",
-        keywords = listOf("fixer une limite", "choisir une limite", "modifier une limite", "changer ma limite", "limite quotidienne", "combien de minutes choisir", "regler une limite"),
-        replies = listOf(
-            "Choisis une limite réaliste pour commencer. Dans Selkie, les durées sont des multiples de 5 minutes, avec un minimum de 5 minutes.",
-            "Pour modifier une limite, ouvre le menu de l’application suivie dans Accueil. À 0 point, la modification est bloquée dans toutes les offres.",
-            "Commence par une application qui te prend souvent plus de temps que prévu. Fixe une limite que tu peux essayer aujourd’hui, puis observe comment elle te convient."
-        )
-    ),
-    CoachTopic(
-        id = "red_screen", label = "L’écran de pause",
-        keywords = listOf("ecran rouge", "ecran de pause", "ecran bloque", "ecran de blocage", "verrou", "application bloquee", "bloque 24 heures"),
-        replies = listOf(
-            "L’écran de pause apparaît quand une application suivie atteint sa limite, si le suivi et les autorisations sont actifs. Le verrou dure 24 heures à partir du dépassement.",
-            "Quand l’écran de pause apparaît, ferme l’application et choisis une activité hors écran. Tu peux voir le temps de verrou restant sur sa carte dans Accueil.",
-            "Le verrou Selkie dure 24 heures après la limite atteinte. Une réinitialisation peut le lever, mais elle coûte 10 points et nécessite ce solde."
-        )
-    ),
-    CoachTopic(
-        id = "reset", label = "Réinitialiser une limite",
-        keywords = listOf("reinitialiser", "reinitialisation", "reset", "lever le verrou", "debloquer", "remettre le compteur", "recommencer ma limite", "je veux reinitialiser", "comment reinitialiser"),
-        replies = listOf(
-            "Réinitialiser une application coûte 10 points. Cela lève son verrou et remet à disposition sa limite complète, sans effacer les statistiques Android.",
-            "Dans Accueil, ouvre le menu de l’application puis Réinitialiser. Selkie te demande confirmation avant de retirer les 10 points.",
-            "La réinitialisation n’est pas gratuite en Premium ou Ultra. Il faut au moins 10 points dans toutes les offres ; sinon, garde la pause ou termine des défis pour en regagner."
-        )
-    ),
-    CoachTopic(
-        id = "points", label = "Mes points",
-        keywords = listOf("points", "solde", "capital discipline", "points d honneur", "zero point", "0 point", "gagner des points", "perdre des points"),
-        replies = listOf(
-            "Tes points font partie des règles Selkie. À 0 point, l’ajout et la modification d’une limite sont bloqués dans toutes les offres. Tu peux toujours retirer une application du suivi.",
-            "Pour les défis standard, cinq défis entièrement terminés donnent un bonus de 5 points. Les validations des journées intermédiaires n’ajoutent pas de points.",
-            "Une réinitialisation coûte 10 points. Les défis personnalisés disponibles en Premium et Ultra rapportent 0,25 point au total, une seule fois quand ils sont terminés."
-        )
-    ),
-    CoachTopic(
-        id = "challenges", label = "Les défis",
-        keywords = listOf("defis", "defi", "valider un defi", "lire 10 pages", "cinq jours", "5 jours", "serie de defis", "bonus des defis"),
-        replies = listOf(
-            "Un défi standard se valide sur cinq dates différentes, une fois par jour. Les jours peuvent être espacés ; valide seulement les journées où tu l’as réellement fait.",
-            "Dans Défis, choisis une activité facile à répéter. Termine ses cinq journées pour finir le défi ; chaque groupe de cinq défis terminés donne 5 points.",
-            "Les journées intermédiaires d’un défi standard ne donnent pas de points. Le bonus arrive après cinq défis entièrement terminés, et les défis terminés se cumulent entre les séries."
-        )
-    ),
-    CoachTopic(
-        id = "custom_challenges", label = "Créer mon défi",
-        keywords = listOf("defi personnalise", "defis personnalises", "creer un defi", "creer mon defi", "mes propres defis", "trois etapes", "3 etapes", "0 25 point"),
-        replies = listOf(
-            "En Premium ou Ultra, tu peux créer un défi avec exactement trois étapes et une durée de 2 à 365 jours. Choisis des étapes simples que tu peux refaire chaque journée.",
-            "Pour valider une journée de ton défi personnalisé, termine ses trois étapes. Le défi rapporte 0,25 point au total, une seule fois à la fin de la durée choisie.",
-            "Un défi personnalisé dure au moins deux jours et contient trois étapes. Par exemple : préparer ton espace, faire quelques exercices adaptés et ranger ton matériel. Le bonus final reste 0,25 point."
-        )
-    ),
-    CoachTopic(
-        id = "premium", label = "Premium et Ultra",
-        keywords = listOf("premium", "ultra", "abonnement", "payer", "paiement", "offres", "gratuit", "prix"),
-        replies = listOf(
-            "Les offres prévues sont Gratuit avec 10 applications, Premium à 10 €/mois avec 50, et Ultra à 20 €/mois sans plafond commercial sur les applications compatibles. Les paiements ne sont pas encore actifs.",
-            "Premium et Ultra permettent les défis personnalisés. Aucune offre ne permet de contourner les règles à 0 point, et une réinitialisation coûte toujours 10 points.",
-            "Le choix d’offre de cette version est une démonstration locale : il ne crée aucun abonnement et ne prélève rien. Ce coach à conseils préparés fonctionne sur le téléphone sans service IA payant."
-        )
-    ),
-    CoachTopic(
-        id = "permissions", label = "Les autorisations",
-        keywords = listOf("autorisation", "autorisations", "permission", "permissions", "acces utilisation", "acces aux donnees d utilisation", "superposition", "par dessus", "apparaitre au dessus"),
-        replies = listOf(
-            "Depuis Plus, ouvre Gérer les autorisations. L’accès aux données d’utilisation sert à mesurer les applications suivies ; l’affichage par-dessus les autres applications permet l’écran de pause.",
-            "Tu peux vérifier les autorisations dans Plus, puis décider de les activer dans les paramètres Android. Je ne les accorde pas et je ne change pas tes réglages à ta place.",
-            "Sans les autorisations nécessaires, Selkie ne peut pas assurer le suivi et l’écran de pause. Tu peux lire les explications avant de choisir ; le coach à conseils préparés reste utilisable sans ces accès."
-        )
-    ),
-    CoachTopic(
-        id = "pause_tracking", label = "Mettre le suivi en pause",
-        keywords = listOf("mettre le suivi en pause", "pause du suivi", "arreter le suivi", "desactiver le suivi", "reprendre le suivi", "activer le suivi", "suivi en pause"),
-        replies = listOf(
-            "Dans Plus, choisis Mettre le suivi en pause. Selkie arrête alors le suivi et les écrans de pause ; tes applications et réglages restent enregistrés.",
-            "Pour reprendre, ouvre Plus puis Activer le suivi. Vérifie les autorisations demandées avant de revenir à tes limites.",
-            "Quand le suivi est en pause, les anciennes mesures ne prouvent pas ton usage actuel. Reprends le suivi depuis Plus si tu veux mesurer et appliquer tes limites."
-        )
-    ),
-    CoachTopic(
-        id = "usage", label = "Mon utilisation",
-        keywords = listOf("mon utilisation", "temps d ecran", "combien de minutes", "minutes utilisees", "usage aujourd hui", "statistiques", "voir mon usage", "quotidien"),
-        replies = listOf(
-            "Consulte les cartes dans Accueil et la rubrique Quotidien pour voir les informations disponibles. Les mesures dépendent du suivi actif et des autorisations Android.",
-            "Les minutes d’une application suivie sont mesurées à partir de son ajout ou de sa dernière réinitialisation. Elles peuvent donc différer du total affiché par Android.",
-            "Regarde d’abord une application et le moment où tu l’ouvres souvent. Choisis ensuite une petite limite ou une pause adaptée, plutôt que de tout changer en même temps."
-        )
-    ),
-    CoachTopic(
         id = "exceeded", label = "Limite dépassée",
         keywords = listOf("limite depassee", "depasse ma limite", "depasse la limite", "limite atteinte", "trop scrolle", "trop utilise", "encore depasse"),
         replies = listOf(
@@ -369,3 +270,6 @@ internal val coachTopics: List<CoachTopic> = listOf(
         )
     )
 )
+
+/** Un seul catalogue, sans sujet d’aide dupliqué parmi les conseils. */
+internal val coachTopics: List<CoachTopic> = coachAdviceTopics + selkieHelpTopics

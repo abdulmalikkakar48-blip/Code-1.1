@@ -1,16 +1,18 @@
-# Coach à conseils préparés — Selkie 0.9.0
+# Coach à conseils préparés — Selkie 0.9.1
 
-Le Coach est accessible sans compte, connexion, crédit API ni abonnement. Il choisit parmi 120 conseils écrits à l’avance dans 40 sujets ; il ne contient pas ChatGPT ni un modèle génératif. Les abonnements restent en démonstration, et le dialogue IA distant reste facultatif, séparé et non configuré.
+Le Coach est accessible sans compte, connexion, crédit API ni abonnement. Il choisit parmi 125 réponses écrites à l’avance dans 67 sujets : 29 sujets de conseils avec trois variantes et 38 questions d’aide avec une réponse complète chacune ; il ne contient pas ChatGPT ni un modèle génératif. Les abonnements restent en démonstration, et le dialogue IA distant reste facultatif, séparé et non configuré.
 
 ## Fonctionnement
 
-Les minuscules, accents, apostrophes et ponctuations sont normalisés. Les mots et expressions connus sont notés, avec une tolérance limitée à certaines petites fautes (dont « tiktoc »). Le sujet le mieux noté fournit une variante de réponse ; la dernière variante de ce sujet n’est pas répétée dans le même onglet. Le moteur n’invente pas une réponse à une question nouvelle et ne comprend pas toutes les formulations.
+Les minuscules, accents, apostrophes et ponctuations sont normalisés. Les mots et expressions connus sont notés, avec une tolérance limitée à certaines petites fautes (dont « tiktoc »). Le sujet le mieux noté fournit une réponse. Les conseils disposent de variantes : la dernière variante de ce sujet n’est pas répétée dans le même onglet. Les questions d’aide ont une réponse de référence unique pour conserver l’ensemble des conditions et règles, plutôt qu’en omettre une selon un tirage aléatoire. Le moteur n’invente pas une réponse à une question nouvelle et ne comprend pas toutes les formulations.
 
 Les sujets couvrent les applications, moments de la journée, émotions, astuces, règles de Selkie et motivation. Les conseils d’aide respectent les limites 10 / 50 / sans plafond commercial, les restrictions à zéro point, la réinitialisation à dix points et les durées et récompenses des défis.
 
 Une réponse peut reprendre le solde exact de points ou le compteur d’une application réellement suivie. Les durées sont celles de la **période de suivi en cours**, qui ne correspond pas nécessairement à aujourd’hui. Quand le suivi est en pause ou les autorisations absentes, les durées ne sont pas utilisées. Aucun compteur ni bilan n’est envoyé à un serveur.
 
-Une phrase inconnue reçoit une explication et jusqu’à quatre boutons de sujets connus. Le choix d’un bouton donne un conseil directement ; aucun message d’erreur technique n’est présenté comme une réponse.
+L’aide est aussi consultable dans **Coach → Comprendre Selkie**, en sept rubriques : découverte, suivi et autorisations, points, défis, offres et abonnements, compte et téléphone, données et contact. Elle décrit le fonctionnement réel, avec une distinction entre les fonctions livrées et les comptes/paiements non actifs. Les prix et le contact proviennent des mêmes constantes que les autres écrans.
+
+Une phrase inconnue reçoit une explication et jusqu’à quatre boutons de sujets connus. Pour une demande reconnue comme centrée sur l’application, les propositions orientent vers son aide. Le choix d’un bouton donne un conseil directement ; aucun message d’erreur technique n’est présenté comme une réponse.
 
 Les expressions de détresse grave reconnues donnent une réponse bienveillante invitant à une aide humaine (personne de confiance, 3114 en France, 112 en danger immédiat). Elles ne reçoivent pas de conseil d’écran ni de rappel de points. Ces règles ne constituent pas une détection exhaustive ni un diagnostic.
 
@@ -27,4 +29,4 @@ source /workspace/.cloud-setup/activate.sh
 ./gradlew --no-daemon --max-workers=2 :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
 ```
 
-Les tests du moteur couvrent les formulations françaises, fautes admises, limites de mots, classement, variantes, suggestions, contexte réel et priorité de la détresse. Sur téléphone, essayer aussi le clavier, le défilement, les boutons de sujets, l’option locale, son effacement et la mise à jour depuis 0.8.1. Ne pas décrire ces essais sur Samsung comme faits tant qu’ils n’ont pas été observés.
+Les tests du moteur couvrent les formulations françaises, fautes admises, limites de mots, classement, variantes, suggestions, contexte réel et priorité de la détresse. Sur téléphone, essayer aussi le clavier, le défilement, les boutons de sujets, l’option locale, son effacement et la mise à jour depuis 0.8.1 ou 0.9.0. Ne pas décrire ces essais sur Samsung comme faits tant qu’ils n’ont pas été observés.

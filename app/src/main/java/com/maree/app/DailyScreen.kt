@@ -167,7 +167,7 @@ internal fun DailyTab(
         AppCardSurface {
             Text("Besoin d’un coup de pouce ?", color = MareePalette.Ink,
                 fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 27.sp)
-            Text("Pose ta question : 40 sujets de conseils préparés, disponibles hors ligne.",
+            Text("Pose ta question sur tes habitudes ou sur Selkie : conseils et aide disponibles hors ligne.",
                 color = MareePalette.Muted, fontSize = 15.sp, lineHeight = 22.sp)
             PrimaryAction("Ouvrir le coach", onClick = onCoach)
         }
