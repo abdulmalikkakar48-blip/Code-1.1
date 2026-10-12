@@ -1,5 +1,11 @@
 # Selkie : version de travail retenue le 12 octobre 2026
 
+## Version de travail 0.10.2
+
+Le fond utilise 144 points : deux cercles de 48 et 32 points, un triangle arrondi de 36 points et un losange de 28 points. Une onde se propage le long des contours ; les formes dérivent doucement, jusqu’à 6 dp, dans une boucle de 24 secondes. Le menu ☰ et les quatre onglets, le coach, les données, les règles et les prix sans réduction restent conservés. Les réglages Android des animations et l’arrêt hors du cycle RESUMED restent pris en compte.
+
+VersionCode 17. [Page de l’APK Selkie 0.10.2 — accès GitHub requis](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.10.2.apk), [sources exactes](../downloads/Selkie-Android-0.10.2-source.zip) et [validation 0.10.2](../downloads/VALIDATION-0.10.2.md). Compilation, 97 tests unitaires et Lint sans erreur validés. Le mouvement, son arrêt et sa reprise ont été observés sur émulateur ; les essais sur téléphone restent à faire. Aucun compte serveur, paiement ou dialogue IA distant n’est activé. Les sections suivantes sont les archives.
+
 ## Version de travail 0.10.1
 
 La référence utilise un menu ☰ en haut à droite : Réglages (Langue, Apparence, Accès Android), Offres (Abonnements), Informations (Règles de Selkie, Confidentialité et données). Chaque entrée ouvre sa page ; la barre du bas conserve Accueil, Quotidien, Défis et Coach. Le badge et l’accès Premium des défis ouvrent Abonnements. L’aide FR/EN utilise ces chemins. Le suivi, les points, les défis, le coach et les prix sans réduction restent conservés. Le fond ajoute des formes géométriques aux mouvements lents, adaptées au thème et au réglage Android des animations.

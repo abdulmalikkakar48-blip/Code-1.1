@@ -19,22 +19,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
 
 /** Decorative drawing only: no input, layout changes or per-frame app recomposition. */
 @Composable
@@ -42,7 +34,6 @@ internal fun SelkieGeometryBackground(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val phase = remember { mutableFloatStateOf(0f) }
-    val polygon = remember { Path() }
     var motionAllowed by remember { mutableStateOf(ValueAnimator.areAnimatorsEnabled()) }
 
     DisposableEffect(context, lifecycle) {
@@ -86,38 +77,9 @@ internal fun SelkieGeometryBackground(modifier: Modifier = Modifier) {
     }
     Canvas(modifier.clipToBounds().clearAndSetSemantics { }) {
         // Reading phase here invalidates drawing, rather than the screens or their layout.
-        val angle = phase.floatValue * (2f * PI.toFloat())
-        val drift = 12.dp.toPx()
-        val blueOrGreen = MareePalette.Teal.copy(alpha = if (AppAppearance.isNight) 0.11f else 0.06f)
-        val secondary = MareePalette.Muted.copy(alpha = if (AppAppearance.isNight) 0.08f else 0.05f)
-        val stroke = Stroke(width = 1.dp.toPx())
-        drawCircle(blueOrGreen, radius = size.width * 0.25f,
-            center = Offset(size.width * 1.03f + sin(angle) * drift,
-                size.height * 0.18f + cos(angle) * drift), style = stroke)
-        drawCircle(secondary, radius = size.width * 0.14f,
-            center = Offset(-size.width * 0.04f + cos(angle + 1f) * drift,
-                size.height * 0.76f + sin(angle + 1f) * drift), style = stroke)
-
-        val triangle = Offset(size.width * 0.03f + sin(angle + 2f) * drift,
-            size.height * 0.44f + cos(angle + 2f) * drift)
-        val side = 26.dp.toPx()
-        polygon.reset()
-        polygon.moveTo(triangle.x, triangle.y - side)
-        polygon.lineTo(triangle.x + side, triangle.y + side * 0.7f)
-        polygon.lineTo(triangle.x - side, triangle.y + side * 0.7f)
-        polygon.close()
-        rotate(sin(angle) * 7f, triangle) { drawPath(polygon, blueOrGreen, style = stroke) }
-
-        val diamond = Offset(size.width * 0.97f + cos(angle - 1f) * drift,
-            size.height * 0.84f + sin(angle - 1f) * drift)
-        val radius = 22.dp.toPx()
-        polygon.reset()
-        polygon.moveTo(diamond.x, diamond.y - radius)
-        polygon.lineTo(diamond.x + radius, diamond.y)
-        polygon.lineTo(diamond.x, diamond.y + radius)
-        polygon.lineTo(diamond.x - radius, diamond.y)
-        polygon.close()
-        rotate(cos(angle) * 10f, diamond) { drawPath(polygon, secondary, style = stroke) }
+        val primary = MareePalette.Teal.copy(alpha = if (AppAppearance.isNight) 0.18f else 0.10f)
+        val secondary = MareePalette.Muted.copy(alpha = if (AppAppearance.isNight) 0.14f else 0.08f)
+        drawSelkieGeometryParticles(phase.floatValue, primary, secondary)
     }
 }
 

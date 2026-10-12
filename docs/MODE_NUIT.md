@@ -1,4 +1,4 @@
-# Apparence — Selkie 0.10.1
+# Apparence — Selkie 0.10.2
 
 Dans **le menu ☰ en haut → Apparence**, choisir **Clair**, **Nuit** ou **Comme le téléphone**. Le clair reste le choix initial pour conserver le design existant. Nuit utilise un fond presque noir, des surfaces bleu marine et des accents bleus clairs. Comme le téléphone suit le réglage d’apparence d’Android.
 
@@ -10,6 +10,8 @@ La palette distingue les accents, leur texte, les fonds de cartes et les fonds d
 
 ## Fond géométrique
 
-Les quatre onglets et les pages des réglages ont quatre formes décoratives (deux cercles, un triangle et un losange), aux contours peu opaques. Leur déplacement suit une boucle de 24 secondes, avec une petite rotation des polygones. Les couleurs utilisent la palette courante. Les cartes restent opaques ; le fond ne reçoit aucun geste et ne crée aucun élément interactif pour le lecteur d’écran.
+Les quatre onglets et les pages des réglages ont quatre formes décoratives composées de **144 points** : deux cercles (48 et 32 points), un triangle arrondi (36) et un losange (28). Une onde serpente sur les contours tandis que leurs centres dérivent doucement, jusqu’à 6 dp. Le mouvement suit une boucle de 24 secondes. Les couleurs utilisent la palette courante : opacité principale de 0,10 en clair et 0,18 en nuit ; secondaire de 0,08 en clair et 0,14 en nuit. Les cartes restent opaques ; le fond ne reçoit aucun geste et ne crée aucun élément interactif pour le lecteur d’écran.
 
 L’animation s’arrête hors du cycle RESUMED de l’activité et devient statique si Android désactive les animations. Le réglage système est observé et revérifié à la reprise. Le dessin lit l’état de mouvement dans Canvas, sans recomposer les écrans à chaque image ; les rafraîchissements sont espacés pour cette décoration lente. Aucun choix supplémentaire ni donnée de mouvement n’est enregistré. Les contrôles sur appareil réel restent nécessaires.
+
+La version 0.10.1 utilisait des contours géométriques avec une dérive lente et une petite rotation des polygones. Ses artefacts restent archivés. Le mouvement, son arrêt et sa reprise ont été vérifiés sur émulateur dans la version 0.10.2 ; voir [la validation](../downloads/VALIDATION-0.10.2.md).
