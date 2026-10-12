@@ -1,14 +1,14 @@
-# Offres et comptes Selkie — décisions de la version 0.9.1
+# Offres et comptes Selkie — décisions de la version 0.9.3
 
 Les offres sont des **démonstrations gratuites** dans cet APK. Il ne crée, ne facture, ne renouvelle et ne résilie aucun abonnement. Les choix mensuel et annuel servent à présenter les tarifs prévus ; ils ne déclenchent pas un achat.
 
-| Offre | Mensuel prévu | Annuel prévu, payé en une fois | Économie annuelle | Applications compatibles |
-| --- | --- | --- | --- | --- |
-| Gratuit | 0 € | 0 € | — | 10 |
-| Premium | 10 € | 110 € | 10 € sur 12 mensualités | 50 |
-| Ultra | 20 € | 220 € | 20 € sur 12 mensualités | Sans plafond commercial |
+| Offre | Mensuel prévu | Annuel prévu, payé en une fois | Applications compatibles |
+| --- | --- | --- | --- |
+| Gratuit | 0 € | 0 € | 10 |
+| Premium | 10 € | 120 € | 50 |
+| Ultra | 20 € | 240 € | Sans plafond commercial |
 
-L’année coûte onze mensualités, soit environ 8,3 % de réduction. Les fonctions d’une offre sont les mêmes pour les deux durées. Les restrictions à zéro point restent identiques pour tous. Les prix doivent être définis et confirmés dans Google Play avant activation ; l’écran de confirmation Google Play sera la référence au moment de l’achat.
+L’année coûte douze mensualités, sans réduction. Les fonctions d’une offre sont les mêmes pour les deux durées. Les restrictions à zéro point restent identiques pour tous. Les prix doivent être définis et confirmés dans Google Play avant activation ; l’écran de confirmation Google Play sera la référence au moment de l’achat.
 
 ## Renouveler et arrêter
 

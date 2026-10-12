@@ -1,5 +1,13 @@
 # Selkie — application Android de réduction du temps d'écran
 
+## Version 0.9.3 — tarifs annuels sans réduction
+
+Les offres annuelles correspondent désormais à douze mensualités : **Premium 10 €/mois ou 120 €/an**, **Ultra 20 €/mois ou 240 €/an**. Les textes de remise et d’économie sont retirés des offres et des réponses du Coach, en français et en anglais. Les fonctions des offres sont identiques pour les deux durées ; les achats restent inactifs dans cet APK de test.
+
+[Télécharger Selkie 0.9.3](downloads/Selkie-Android-0.9.3.apk) · [Sources exactes](downloads/Selkie-Android-0.9.3-source.zip) · [Validation](downloads/VALIDATION-0.9.3.md) · [Offres actuelles](docs/ABONNEMENTS_ET_COMPTES.md).
+
+Les versions ci-dessous sont des archives ; leurs anciens tarifs ne sont pas ceux de la version actuelle.
+
 ## Version 0.9.2 — français et anglais
 
 Selkie propose désormais **Français / English**, dès l’accueil initial et dans **Plus → Langue / Language**. Les écrans, offres, notifications, défis proposés, politique et coach hors ligne sont traduits. Chaque langue contient 67 sujets et 125 réponses préparées, dont 38 questions d’aide. La réponse suit la langue choisie, sans traducteur en ligne. Les points, limites et défis personnels sont conservés.

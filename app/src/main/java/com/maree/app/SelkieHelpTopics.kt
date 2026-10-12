@@ -196,9 +196,9 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
     ),
     help(
         SelkieHelpSection.OFFERS, "subscription_annual", "Quel est le prix de l’offre annuelle ?",
-        listOf("annuel", "annuelle", "par an", "par annee", "chaque annee", "tous les ans", "abonnement annuel", "reduction", "110 euros", "220 euros"),
+        listOf("annuel", "annuelle", "par an", "par annee", "chaque annee", "tous les ans", "abonnement annuel", "reduction", "120 euros", "240 euros"),
         "L’offre annuelle est prévue à ${PlanType.PREMIUM.annualPriceEuros} € pour Premium ou ${PlanType.ULTRA.annualPriceEuros} € pour Ultra, payés en une fois pour un an. " +
-            "C’est un mois économisé par rapport à douze mensualités : 10 € ou 20 €, soit environ 8,3 % de réduction, avec les mêmes fonctions. " +
+            "Cela correspond à douze mensualités, avec les mêmes fonctions. " +
             "Elle se renouvellera chaque année sauf résiliation lorsque les paiements seront activés. Aucun abonnement annuel n’est vendu ici."
     ),
     help(

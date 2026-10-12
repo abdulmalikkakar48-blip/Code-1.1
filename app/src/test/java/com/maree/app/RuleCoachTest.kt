@@ -261,7 +261,7 @@ class RuleCoachTest {
         assertTrue(cancellation, cancellation.contains("Google Play"))
         assertFalse(cancellation.contains("Your subscription has been cancelled"))
         val annual = coach.replyForTopic("subscription_annual", context).text
-        assertTrue(annual, annual.contains("110") && annual.contains("220"))
+        assertTrue(annual, annual.contains("120") && annual.contains("240"))
         assertTrue(annual, annual.contains("year", ignoreCase = true))
     }
 

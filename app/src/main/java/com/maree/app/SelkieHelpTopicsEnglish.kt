@@ -177,9 +177,9 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
     ),
     englishHelp(
         SelkieHelpSection.OFFERS, "subscription_annual", "What is the annual plan price?",
-        listOf("annual", "yearly", "per year", "each year", "every year", "annual subscription", "discount", "110 euros", "220 euros"),
+        listOf("annual", "yearly", "per year", "each year", "every year", "annual subscription", "discount", "120 euros", "240 euros"),
         "The planned annual price is €${PlanType.PREMIUM.annualPriceEuros} for Premium or €${PlanType.ULTRA.annualPriceEuros} for Ultra, paid once for a year. " +
-            "That saves one month compared with twelve monthly payments: €10 or €20, about an 8.3% discount, with the same features. " +
+            "This equals twelve monthly payments, with the same features. " +
             "It will renew each year unless canceled once payments are activated. No annual subscription is sold here."
     ),
     englishHelp(

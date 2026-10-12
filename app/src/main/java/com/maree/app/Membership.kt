@@ -25,9 +25,8 @@ enum class PlanType(val maxTrackedApps: Int?, val monthlyPriceEuros: Int) {
     FREE(10, 0), PREMIUM(50, 10), ULTRA(null, 20);
 
     val canCreateCustomChallenges: Boolean get() = this != FREE
-    /** Prix prévus, sans facturation active : l’année coûte onze mensualités. */
-    val annualPriceEuros: Int get() = monthlyPriceEuros * 11
-    val annualSavingEuros: Int get() = monthlyPriceEuros * 12 - annualPriceEuros
+    /** Prix prévus, sans facturation active : l’année coûte douze mensualités. */
+    val annualPriceEuros: Int get() = monthlyPriceEuros * 12
     fun priceEuros(period: BillingPeriod): Int = when (period) {
         BillingPeriod.MONTHLY -> monthlyPriceEuros
         BillingPeriod.ANNUAL -> annualPriceEuros

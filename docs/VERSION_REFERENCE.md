@@ -1,5 +1,11 @@
 # Selkie : version de travail retenue le 12 octobre 2026
 
+## Version de travail 0.9.3
+
+Les tarifs annuels sont sans réduction : Premium 10 €/mois ou 120 €/an ; Ultra 20 €/mois ou 240 €/an. Les annonces de remise sont retirées des offres et du Coach FR/EN. Les règles, fonctions, langues et démonstrations gratuites sont conservées. [Offres actuelles](ABONNEMENTS_ET_COMPTES.md).
+
+APK et sources : `downloads/Selkie-Android-0.9.3.apk` et `downloads/Selkie-Android-0.9.3-source.zip`, versionCode 14, signature de test identique aux versions 0.8.1 à 0.9.2. [Validation 0.9.3](../downloads/VALIDATION-0.9.3.md). Les sections suivantes décrivent les archives et leurs anciens tarifs.
+
 ## Version de travail 0.9.2
 
 Français et anglais sont disponibles dans les écrans, défis proposés, politique et coach hors ligne. Le choix est local, accessible à l’accueil et dans Plus ; les mêmes règles et données sont conservées. Chaque langue possède 67 sujets et 125 réponses, dont 38 questions d’aide. Les comptes, paiements et IA distante restent non actifs. Voir [les langues](LANGUES.md).

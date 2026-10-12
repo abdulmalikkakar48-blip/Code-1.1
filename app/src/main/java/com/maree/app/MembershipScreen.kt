@@ -69,8 +69,8 @@ internal fun MembershipSection(plan: PlanType, onDemoPlan: (PlanType) -> Unit) {
             }
         }
         Text(if (period == BillingPeriod.ANNUAL)
-            tr("Une année payée en une fois, avec l’équivalent d’un mois offert. Même contenu que l’offre mensuelle.", "Pay for a year upfront and save the equivalent of one month. The features are the same as the monthly plan.")
-            else tr("Un paiement chaque mois. Le choix annuel offre une petite réduction.", "One payment each month. The annual option offers a small discount."),
+            tr("Une année payée en une fois, au prix de douze mensualités. Même contenu que l’offre mensuelle.", "Pay for a year upfront at the price of twelve monthly payments. The features are the same as the monthly plan.")
+            else tr("Un paiement chaque mois. Tu peux aussi choisir un paiement annuel.", "One payment each month. You can also choose annual payment."),
             color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 20.sp)
 
         PlanType.entries.forEach { option ->
@@ -129,10 +129,6 @@ private fun MembershipPlanCard(option: PlanType, selected: Boolean, period: Bill
                 Text(if (option == PlanType.FREE) tr("toujours gratuit", "always free") else tr("${period.priceSuffix} · prévu", "${period.priceSuffix} · planned"),
                     modifier = Modifier.weight(1f),
                     color = MareePalette.Muted, fontSize = 13.sp)
-            }
-            if (option != PlanType.FREE && period == BillingPeriod.ANNUAL) {
-                Text(tr("${option.annualSavingEuros} € économisés par rapport à 12 mensualités.", "Save €${option.annualSavingEuros} compared with 12 monthly payments."),
-                    color = MareePalette.DeepTeal, fontSize = 13.sp, lineHeight = 20.sp)
             }
             HorizontalDivider(color = MareePalette.Outline)
 
