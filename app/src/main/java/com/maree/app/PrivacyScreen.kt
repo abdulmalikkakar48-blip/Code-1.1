@@ -56,33 +56,33 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit) {
         ) {
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    TextButton(onClick = onBack) { Text("‹ Retour") }
+                    TextButton(onClick = onBack) { Text(tr("‹ Retour", "‹ Back")) }
                     ScreenHeading(
-                        eyebrow = "CONFIDENTIALITÉ",
-                        title = "Tes données, tes choix.",
-                        description = "L’essentiel sur cette version de Selkie. Le texte complet est disponible ci-dessous."
+                        eyebrow = tr("CONFIDENTIALITÉ", "PRIVACY"),
+                        title = tr("Tes données, tes choix.", "Your data, your choices."),
+                        description = tr("L’essentiel sur cette version de Selkie. Le texte complet est disponible ci-dessous.", "The essentials for this version of Selkie. The full policy is available below.")
                     )
                 }
             }
             item {
                 AppCardSurface {
-                    StatusPill("Suivi local · coach facultatif")
-                    PrivacyFact("Ce qui est enregistré",
-                        "Tes applications suivies, tes limites, tes points et tes défis restent sur ton appareil.")
-                    PrivacyFact("Ce qui reste privé",
-                        "Selkie ne lit ni tes messages, ni tes photos, ni le contenu de ton écran. Les durées sont consultées uniquement après ton autorisation.")
-                    PrivacyFact("Tu gardes le contrôle",
-                        "Arrête le suivi dans Plus ou efface tes données ci-dessous. Pour retirer un accès, utilise les réglages Android.")
-                    PrivacyFact("Le Coach, aujourd’hui",
-                        "Le coach à conseils préparés fonctionne sans compte ni envoi. Les questions non comprises restent sur ce téléphone uniquement si tu actives leur enregistrement ; tu peux les consulter et les effacer dans Coach. Un futur dialogue IA en ligne demanderait ton accord pour transmettre les échanges. Les paiements restent inactifs.")
+                    StatusPill(tr("Suivi local · coach facultatif", "Local tracking · optional coach"))
+                    PrivacyFact(tr("Ce qui est enregistré", "What is saved"),
+                        tr("Tes applications suivies, tes limites, tes points et tes défis restent sur ton appareil.", "Your tracked apps, limits, points and challenges stay on your device."))
+                    PrivacyFact(tr("Ce qui reste privé", "What stays private"),
+                        tr("Selkie ne lit ni tes messages, ni tes photos, ni le contenu de ton écran. Les durées sont consultées uniquement après ton autorisation.", "Selkie does not read your messages, photos or screen content. Usage times are accessed only after you give permission."))
+                    PrivacyFact(tr("Tu gardes le contrôle", "You stay in control"),
+                        tr("Arrête le suivi dans Plus ou efface tes données ci-dessous. Pour retirer un accès, utilise les réglages Android.", "Stop tracking in More or erase your data below. Use Android settings to revoke access."))
+                    PrivacyFact(tr("Le Coach, aujourd’hui", "The coach today"),
+                        tr("Le coach à conseils préparés fonctionne sans compte ni envoi. Les questions non comprises restent sur ce téléphone uniquement si tu actives leur enregistrement ; tu peux les consulter et les effacer dans Coach. Un futur dialogue IA en ligne demanderait ton accord pour transmettre les échanges. Les paiements restent inactifs.", "The coach uses prepared advice, without an account or sending messages anywhere. Unrecognised questions stay on this phone only if you enable saving; you can view and erase them in Coach. A future online AI chat would ask for your agreement before transmitting messages. Payments remain inactive."))
                 }
             }
             item {
-                SectionLabel("Une question sur tes données ?")
+                SectionLabel(tr("Une question sur tes données ?", "A question about your data?"))
             }
             item {
                 AppCardSurface {
-                    Text("Responsable de l’application", fontSize = 12.sp, color = MareePalette.Muted)
+                    Text(tr("Responsable de l’application", "Data controller"), fontSize = 12.sp, color = MareePalette.Muted)
                     Text(PrivacyIdentity.controllerName, color = MareePalette.Ink,
                         fontSize = 17.sp, fontWeight = FontWeight.SemiBold)
                     Text(PrivacyIdentity.contactEmail, color = MareePalette.Muted, fontSize = 14.sp)
@@ -90,26 +90,26 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit) {
                         try {
                             context.startActivity(Intent(Intent.ACTION_SENDTO,
                                 Uri.parse("mailto:${PrivacyIdentity.contactEmail}"))
-                                .putExtra(Intent.EXTRA_SUBJECT, "Selkie · Confidentialité"))
+                                .putExtra(Intent.EXTRA_SUBJECT, tr("Selkie · Confidentialité", "Selkie · Privacy")))
                         } catch (_: ActivityNotFoundException) {
-                            scope.launch { snackbars.showSnackbar("Écris à ${PrivacyIdentity.contactEmail}") }
+                            scope.launch { snackbars.showSnackbar(tr("Écris à ${PrivacyIdentity.contactEmail}", "Email ${PrivacyIdentity.contactEmail}")) }
                         }
                     }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp)) {
-                        Text("Contacter par e-mail")
+                        Text(tr("Contacter par e-mail", "Contact by email"))
                     }
                 }
             }
             item {
                 OutlinedButton(onClick = { fullPolicy = !fullPolicy },
                     modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp)) {
-                    Text(if (fullPolicy) "Masquer la politique complète" else "Lire la politique complète")
+                    Text(if (fullPolicy) tr("Masquer la politique complète", "Hide full policy") else tr("Lire la politique complète", "Read full policy"))
                 }
             }
             if (fullPolicy) {
                 item {
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        SectionLabel("Politique complète")
-                        Text("Mise à jour : ${PrivacyContent.updatedOn}",
+                        SectionLabel(tr("Politique complète", "Full policy"))
+                        Text(tr("Mise à jour : ${PrivacyContent.updatedOn}", "Updated: ${PrivacyContent.updatedOn}"),
                             color = MareePalette.Muted, fontSize = 12.sp)
                     }
                 }
@@ -125,18 +125,18 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit) {
             }
             item {
                 AppCardSurface {
-                    Text("Repartir de zéro", fontSize = 17.sp,
+                    Text(tr("Repartir de zéro", "Start fresh"), fontSize = 17.sp,
                         fontWeight = FontWeight.SemiBold, color = MareePalette.Ink)
-                    Text("Cela supprime tes réglages, tes points et tes défis de Selkie.",
+                    Text(tr("Cela supprime tes réglages, tes points et tes défis de Selkie.", "This erases your Selkie settings, points and challenges."),
                         fontSize = 14.sp, lineHeight = 21.sp, color = MareePalette.Muted)
                     Button(onClick = onDeleteData, modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.errorContainer,
                             contentColor = MaterialTheme.colorScheme.onErrorContainer)) {
-                        Text("Effacer mes données")
+                        Text(tr("Effacer mes données", "Erase my data"))
                     }
-                    Text("Une confirmation sera demandée. Les statistiques d’Android et les autorisations du téléphone restent inchangées.",
+                    Text(tr("Une confirmation sera demandée. Les statistiques d’Android et les autorisations du téléphone restent inchangées.", "You will be asked to confirm. Android usage statistics and your phone’s permissions stay unchanged."),
                         fontSize = 12.sp, lineHeight = 18.sp, color = MareePalette.Muted)
                 }
             }

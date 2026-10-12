@@ -1,6 +1,10 @@
-# Coach à conseils préparés — Selkie 0.9.1
+# Coach à conseils préparés — Selkie 0.9.2
 
 Le Coach est accessible sans compte, connexion, crédit API ni abonnement. Il choisit parmi 125 réponses écrites à l’avance dans 67 sujets : 29 sujets de conseils avec trois variantes et 38 questions d’aide avec une réponse complète chacune ; il ne contient pas ChatGPT ni un modèle génératif. Les abonnements restent en démonstration, et le dialogue IA distant reste facultatif, séparé et non configuré.
+
+## Français et anglais
+
+Choisis Français ou English à l’accueil ou dans Plus. Chaque langue contient les mêmes 67 sujets et 125 réponses, dont 38 questions d’aide complètes. Le moteur reconnaît les expressions connues des deux langues, mais répond dans la langue choisie. Les données mesurées restent identiques, avec le séparateur de points adapté. La conversation en mémoire et ses menus sont recréés à la bascule ; les phrases enregistrées sur option restent dans leur langue d’origine. Voir [les langues](LANGUES.md).
 
 ## Fonctionnement
 

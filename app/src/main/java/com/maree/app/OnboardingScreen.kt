@@ -53,67 +53,68 @@ fun OnboardingScreen(
                 Spacer(Modifier.width(10.dp))
                 Text("selkie", fontSize = 25.sp, fontWeight = FontWeight.Bold, color = MareePalette.Ink)
             }
+            LanguageSelector()
             ScreenHeading(
-                eyebrow = "BIENVENUE",
-                title = "Prépare ton suivi.",
-                description = "Deux accès pour mesurer ton temps et afficher une pause. Les notifications sont facultatives."
+                eyebrow = tr("BIENVENUE", "WELCOME"),
+                title = tr("Prépare ton suivi.", "Set up your tracking."),
+                description = tr("Deux accès pour mesurer ton temps et afficher une pause. Les notifications sont facultatives.", "Two permissions to measure your time and show a pause. Notifications are optional.")
             )
-            SectionLabel("Les accès Android", "$requiredAccessCount / 2 nécessaires")
+            SectionLabel(tr("Les accès Android", "Android permissions"), tr("$requiredAccessCount / 2 nécessaires", "$requiredAccessCount / 2 required"))
 
             OnboardingPermissionCard(
                 number = "01",
-                title = "Mesurer ton temps",
+                title = tr("Mesurer ton temps", "Measure your time"),
                 required = true,
                 granted = status.usageGranted,
-                description = "Consulte les durées des applications pour calculer tes limites.",
-                guidance = "Dans les réglages Android, choisis Selkie et active l’accès aux données d’utilisation.",
-                action = "Autoriser les durées",
+                description = tr("Consulte les durées des applications pour calculer tes limites.", "Checks app usage times to calculate your limits."),
+                guidance = tr("Dans les réglages Android, choisis Selkie et active l’accès aux données d’utilisation.", "In Android settings, select Selkie and allow usage access."),
+                action = tr("Autoriser les durées", "Allow usage access"),
                 onRequest = onUsagePermission
             )
             OnboardingPermissionCard(
                 number = "02",
-                title = "Afficher une pause",
+                title = tr("Afficher une pause", "Show a pause"),
                 required = true,
                 granted = status.overlayGranted,
-                description = "Affiche l’écran de pause quand la limite d’une application est atteinte.",
-                guidance = "Dans les réglages Android, autorise Selkie à s’afficher par-dessus les autres applications.",
-                action = "Autoriser l’écran de pause",
+                description = tr("Affiche l’écran de pause quand la limite d’une application est atteinte.", "Shows a pause screen when an app reaches its limit."),
+                guidance = tr("Dans les réglages Android, autorise Selkie à s’afficher par-dessus les autres applications.", "In Android settings, allow Selkie to display over other apps."),
+                action = tr("Autoriser l’écran de pause", "Allow pause screen"),
                 onRequest = onOverlayPermission
             )
             OnboardingPermissionCard(
                 number = "03",
-                title = "Recevoir une alerte",
+                title = tr("Recevoir une alerte", "Receive an alert"),
                 required = false,
                 granted = status.notificationsGranted,
-                description = "Te prévient à l’approche d’une limite. Le suivi fonctionne aussi sans ces alertes.",
+                description = tr("Te prévient à l’approche d’une limite. Le suivi fonctionne aussi sans ces alertes.", "Warns you as you approach a limit. Tracking also works without these alerts."),
                 guidance = null,
-                action = "Autoriser les notifications",
+                action = tr("Autoriser les notifications", "Allow notifications"),
                 onRequest = onNotificationPermission
             )
 
             AppCardSurface {
-                Text("Tes données restent sur ton téléphone", fontSize = 16.sp,
+                Text(tr("Tes données restent sur ton téléphone", "Your data stays on your phone"), fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold, color = MareePalette.Ink)
-                Text("Selkie ne lit ni tes messages, ni tes photos, ni le contenu de ton écran.",
+                Text(tr("Selkie ne lit ni tes messages, ni tes photos, ni le contenu de ton écran.", "Selkie does not read your messages, photos, or screen content."),
                     color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
-                TextButton(onClick = onPrivacy) { Text("Lire la confidentialité") }
+                TextButton(onClick = onPrivacy) { Text(tr("Lire la confidentialité", "Read the privacy policy")) }
             }
 
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 PrimaryAction(
-                    label = "Activer le suivi",
+                    label = tr("Activer le suivi", "Turn on tracking"),
                     onClick = onComplete,
                     modifier = Modifier.fillMaxWidth(),
                     enabled = status.readyForMonitoring
                 )
                 if (!status.readyForMonitoring) {
-                    Text("Les deux premiers accès sont nécessaires pour activer le suivi.",
+                    Text(tr("Les deux premiers accès sont nécessaires pour activer le suivi.", "The first two permissions are required to turn on tracking."),
                         color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
                 }
                 TextButton(onClick = onExplore, modifier = Modifier.fillMaxWidth()) {
-                    Text("Découvrir sans suivi", fontWeight = FontWeight.Medium)
+                    Text(tr("Découvrir sans suivi", "Explore without tracking"), fontWeight = FontWeight.Medium)
                 }
-                Text("Tu pourras activer le suivi plus tard dans Plus. En attendant, aucune application n’est surveillée ou bloquée.",
+                Text(tr("Tu pourras activer le suivi plus tard dans Plus. En attendant, aucune application n’est surveillée ou bloquée.", "You can turn on tracking later in More. Until then, no apps are monitored or blocked."),
                     color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
             }
         }
@@ -140,13 +141,13 @@ private fun OnboardingPermissionCard(
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(title, color = MareePalette.Ink, fontWeight = FontWeight.SemiBold, fontSize = 17.sp)
-                Text(if (required) "Nécessaire au suivi" else "Facultatif",
+                Text(if (required) tr("Nécessaire au suivi", "Required for tracking") else tr("Facultatif", "Optional"),
                     color = MareePalette.Muted, fontSize = 12.sp)
             }
         }
         Text(description, color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
         if (granted) {
-            StatusPill("✓ Accès accordé")
+            StatusPill(tr("✓ Accès accordé", "✓ Permission granted"))
         } else {
             guidance?.let {
                 Text(it, color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)

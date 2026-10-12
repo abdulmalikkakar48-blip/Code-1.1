@@ -18,18 +18,29 @@ private const val CHALLENGE_CYCLE = 21L * DAY
 const val CHALLENGE_REQUIRED_DAYS = 5
 
 /** 20 défis : les deux groupes alternent tous les 21 jours. */
-val CHALLENGES = listOf(
-    "Lire 10 pages d'un livre", "Marcher 20 minutes sans téléphone",
-    "Manger un repas sans écran", "Désactiver une notification inutile",
-    "Laisser son téléphone loin de son lit", "Faire 15 minutes de rangement",
-    "Appeler un proche au lieu d'envoyer un message", "Écrire trois choses positives",
-    "Faire une pause de 30 minutes sans écran", "Prendre l'air pendant 15 minutes",
-    "Ne pas regarder son téléphone au réveil", "Faire 10 minutes d'étirements",
-    "Lire un article long sans distraction", "Dessiner ou écrire pendant 20 minutes",
-    "Préparer son lendemain sur papier", "Passer une heure sans réseau social",
-    "Faire une promenade attentive", "Apprendre quelque chose hors écran",
-    "Prendre son goûter sans téléphone", "Couper les écrans une heure avant de dormir"
-)
+val CHALLENGES: List<String>
+    get() = listOf(
+        tr("Lire 10 pages d'un livre", "Read 10 pages of a book"),
+        tr("Marcher 20 minutes sans téléphone", "Walk for 20 minutes without your phone"),
+        tr("Manger un repas sans écran", "Enjoy a meal without screens"),
+        tr("Désactiver une notification inutile", "Turn off an unnecessary notification"),
+        tr("Laisser son téléphone loin de son lit", "Keep your phone away from your bed"),
+        tr("Faire 15 minutes de rangement", "Tidy up for 15 minutes"),
+        tr("Appeler un proche au lieu d'envoyer un message", "Call someone close instead of texting"),
+        tr("Écrire trois choses positives", "Write down three positive things"),
+        tr("Faire une pause de 30 minutes sans écran", "Take a 30-minute screen-free break"),
+        tr("Prendre l'air pendant 15 minutes", "Get some fresh air for 15 minutes"),
+        tr("Ne pas regarder son téléphone au réveil", "Avoid checking your phone when you wake up"),
+        tr("Faire 10 minutes d'étirements", "Stretch for 10 minutes"),
+        tr("Lire un article long sans distraction", "Read a long article without distractions"),
+        tr("Dessiner ou écrire pendant 20 minutes", "Draw or write for 20 minutes"),
+        tr("Préparer son lendemain sur papier", "Plan tomorrow on paper"),
+        tr("Passer une heure sans réseau social", "Spend an hour without social media"),
+        tr("Faire une promenade attentive", "Take a mindful walk"),
+        tr("Apprendre quelque chose hors écran", "Learn something away from screens"),
+        tr("Prendre son goûter sans téléphone", "Enjoy a snack without your phone"),
+        tr("Couper les écrans une heure avant de dormir", "Turn off screens an hour before bed")
+    )
 
 data class TrackedApp(
     val packageName: String,
@@ -173,25 +184,25 @@ class Store internal constructor(private val prefs: SharedPreferences) {
         (pointUnits().toLong() + delta).coerceIn(0, Int.MAX_VALUE.toLong()).toInt()
 
     fun addApp(packageName: String, limitMinutes: Int, rawTodayMillis: Long): String? = synchronized(lock) {
-        if (!canEdit()) return@synchronized "Tu n'as plus de points. Fais un défi ou attends le prochain bonus."
+        if (!canEdit()) return@synchronized tr("Tu n'as plus de points. Fais un défi ou attends le prochain bonus.", "You have no points left. Complete a challenge or wait for the next bonus.")
         val apps = readApps()
         val plan = planType()
         val appLimit = plan.maxTrackedApps
         if (appLimit != null && apps.size >= appLimit)
-            return@synchronized "$appLimit applications maximum avec l’offre ${plan.displayName}."
-        if (apps.any { it.packageName == packageName }) return@synchronized "Cette application est déjà suivie."
-        if (limitMinutes < 5 || limitMinutes % 5 != 0) return@synchronized "Choisis un multiple de 5 minutes."
+            return@synchronized tr("$appLimit applications maximum avec l’offre ${plan.displayName}.", "The ${plan.displayName} plan allows up to $appLimit apps.")
+        if (apps.any { it.packageName == packageName }) return@synchronized tr("Cette application est déjà suivie.", "This app is already being tracked.")
+        if (limitMinutes < 5 || limitMinutes % 5 != 0) return@synchronized tr("Choisis un multiple de 5 minutes.", "Choose a multiple of 5 minutes.")
         apps.add(TrackedApp(packageName, limitMinutes, rawTodayMillis))
         saveApps(apps)
         null
     }
 
     fun editLimit(packageName: String, minutes: Int): String? = synchronized(lock) {
-        if (!canEdit()) return@synchronized "Impossible de modifier une limite à 0 point. Termine des défis pour en regagner."
-        if (minutes < 5 || minutes % 5 != 0) return@synchronized "Choisis un multiple de 5 minutes."
+        if (!canEdit()) return@synchronized tr("Impossible de modifier une limite à 0 point. Termine des défis pour en regagner.", "You cannot change a limit with 0 points. Complete challenges to earn some back.")
+        if (minutes < 5 || minutes % 5 != 0) return@synchronized tr("Choisis un multiple de 5 minutes.", "Choose a multiple of 5 minutes.")
         val apps = readApps()
         val index = apps.indexOfFirst { it.packageName == packageName }
-        if (index < 0) return@synchronized "Application introuvable."
+        if (index < 0) return@synchronized tr("Application introuvable.", "App not found.")
         apps[index] = apps[index].copy(limitMinutes = minutes)
         saveApps(apps)
         null
@@ -203,10 +214,10 @@ class Store internal constructor(private val prefs: SharedPreferences) {
 
     fun resetApp(packageName: String, rawTodayMillis: Long): String? = synchronized(lock) {
         if (pointUnits() < 10 * POINT_UNITS_PER_POINT)
-            return@synchronized "Il faut 10 points pour réinitialiser une limite."
+            return@synchronized tr("Il faut 10 points pour réinitialiser une limite.", "You need 10 points to reset a limit.")
         val apps = readApps()
         val index = apps.indexOfFirst { it.packageName == packageName }
-        if (index < 0) return@synchronized "Application introuvable."
+        if (index < 0) return@synchronized tr("Application introuvable.", "App not found.")
         apps[index] = apps[index].copy(baselineMillis = rawTodayMillis, lockedUntil = 0L)
         saveApps(apps)
         prefs.edit().putInt("pointUnits", shiftedPointUnits(-10 * POINT_UNITS_PER_POINT)).apply()
@@ -369,22 +380,22 @@ class Store internal constructor(private val prefs: SharedPreferences) {
         title: String, steps: List<String>, requiredDays: Int,
         now: Long = System.currentTimeMillis()
     ): String? = synchronized(lock) {
-        if (!planType().canCreateCustomChallenges) return@synchronized "Les défis personnalisés sont disponibles avec Premium et Ultra."
+        if (!planType().canCreateCustomChallenges) return@synchronized tr("Les défis personnalisés sont disponibles avec Premium et Ultra.", "Custom challenges are available with Premium and Ultra.")
         val cleanTitle = title.trim()
         val cleanSteps = steps.map { it.trim() }
-        if (cleanTitle.isEmpty()) return@synchronized "Donne un titre à ton défi."
+        if (cleanTitle.isEmpty()) return@synchronized tr("Donne un titre à ton défi.", "Give your challenge a title.")
         if (cleanSteps.size != 3 || cleanSteps.any { it.isEmpty() })
-            return@synchronized "Un défi personnalisé demande exactement 3 étapes renseignées."
+            return@synchronized tr("Un défi personnalisé demande exactement 3 étapes renseignées.", "A custom challenge needs exactly 3 steps, each with a description.")
         if (requiredDays !in CUSTOM_MIN_DAYS..CUSTOM_MAX_DAYS)
-            return@synchronized "Choisis une durée entre $CUSTOM_MIN_DAYS et $CUSTOM_MAX_DAYS jours."
+            return@synchronized tr("Choisis une durée entre $CUSTOM_MIN_DAYS et $CUSTOM_MAX_DAYS jours.", "Choose a duration between $CUSTOM_MIN_DAYS and $CUSTOM_MAX_DAYS days.")
         val challenges = readCustomChallenges()
         val active = challenges.filterNot { it.completed }
         if (active.size >= MAX_ACTIVE_CUSTOM_CHALLENGES)
-            return@synchronized "$MAX_ACTIVE_CUSTOM_CHALLENGES défis personnalisés actifs maximum."
+            return@synchronized tr("$MAX_ACTIVE_CUSTOM_CHALLENGES défis personnalisés actifs maximum.", "You can have up to $MAX_ACTIVE_CUSTOM_CHALLENGES active custom challenges.")
         fun normalized(text: String) = text.lowercase(Locale.ROOT).replace(Regex("\\s+"), " ").trim()
         if (active.any { normalized(it.title) == normalized(cleanTitle) &&
                 it.steps.map(::normalized) == cleanSteps.map(::normalized) })
-            return@synchronized "Ce défi personnalisé est déjà actif."
+            return@synchronized tr("Ce défi personnalisé est déjà actif.", "This custom challenge is already active.")
         challenges.add(StoredCustomChallenge(UUID.randomUUID().toString(), cleanTitle, cleanSteps, requiredDays, now))
         prefs.edit().putString("customChallenges", customChallengesJson(challenges)).apply()
         null
@@ -393,13 +404,13 @@ class Store internal constructor(private val prefs: SharedPreferences) {
     fun setCustomChallengeStep(
         id: String, index: Int, checked: Boolean, now: Long = System.currentTimeMillis()
     ): String? = synchronized(lock) {
-        if (!planType().canCreateCustomChallenges) return@synchronized "Active Premium ou Ultra pour poursuivre ce défi personnalisé."
-        if (index !in 0..2) return@synchronized "Étape introuvable."
+        if (!planType().canCreateCustomChallenges) return@synchronized tr("Active Premium ou Ultra pour poursuivre ce défi personnalisé.", "Activate Premium or Ultra to continue this custom challenge.")
+        if (index !in 0..2) return@synchronized tr("Étape introuvable.", "Step not found.")
         val challenges = readCustomChallenges()
         val position = challenges.indexOfFirst { it.id == id }
-        if (position < 0) return@synchronized "Défi introuvable."
+        if (position < 0) return@synchronized tr("Défi introuvable.", "Challenge not found.")
         val challenge = challenges[position]
-        if (!canEditCustomToday(challenge, now)) return@synchronized "Cette journée ne peut plus être modifiée."
+        if (!canEditCustomToday(challenge, now)) return@synchronized tr("Cette journée ne peut plus être modifiée.", "You can no longer change this day.")
         val today = localDate(now)
         val steps = if (challenge.stepDate == today) challenge.checkedSteps else emptySet()
         challenges[position] = challenge.copy(stepDate = today,
@@ -409,15 +420,15 @@ class Store internal constructor(private val prefs: SharedPreferences) {
     }
 
     fun validateCustomChallengeToday(id: String, now: Long = System.currentTimeMillis()): String? = synchronized(lock) {
-        if (!planType().canCreateCustomChallenges) return@synchronized "Active Premium ou Ultra pour poursuivre ce défi personnalisé."
+        if (!planType().canCreateCustomChallenges) return@synchronized tr("Active Premium ou Ultra pour poursuivre ce défi personnalisé.", "Activate Premium or Ultra to continue this custom challenge.")
         val challenges = readCustomChallenges()
         val position = challenges.indexOfFirst { it.id == id }
-        if (position < 0) return@synchronized "Défi introuvable."
+        if (position < 0) return@synchronized tr("Défi introuvable.", "Challenge not found.")
         val challenge = challenges[position]
-        if (!canEditCustomToday(challenge, now)) return@synchronized "Cette journée est déjà validée ou indisponible."
+        if (!canEditCustomToday(challenge, now)) return@synchronized tr("Cette journée est déjà validée ou indisponible.", "This day is already confirmed or unavailable.")
         val today = localDate(now)
         if (challenge.stepDate != today || challenge.checkedSteps.size != 3)
-            return@synchronized "Termine les 3 étapes d’aujourd’hui avant de valider."
+            return@synchronized tr("Termine les 3 étapes d’aujourd’hui avant de valider.", "Complete all 3 of today's steps before confirming.")
         val days = challenge.days + today
         val earnsReward = days.size == challenge.requiredDays && !challenge.rewardClaimed
         challenges[position] = challenge.copy(days = days, rewardClaimed = challenge.rewardClaimed || earnsReward)
@@ -430,7 +441,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
 
     fun deleteCustomChallenge(id: String): String? = synchronized(lock) {
         val challenges = readCustomChallenges()
-        if (challenges.none { it.id == id }) return@synchronized "Défi introuvable."
+        if (challenges.none { it.id == id }) return@synchronized tr("Défi introuvable.", "Challenge not found.")
         prefs.edit().putString("customChallenges", customChallengesJson(challenges.filterNot { it.id == id })).apply()
         null
     }

@@ -101,7 +101,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Locale
 
 private val Background = MareePalette.Background
 private val CardColor = MareePalette.Surface
@@ -121,7 +120,7 @@ fun installedLaunchableApps(context: android.content.Context): List<InstalledApp
         val pkg = info.activityInfo?.packageName ?: return@mapNotNull null
         if (pkg == context.packageName) return@mapNotNull null
         InstalledApp(pkg, info.loadLabel(context.packageManager)?.toString() ?: pkg)
-    }.distinctBy { it.pkg }.sortedBy { it.label.lowercase(Locale.getDefault()) }
+    }.distinctBy { it.pkg }.sortedBy { it.label.lowercase(AppLanguage.locale) }
 }
 
 fun appLabel(context: android.content.Context, pkg: String): String = try {
@@ -187,7 +186,7 @@ private fun MareeApp() {
     fun openSettings(intent: Intent) {
         try { settingsRequest.launch(intent) }
         catch (_: android.content.ActivityNotFoundException) {
-            infoMessage = "Ouvre les paramètres Android, puis Applications → Selkie, pour gérer les autorisations."
+            infoMessage = tr("Ouvre les paramètres Android, puis Applications → Selkie, pour gérer les autorisations.", "Open Android settings, then Apps → Selkie, to manage permissions.")
         }
     }
     fun askNotifications() {
@@ -283,11 +282,11 @@ private fun MareeApp() {
                 NavigationBar(containerColor = MareePalette.DeepTeal, tonalElevation = 0.dp,
                     modifier = Modifier.heightIn(min = (80f + extraNavHeight).dp)) {
                     listOf(
-                        Triple("Accueil", R.drawable.ic_nav_home, 0),
-                        Triple("Quotidien", R.drawable.ic_nav_daily, 1),
-                        Triple("Défis", R.drawable.ic_nav_challenges, 2),
-                        Triple("Coach", R.drawable.ic_nav_coach, 3),
-                        Triple("Plus", R.drawable.ic_nav_more, 4)
+                        Triple(tr("Accueil", "Home"), R.drawable.ic_nav_home, 0),
+                        Triple(tr("Quotidien", "Daily"), R.drawable.ic_nav_daily, 1),
+                        Triple(tr("Défis", "Challenges"), R.drawable.ic_nav_challenges, 2),
+                        Triple(tr("Coach", "Coach"), R.drawable.ic_nav_coach, 3),
+                        Triple(tr("Plus", "More"), R.drawable.ic_nav_more, 4)
                     ).forEach { (name, icon, index) ->
                         NavigationBarItem(
                             selected = tab == index, onClick = { tab = index },
@@ -389,7 +388,7 @@ private fun MareeApp() {
                             snapshot = store.readSnapshot(lastReading)
                             refresh()
                         },
-                        onAccount = { infoMessage = "Cette version fonctionne sans compte ; ton suivi reste sur ce téléphone. Un compte Selkie est prévu pour retrouver tes droits d’abonnement, avec un seul téléphone connecté à la fois. Il n’est pas encore actif : il demande un serveur de connexion et une vérification des achats Google Play. Tes points et défis ne sont pas synchronisés." }
+                        onAccount = { infoMessage = tr("Cette version fonctionne sans compte ; ton suivi reste sur ce téléphone. Un compte Selkie est prévu pour retrouver tes droits d’abonnement, avec un seul téléphone connecté à la fois. Il n’est pas encore actif : il demande un serveur de connexion et une vérification des achats Google Play. Tes points et défis ne sont pas synchronisés.", "This version works without an account; your tracking stays on this phone. A Selkie account is planned to restore subscription access, with only one phone signed in at a time. Accounts are not active yet: they need an authentication server and Google Play purchase verification. Your points and challenges are not synced.") }
                     )
                 }
             }
@@ -421,7 +420,7 @@ private fun MareeApp() {
         )
     }
     editApp?.let { item ->
-        MinutesDialog("Modifier la limite de ${appLabel(context, item.packageName)}", item.limitMinutes,
+        MinutesDialog(tr("Modifier la limite de ${appLabel(context, item.packageName)}", "Edit the limit for ${appLabel(context, item.packageName)}"), item.limitMinutes,
             onDismiss = { editApp = null }, onConfirm = { mins ->
                 store.editLimit(item.packageName, mins)?.let(::display)
                 editApp = null
@@ -430,17 +429,17 @@ private fun MareeApp() {
     }
     removeApp?.let { item ->
         AlertDialog(onDismissRequest = { removeApp = null },
-            title = { Text("Retirer ${appLabel(context, item.packageName)} ?") },
-            text = { Text("Cette application et son verrou seront supprimés de Selkie.") },
+            title = { Text(tr("Retirer ${appLabel(context, item.packageName)} ?", "Remove ${appLabel(context, item.packageName)}?")) },
+            text = { Text(tr("Cette application et son verrou seront supprimés de Selkie.", "This app and its lock will be removed from Selkie.")) },
             confirmButton = { Button(onClick = {
                 store.removeApp(item.packageName); removeApp = null; refresh()
-            }) { Text("Retirer") } },
-            dismissButton = { TextButton(onClick = { removeApp = null }) { Text("Annuler") } })
+            }) { Text(tr("Retirer", "Remove")) } },
+            dismissButton = { TextButton(onClick = { removeApp = null }) { Text(tr("Annuler", "Cancel")) } })
     }
     resetApp?.let { item ->
         AlertDialog(onDismissRequest = { resetApp = null },
-            title = { Text("Réinitialiser la limite ?") },
-            text = { Text("Le verrou sera levé et la limite complète sera rendue. Coût : 10 points.") },
+            title = { Text(tr("Réinitialiser la limite ?", "Reset the limit?")) },
+            text = { Text(tr("Le verrou sera levé et la limite complète sera rendue. Coût : 10 points.", "The lock will be removed and the full limit restored. Cost: 10 points.")) },
             confirmButton = { Button(onClick = {
                 val operationGeneration = storeGeneration
                 val operationStore = store
@@ -456,18 +455,18 @@ private fun MareeApp() {
                     if (issue != null) display(issue)
                     refresh()
                 }
-            }) { Text("Réinitialiser (−10)") } },
-            dismissButton = { TextButton(onClick = { resetApp = null }) { Text("Annuler") } })
+            }) { Text(tr("Réinitialiser (−10)", "Reset (−10)")) } },
+            dismissButton = { TextButton(onClick = { resetApp = null }) { Text(tr("Annuler", "Cancel")) } })
     }
     infoMessage?.let { message ->
         AlertDialog(onDismissRequest = { infoMessage = null },
             title = { Text("Selkie") }, text = { Text(message) },
-            confirmButton = { TextButton(onClick = { infoMessage = null }) { Text("Compris") } })
+            confirmButton = { TextButton(onClick = { infoMessage = null }) { Text(tr("Compris", "Got it")) } })
     }
     if (deleteConfirmation) {
         AlertDialog(onDismissRequest = { if (!deleting) deleteConfirmation = false },
-            title = { Text("Effacer les données de Selkie ?") },
-            text = { Text("Tes applications suivies, limites, verrous, points, défis, choix de démonstration et d’accueil, ainsi que les questions du coach enregistrées sur ce téléphone seront effacés. Le suivi sera arrêté. Cette action est irréversible et ne supprime pas les statistiques Android.") },
+            title = { Text(tr("Effacer les données de Selkie ?", "Delete Selkie data?")) },
+            text = { Text(tr("Tes applications suivies, limites, verrous, points, défis, choix de démonstration et d’accueil, ainsi que les questions du coach enregistrées sur ce téléphone seront effacés. Le suivi sera arrêté. Cette action est irréversible et ne supprime pas les statistiques Android.", "Your tracked apps, limits, locks, points, challenges, demo and onboarding choices, and coach questions saved on this phone will be deleted. Tracking will stop. This cannot be undone and does not delete Android usage statistics.")) },
             confirmButton = { Button(enabled = !deleting, onClick = {
                 scope.launch {
                     deleting = true
@@ -478,7 +477,8 @@ private fun MareeApp() {
                         val local = store.clearPersonalData()
                         val coach = try { CoachSessionStore(context).clear(); true } catch (_: CoachError) { false }
                         val offlineCoach = OfflineCoachHistory(context).clear()
-                        local && coach && offlineCoach
+                        val language = AppLanguage.reset(context)
+                        local && coach && offlineCoach && language
                     }
                     deleting = false
                     deleteConfirmation = false
@@ -493,13 +493,13 @@ private fun MareeApp() {
                         tab = 0
                         refresh()
                     } else {
-                        infoMessage = "L’effacement n’a pas pu être enregistré. Le suivi est arrêté. Réessaie depuis Confidentialité."
+                        infoMessage = tr("L’effacement n’a pas pu être enregistré. Le suivi est arrêté. Réessaie depuis Confidentialité.", "Deletion could not be saved. Tracking has stopped. Try again from Privacy.")
                     }
                 }
             }, colors = ButtonDefaults.buttonColors(containerColor = MareePalette.Danger)) {
-                Text(if (deleting) "Effacement…" else "Tout effacer")
+                Text(if (deleting) tr("Effacement…", "Deleting…") else tr("Tout effacer", "Delete everything"))
             } },
-            dismissButton = { TextButton(enabled = !deleting, onClick = { deleteConfirmation = false }) { Text("Annuler") } })
+            dismissButton = { TextButton(enabled = !deleting, onClick = { deleteConfirmation = false }) { Text(tr("Annuler", "Cancel")) } })
     }
 }
 
@@ -517,15 +517,15 @@ private fun HomeTab(
         when (appSort) {
             1 -> matching.sortedByDescending { it.usedMillis }
             2 -> matching.sortedByDescending { it.progress }
-            else -> matching.sortedBy { getName(it.packageName).lowercase(Locale.FRENCH) }
+            else -> matching.sortedBy { getName(it.packageName).lowercase(AppLanguage.locale) }
         }
     } else snapshot.apps
     LazyColumn(Modifier.fillMaxSize(),
         contentPadding = PaddingValues(start = 20.dp, end = 20.dp, bottom = 24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         item {
-            ScreenHeading("TON ESPACE", "Reprends ton temps.",
-                "Des limites simples. Plus de place pour toi.")
+            ScreenHeading(tr("TON ESPACE", "YOUR SPACE"), tr("Reprends ton temps.", "Take back your time."),
+                tr("Des limites simples. Plus de place pour toi.", "Simple limits. More room for you."))
         }
         item {
             DisciplineCard(snapshot, onChallenges)
@@ -534,54 +534,54 @@ private fun HomeTab(
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 HomeMetric(
                     value = snapshot.apps.size.toString(),
-                    label = "Applications suivies",
+                    label = tr("Applications suivies", "Tracked apps"),
                     modifier = Modifier.weight(1f)
                 )
                 HomeMetric(
                     value = snapshot.checkedChallenges.size.toString(),
-                    label = "Défis terminés · série",
+                    label = tr("Défis terminés · série", "Completed challenges · series"),
                     modifier = Modifier.weight(1f)
                 )
             }
         }
         if (!active) item {
             AppCardSurface {
-                StatusPill("Suivi en pause")
-                Text("Active le suivi pour mesurer tes limites et afficher les écrans de pause.",
+                StatusPill(tr("Suivi en pause", "Tracking paused"))
+                Text(tr("Active le suivi pour mesurer tes limites et afficher les écrans de pause.", "Turn on tracking to measure your limits and show pause screens."),
                     color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
-                PrimaryAction("Activer le suivi", onClick = onSetup, modifier = Modifier.fillMaxWidth())
+                PrimaryAction(tr("Activer le suivi", "Turn on tracking"), onClick = onSetup, modifier = Modifier.fillMaxWidth())
             }
         }
         item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("Tes applications", color = Cream, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
-                    Text(if (appLimit == null) "${snapshot.apps.size} suivies · sans plafond"
-                        else "${snapshot.apps.size} sur $appLimit suivies", color = Muted, fontSize = 12.sp)
+                    Text(tr("Tes applications", "Your apps"), color = Cream, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+                    Text(if (appLimit == null) tr("${snapshot.apps.size} suivies · sans plafond", "${snapshot.apps.size} tracked · no limit")
+                        else tr("${snapshot.apps.size} sur $appLimit suivies", "${snapshot.apps.size} of $appLimit tracked"), color = Muted, fontSize = 12.sp)
                 }
-                PrimaryAction("+ Ajouter", onClick = onAdd,
+                PrimaryAction(tr("+ Ajouter", "+ Add"), onClick = onAdd,
                     enabled = snapshot.points > 0 && (appLimit == null || snapshot.apps.size < appLimit))
             }
         }
         if (snapshot.points <= 0) item {
-            Text("À 0 point, gagne des points avec les défis pour ajouter ou modifier une limite.",
+            Text(tr("À 0 point, gagne des points avec les défis pour ajouter ou modifier une limite.", "At 0 points, earn points through challenges to add or edit a limit."),
                 color = Warning, fontSize = 13.sp, lineHeight = 20.sp)
         }
         if (appLimit != null && snapshot.apps.size >= appLimit) item {
             Text(if (snapshot.apps.size > appLimit)
-                "Tes applications restent suivies. Retire-en pour passer sous le plafond et en ajouter une autre."
-                else "Plafond atteint. Tu peux retirer une application pour en choisir une autre.",
+                tr("Tes applications restent suivies. Retire-en pour passer sous le plafond et en ajouter une autre.", "Your apps are still tracked. Remove some to get below the limit and add another.")
+                else tr("Plafond atteint. Tu peux retirer une application pour en choisir une autre.", "App limit reached. You can remove an app to choose another."),
                 color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
         }
         if (snapshot.apps.isEmpty()) item {
             AppCardSurface {
-                Text("Ta première limite", fontWeight = FontWeight.SemiBold, fontSize = 19.sp)
-                Text("Choisis l’application qui prend le plus de place dans ta journée. Fixe une limite qui te ressemble.",
+                Text(tr("Ta première limite", "Your first limit"), fontWeight = FontWeight.SemiBold, fontSize = 19.sp)
+                Text(tr("Choisis l’application qui prend le plus de place dans ta journée. Fixe une limite qui te ressemble.", "Choose the app that takes up most of your day. Set a limit that works for you."),
                     color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
                 OutlinedButton(onClick = onAdd, enabled = snapshot.points > 0,
                     modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp), shape = RoundedCornerShape(14.dp)) {
-                    Text("Choisir une application")
+                    Text(tr("Choisir une application", "Choose an app"))
                 }
             }
         } else {
@@ -589,11 +589,11 @@ private fun HomeTab(
                 item {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         OutlinedTextField(value = appQuery, onValueChange = { appQuery = it },
-                            placeholder = { Text("Rechercher une application") }, singleLine = true,
+                            placeholder = { Text(tr("Rechercher une application", "Search for an app")) }, singleLine = true,
                             shape = RoundedCornerShape(14.dp), modifier = Modifier.fillMaxWidth())
                         Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            listOf("Nom", "Temps passé", "Limite proche").forEachIndexed { index, title ->
+                            listOf(tr("Nom", "Name"), tr("Temps passé", "Time spent"), tr("Limite proche", "Close to limit")).forEachIndexed { index, title ->
                                 FilterChip(selected = appSort == index, onClick = { appSort = index },
                                     label = { Text(title, fontSize = 12.sp) })
                             }
@@ -601,7 +601,7 @@ private fun HomeTab(
                     }
                 }
                 if (displayedApps.isEmpty()) item {
-                    Text("Aucune application ne correspond à ta recherche.", color = Muted, fontSize = 14.sp)
+                    Text(tr("Aucune application ne correspond à ta recherche.", "No apps match your search."), color = Muted, fontSize = 14.sp)
                 }
             }
             items(displayedApps, key = { it.packageName }) { app ->
@@ -635,19 +635,19 @@ private fun AppCard(
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(name, fontWeight = FontWeight.SemiBold, fontSize = 17.sp,
                     maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(if (!active) "Suivi en pause" else if (app.isLocked) "Limite atteinte" else "Suivi actif",
+                Text(if (!active) tr("Suivi en pause", "Tracking paused") else if (app.isLocked) tr("Limite atteinte", "Limit reached") else tr("Suivi actif", "Tracking active"),
                     fontSize = 12.sp, color = if (!active) Muted else if (app.isLocked) Warning else Mint)
             }
             Box {
                 IconButton(onClick = { menuOpen = true }) {
-                    Icon(painterResource(R.drawable.ic_app_options), contentDescription = "Options pour $name")
+                    Icon(painterResource(R.drawable.ic_app_options), contentDescription = tr("Options pour $name", "Options for $name"))
                 }
                 DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
-                    DropdownMenuItem(text = { Text("Réinitialiser · −10 points") }, enabled = canReset,
+                    DropdownMenuItem(text = { Text(tr("Réinitialiser · −10 points", "Reset · −10 points")) }, enabled = canReset,
                         onClick = { menuOpen = false; onReset() })
-                    DropdownMenuItem(text = { Text("Retirer du suivi", color = MareePalette.Danger) },
+                    DropdownMenuItem(text = { Text(tr("Retirer du suivi", "Stop tracking"), color = MareePalette.Danger) },
                         onClick = { menuOpen = false; onRemove() })
-                    if (!canReset) Text("10 points nécessaires", color = Muted, fontSize = 12.sp,
+                    if (!canReset) Text(tr("10 points nécessaires", "10 points required"), color = Muted, fontSize = 12.sp,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp))
                 }
             }
@@ -656,18 +656,18 @@ private fun AppCard(
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically) {
                 Text("${app.usedMinutes} min", fontSize = 20.sp, color = Cream, fontWeight = FontWeight.SemiBold)
-                Text("sur ${app.limitMinutes} min", color = Muted, fontSize = 13.sp)
+                Text(tr("sur ${app.limitMinutes} min", "of ${app.limitMinutes} min"), color = Muted, fontSize = 13.sp)
             }
             LinearProgressIndicator(progress = { app.progress.coerceIn(0f, 1f) },
                 modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
                 color = if (app.isLocked || app.progress >= 1f) Warning else Mint, trackColor = CardLighter)
         } else {
-            Text("Limite choisie : ${app.limitMinutes} min", color = Muted, fontSize = 14.sp)
+            Text(tr("Limite choisie : ${app.limitMinutes} min", "Selected limit: ${app.limitMinutes} min"), color = Muted, fontSize = 14.sp)
         }
-        if (app.isLocked && active) Text("Écran de pause · encore ${remainingTime(app.lockedUntil)}",
+        if (app.isLocked && active) Text(tr("Écran de pause · encore ${remainingTime(app.lockedUntil)}", "Pause screen · ${remainingTime(app.lockedUntil)} remaining"),
             color = Warning, fontSize = 13.sp)
         TextButton(onClick = onEdit, enabled = canEdit) {
-            Text("Modifier la limite", fontSize = 13.sp)
+            Text(tr("Modifier la limite", "Edit limit"), fontSize = 13.sp)
         }
     }
 }
@@ -686,13 +686,13 @@ private fun ChallengeTab(
     var showRules by rememberSaveable { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())
         .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        ScreenHeading("LES DÉFIS", "Un jour à la fois.",
-            if (personal) "Crée les habitudes qui te ressemblent." else "De petites actions pour de vrais progrès.")
+        ScreenHeading(tr("LES DÉFIS", "CHALLENGES"), tr("Un jour à la fois.", "One day at a time."),
+            if (personal) tr("Crée les habitudes qui te ressemblent.", "Build habits that suit you.") else tr("De petites actions pour de vrais progrès.", "Small actions for real progress."))
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             FilterChip(selected = !personal, onClick = { personal = false },
-                modifier = Modifier.weight(1f), label = { Text("Défis proposés") })
+                modifier = Modifier.weight(1f), label = { Text(tr("Défis proposés", "Suggested challenges")) })
             FilterChip(selected = personal, onClick = { personal = true },
-                modifier = Modifier.weight(1f), label = { Text("Mes défis") })
+                modifier = Modifier.weight(1f), label = { Text(tr("Mes défis", "My challenges")) })
         }
         if (personal) {
             CustomChallengesSection(snapshot, onOffers, onCreateCustom, onToggleCustomStep,
@@ -701,21 +701,21 @@ private fun ChallengeTab(
             AppCardSurface {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("Ta série", color = Cream, fontSize = 20.sp, fontWeight = FontWeight.SemiBold,
+                    Text(tr("Ta série", "Your series"), color = Cream, fontSize = 20.sp, fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.weight(1f))
                     Text("$finished / 10", color = Muted, fontSize = 13.sp)
                     TextButton(onClick = { showRules = !showRules }) {
-                        Text(if (showRules) "Fermer" else "Règles", fontSize = 12.sp)
+                        Text(if (showRules) tr("Fermer", "Close") else tr("Règles", "Rules"), fontSize = 12.sp)
                     }
                 }
                 LinearProgressIndicator(progress = { finished / 10f },
                     modifier = Modifier.fillMaxWidth().height(6.dp).clip(CircleShape),
                     color = Mint, trackColor = CardLighter)
-                Text("+5 points pour 5 défis terminés", color = Mint,
+                Text(tr("+5 points pour 5 défis terminés", "+5 points for every 5 completed challenges"), color = Mint,
                     fontWeight = FontWeight.Medium, fontSize = 13.sp, lineHeight = 20.sp)
-                Text("Nouvelle série dans ${snapshot.daysUntilChallenges} jours · progression remise à zéro.",
+                Text(tr("Nouvelle série dans ${snapshot.daysUntilChallenges} ${if (snapshot.daysUntilChallenges == 1) "jour" else "jours"} · progression remise à zéro.", "New series in ${snapshot.daysUntilChallenges} ${if (snapshot.daysUntilChallenges == 1) "day" else "days"} · progress resets."),
                     color = Muted, fontSize = 12.sp, lineHeight = 18.sp)
-                if (showRules) Text("Chaque défi demande $CHALLENGE_REQUIRED_DAYS journées différentes, avec une validation par date locale. Les jours peuvent être espacés. Les jours intermédiaires ne donnent pas de points. Les défis entièrement terminés se cumulent entre les séries pour le bonus.",
+                if (showRules) Text(tr("Chaque défi demande $CHALLENGE_REQUIRED_DAYS journées différentes, avec une validation par date locale. Les jours peuvent être espacés. Les jours intermédiaires ne donnent pas de points. Les défis entièrement terminés se cumulent entre les séries pour le bonus.", "Each challenge requires $CHALLENGE_REQUIRED_DAYS different days, with one check-in per local date. The days do not have to be consecutive. Individual days do not earn points. Fully completed challenges count towards the bonus across series."),
                     color = Muted, fontSize = 13.sp, lineHeight = 20.sp)
             }
             indices.forEach { index ->
@@ -736,22 +736,22 @@ private fun ChallengeTab(
                             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                                 Text(CHALLENGES[index], color = Cream, fontWeight = FontWeight.SemiBold,
                                     fontSize = 17.sp, lineHeight = 24.sp)
-                                Text("$completedDays / ${progress.requiredDays} journées validées",
+                                Text(tr("$completedDays / ${progress.requiredDays} journées validées", "$completedDays / ${progress.requiredDays} days checked in"),
                                     color = Muted, fontSize = 13.sp)
                             }
                         }
                         when {
-                            done -> StatusPill("✓ Défi terminé")
-                            progress.validatedToday -> StatusPill("✓ Validé aujourd’hui · à demain")
+                            done -> StatusPill(tr("✓ Défi terminé", "✓ Challenge complete"))
+                            progress.validatedToday -> StatusPill(tr("✓ Validé aujourd’hui · à demain", "✓ Checked in today · see you tomorrow"))
                             else -> {
-                                PrimaryAction("Valider aujourd’hui", onClick = { onComplete(index) },
+                                PrimaryAction(tr("Valider aujourd’hui", "Check in today"), onClick = { onComplete(index) },
                                     enabled = progress.canValidateToday, modifier = Modifier.fillMaxWidth())
-                                if (!progress.canValidateToday) Text("La date du téléphone précède une validation enregistrée. Vérifie les réglages de date.",
+                                if (!progress.canValidateToday) Text(tr("La date du téléphone précède une validation enregistrée. Vérifie les réglages de date.", "Your phone date is earlier than a saved check-in. Check your date settings."),
                                     color = Muted, fontSize = 12.sp, lineHeight = 18.sp)
                             }
                         }
                         TextButton(onClick = { expanded = !expanded }) {
-                            Text(if (expanded) "Masquer les journées" else "Voir les ${progress.requiredDays} journées", fontSize = 13.sp)
+                            Text(if (expanded) tr("Masquer les journées", "Hide days") else tr("Voir les ${progress.requiredDays} journées", "Show the ${progress.requiredDays} days"), fontSize = 13.sp)
                         }
                         if (expanded) ChallengeDays(progress.requiredDays, completedDays, progress.validatedToday)
                     }
@@ -770,27 +770,28 @@ private fun MoreTab(
 ) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())
         .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
-        ScreenHeading("TES RÉGLAGES", "À ta façon.", "Ton suivi, tes données, tes choix.")
+        ScreenHeading(tr("TES RÉGLAGES", "YOUR SETTINGS"), tr("À ta façon.", "Your way."), tr("Ton suivi, tes données, tes choix.", "Your tracking, your data, your choices."))
+        LanguageSelector()
         AppCardSurface {
-            SectionLabel("Le suivi", if (active) "Actif" else "En pause")
-            Text(if (active) "Les limites de tes applications sont surveillées."
-                else "Aucune application n’est surveillée ou bloquée.",
+            SectionLabel(tr("Le suivi", "Tracking"), if (active) tr("Actif", "Active") else tr("En pause", "Paused"))
+            Text(if (active) tr("Les limites de tes applications sont surveillées.", "Your app limits are being monitored.")
+                else tr("Aucune application n’est surveillée ou bloquée.", "No apps are being monitored or blocked."),
                 color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
-            PrimaryAction(if (active) "Gérer les autorisations" else "Activer le suivi",
+            PrimaryAction(if (active) tr("Gérer les autorisations", "Manage permissions") else tr("Activer le suivi", "Turn on tracking"),
                 onClick = onSetup, modifier = Modifier.fillMaxWidth())
-            if (active) TextButton(onClick = onPause) { Text("Mettre le suivi en pause") }
+            if (active) TextButton(onClick = onPause) { Text(tr("Mettre le suivi en pause", "Pause tracking")) }
             if (!notificationsGranted) {
                 HorizontalDivider(color = MareePalette.Outline)
-                TextButton(onClick = onNotifications) { Text("Activer les alertes facultatives") }
+                TextButton(onClick = onNotifications) { Text(tr("Activer les alertes facultatives", "Turn on optional alerts")) }
             }
         }
         AppCardSurface {
-            Text("Tes données, sous ton contrôle", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
-            Text("Ton suivi reste sur ton téléphone. Consulte les informations de confidentialité ou efface tes données.",
+            Text(tr("Tes données, sous ton contrôle", "Your data, under your control"), fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+            Text(tr("Ton suivi reste sur ton téléphone. Consulte les informations de confidentialité ou efface tes données.", "Your tracking stays on your phone. Read the privacy information or delete your data."),
                 color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
             OutlinedButton(onClick = onPrivacy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
-                shape = RoundedCornerShape(14.dp)) { Text("Confidentialité et données") }
-            TextButton(onClick = onAccount) { Text("Compte et changement de téléphone", fontSize = 13.sp) }
+                shape = RoundedCornerShape(14.dp)) { Text(tr("Confidentialité et données", "Privacy and data")) }
+            TextButton(onClick = onAccount) { Text(tr("Compte et changement de téléphone", "Account and switching phones"), fontSize = 13.sp) }
         }
         Spacer(Modifier.height(4.dp))
         MembershipSection(plan, onDemoPlan)
@@ -808,36 +809,36 @@ private fun AppPickerDialog(
     var selected by remember { mutableStateOf<InstalledApp?>(null) }
     var query by remember { mutableStateOf("") }
     if (selected != null) {
-        MinutesDialog("Limite quotidienne de ${selected!!.label}", 30,
+        MinutesDialog(tr("Limite quotidienne de ${selected!!.label}", "Daily limit for ${selected!!.label}"), 30,
             onDismiss = onDismiss,
             onConfirm = { mins -> onConfirm(selected!!.pkg, mins) })
     } else {
         AlertDialog(
             onDismissRequest = onDismiss,
-            title = { Text("Choisir une application") },
+            title = { Text(tr("Choisir une application", "Choose an app")) },
             text = {
                 Column {
                     OutlinedTextField(
                         value = query, onValueChange = { query = it },
                         modifier = Modifier.fillMaxWidth(),
                         enabled = apps != null && !loadFailed,
-                        singleLine = true, label = { Text("Rechercher") }
+                        singleLine = true, label = { Text(tr("Rechercher", "Search")) }
                     )
                     Spacer(Modifier.height(12.dp))
                     if (loadFailed) {
-                        Text("Impossible de charger les applications.", color = Muted)
-                        TextButton(onClick = onRetry) { Text("Réessayer") }
+                        Text(tr("Impossible de charger les applications.", "Could not load apps."), color = Muted)
+                        TextButton(onClick = onRetry) { Text(tr("Réessayer", "Try again")) }
                     } else if (apps == null) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp)
                             Spacer(Modifier.width(12.dp))
-                            Text("Chargement des applications…", color = Muted)
+                            Text(tr("Chargement des applications…", "Loading apps…"), color = Muted)
                         }
                     } else {
                         val matching = apps.filter { it.label.contains(query, ignoreCase = true) }
                         if (matching.isEmpty()) {
-                            Text(if (apps.isEmpty()) "Aucune application disponible."
-                                else "Aucune application trouvée.", color = Muted)
+                            Text(if (apps.isEmpty()) tr("Aucune application disponible.", "No apps available.")
+                                else tr("Aucune application trouvée.", "No apps found."), color = Muted)
                         }
                         LazyColumn(Modifier.heightIn(max = 340.dp)) {
                             items(matching, key = { it.pkg }) { app ->
@@ -855,7 +856,7 @@ private fun AppPickerDialog(
                     }
                 }
             },
-            confirmButton = { TextButton(onClick = onDismiss) { Text("Fermer") } }
+            confirmButton = { TextButton(onClick = onDismiss) { Text(tr("Fermer", "Close")) } }
         )
     }
 }
@@ -871,7 +872,7 @@ private fun MinutesDialog(
         text = {
             Column(horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text("Choisis une limite par pas de 5 minutes.", color = Muted,
+                Text(tr("Choisis une limite par pas de 5 minutes.", "Choose a limit in 5-minute steps."), color = Muted,
                     textAlign = TextAlign.Center)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     OutlinedButton(onClick = { minutes = (minutes - 5).coerceAtLeast(5) },
@@ -883,8 +884,8 @@ private fun MinutesDialog(
                 }
             }
         },
-        confirmButton = { Button(onClick = { onConfirm(minutes) }) { Text("Confirmer") } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Annuler") } }
+        confirmButton = { Button(onClick = { onConfirm(minutes) }) { Text(tr("Confirmer", "Confirm")) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(tr("Annuler", "Cancel")) } }
     )
 }
 
@@ -896,7 +897,7 @@ private fun DisciplineCard(snapshot: MareeSnapshot, onChallenges: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(20.dp)) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("TON CAPITAL\nDISCIPLINE", color = MareePalette.Mint,
+                Text(tr("TON CAPITAL\nDISCIPLINE", "YOUR DISCIPLINE\nBALANCE"), color = MareePalette.Mint,
                     style = MaterialTheme.typography.labelMedium, letterSpacing = 1.5.sp,
                     modifier = Modifier.weight(1f))
                 Surface(color = MareePalette.Mint, shape = CircleShape) {
@@ -909,11 +910,11 @@ private fun DisciplineCard(snapshot: MareeSnapshot, onChallenges: () -> Unit) {
                 Text(formatPoints(snapshot.points), color = Color.White,
                     fontSize = 64.sp, lineHeight = 70.sp, fontWeight = FontWeight.ExtraBold,
                     letterSpacing = (-2).sp)
-                Text("points pour avancer", color = Color(0xFFCBDBD0),
+                Text(tr("points pour avancer", "points to keep moving"), color = Color(0xFFCBDBD0),
                     style = MaterialTheme.typography.bodyMedium)
             }
             HorizontalDivider(color = Color.White.copy(alpha = 0.18f))
-            Text("Chaque petit pas compte.", color = Color.White,
+            Text(tr("Chaque petit pas compte.", "Every small step counts."), color = Color.White,
                 style = MaterialTheme.typography.titleMedium)
             Button(onClick = onChallenges,
                 modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
@@ -922,7 +923,7 @@ private fun DisciplineCard(snapshot: MareeSnapshot, onChallenges: () -> Unit) {
                     contentColor = MareePalette.DeepTeal)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text("Explorer les défis", style = MaterialTheme.typography.labelLarge,
+                    Text(tr("Explorer les défis", "Explore challenges"), style = MaterialTheme.typography.labelLarge,
                         modifier = Modifier.weight(1f))
                     Text("→", fontSize = 22.sp)
                 }

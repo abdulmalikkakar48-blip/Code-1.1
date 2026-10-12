@@ -226,4 +226,114 @@ class RuleCoachTest {
         assertTrue(distress.sensitive)
         assertTrue(distress.suggestions.isEmpty())
     }
+
+    @Test fun englishAndFrenchCataloguesHaveTheSameTopicsAndCompleteHelp() {
+        val french = coachTopicsFor(AppLocale.FRENCH)
+        val english = coachTopicsFor(AppLocale.ENGLISH)
+        assertEquals(67, english.size)
+        assertEquals(french.map { it.id }, english.map { it.id })
+        assertEquals(125, english.sumOf { it.replies.size })
+        assertTrue(english.all { it.label.isNotBlank() && it.keywords.isNotEmpty() &&
+            it.replies.all(String::isNotBlank) })
+        assertEquals(38, helpEntriesFor(AppLocale.ENGLISH).size)
+        assertEquals(helpEntriesFor(AppLocale.FRENCH).map { it.topic.id },
+            helpEntriesFor(AppLocale.ENGLISH).map { it.topic.id })
+        assertTrue(helpEntriesFor(AppLocale.ENGLISH).all { it.topic.appHelp })
+    }
+
+    @Test fun englishHelpRecognizesSubscriptionAndTrackingQuestions() {
+        val coach = RuleCoach(random = Random(14), language = AppLocale.ENGLISH)
+        for ((message, expected) in listOf(
+            "How do I cancel my Premium subscription?" to "cancel_subscription",
+            "How much does the annual subscription cost?" to "subscription_annual",
+            "Is the subscription renewed every month?" to "subscription_monthly",
+            "How do I restore my Premium purchase?" to "restore_subscription",
+            "How do I add TikTok?" to "add_app",
+            "How do I change the TikTok limit?" to "limits",
+            "Why is TikTok blocked?" to "red_screen",
+            "How much time have I used TikTok?" to "usage",
+            "How do I remove TikTok from tracking?" to "remove_app",
+            "Where is the privacy policy?" to "privacy"
+        )) {
+            assertEquals(message, expected, coach.reply(message, context).topicId)
+        }
+        val cancellation = coach.replyForTopic("cancel_subscription", context).text
+        assertTrue(cancellation, cancellation.contains("Google Play"))
+        assertFalse(cancellation.contains("Your subscription has been cancelled"))
+        val annual = coach.replyForTopic("subscription_annual", context).text
+        assertTrue(annual, annual.contains("110") && annual.contains("220"))
+        assertTrue(annual, annual.contains("year", ignoreCase = true))
+    }
+
+    @Test fun englishAdviceUnderstandsTyposAndDoesNotConfuseOveruseWithUsageHelp() {
+        val coach = RuleCoach(random = Random(3), language = AppLocale.ENGLISH)
+        for ((message, expected) in listOf(
+            "I spend too much time on tiktoc!" to "tiktok",
+            "I can’t sleep at night" to "sleep",
+            "Turn off notificatons" to "notifications"
+        )) {
+            assertEquals(message, expected, coach.reply(message, context).topicId)
+        }
+        val usage = coach.reply("tiktoc", context).text
+        assertTrue(usage, usage.contains("TikTok: 40 min during the current tracking period"))
+        assertFalse(usage.contains("today", ignoreCase = true))
+        assertFalse(coach.reply("TikTok", context.copy(trackingEnabled = false)).text
+            .contains("Recorded usage"))
+    }
+
+    @Test fun languageSwitchUsesTheSameBalanceAndKeepsEachCoachLanguageIndependent() {
+        val french = RuleCoach(random = Random(4), language = AppLocale.FRENCH)
+        val english = RuleCoach(random = Random(4), language = AppLocale.ENGLISH)
+        val frenchPoints = french.replyForTopic("points", context).text
+        val englishPoints = english.replyForTopic("points", context).text
+        assertTrue(frenchPoints, frenchPoints.contains("35,25 points"))
+        assertTrue(englishPoints, englishPoints.contains("35.25 points"))
+        assertEquals(141, context.pointUnits)
+        // Les mots des deux langues n’imposent pas la langue des réponses.
+        assertTrue(english.reply("Comment gagner des points ?", context).text.contains("35.25 points"))
+        assertTrue(french.reply("How do I earn points?", context).text.contains("35,25 points"))
+        assertTrue(english.replyForTopic("points", context.copy(pointUnits = 2)).text.contains("0.5 points"))
+        assertTrue(english.replyForTopic("points", context.copy(pointUnits = -8)).text.contains("0 points"))
+        assertTrue(french.replyForTopic("points", context).text.contains("35,25 points"))
+    }
+
+    @Test fun englishUnknownQuestionsHaveHonestFallbackAndTranslatedSuggestions() {
+        val coach = RuleCoach(language = AppLocale.ENGLISH)
+        val unknown = coach.reply("Which dinosaur has the longest tail?", context)
+        assertTrue(unknown.unrecognized)
+        assertFalse(unknown.sensitive)
+        assertNull(unknown.topicId)
+        assertEquals(4, unknown.suggestions.size)
+        assertTrue(unknown.text, unknown.text.contains("written in advance"))
+        assertFalse(unknown.text.contains("35.25"))
+        val appUnknown = coach.reply("Can Selkie translate poems?", context)
+        assertTrue(appUnknown.unrecognized)
+        assertTrue(appUnknown.text, appUnknown.text.contains("question about Selkie"))
+        val topics = coachTopicsFor(AppLocale.ENGLISH).associateBy { it.id }
+        assertTrue(appUnknown.suggestions.all { topics[it]?.appHelp == true })
+        assertEquals("Sleep", topics.getValue("sleep").label)
+        assertEquals("Boredom", topics.getValue("boredom").label)
+        appUnknown.suggestions.forEach { id ->
+            assertEquals(id, coach.replyForTopic(id, context).topicId)
+        }
+    }
+
+    @Test fun englishSeriousDistressGivesHumanSupportBeforeSubscriptionOrAppAdvice() {
+        val coach = RuleCoach(language = AppLocale.ENGLISH)
+        for (message in listOf("TikTok makes me want to hurt myself", "I want to die",
+            "I don’t want to be alive", "I want to end my life", "Premium and suicide")) {
+            val reply = coach.reply(message, context)
+            assertTrue(message, reply.sensitive)
+            assertFalse(reply.unrecognized)
+            assertNull(reply.topicId)
+            assertTrue(reply.text, reply.text.contains("someone you trust"))
+            assertTrue(reply.text.contains("In France") && reply.text.contains("3114"))
+            assertTrue(reply.text.contains("112") && reply.text.contains("local emergency number"))
+            assertFalse(reply.text.contains("35.25"))
+            assertTrue(reply.suggestions.isEmpty())
+        }
+        for (message in listOf("I feel sad", "This TikTok video has me dying of laughter", "My foot hurts")) {
+            assertFalse(message, coach.reply(message, context).sensitive)
+        }
+    }
 }

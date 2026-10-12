@@ -1,5 +1,13 @@
 # Selkie — application Android de réduction du temps d'écran
 
+## Version 0.9.2 — français et anglais
+
+Selkie propose désormais **Français / English**, dès l’accueil initial et dans **Plus → Langue / Language**. Les écrans, offres, notifications, défis proposés, politique et coach hors ligne sont traduits. Chaque langue contient 67 sujets et 125 réponses préparées, dont 38 questions d’aide. La réponse suit la langue choisie, sans traducteur en ligne. Les points, limites et défis personnels sont conservés.
+
+[Télécharger Selkie 0.9.2](downloads/Selkie-Android-0.9.2.apk) · [Sources exactes](downloads/Selkie-Android-0.9.2-source.zip) · [Validation](downloads/VALIDATION-0.9.2.md) · [Fonctionnement des langues](docs/LANGUES.md) · [English privacy policy](docs/PRIVACY_POLICY_EN.md).
+
+**English:** Choose **English** on the welcome screen or in **More → Langue / Language**. The app, built-in challenges and offline coach now include English. Your points, limits and custom challenge text stay intact. Accounts, real payments and online AI chat are not active in this test version.
+
 ## Version 0.9.1 — aide Selkie et offres annuelles
 
 Le même Coach répond désormais aux questions sur l’application et propose des conseils de temps d’écran : **38 questions d’aide dans sept rubriques et 29 sujets de conseils**, soit 67 sujets et 125 réponses préparées. Dans **Coach → Comprendre Selkie**, les réponses sur les limites, points, défis, données, offres et comptes sont consultables directement. Les demandes reconnues sur l’application proposent une aide adaptée ; les conseils restent disponibles hors ligne.

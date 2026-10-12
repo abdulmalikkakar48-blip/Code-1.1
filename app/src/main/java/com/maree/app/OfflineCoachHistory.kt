@@ -103,17 +103,20 @@ internal class OfflineCoachHistory(context: Context) {
         private val privateOrCrisis = Regex(
             "\\b(?:suicid\\w*|automutil\\w*|scarifi\\w*|mourir|meurs|tuer|" +
                 "depress\\w*|maltrait\\w*|agress\\w*|viol|violee?|cancer|diagnostic|" +
-                "medicament\\w*|traitement|enceinte|grossesse|iban|rib|password)\\b|" +
+                "medicament\\w*|traitement|enceinte|grossesse|iban|rib|password|" +
+                "self.?harm|medication\\w*|treatment|pregnan\\w*|diagnos\\w*|abuse\\w*|rape)\\b|" +
                 "me faire du mal|faire mal a moi|en finir|ne plus vivre|plus envie de vivre|" +
                 "vais tres mal|va tres mal|je m.?appelle|mon nom|mon adresse|" +
-                "date de naissance|mot de passe|cle.?api|numero de (?:carte|telephone|securite)"
+                "date de naissance|mot de passe|cle.?api|numero de (?:carte|telephone|securite)|" +
+                "hurt myself|kill myself|want to die|my name|my address|date of birth|" +
+                "api.?key|credit card|card number|phone number|social security|bank details"
         )
 
         private fun duplicateKey(value: String): String =
             value.lowercase(Locale.ROOT).replace(whitespace, " ")
 
         /** Filtre de précaution ; il ne garantit pas la détection de toute information privée. */
-        private fun sensitive(value: String): Boolean {
+        internal fun sensitive(value: String): Boolean {
             val plain = Normalizer.normalize(value.lowercase(Locale.ROOT), Normalizer.Form.NFD)
                 .replace(accents, "")
             return contactOrNumber.containsMatchIn(value) || privateOrCrisis.containsMatchIn(plain)

@@ -51,14 +51,14 @@ fun remainingTime(until: Long): String {
     val hours = total / 3600
     val minutes = (total % 3600) / 60
     val seconds = total % 60
-    return "%02d h %02d min %02d s".format(hours, minutes, seconds)
+    return "%02d h %02d min %02d s".format(AppLanguage.locale, hours, minutes, seconds)
 }
 
 /** Écran de secours pour une éventuelle ouverture via activité. Le service utilise une surcouche. */
 class LockActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val name = intent.getStringExtra("name") ?: "Cette application"
+        val name = intent.getStringExtra("name") ?: tr("Cette application", "This app")
         val until = intent.getLongExtra("until", System.currentTimeMillis())
         @Suppress("DEPRECATION")
         val points = (intent.extras?.get("points") as? Number)?.toDouble() ?: 100.0
@@ -78,17 +78,17 @@ private fun LockScreen(name: String, until: Long, points: Double, leave: () -> U
     ) {
         Text("SELKIE", color = Color.White.copy(alpha = 0.8f), fontSize = 18.sp)
         Spacer(Modifier.height(36.dp))
-        Text("Le moment de\ndéconnecter.", color = Color.White,
+        Text(tr("Le moment de\ndéconnecter.", "Time to\ndisconnect."), color = Color.White,
             fontWeight = FontWeight.Bold, fontSize = 35.sp, textAlign = TextAlign.Center)
         Spacer(Modifier.height(24.dp))
-        Text("$name est en pause pendant 24 h.", color = Color.White,
+        Text(tr("$name est en pause pendant 24 h.", "$name is paused for 24 hours."), color = Color.White,
             textAlign = TextAlign.Center, fontSize = 18.sp)
         Spacer(Modifier.height(32.dp))
-        Text("Déblocage dans ${remainingTime(until)}", color = Color.White, fontSize = 17.sp)
+        Text(tr("Déblocage dans ${remainingTime(until)}", "Unlocks in ${remainingTime(until)}"), color = Color.White, fontSize = 17.sp)
         Spacer(Modifier.height(12.dp))
-        Text("${formatPoints(points)} points d’honneur", color = Color.White, fontSize = 16.sp)
+        Text(tr("${formatPoints(points)} points d’honneur", "${formatPoints(points)} discipline points"), color = Color.White, fontSize = 16.sp)
         Spacer(Modifier.height(36.dp))
-        ComposeButton(onClick = leave) { Text("Retour à l’accueil") }
+        ComposeButton(onClick = leave) { Text(tr("Retour à l’accueil", "Back to home")) }
     }
 }
 
@@ -98,6 +98,8 @@ class LockOverlay(private val context: Context) {
     private val handler = Handler(Looper.getMainLooper())
     private var view: FrameLayout? = null
     private var caption: TextView? = null
+    private var headline: TextView? = null
+    private var exitButton: Button? = null
     private var countdown: TextView? = null
     private var honor: TextView? = null
     private var appName = ""
@@ -106,8 +108,7 @@ class LockOverlay(private val context: Context) {
 
     private val refresh = object : Runnable {
         override fun run() {
-            countdown?.text = "Déblocage dans ${remainingTime(lockUntil)}"
-            honor?.text = "${formatPoints(points)} points d’honneur"
+            updateText()
             handler.postDelayed(this, 1000)
         }
     }
@@ -117,9 +118,15 @@ class LockOverlay(private val context: Context) {
         lockUntil = until
         points = currentPoints
         if (view == null) create()
-        caption?.text = "$name est en pause pendant 24 h."
-        countdown?.text = "Déblocage dans ${remainingTime(until)}"
-        honor?.text = "${formatPoints(points)} points d’honneur"
+        updateText()
+    }
+
+    private fun updateText() {
+        headline?.text = tr("Le moment de\ndéconnecter.", "Time to\ndisconnect.")
+        exitButton?.text = tr("Retour à l’accueil", "Back to home")
+        caption?.text = tr("$appName est en pause pendant 24 h.", "$appName is paused for 24 hours.")
+        countdown?.text = tr("Déblocage dans ${remainingTime(lockUntil)}", "Unlocks in ${remainingTime(lockUntil)}")
+        honor?.text = tr("${formatPoints(points)} points d’honneur", "${formatPoints(points)} discipline points")
     }
 
     private fun makeText(text: String, size: Float, bold: Boolean = false): TextView =
@@ -152,17 +159,18 @@ class LockOverlay(private val context: Context) {
             setPadding(28, 50, 28, 50)
         }
         column.addView(makeText("SELKIE", 19f))
-        column.addView(makeText("Le moment de\ndéconnecter.", 34f, true))
+        headline = makeText(tr("Le moment de\ndéconnecter.", "Time to\ndisconnect."), 34f, true)
+            .also { column.addView(it) }
         caption = makeText("", 18f).also { column.addView(it) }
         countdown = makeText("", 18f, true).also { column.addView(it) }
         honor = makeText("", 17f).also { column.addView(it) }
         val button = Button(context).apply {
-            text = "Retour à l’accueil"
+            text = tr("Retour à l’accueil", "Back to home")
             setTextColor(AndroidColor.rgb(30, 45, 50))
             setBackgroundColor(AndroidColor.WHITE)
             isAllCaps = false
             setOnClickListener { exitToHome() }
-        }
+        }.also { exitButton = it }
         val params = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply { setMargins(26, 44, 26, 0) }
@@ -188,6 +196,8 @@ class LockOverlay(private val context: Context) {
             // Permission potentiellement révoquée pendant le suivi.
             view = null
             caption = null
+            headline = null
+            exitButton = null
             countdown = null
             honor = null
         }
@@ -203,6 +213,8 @@ class LockOverlay(private val context: Context) {
         view?.let { try { manager.removeViewImmediate(it) } catch (_: Exception) { } }
         view = null
         caption = null
+        headline = null
+        exitButton = null
         countdown = null
         honor = null
     }

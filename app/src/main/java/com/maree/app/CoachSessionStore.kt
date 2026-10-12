@@ -17,16 +17,16 @@ internal class CoachSessionStore(context: Context) {
 
     fun save(session: CoachSession, expectedGeneration: Long) = synchronized(lock) {
         if (prefs.getLong("generation", 0L) != expectedGeneration)
-            throw CoachError("SESSION_CLEARED", "La connexion a été effacée. Reconnecte-toi si tu le souhaites.")
+            throw CoachError("SESSION_CLEARED", tr("La connexion a été effacée. Reconnecte-toi si tu le souhaites.", "The session was cleared. Sign in again if you wish."))
         if (!prefs.edit().putString("access", session.accessToken).putString("refresh", session.refreshToken)
             .putString("email", session.email).commit())
-            throw CoachError("STORAGE_ERROR", "La connexion n’a pas pu être enregistrée.")
+            throw CoachError("STORAGE_ERROR", tr("La connexion n’a pas pu être enregistrée.", "The session could not be saved."))
     }
 
     fun clear() = synchronized(lock) {
         val next = prefs.getLong("generation", 0L) + 1L
         if (!prefs.edit().clear().putLong("generation", next).commit())
-            throw CoachError("STORAGE_ERROR", "La connexion n’a pas pu être effacée.")
+            throw CoachError("STORAGE_ERROR", tr("La connexion n’a pas pu être effacée.", "The session could not be cleared."))
     }
 
     companion object { private val lock = Any() }

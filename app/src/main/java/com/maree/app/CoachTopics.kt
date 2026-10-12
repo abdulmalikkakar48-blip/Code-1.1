@@ -1,7 +1,7 @@
 package com.maree.app
 
 /** Conseils préparés, séparés des réponses de référence sur le fonctionnement de Selkie. */
-internal val coachAdviceTopics: List<CoachTopic> = listOf(
+internal val coachAdviceTopicsFrench: List<CoachTopic> = listOf(
     CoachTopic(
         id = "tiktok", label = "TikTok",
         keywords = listOf("tiktok", "tik tok", "tiktoc", "pour toi", "scroll tiktok"),
@@ -272,4 +272,16 @@ internal val coachAdviceTopics: List<CoachTopic> = listOf(
 )
 
 /** Un seul catalogue, sans sujet d’aide dupliqué parmi les conseils. */
-internal val coachTopics: List<CoachTopic> = coachAdviceTopics + selkieHelpTopics
+internal val coachAdviceTopics: List<CoachTopic>
+    get() = when (AppLanguage.current) {
+        AppLocale.FRENCH -> coachAdviceTopicsFrench
+        AppLocale.ENGLISH -> coachAdviceTopicsEnglish
+    }
+
+internal fun coachTopicsFor(language: AppLocale): List<CoachTopic> = when (language) {
+    AppLocale.FRENCH -> coachAdviceTopicsFrench
+    AppLocale.ENGLISH -> coachAdviceTopicsEnglish
+} + helpEntriesFor(language).map { it.topic }
+
+internal val coachTopics: List<CoachTopic>
+    get() = coachTopicsFor(AppLanguage.current)

@@ -1,14 +1,16 @@
 package com.maree.app
 
 /** Rubriques de l’aide embarquée, consultables sans compte ni connexion. */
-internal enum class SelkieHelpSection(val label: String) {
-    DISCOVER("Découvrir Selkie"),
-    TRACKING("Suivi et autorisations"),
-    POINTS("Les points"),
-    CHALLENGES("Les défis"),
-    OFFERS("Offres et abonnements"),
-    ACCOUNT("Compte et téléphone"),
-    PRIVACY("Données et contact")
+internal enum class SelkieHelpSection(private val frenchLabel: String, private val englishLabel: String) {
+    DISCOVER("Découvrir Selkie", "Discover Selkie"),
+    TRACKING("Suivi et autorisations", "Tracking and permissions"),
+    POINTS("Les points", "Points"),
+    CHALLENGES("Les défis", "Challenges"),
+    OFFERS("Offres et abonnements", "Plans and subscriptions"),
+    ACCOUNT("Compte et téléphone", "Account and phone"),
+    PRIVACY("Données et contact", "Data and contact");
+
+    val label: String get() = tr(frenchLabel, englishLabel)
 }
 
 internal data class SelkieHelpEntry(val section: SelkieHelpSection, val topic: CoachTopic)
@@ -18,7 +20,7 @@ internal data class SelkieHelpEntry(val section: SelkieHelpSection, val topic: C
  * qu’un tirage de variantes ne masque un prix, une condition ou une limite réelle.
  * Les comptes et paiements futurs sont toujours distingués de la version de test.
  */
-internal val selkieHelpEntries: List<SelkieHelpEntry> = listOf(
+internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
     help(
         SelkieHelpSection.DISCOVER, "app_overview", "À quoi sert Selkie ?",
         listOf("selkie", "maree", "a quoi sert selkie", "qu est ce que selkie", "presentation de selkie", "comment fonctionne selkie", "description de l application", "que fait cette application", "a quoi sert l application", "a quoi sert cette application", "comment fonctionne l application", "comment utiliser selkie"),
@@ -259,7 +261,16 @@ internal val selkieHelpEntries: List<SelkieHelpEntry> = listOf(
     )
 )
 
-internal val selkieHelpTopics: List<CoachTopic> = selkieHelpEntries.map { it.topic }
+internal fun helpEntriesFor(language: AppLocale): List<SelkieHelpEntry> = when (language) {
+    AppLocale.FRENCH -> selkieHelpEntriesFrench
+    AppLocale.ENGLISH -> selkieHelpEntriesEnglish
+}
+
+internal val selkieHelpEntries: List<SelkieHelpEntry>
+    get() = helpEntriesFor(AppLanguage.current)
+
+internal val selkieHelpTopics: List<CoachTopic>
+    get() = selkieHelpEntries.map { it.topic }
 
 private fun help(
     section: SelkieHelpSection,

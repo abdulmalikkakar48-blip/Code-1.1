@@ -17,14 +17,20 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -92,5 +98,29 @@ internal fun PrimaryAction(label: String, onClick: () -> Unit,
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp, pressedElevation = 0.dp),
         modifier = modifier.heightIn(min = 52.dp)) {
         Text(label, style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Center)
+    }
+}
+
+@Composable
+internal fun LanguageSelector() {
+    val context = LocalContext.current
+    var saveFailed by remember { mutableStateOf(false) }
+    AppCardSurface {
+        Text("Langue / Language", style = MaterialTheme.typography.titleMedium,
+            color = MareePalette.Ink)
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            listOf(AppLocale.FRENCH to "Français", AppLocale.ENGLISH to "English").forEach { (locale, label) ->
+                FilterChip(
+                    selected = AppLanguage.current == locale,
+                    onClick = { saveFailed = !AppLanguage.set(context, locale) },
+                    modifier = Modifier.weight(1f),
+                    label = { Text(label) }
+                )
+            }
+        }
+        if (saveFailed) Text(
+            tr("La langue n’a pas pu être enregistrée. Réessaie.", "The language could not be saved. Try again."),
+            color = MareePalette.Danger, style = MaterialTheme.typography.bodySmall
+        )
     }
 }

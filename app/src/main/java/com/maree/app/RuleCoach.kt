@@ -31,12 +31,33 @@ data class OfflineCoachReply(
 
 /** Conseils écrits à l'avance : aucun modèle, compte, stockage ou appel réseau. */
 class RuleCoach(
-    topics: List<CoachTopic> = coachTopics,
-    private val random: Random = Random.Default
+    topics: List<CoachTopic>? = null,
+    private val random: Random = Random.Default,
+    private val language: AppLocale = AppLanguage.current
 ) {
     private data class PreparedTopic(val topic: CoachTopic, val keywords: List<List<String>>)
 
-    private val prepared = topics.filter { it.replies.any(String::isNotBlank) }.map { topic ->
+    // Les mots des deux langues sont compris ; les réponses gardent la langue choisie.
+    // Un catalogue fourni explicitement reste autonome (utile pour des sujets/tests ciblés).
+    private val selectedTopics = topics ?: coachTopicsFor(language).let { selected ->
+        val alternate = coachTopicsFor(if (language == AppLocale.FRENCH) AppLocale.ENGLISH else AppLocale.FRENCH)
+            .associateBy { it.id }
+        selected.map { topic -> topic.copy(keywords = (topic.keywords +
+            alternate[topic.id]?.keywords.orEmpty()).distinct()) }
+    }
+    private fun text(french: String, english: String): String =
+        if (language == AppLocale.ENGLISH) english else french
+
+    private fun pointBalance(pointUnits: Int): String {
+        val safeUnits = pointUnits.coerceAtLeast(0)
+        val whole = (safeUnits / POINT_UNITS_PER_POINT).toString()
+        val fraction = when (safeUnits % POINT_UNITS_PER_POINT) {
+            1 -> "25"; 2 -> "5"; 3 -> "75"; else -> ""
+        }
+        return if (fraction.isEmpty()) whole else whole + text(",", ".") + fraction
+    }
+
+    private val prepared = selectedTopics.filter { it.replies.any(String::isNotBlank) }.map { topic ->
         PreparedTopic(topic.copy(replies = topic.replies.filter(String::isNotBlank).distinct()),
             (topic.keywords + topic.appAliases).map(::words).filter { it.isNotEmpty() }.distinct())
     }
@@ -81,8 +102,8 @@ class RuleCoach(
         val text = buildString {
             append(topic.replies[index])
             if (topic.id in pointTopics) {
-                append("\n\nTon solde actuel dans Selkie : ")
-                append(formatPointUnits(context.pointUnits.coerceAtLeast(0)))
+                append(text("\n\nTon solde actuel dans Selkie : ", "\n\nYour current Selkie balance: "))
+                append(pointBalance(context.pointUnits))
                 append(" points.")
             }
             if (context.trackingEnabled && topic.appAliases.isNotEmpty()) {
@@ -92,11 +113,11 @@ class RuleCoach(
                         aliases.any { containsWords(words(candidate.name), it) }
                 }
                 if (app != null) {
-                    append("\n\nSuivi enregistré pour ")
+                    append(text("\n\nSuivi enregistré pour ", "\n\nRecorded usage for "))
                     append(app.name.replace(Regex("\\s+"), " ").trim().take(80))
-                    append(" : ")
+                    append(text(" : ", ": "))
                     append(app.trackedMillis / 60_000L)
-                    append(" min sur la période de suivi en cours.")
+                    append(text(" min sur la période de suivi en cours.", " min during the current tracking period."))
                 }
             }
         }
@@ -113,8 +134,10 @@ class RuleCoach(
         val suggestions = (near + defaults.filter { it in available } + available)
             .distinct().take(4)
         return OfflineCoachReply(null,
-            if (appContext) "Je n’ai pas encore de réponse prévue pour cette question sur Selkie. Choisis une rubrique d’aide ci-dessous ou reformule ta question."
-            else "Je n’ai pas encore de conseil prévu pour cette phrase. Je réponds à partir de conseils écrits à l’avance. Choisis un sujet ci-dessous ou reformule ta question.",
+            if (appContext) text("Je n’ai pas encore de réponse prévue pour cette question sur Selkie. Choisis une rubrique d’aide ci-dessous ou reformule ta question.",
+                "I don’t have a prepared answer to this question about Selkie yet. Choose a help topic below or rephrase your question.")
+            else text("Je n’ai pas encore de conseil prévu pour cette phrase. Je réponds à partir de conseils écrits à l’avance. Choisis un sujet ci-dessous ou reformule ta question.",
+                "I don’t have prepared advice for this message yet. I use advice written in advance. Choose a topic below or rephrase your question."),
             suggestions = suggestions, unrecognized = true)
     }
 
@@ -143,10 +166,11 @@ class RuleCoach(
             appTarget && tokens.any { it in blockedWords } -> "red_screen"
             appTarget && tokens.any { it in removalWords } &&
                 (tokens.any { it in trackingWords } ||
-                    (tokens.any { it in trackedRemovalWords } && "telephone" !in tokens)) -> "remove_app"
+                    (tokens.any { it in trackedRemovalWords } && tokens.none { it in phoneWords })) -> "remove_app"
             appTarget && tokens.any { it in removalWords } -> "uninstall"
             appTarget && tokens.any { it in durationWords } &&
                 (tokens.any { it in measurementQuestionWords } ||
+                    containsWords(tokens, words("how much")) || containsWords(tokens, words("how long")) ||
                     tokens.any { it in viewingWords }) -> "usage"
             else -> null
         }
@@ -176,7 +200,8 @@ class RuleCoach(
             }
 
     private fun humanSupport() = OfflineCoachReply(null,
-        "Tu n’as pas à traverser une situation aussi difficile seul. Contacte maintenant une personne de confiance et dis-lui ce qui se passe. En France, tu peux appeler le 3114, gratuitement, 24 h/24. Si tu es en danger immédiat, appelle le 112 ou rejoins les urgences. Ce coach ne peut pas évaluer une urgence ni remplacer une aide humaine.",
+        text("Tu n’as pas à traverser une situation aussi difficile seul. Contacte maintenant une personne de confiance et dis-lui ce qui se passe. En France, tu peux appeler le 3114, gratuitement, 24 h/24. Si tu es en danger immédiat, appelle le 112 ou rejoins les urgences. Ce coach ne peut pas évaluer une urgence ni remplacer une aide humaine.",
+            "You don’t have to face something this difficult alone. Contact someone you trust now and tell them what is happening. In France, you can call 3114 free of charge, 24/7. If you are in immediate danger, call 112 in France or the EU, or your local emergency number elsewhere. Outside France, contact a local crisis helpline. This coach cannot assess an emergency or replace human support."),
         sensitive = true)
 
     companion object {
@@ -189,32 +214,34 @@ class RuleCoach(
         private val brandKeywords = setOf(listOf("selkie"), listOf("maree"))
         private val genericNavigationKeywords = setOf(
             listOf("ou", "trouver"), listOf("ou", "aller"), listOf("ou", "ouvrir"),
-            listOf("comment", "ca", "marche"), listOf("comment", "faire"), listOf("comment", "utiliser")
+            listOf("comment", "ca", "marche"), listOf("comment", "faire"), listOf("comment", "utiliser"),
+            listOf("where", "to", "find"), listOf("where", "to", "go"), listOf("how", "to", "use")
         )
         private val appContextWords = setOf("selkie", "maree", "application", "applications", "app", "apps",
             "suivi", "premium", "ultra", "abonnement", "abonnements", "compte", "confidentialite", "rgpd",
-            "renouvele", "renouvellement", "prelevement")
-        private val appTargetWords = setOf("application", "applications", "app", "apps", "suivi")
-        private val subscriptionWords = setOf("abonnement", "abonnements", "premium", "ultra", "achat", "achats")
-        private val cancellationWords = setOf("annuler", "resilier", "resiliation", "annulation", "desabonner", "desabonnement")
+            "renouvele", "renouvellement", "prelevement", "tracking", "subscription", "subscriptions", "account", "privacy", "gdpr", "renewal", "renew", "billing")
+        private val appTargetWords = setOf("application", "applications", "app", "apps", "suivi", "tracking", "tracked")
+        private val subscriptionWords = setOf("abonnement", "abonnements", "premium", "ultra", "achat", "achats", "subscription", "subscriptions", "purchase", "purchases", "plan")
+        private val cancellationWords = setOf("annuler", "resilier", "resiliation", "annulation", "desabonner", "desabonnement", "cancel", "cancelling", "cancellation", "unsubscribe")
         private val challengeWords = setOf("defi", "defis", "challenge", "challenges")
-        private val pointWords = setOf("point", "points", "solde")
-        private val gainingWords = setOf("gagner", "regagner", "obtenir", "recuperer", "augmenter")
-        private val losingWords = setOf("perdre", "perdu", "perds", "perd", "retires")
-        private val restorationWords = setOf("restaurer", "restauration", "recuperer", "retrouver")
-        private val paymentWords = setOf("payer", "paiement", "paiements", "acheter", "facturation", "prelevement")
-        private val addingWords = setOf("ajouter", "ajoute", "suivre", "selectionner")
-        private val limitWords = setOf("limite", "limites")
-        private val editingWords = setOf("modifier", "changer", "regler", "fixer", "choisir")
-        private val blockedWords = setOf("bloque", "bloquee", "bloques", "bloquees", "verrouille", "verrouillee")
-        private val removalWords = setOf("retirer", "supprimer", "enlever", "desinstaller")
-        private val trackedRemovalWords = setOf("retirer", "enlever")
-        private val trackingWords = setOf("suivi", "selkie", "maree")
-        private val durationWords = setOf("temps", "minutes", "minute", "duree", "utilisation", "usage")
-        private val measurementQuestionWords = setOf("combien", "quelle", "quel")
-        private val viewingWords = setOf("voir", "consulter", "afficher", "trouver")
-        private val noFuzzyKeywords = setOf("compte", "compteur", "profil")
-        private val harmWords = setOf("automutilation", "automutiler", "suicide", "suicidaire")
+        private val pointWords = setOf("point", "points", "solde", "balance")
+        private val gainingWords = setOf("gagner", "regagner", "obtenir", "recuperer", "augmenter", "earn", "earning", "gain", "get", "increase")
+        private val losingWords = setOf("perdre", "perdu", "perds", "perd", "retires", "lose", "lost", "losing", "deducted")
+        private val restorationWords = setOf("restaurer", "restauration", "recuperer", "retrouver", "restore", "restoration", "recover")
+        private val paymentWords = setOf("payer", "paiement", "paiements", "acheter", "facturation", "prelevement", "pay", "payment", "payments", "buy", "billing", "charged")
+        private val addingWords = setOf("ajouter", "ajoute", "suivre", "selectionner", "add", "adding", "track", "select")
+        private val limitWords = setOf("limite", "limites", "limit", "limits")
+        private val editingWords = setOf("modifier", "changer", "regler", "fixer", "choisir", "edit", "change", "set", "choose")
+        private val blockedWords = setOf("bloque", "bloquee", "bloques", "bloquees", "verrouille", "verrouillee", "blocked", "locked")
+        private val removalWords = setOf("retirer", "supprimer", "enlever", "desinstaller", "remove", "delete", "uninstall")
+        private val trackedRemovalWords = setOf("retirer", "enlever", "remove")
+        private val phoneWords = setOf("telephone", "phone", "device")
+        private val trackingWords = setOf("suivi", "selkie", "maree", "tracking", "tracked")
+        private val durationWords = setOf("temps", "minutes", "minute", "duree", "utilisation", "usage", "time", "duration", "used")
+        private val measurementQuestionWords = setOf("combien", "quelle", "quel", "what")
+        private val viewingWords = setOf("voir", "consulter", "afficher", "trouver", "see", "view", "show", "find")
+        private val noFuzzyKeywords = setOf("compte", "compteur", "profil", "account", "profile")
+        private val harmWords = setOf("automutilation", "automutiler", "suicide", "suicidaire", "selfharm", "suicidal")
         private val typoAliases = mapOf(
             "tiktoc" to "tiktok", "tikto" to "tiktok", "youtub" to "youtube",
             "insta" to "instagram", "instagrame" to "instagram",
@@ -228,7 +255,9 @@ class RuleCoach(
             "je veux en finir", "envie d en finir", "je vais tres mal", "je me sens tres mal",
             "je ne vais pas bien du tout", "je vais pas bien du tout", "je n en peux plus",
             "j en peux plus", "plus envie de vivre", "ne veux plus vivre", "veux plus vivre",
-            "kill myself", "hurt myself", "want to die"
+            "kill myself", "hurt myself", "want to die", "end my life", "take my own life",
+            "harm myself", "self harm", "i don t want to live", "i do not want to live",
+            "i don t want to be alive", "i do not want to be alive", "i feel extremely unwell"
         ).map(::words)
         private fun words(value: String): List<String> {
             val expanded = value.lowercase(Locale.ROOT).replace("œ", "oe").replace("æ", "ae")

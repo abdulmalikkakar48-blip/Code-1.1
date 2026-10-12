@@ -48,6 +48,7 @@ class MonitorService : Service() {
     private lateinit var setup: SetupPreferences
     private var previousForeground: String? = null
     private var hasPreviousForeground = false
+    private var notificationLocale: AppLocale? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -60,32 +61,46 @@ class MonitorService : Service() {
         reader = UsageReader(this)
         overlay = LockOverlay(this)
         createNotificationChannels()
-        val intent = PendingIntent.getActivity(
-            this, 0, Intent(this, MainActivity::class.java),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val notification = NotificationCompat.Builder(this, SERVICE_CHANNEL)
-            .setSmallIcon(com.maree.app.R.drawable.ic_notification)
-            .setContentTitle("Selkie protège ton temps")
-            .setContentText("Le suivi du temps d’écran est actif")
-            .setContentIntent(intent)
-            .setOngoing(true)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
-            .build()
-        startForeground(SERVICE_NOTIFICATION, notification)
+        startForeground(SERVICE_NOTIFICATION, trackingNotification())
+        notificationLocale = AppLanguage.current
         worker.scheduleWithFixedDelay({
             try { monitor() } catch (_: Exception) { /* ne pas interrompre le suivi */ }
         }, 0, 2, TimeUnit.SECONDS)
     }
 
+    private fun trackingNotification(): Notification {
+        val intent = PendingIntent.getActivity(
+            this, 0, Intent(this, MainActivity::class.java),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        return NotificationCompat.Builder(this, SERVICE_CHANNEL)
+            .setSmallIcon(com.maree.app.R.drawable.ic_notification)
+            .setContentTitle(tr("Selkie protège ton temps", "Selkie protects your time"))
+            .setContentText(tr("Le suivi du temps d’écran est actif", "Screen time tracking is active"))
+            .setContentIntent(intent)
+            .setOngoing(true)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .build()
+    }
+
+    /** Actualise les textes sans interrompre le suivi ni consommer une nouvelle alerte. */
+    private fun refreshNotificationLanguage() {
+        if (notificationLocale == AppLanguage.current) return
+        createNotificationChannels()
+        // Le service est déjà au premier plan : cette mise à jour conserve le suivi
+        // même lorsque les notifications facultatives sont refusées sur Android 13+.
+        startForeground(SERVICE_NOTIFICATION, trackingNotification())
+        notificationLocale = AppLanguage.current
+    }
+
     private fun createNotificationChannels() {
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(NotificationChannel(
-            SERVICE_CHANNEL, "Suivi Selkie", NotificationManager.IMPORTANCE_LOW
-        ).apply { description = "Notification de suivi permanent" })
+            SERVICE_CHANNEL, tr("Suivi Selkie", "Selkie tracking"), NotificationManager.IMPORTANCE_LOW
+        ).apply { description = tr("Notification de suivi permanent", "Ongoing tracking notification") })
         manager.createNotificationChannel(NotificationChannel(
-            ALERT_CHANNEL, "Alertes de limite", NotificationManager.IMPORTANCE_DEFAULT
-        ).apply { description = "Préventions avant la limite de temps" })
+            ALERT_CHANNEL, tr("Alertes de limite", "Time limit alerts"), NotificationManager.IMPORTANCE_DEFAULT
+        ).apply { description = tr("Préventions avant la limite de temps", "Warnings before the time limit") })
     }
 
     private fun label(pkg: String): String = try {
@@ -124,6 +139,7 @@ class MonitorService : Service() {
                 stopSelf()
                 return@post
             }
+            refreshNotificationLanguage()
             for ((pkg, remaining) in tick.warnings) alert(label(pkg), remaining, pkg.hashCode())
             if (locked != null && store.packages().contains(locked.packageName)) {
                 overlay.show(label(locked.packageName), locked.lockedUntil, currentPoints)
@@ -137,10 +153,10 @@ class MonitorService : Service() {
         if (Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(
                 this, Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED) return
-        val message = "Plus que $remaining min sur $name"
+        val message = tr("Plus que $remaining min sur $name", "Only $remaining min left on $name")
         val notification: Notification = NotificationCompat.Builder(this, ALERT_CHANNEL)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("Selkie · Dernière ligne droite")
+            .setContentTitle(tr("Selkie · Dernière ligne droite", "Selkie · Almost at your limit"))
             .setContentText(message)
             .setAutoCancel(true)
             .build()

@@ -7,8 +7,17 @@ const val CUSTOM_MIN_DAYS = 2
 const val CUSTOM_MAX_DAYS = 365
 const val MAX_ACTIVE_CUSTOM_CHALLENGES = 10
 
-enum class BillingPeriod(val label: String, val priceSuffix: String) {
-    MONTHLY("Mensuel", "/ mois"), ANNUAL("Annuel", "/ an")
+enum class BillingPeriod {
+    MONTHLY, ANNUAL;
+
+    val label: String get() = when (this) {
+        MONTHLY -> tr("Mensuel", "Monthly")
+        ANNUAL -> tr("Annuel", "Annual")
+    }
+    val priceSuffix: String get() = when (this) {
+        MONTHLY -> tr("/ mois", "/ month")
+        ANNUAL -> tr("/ an", "/ year")
+    }
 }
 
 /** null représente l’absence de plafond commercial sur les applications compatibles. */
@@ -24,15 +33,17 @@ enum class PlanType(val maxTrackedApps: Int?, val monthlyPriceEuros: Int) {
         BillingPeriod.ANNUAL -> annualPriceEuros
     }
     val displayName: String get() = when (this) {
-        FREE -> "Gratuit"
+        FREE -> tr("Gratuit", "Free")
         PREMIUM -> "Premium"
         ULTRA -> "Ultra"
     }
 }
 
-/** Un solde provient de quarts entiers ; l'affichage n'ajoute ni zéros ni séparateur anglais. */
-fun formatPoints(points: Double): String =
-    BigDecimal.valueOf(points).stripTrailingZeros().toPlainString().replace('.', ',')
+/** Un solde provient de quarts entiers ; le séparateur suit la langue sans zéros ajoutés. */
+fun formatPoints(points: Double): String {
+    val value = BigDecimal.valueOf(points).stripTrailingZeros().toPlainString()
+    return if (AppLanguage.current == AppLocale.FRENCH) value.replace('.', ',') else value
+}
 
 fun formatPointUnits(pointUnits: Int): String = formatPoints(pointUnits / POINT_UNITS_PER_POINT.toDouble())
 
