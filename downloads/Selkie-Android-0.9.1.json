@@ -1,0 +1,33 @@
+{
+  "versionName": "0.9.1",
+  "versionCode": 12,
+  "applicationId": "com.maree.app",
+  "bytes": 23696628,
+  "sha256": "d8e52f9d5e8c8bd7f9a9e4b9d7720120909d3544fd73e8e92707f4ae17615a7c",
+  "tests": {
+    "tests": 57,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Warning": 13,
+    "Information": 1
+  },
+  "offlineCoachTopics": 67,
+  "offlineCoachReplies": 125,
+  "appHelpQuestions": 38,
+  "appHelpSections": 7,
+  "onlineCoachConfigured": false,
+  "accountServerConfigured": false,
+  "playBillingEnabled": false,
+  "certificateSha256": "9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50",
+  "sourceCommit": "a84069abf12974a7e5549130de5cabec6b8dcd35",
+  "sourceArchive": {
+    "file": "Selkie-Android-0.9.1-source.zip",
+    "bytes": 569423,
+    "sha256": "630b541c80c5041fed2668172aaacd77151ae5c790c16f775a2aed0ba686cd39",
+    "files": 80
+  },
+  "signaturePolicy": "Same existing development certificate as Selkie 0.8.1 and 0.9.0; test APK, not a Play release"
+}

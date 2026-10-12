@@ -24,3 +24,10 @@ Le contact de confidentialité devient `1kabdm@gmail.com`. Le responsable actuel
 **Aucun paiement, compte serveur, restauration d’achat ou restriction à un téléphone connecté n’est activé.** Cette dernière règle est décrite comme prévue et nécessite une vérification serveur. Les paramètres publics Supabase compilés sont vides ; le dialogue IA distant reste non configuré. Voir [offres et comptes](../docs/ABONNEMENTS_ET_COMPTES.md).
 
 Le suivi, les règles des points et défis, la conservation locale facultative du Coach, le phoque et le design retenu restent conservés.
+
+## Sources conservées
+
+- Commit exact du code : `a84069abf12974a7e5549130de5cabec6b8dcd35`.
+- Archive : `Selkie-Android-0.9.1-source.zip`, 569423 octets, 80 fichiers.
+- SHA-256 : `630b541c80c5041fed2668172aaacd77151ae5c790c16f775a2aed0ba686cd39`.
+- CRC ZIP et égalité de chaque fichier avec le commit vérifiés ; script Gradle exécutable conservé. Aucun APK, cache de compilation ou fichier de signature privée dans les sources.
