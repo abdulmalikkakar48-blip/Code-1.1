@@ -1,0 +1,147 @@
+{
+  "versionName": "0.10.3",
+  "versionCode": 18,
+  "applicationId": "com.maree.app",
+  "bytes": 25408750,
+  "sha256": "e08371b091e2aa7739f4e69c1cda9fb99a8bc48ad11f8d0008a0c5976f6cf57d",
+  "minSdkVersion": 29,
+  "targetSdkVersion": 34,
+  "tests": {
+    "tests": 97,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Fatal": 0,
+    "Error": 0,
+    "Warning": 3,
+    "Information": 1
+  },
+  "supportedLanguages": [
+    "fr",
+    "en"
+  ],
+  "preparedCoachQuestionsPerLanguage": 1152,
+  "preparedCoachContexts": 48,
+  "preparedCoachIntents": 24,
+  "preparedCoachSections": 8,
+  "preparedCoachContentMethod": "Curated context texts combined with 24 distinct advice templates; not a generative model",
+  "offlineCoachTopicsPerLanguage": 67,
+  "offlineCoachRepliesPerLanguage": 125,
+  "appHelpQuestionsPerLanguage": 38,
+  "themeModes": [
+    "light",
+    "dark",
+    "system"
+  ],
+  "defaultThemeMode": "light",
+  "annualDiscount": false,
+  "plannedPricesEuros": {
+    "Premium": {
+      "monthly": 10,
+      "annual": 120
+    },
+    "Ultra": {
+      "monthly": 20,
+      "annual": 240
+    }
+  },
+  "onlineCoachConfigured": false,
+  "accountServerConfigured": false,
+  "playBillingEnabled": false,
+  "certificateSha256": "9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50",
+  "signaturePolicy": "Existing development certificate retained; test APK, not a Play release",
+  "primaryTabs": [
+    "home",
+    "daily",
+    "challenges",
+    "coach"
+  ],
+  "menuDestinations": [
+    "language",
+    "appearance",
+    "androidAccess",
+    "subscriptions",
+    "rules",
+    "privacy"
+  ],
+  "menuPlacement": "Top right hamburger icon",
+  "sourceCommit": "007296cd1f92fa32921a0c4397aefbb4f33006d2",
+  "sourceArchive": {
+    "file": "Selkie-Android-0.10.3-source.zip",
+    "bytes": 655746,
+    "sha256": "19a2a107e03e4bcd6b73ab8f8de1fb544b71cd25af975b10a7fdfe0c35fc188c",
+    "files": 99
+  },
+  "emulatorChecks": {
+    "androidApi": 34,
+    "screenPixels": [
+      480,
+      800
+    ],
+    "updateInstalled": true,
+    "dataAndPreferencesRetainedObserved": true,
+    "headerMenuButtonObserved": true,
+    "fourPrimaryTabsObserved": true,
+    "menuOpenedObserved": true,
+    "appearancePageFromMenuObserved": true,
+    "lightAndNightWaterHomeObserved": true,
+    "systemAnimationSettingRestored": true,
+    "physicalPhoneTested": false,
+    "completeAppFlowVerified": false,
+    "notes": "Final APK installed. Water background, movement, stopping and resuming observed in Light and Night on a stable home screen. Early XML requests during launch/theme changes sometimes returned null roots; stable captures were used. No physical phone or complete application flow test."
+  },
+  "waterParticleBackground": {
+    "rendering": "Full-viewport dotted water surface; travelling vertical and horizontal waves",
+    "baseSpacingDp": 18,
+    "maxParticles": 1600,
+    "dotRadiusDp": 1.35,
+    "verticalWaveAmplitudesDp": [
+      18,
+      5
+    ],
+    "horizontalWaveAmplitudeDp": 6,
+    "loopSeconds": 12,
+    "maxUpdatesPerSecond": 20,
+    "maxOpacity": {
+      "light": 0.14,
+      "night": 0.32
+    },
+    "intensityLevels": [
+      0.65,
+      0.82,
+      1
+    ],
+    "nativeDrawBatchesPerFrame": 3,
+    "reusesPointBuffersAndPaints": true,
+    "drawOnlyStateUpdates": true,
+    "staticWhenSystemAnimationsDisabled": true,
+    "pausesOutsideResumedLifecycle": true,
+    "storesMovementData": false,
+    "emulatorMotionChecks": {
+      "light": {
+        "theme": "light",
+        "originalSystemAnimationScale": "0",
+        "changedPixelsAnimationsEnabled": 9284,
+        "changedPixelsAnimationsDisabled": 0,
+        "changedPixelsAfterReenabling": 9421,
+        "animationsMoveObserved": true,
+        "reducedMotionStaticObserved": true,
+        "motionResumesObserved": true,
+        "systemAnimationSettingRestored": true
+      },
+      "night": {
+        "theme": "night",
+        "originalSystemAnimationScale": "0",
+        "changedPixelsAnimationsEnabled": 9293,
+        "changedPixelsAnimationsDisabled": 0,
+        "changedPixelsAfterReenabling": 9495,
+        "animationsMoveObserved": true,
+        "reducedMotionStaticObserved": true,
+        "motionResumesObserved": true,
+        "systemAnimationSettingRestored": true
+      }
+    }
+  }
+}
