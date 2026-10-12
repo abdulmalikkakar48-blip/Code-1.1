@@ -2,9 +2,11 @@ package com.maree.app
 
 import android.animation.ValueAnimator
 import android.database.ContentObserver
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -46,9 +48,14 @@ internal fun SelkieGeometryBackground(modifier: Modifier = Modifier) {
     DisposableEffect(context, lifecycle) {
         val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
             override fun onChange(selfChange: Boolean) {
-                motionAllowed = ValueAnimator.areAnimatorsEnabled()
+                // WindowManager may deliver its effective scale after the provider notification.
+                Handler(Looper.getMainLooper()).post {
+                    motionAllowed = ValueAnimator.areAnimatorsEnabled()
+                }
             }
         }
+        val removeNativeListener = if (Build.VERSION.SDK_INT >= 33)
+            NativeAnimatorScale.observe { enabled -> motionAllowed = enabled } else null
         val registered = runCatching {
             context.contentResolver.registerContentObserver(
                 Settings.Global.getUriFor(Settings.Global.ANIMATOR_DURATION_SCALE), false, observer)
@@ -59,6 +66,7 @@ internal fun SelkieGeometryBackground(modifier: Modifier = Modifier) {
         lifecycle.addObserver(lifecycleObserver)
         onDispose {
             lifecycle.removeObserver(lifecycleObserver)
+            removeNativeListener?.invoke()
             if (registered) context.contentResolver.unregisterContentObserver(observer)
         }
     }
@@ -110,5 +118,17 @@ internal fun SelkieGeometryBackground(modifier: Modifier = Modifier) {
         polygon.lineTo(diamond.x - radius, diamond.y)
         polygon.close()
         rotate(cos(angle) * 10f, diamond) { drawPath(polygon, secondary, style = stroke) }
+    }
+}
+
+/** Observe the framework's effective value, including accessibility and battery-saving overrides. */
+@RequiresApi(33)
+private object NativeAnimatorScale {
+    fun observe(onChange: (Boolean) -> Unit): () -> Unit {
+        val listener = object : ValueAnimator.DurationScaleChangeListener {
+            override fun onChanged(durationScale: Float) { onChange(durationScale > 0f) }
+        }
+        ValueAnimator.registerDurationScaleChangeListener(listener)
+        return { ValueAnimator.unregisterDurationScaleChangeListener(listener) }
     }
 }
