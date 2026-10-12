@@ -1,5 +1,11 @@
 # Selkie : version de travail retenue le 12 octobre 2026
 
+## Version de travail 0.10.0
+
+Le Coach possède une bibliothèque de 1 152 questions/réponses par langue, composée de 48 situations × 24 types de conseils et répartie en huit rubriques. Question en haut, réponse séparée dessous, recherche et pagination. Le mode Nuit noir et bleu est sélectionnable dans Plus → Apparence (Clair, Nuit, Comme le téléphone). Le français, l’anglais, le logo, les règles et les prix sans réduction restent conservés.
+
+APK et sources : `downloads/Selkie-Android-0.10.0.apk` et `downloads/Selkie-Android-0.10.0-source.zip`, versionCode 15, signature de test identique aux versions 0.8.1 à 0.9.3. [Validation 0.10.0](../downloads/VALIDATION-0.10.0.md), [Coach](COACH_HORS_LIGNE.md), [mode nuit](MODE_NUIT.md). Aucun compte serveur, paiement ou dialogue IA distant n’est activé. Les sections suivantes sont les archives.
+
 ## Version de travail 0.9.3
 
 Les tarifs annuels sont sans réduction : Premium 10 €/mois ou 120 €/an ; Ultra 20 €/mois ou 240 €/an. Les annonces de remise sont retirées des offres et du Coach FR/EN. Les règles, fonctions, langues et démonstrations gratuites sont conservées. [Offres actuelles](ABONNEMENTS_ET_COMPTES.md).

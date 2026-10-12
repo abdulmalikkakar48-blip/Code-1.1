@@ -36,6 +36,7 @@ class RuleCoach(
     private val language: AppLocale = AppLanguage.current
 ) {
     private data class PreparedTopic(val topic: CoachTopic, val keywords: List<List<String>>)
+    private val useQuestionLibrary = topics == null
 
     // Les mots des deux langues sont compris ; les réponses gardent la langue choisie.
     // Un catalogue fourni explicitement reste autonome (utile pour des sujets/tests ciblés).
@@ -61,12 +62,18 @@ class RuleCoach(
         PreparedTopic(topic.copy(replies = topic.replies.filter(String::isNotBlank).distinct()),
             (topic.keywords + topic.appAliases).map(::words).filter { it.isNotEmpty() }.distinct())
     }
+    private val topicsById = prepared.associate { it.topic.id to it.topic }
     private val lastReplies = mutableMapOf<String, Int>()
 
     @Synchronized
     fun reply(message: String, context: OfflineCoachContext): OfflineCoachReply {
         val tokens = words(message)
         if (requiresHumanSupport(tokens)) return humanSupport()
+        if (useQuestionLibrary) {
+            findPreparedCoachQuestion(message, language)?.let { question ->
+                return preparedQuestionReply(question, context)
+            }
+        }
         val appContext = hasAppContext(tokens)
         val requestedAction = requestedAppAction(tokens)
         val scored = prepared.map { preparedTopic ->
@@ -91,6 +98,19 @@ class RuleCoach(
         return if (topic == null) unknownReply(emptyList()) else knownReply(topic, context)
     }
 
+    /** Une question choisie dans la bibliothèque garde sa réponse complète et sa rubrique. */
+    @Synchronized
+    fun replyForPreparedQuestion(questionId: String, context: OfflineCoachContext): OfflineCoachReply {
+        val question = if (useQuestionLibrary) preparedCoachQuestionById(questionId, language) else null
+        return if (question == null) unknownReply(emptyList()) else preparedQuestionReply(question, context)
+    }
+
+    private fun preparedQuestionReply(question: PreparedCoachQuestion, context: OfflineCoachContext): OfflineCoachReply {
+        // La bibliothèque complète les conseils existants sans créer de données de suivi.
+        val topic = topicsById[question.topicId] ?: return unknownReply(emptyList())
+        return answerReply(topic, question.answer, context)
+    }
+
     private fun knownReply(topic: CoachTopic, context: OfflineCoachContext): OfflineCoachReply {
         val last = lastReplies[topic.id]
         val count = topic.replies.size
@@ -99,8 +119,12 @@ class RuleCoach(
             if (last != null && draw >= last) draw + 1 else draw
         }
         lastReplies[topic.id] = index
+        return answerReply(topic, topic.replies[index], context)
+    }
+
+    private fun answerReply(topic: CoachTopic, answer: String, context: OfflineCoachContext): OfflineCoachReply {
         val text = buildString {
-            append(topic.replies[index])
+            append(answer)
             if (topic.id in pointTopics) {
                 append(text("\n\nTon solde actuel dans Selkie : ", "\n\nYour current Selkie balance: "))
                 append(pointBalance(context.pointUnits))

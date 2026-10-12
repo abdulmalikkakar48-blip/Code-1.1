@@ -1,5 +1,15 @@
 # Selkie — application Android de réduction du temps d'écran
 
+## Version 0.10.0 — bibliothèque du coach et mode nuit
+
+Le Coach ajoute **1 152 questions et réponses préparées par langue**, classées en huit rubriques, avec recherche et pagination. Elles combinent 48 situations concrètes et 24 types de conseils ; les alias ne sont pas comptés comme des questions supplémentaires. Les 67 sujets existants et les 38 questions d’aide Selkie restent disponibles. La question se trouve dans une carte en haut, et la réponse dans une autre carte immédiatement dessous. Une réponse ancienne est masquée quand la question est modifiée.
+
+Le **mode Nuit noir et bleu** est accessible dans **Plus → Apparence**, avec les choix Clair, Nuit et Comme le téléphone. Le choix est local et conservé ; les règles, points, limites, langues et textes des défis personnels sont conservés. Le logo et l’écran rouge de blocage gardent leur identité. Les tarifs annuels restent sans réduction : Premium 120 €/an, Ultra 240 €/an ; aucun paiement réel n’est actif.
+
+[Page de l’APK Selkie 0.10.0 — accès GitHub requis](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.10.0.apk) · [Sources exactes](downloads/Selkie-Android-0.10.0-source.zip) · [Validation](downloads/VALIDATION-0.10.0.md) · [Bibliothèque du Coach](docs/COACH_HORS_LIGNE.md) · [Apparence](docs/MODE_NUIT.md).
+
+**English:** The offline coach includes 1,152 prepared question-and-answer pairs, with search and eight categories. Your question is above a separate answer card. Choose Light, Night or Follow phone in More → Appearance. Advice remains rule-based and offline; payments, accounts and remote AI chat are not active.
+
 ## Version 0.9.3 — tarifs annuels sans réduction
 
 Les offres annuelles correspondent désormais à douze mensualités : **Premium 10 €/mois ou 120 €/an**, **Ultra 20 €/mois ou 240 €/an**. Les textes de remise et d’économie sont retirés des offres et des réponses du Coach, en français et en anglais. Les fonctions des offres sont identiques pour les deux durées ; les achats restent inactifs dans cet APK de test.
@@ -84,7 +94,7 @@ Plafonds : **10 applications en Gratuit**, **50 en Premium** et **aucun plafond 
 
 Pour commencer la distribution et les paiements, ouvre [le guide de démarrage](docs/DEMARRER_PUBLICATION.md). Il mène aux étapes [Google Play](docs/PUBLICATION_GOOGLE_PLAY.md) et [abonnements](docs/ABONNEMENTS.md). Le travail porte sur Android ; la version iPhone est reportée. L’APK reste une version de test ; aucun paiement ni coach IA n’est connecté.
 
-**Version actuelle : 0.9.0 (APK de test et code source).** Interface entièrement en français.
+**Version actuelle : 0.10.0 (APK de test et code source).** Interface française et anglaise, apparence claire ou nuit.
 
 Ce projet suit le cahier des charges fourni, en Kotlin + Jetpack Compose Material 3, `minSdk 29` (Android 10), `targetSdk 34`, package `com.maree.app`, Gradle 8.7, AGP 8.5.2, Kotlin 1.9.24.
 
@@ -143,7 +153,7 @@ La politique est une information pour la version locale, pas une certification j
 1. Créer un dépôt GitHub vide et y envoyer **le contenu** de ce répertoire (`app/`, `.github/`, etc.).
 2. Ouvrir l'onglet **Actions**, sélectionner **Construire l'APK Android**, puis lancer **Run workflow** (ou envoyer un commit sur `main`).
 3. À la fin de la tâche `android`, récupérer l'artefact `Selkie-build-to-sign` ; il contient `app-debug.apk`. C’est un fichier intermédiaire qui utilise la clé temporaire du runner.
-4. Pour distribuer une mise à jour, signer ce fichier avec la clé fixe sauvegardée, selon [la procédure de signature](docs/SIGNATURE_ANDROID.md). Le fichier déjà prêt à installer est dans [downloads/Selkie-Android.apk](downloads/Selkie-Android.apk), pour Android 10+.
+4. Pour distribuer une mise à jour, signer ce fichier avec la clé fixe sauvegardée, selon [la procédure de signature](docs/SIGNATURE_ANDROID.md). Le fichier de test actuel est [Selkie-Android-0.10.0.apk](downloads/Selkie-Android-0.10.0.apk), pour Android 10+.
 5. Ouvrir Selkie, lire les explications, puis activer les accès nécessaires au suivi. Les notifications sont facultatives, et le mode découverte reste disponible.
 
 Le projet a été compilé dans l'environnement cloud. L'APK de test est généré dans `app/build/outputs/apk/debug/app-debug.apk`. Le wrapper Gradle 8.7 est inclus, avec vérification SHA-256 de sa distribution ; GitHub Actions utilise ce wrapper pour compiler, exécuter les tests unitaires et lancer Android Lint.

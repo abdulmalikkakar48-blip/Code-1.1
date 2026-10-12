@@ -19,7 +19,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -48,7 +47,7 @@ internal fun ChallengeDays(requiredDays: Int, completedDays: Int, validatedToday
                     if (done) MareePalette.Teal else MareePalette.Subtle, CircleShape),
                     contentAlignment = Alignment.Center) {
                     Text(if (done) "✓" else day.toString(),
-                        color = if (done) Color.White else MareePalette.Teal,
+                        color = if (done) MareePalette.OnPrimary else MareePalette.Teal,
                         fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
                 }
                 Text(tr("Jour $day", "Day $day"), modifier = Modifier.weight(1f),

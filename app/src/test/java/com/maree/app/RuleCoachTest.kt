@@ -2,6 +2,8 @@ package com.maree.app
 
 import org.junit.Assert.*
 import org.junit.Test
+import java.text.Normalizer
+import java.util.Locale
 import kotlin.random.Random
 
 class RuleCoachTest {
@@ -335,5 +337,119 @@ class RuleCoachTest {
         for (message in listOf("I feel sad", "This TikTok video has me dying of laughter", "My foot hurts")) {
             assertFalse(message, coach.reply(message, context).sensitive)
         }
+    }
+
+    @Test fun completeQuestionLibraryIsAvailableInBothLanguagesWithExistingParentTopics() {
+        val french = preparedCoachQuestionsFor(AppLocale.FRENCH)
+        val english = preparedCoachQuestionsFor(AppLocale.ENGLISH)
+        assertTrue("The coach needs more than 1,000 prepared question-answer pairs", french.size > 1_000)
+        assertEquals(french.map { it.id }, english.map { it.id })
+        assertEquals(french.size, french.map { it.id }.distinct().size)
+        for ((language, questions) in listOf(AppLocale.FRENCH to french, AppLocale.ENGLISH to english)) {
+            val coach = RuleCoach(language = language)
+            val topicIds = coachTopicsFor(language).map { it.id }.toSet()
+            val noMeasurements = context.copy(trackingEnabled = false)
+            for (question in questions) {
+                assertTrue(question.id, question.question.isNotBlank() && question.answer.isNotBlank())
+                assertTrue(question.id, question.topicId in topicIds)
+                val reply = coach.replyForPreparedQuestion(question.id, noMeasurements)
+                assertEquals(question.id, question.topicId, reply.topicId)
+                assertTrue(question.id, reply.text.startsWith(question.answer))
+                assertFalse(question.id, reply.unrecognized || reply.sensitive)
+            }
+        }
+    }
+
+    @Test fun exactPreparedQuestionKeepsItsFullAnswerRatherThanOneGenericTopicReply() {
+        val question = preparedCoachQuestionsFor(AppLocale.FRENCH).first { it.topicId == "tiktok" }
+        val coach = RuleCoach(language = AppLocale.FRENCH)
+        val noMeasurements = context.copy(trackingEnabled = false)
+        val typed = coach.reply(question.question, noMeasurements)
+        val selected = coach.replyForPreparedQuestion(question.id, noMeasurements)
+        assertEquals(question.answer, typed.text)
+        assertEquals(question.answer, selected.text)
+        assertEquals(question.topicId, typed.topicId)
+        assertFalse(typed.unrecognized)
+        assertFalse(coachTopicsFor(AppLocale.FRENCH).first { it.id == "tiktok" }.replies.contains(typed.text))
+    }
+
+    @Test fun preparedQuestionsIgnoreAccentsPunctuationCaseAndApostropheStyle() {
+        val question = preparedCoachQuestionsFor(AppLocale.FRENCH).first { it.topicId == "tiktok" }
+        val normalized = Normalizer.normalize(question.question, Normalizer.Form.NFD)
+            .replace(Regex("\\p{M}+"), "").uppercase(Locale.ROOT)
+            .replace('’', '\'').replace('?', '!') + " !!!"
+        val reply = RuleCoach(language = AppLocale.FRENCH)
+            .reply(normalized, context.copy(trackingEnabled = false))
+        assertEquals(question.answer, reply.text)
+        assertEquals(question.topicId, reply.topicId)
+    }
+
+    @Test fun aPreparedQuestionInEitherLanguageGetsTheChosenCoachLanguage() {
+        val french = preparedCoachQuestionsFor(AppLocale.FRENCH).first { it.topicId == "tiktok" }
+        val english = preparedCoachQuestionsFor(AppLocale.ENGLISH).first { it.id == french.id }
+        val noMeasurements = context.copy(trackingEnabled = false)
+        val frenchCoach = RuleCoach(language = AppLocale.FRENCH)
+        val englishCoach = RuleCoach(language = AppLocale.ENGLISH)
+        assertEquals(english.answer, englishCoach.reply(french.question, noMeasurements).text)
+        assertEquals(french.answer, frenchCoach.reply(english.question, noMeasurements).text)
+        assertEquals(english.answer, englishCoach.replyForPreparedQuestion(french.id, noMeasurements).text)
+        assertEquals(french.answer, frenchCoach.replyForPreparedQuestion(english.id, noMeasurements).text)
+    }
+
+    @Test fun preparedAppAnswersAppendOnlyTheRealMatchingCurrentTrackingPeriod() {
+        val question = preparedCoachQuestionsFor(AppLocale.ENGLISH).first { it.topicId == "tiktok" }
+        val coach = RuleCoach(language = AppLocale.ENGLISH)
+        val measured = coach.replyForPreparedQuestion(question.id, context).text
+        assertTrue(measured, measured.startsWith(question.answer))
+        assertTrue(measured, measured.endsWith("TikTok: 40 min during the current tracking period."))
+        assertEquals(question.answer, coach.replyForPreparedQuestion(question.id,
+            context.copy(trackingEnabled = false)).text)
+        assertEquals(question.answer, coach.replyForPreparedQuestion(question.id,
+            context.copy(apps = listOf(OfflineCoachApp("YouTube", 6_000_000L)))).text)
+        assertEquals(question.answer, coach.replyForPreparedQuestion(question.id,
+            context.copy(apps = listOf(OfflineCoachApp("TikTok", -1L)))).text)
+    }
+
+    @Test fun preparedPointAnswersUseExactQuarterPointsInTheChosenLanguage() {
+        for ((language, balance) in listOf(AppLocale.FRENCH to "35,25", AppLocale.ENGLISH to "35.25")) {
+            val question = preparedCoachQuestionsFor(language).first {
+                it.topicId in setOf("points", "exceeded", "relapse", "streak")
+            }
+            val coach = RuleCoach(language = language)
+            val reply = coach.replyForPreparedQuestion(question.id, context)
+            assertTrue(reply.text, reply.text.startsWith(question.answer))
+            assertTrue(reply.text, reply.text.endsWith("$balance points."))
+            assertFalse(reply.text.contains("Recorded usage") || reply.text.contains("Suivi enregistré"))
+            assertTrue(coach.replyForPreparedQuestion(question.id,
+                context.copy(pointUnits = -5)).text.endsWith("0 points."))
+        }
+    }
+
+    @Test fun distressStillTakesPriorityWhenAQuestionAlsoContainsLibraryWords() {
+        for ((language, distress) in listOf(AppLocale.FRENCH to "Je veux me faire du mal",
+            AppLocale.ENGLISH to "I want to hurt myself")) {
+            val question = preparedCoachQuestionsFor(language).first { it.topicId == "tiktok" }
+            val reply = RuleCoach(language = language).reply(question.question + " " + distress, context)
+            assertTrue(reply.sensitive)
+            assertFalse(reply.unrecognized)
+            assertNull(reply.topicId)
+            assertTrue(reply.text.contains("3114"))
+            assertFalse(reply.text.contains("35,25") || reply.text.contains("35.25"))
+            assertFalse(reply.text.contains("Recorded usage") || reply.text.contains("Suivi enregistré"))
+        }
+    }
+
+    @Test fun missingPreparedQuestionAndExplicitCustomCatalogueKeepHonestFallback() {
+        val coach = RuleCoach(language = AppLocale.ENGLISH)
+        val missing = coach.replyForPreparedQuestion("missing-question", context)
+        assertTrue(missing.unrecognized)
+        assertEquals(4, missing.suggestions.size)
+        assertFalse(missing.sensitive)
+        val question = preparedCoachQuestionsFor(AppLocale.ENGLISH).first { it.topicId == "tiktok" }
+        val custom = RuleCoach(listOf(CoachTopic("custom", "Custom", listOf("sapphire"),
+            listOf("A custom answer."))), language = AppLocale.ENGLISH)
+        assertTrue(custom.replyForPreparedQuestion(question.id, context).unrecognized)
+        assertTrue(custom.reply(question.question, context).unrecognized)
+        assertEquals("A custom answer.", custom.reply("sapphire", context).text)
     }
 }

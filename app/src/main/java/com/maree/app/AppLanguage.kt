@@ -57,5 +57,6 @@ class SelkieApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         AppLanguage.initialize(this)
+        AppAppearance.initialize(this)
     }
 }

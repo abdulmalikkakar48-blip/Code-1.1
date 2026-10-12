@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +33,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -72,6 +73,8 @@ internal fun OnlineCoachTab() {
     val sessions = remember { CoachSessionStore(context) }
     val scope = rememberCoroutineScope()
     val scroll = rememberScrollState()
+    val focus = LocalFocusManager.current
+    val keyboard = LocalSoftwareKeyboardController.current
     var session by remember { mutableStateOf(sessions.load()) }
     var email by rememberSaveable { mutableStateOf("") }
     var code by remember { mutableStateOf("") }
@@ -79,15 +82,13 @@ internal fun OnlineCoachTab() {
     var consent by remember { mutableStateOf(false) }
     var busy by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
-    var question by remember { mutableStateOf("") }
-    var messages by remember { mutableStateOf<List<CoachMessage>>(emptyList()) }
+    var question by remember(language) { mutableStateOf("") }
+    var answeredQuestion by remember(language) { mutableStateOf("") }
+    var messages by remember(language) { mutableStateOf<List<CoachMessage>>(emptyList()) }
     var remaining by remember { mutableStateOf<Int?>(null) }
     var localTips by rememberSaveable { mutableStateOf(false) }
     var selected by rememberSaveable { mutableIntStateOf(0) }
     val advice = situations[selected.coerceIn(situations.indices)]
-    LaunchedEffect(messages.size, busy) {
-        if (messages.isNotEmpty()) scroll.animateScrollTo(scroll.maxValue)
-    }
 
     fun run(action: suspend () -> Unit) {
         if (busy) return
@@ -168,19 +169,15 @@ internal fun OnlineCoachTab() {
                     TextButton(enabled = !busy, onClick = {
                         run {
                             withContext(Dispatchers.IO) { sessions.clear() }
-                            session = null; messages = emptyList(); remaining = null; consent = false
+                            session = null; messages = emptyList(); question = ""; answeredQuestion = ""
+                            remaining = null; consent = false
                         }
                     }) { Text(tr("Me déconnecter sur ce téléphone", "Sign out on this phone")) }
                 }
             }
-            messages.forEach { message ->
-                AppCardSurface(containerColor = if (message.role == "user") MareePalette.Subtle else MareePalette.Surface) {
-                    SectionLabel(if (message.role == "user") tr("Toi", "You") else tr("Coach IA", "AI coach"))
-                    Text(message.text, color = MareePalette.Ink, fontSize = 16.sp, lineHeight = 24.sp)
-                }
-            }
             if (session != null) {
                 AppCardSurface {
+                    SectionLabel(tr("Ta question", "Your question"))
                     OutlinedTextField(value = question, onValueChange = { question = it.take(800) },
                         label = { Text(tr("Ta question", "Your question")) }, placeholder = { Text(tr("Comment arrêter de scroller le soir ?", "How can I stop scrolling in the evening?")) },
                         minLines = 2, maxLines = 5, enabled = !busy,
@@ -190,6 +187,8 @@ internal fun OnlineCoachTab() {
                         val outgoing = question.trim()
                         val previous = messages.toList()
                         val generation = sessions.generation()
+                        focus.clearFocus()
+                        keyboard?.hide()
                         run {
                             var active = session ?: return@run
                             val reply = try {
@@ -206,13 +205,32 @@ internal fun OnlineCoachTab() {
                             messages = (previous + CoachMessage("user", outgoing) +
                                 CoachMessage("assistant", reply.answer)).takeLast(40)
                             remaining = reply.remaining
-                            question = ""
+                            question = outgoing
+                            answeredQuestion = outgoing
                         }
                     }, modifier = Modifier.fillMaxWidth(),
                         enabled = !busy && consent && question.isNotBlank() && remaining != 0)
                     Text(tr("La conversation reste en mémoire pendant l’ouverture de cet onglet. Elle n’est pas enregistrée sur le téléphone.", "The conversation stays in memory while this tab is open. It is not saved on the phone."),
                         color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
-                    TextButton(enabled = !busy, onClick = { messages = emptyList() }) { Text(tr("Nouvelle conversation", "New conversation")) }
+                    TextButton(enabled = !busy, onClick = {
+                        messages = emptyList(); question = ""; answeredQuestion = ""
+                    }) { Text(tr("Nouvelle conversation", "New conversation")) }
+                }
+                AppCardSurface {
+                    SectionLabel(tr("La réponse du coach", "The coach’s answer"))
+                    val latestAnswer = messages.lastOrNull { it.role == "assistant" }
+                    if (busy) {
+                        Text(tr("Le coach prépare sa réponse…", "The coach is preparing its answer…"),
+                            color = MareePalette.Muted, fontSize = 15.sp, lineHeight = 22.sp)
+                    } else if (latestAnswer != null && question.trim() == answeredQuestion) {
+                        Text(latestAnswer.text, color = MareePalette.Ink, fontSize = 16.sp, lineHeight = 24.sp)
+                    } else {
+                        Text(if (latestAnswer != null) tr("Ta question a changé. Appuie sur Envoyer pour obtenir une nouvelle réponse.",
+                            "Your question has changed. Tap Send to get a new answer.")
+                            else tr("La réponse apparaîtra ici après l’envoi de ta question.",
+                                "The answer will appear here after you send your question."),
+                            color = MareePalette.Muted, fontSize = 15.sp, lineHeight = 22.sp)
+                    }
                 }
             }
             if (busy) CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MareePalette.Teal)

@@ -64,7 +64,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
@@ -78,7 +77,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -102,13 +100,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-private val Background = MareePalette.Background
-private val CardColor = MareePalette.Surface
-private val CardLighter = MareePalette.Subtle
-private val Mint = MareePalette.Teal
-private val Cream = MareePalette.Ink
-private val Muted = MareePalette.Muted
-private val Warning = MareePalette.Danger
+private val Background get() = MareePalette.Background
+private val CardColor get() = MareePalette.Surface
+private val CardLighter get() = MareePalette.Subtle
+private val Mint get() = MareePalette.Teal
+private val Cream get() = MareePalette.Ink
+private val Muted get() = MareePalette.Muted
+private val Warning get() = MareePalette.Danger
 
 data class InstalledApp(val pkg: String, val label: String)
 
@@ -279,7 +277,7 @@ private fun MareeApp() {
             snackbarHost = { SnackbarHost(snackbars) },
             bottomBar = {
                 val extraNavHeight = (LocalDensity.current.fontScale - 1f).coerceAtLeast(0f) * 28f
-                NavigationBar(containerColor = MareePalette.DeepTeal, tonalElevation = 0.dp,
+                NavigationBar(containerColor = MareePalette.NavigationBackground, tonalElevation = 0.dp,
                     modifier = Modifier.heightIn(min = (80f + extraNavHeight).dp)) {
                     listOf(
                         Triple(tr("Accueil", "Home"), R.drawable.ic_nav_home, 0),
@@ -295,9 +293,9 @@ private fun MareeApp() {
                                 fontWeight = FontWeight.Medium, maxLines = 2,
                                 textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis) },
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MareePalette.DeepTeal, selectedTextColor = MareePalette.Mint,
-                                indicatorColor = MareePalette.Mint, unselectedIconColor = Color(0xFFAFBEB5),
-                                unselectedTextColor = Color(0xFFAFBEB5)
+                                selectedIconColor = MareePalette.OnHeroAccent, selectedTextColor = MareePalette.HeroAccent,
+                                indicatorColor = MareePalette.HeroAccent, unselectedIconColor = MareePalette.NavigationMuted,
+                                unselectedTextColor = MareePalette.NavigationMuted
                             )
                         )
                     }
@@ -466,7 +464,7 @@ private fun MareeApp() {
     if (deleteConfirmation) {
         AlertDialog(onDismissRequest = { if (!deleting) deleteConfirmation = false },
             title = { Text(tr("Effacer les données de Selkie ?", "Delete Selkie data?")) },
-            text = { Text(tr("Tes applications suivies, limites, verrous, points, défis, choix de démonstration et d’accueil, ainsi que les questions du coach enregistrées sur ce téléphone seront effacés. Le suivi sera arrêté. Cette action est irréversible et ne supprime pas les statistiques Android.", "Your tracked apps, limits, locks, points, challenges, demo and onboarding choices, and coach questions saved on this phone will be deleted. Tracking will stop. This cannot be undone and does not delete Android usage statistics.")) },
+            text = { Text(tr("Tes applications suivies, limites, verrous, points, défis, choix de démonstration, d’accueil, de langue et d’apparence, ainsi que les questions du coach enregistrées sur ce téléphone seront effacés. Le suivi sera arrêté. Cette action est irréversible et ne supprime pas les statistiques Android.", "Your tracked apps, limits, locks, points, challenges, demo, onboarding, language and appearance choices, and coach questions saved on this phone will be deleted. Tracking will stop. This cannot be undone and does not delete Android usage statistics.")) },
             confirmButton = { Button(enabled = !deleting, onClick = {
                 scope.launch {
                     deleting = true
@@ -478,7 +476,8 @@ private fun MareeApp() {
                         val coach = try { CoachSessionStore(context).clear(); true } catch (_: CoachError) { false }
                         val offlineCoach = OfflineCoachHistory(context).clear()
                         val language = AppLanguage.reset(context)
-                        local && coach && offlineCoach && language
+                        val appearance = AppAppearance.reset(context)
+                        local && coach && offlineCoach && language && appearance
                     }
                     deleting = false
                     deleteConfirmation = false
@@ -496,7 +495,8 @@ private fun MareeApp() {
                         infoMessage = tr("L’effacement n’a pas pu être enregistré. Le suivi est arrêté. Réessaie depuis Confidentialité.", "Deletion could not be saved. Tracking has stopped. Try again from Privacy.")
                     }
                 }
-            }, colors = ButtonDefaults.buttonColors(containerColor = MareePalette.Danger)) {
+            }, colors = ButtonDefaults.buttonColors(containerColor = MareePalette.Danger,
+                contentColor = MareePalette.OnDanger)) {
                 Text(if (deleting) tr("Effacement…", "Deleting…") else tr("Tout effacer", "Delete everything"))
             } },
             dismissButton = { TextButton(enabled = !deleting, onClick = { deleteConfirmation = false }) { Text(tr("Annuler", "Cancel")) } })
@@ -772,6 +772,7 @@ private fun MoreTab(
         .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
         ScreenHeading(tr("TES RÉGLAGES", "YOUR SETTINGS"), tr("À ta façon.", "Your way."), tr("Ton suivi, tes données, tes choix.", "Your tracking, your data, your choices."))
         LanguageSelector()
+        AppearanceSelector()
         AppCardSurface {
             SectionLabel(tr("Le suivi", "Tracking"), if (active) tr("Actif", "Active") else tr("En pause", "Paused"))
             Text(if (active) tr("Les limites de tes applications sont surveillées.", "Your app limits are being monitored.")
@@ -892,35 +893,35 @@ private fun MinutesDialog(
 @Composable
 private fun DisciplineCard(snapshot: MareeSnapshot, onChallenges: () -> Unit) {
     Card(shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(containerColor = MareePalette.DeepTeal)) {
+        colors = CardDefaults.cardColors(containerColor = MareePalette.HeroBackground)) {
         Column(Modifier.fillMaxWidth().padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(tr("TON CAPITAL\nDISCIPLINE", "YOUR DISCIPLINE\nBALANCE"), color = MareePalette.Mint,
+                Text(tr("TON CAPITAL\nDISCIPLINE", "YOUR DISCIPLINE\nBALANCE"), color = MareePalette.HeroAccent,
                     style = MaterialTheme.typography.labelMedium, letterSpacing = 1.5.sp,
                     modifier = Modifier.weight(1f))
-                Surface(color = MareePalette.Mint, shape = CircleShape) {
+                Surface(color = MareePalette.HeroAccent, shape = CircleShape) {
                     Icon(painterResource(R.drawable.ic_nav_challenges), contentDescription = null,
-                        tint = MareePalette.DeepTeal,
+                        tint = MareePalette.OnHeroAccent,
                         modifier = Modifier.padding(12.dp).size(24.dp))
                 }
             }
             Column {
-                Text(formatPoints(snapshot.points), color = Color.White,
+                Text(formatPoints(snapshot.points), color = MareePalette.OnHero,
                     fontSize = 64.sp, lineHeight = 70.sp, fontWeight = FontWeight.ExtraBold,
                     letterSpacing = (-2).sp)
-                Text(tr("points pour avancer", "points to keep moving"), color = Color(0xFFCBDBD0),
+                Text(tr("points pour avancer", "points to keep moving"), color = MareePalette.OnHeroMuted,
                     style = MaterialTheme.typography.bodyMedium)
             }
-            HorizontalDivider(color = Color.White.copy(alpha = 0.18f))
-            Text(tr("Chaque petit pas compte.", "Every small step counts."), color = Color.White,
+            HorizontalDivider(color = MareePalette.OnHero.copy(alpha = 0.18f))
+            Text(tr("Chaque petit pas compte.", "Every small step counts."), color = MareePalette.OnHero,
                 style = MaterialTheme.typography.titleMedium)
             Button(onClick = onChallenges,
                 modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
                 shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MareePalette.Mint,
-                    contentColor = MareePalette.DeepTeal)) {
+                colors = ButtonDefaults.buttonColors(containerColor = MareePalette.HeroAccent,
+                    contentColor = MareePalette.OnHeroAccent)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(tr("Explorer les défis", "Explore challenges"), style = MaterialTheme.typography.labelLarge,

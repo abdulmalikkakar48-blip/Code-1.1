@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.Dp
 internal fun BrandIcon(size: Dp = 36.dp) {
     Image(painterResource(R.drawable.brand_mark), contentDescription = null,
         modifier = Modifier.size(size).clip(RoundedCornerShape(11.dp))
-            .background(MareePalette.Mint).padding((size.value * 0.15f).dp))
+            .background(MareePalette.BrandBackground).padding((size.value * 0.15f).dp))
 }
 
 @Composable
@@ -120,6 +120,44 @@ internal fun LanguageSelector() {
         }
         if (saveFailed) Text(
             tr("La langue n’a pas pu être enregistrée. Réessaie.", "The language could not be saved. Try again."),
+            color = MareePalette.Danger, style = MaterialTheme.typography.bodySmall
+        )
+    }
+}
+
+@Composable
+internal fun AppearanceSelector() {
+    val context = LocalContext.current
+    var saveFailed by remember { mutableStateOf(false) }
+    AppCardSurface {
+        Text(tr("Apparence", "Appearance"), style = MaterialTheme.typography.titleMedium,
+            color = MareePalette.Ink)
+        Text(tr("Choisis le style de Selkie. Ton choix reste sur ce téléphone.",
+            "Choose Selkie’s look. Your choice stays on this phone."),
+            color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium)
+        listOf(
+            Triple(ThemeMode.LIGHT, tr("Clair", "Light"),
+                tr("Crème et vert", "Cream and green")),
+            Triple(ThemeMode.DARK, tr("Nuit", "Night"),
+                tr("Noir, bleu marine et bleu doux", "Black, navy and soft blue")),
+            Triple(ThemeMode.SYSTEM, tr("Comme le téléphone", "Follow phone settings"),
+                tr("Suit le mode clair ou sombre d’Android", "Follows Android’s light or dark mode"))
+        ).forEach { (mode, label, description) ->
+            FilterChip(
+                selected = AppAppearance.current == mode,
+                onClick = { saveFailed = !AppAppearance.set(context, mode) },
+                modifier = Modifier.fillMaxWidth().heightIn(min = 58.dp),
+                label = {
+                    Column(Modifier.padding(vertical = 6.dp)) {
+                        Text(label, style = MaterialTheme.typography.labelLarge)
+                        Text(description, style = MaterialTheme.typography.bodySmall)
+                    }
+                }
+            )
+        }
+        if (saveFailed) Text(
+            tr("L’apparence n’a pas pu être enregistrée. Réessaie.",
+                "The appearance could not be saved. Try again."),
             color = MareePalette.Danger, style = MaterialTheme.typography.bodySmall
         )
     }

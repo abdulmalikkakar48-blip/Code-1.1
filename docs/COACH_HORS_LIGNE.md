@@ -1,14 +1,26 @@
-# Coach à conseils préparés — Selkie 0.9.2
+# Coach à conseils préparés — Selkie 0.10.0
 
-Le Coach est accessible sans compte, connexion, crédit API ni abonnement. Il choisit parmi 125 réponses écrites à l’avance dans 67 sujets : 29 sujets de conseils avec trois variantes et 38 questions d’aide avec une réponse complète chacune ; il ne contient pas ChatGPT ni un modèle génératif. Les abonnements restent en démonstration, et le dialogue IA distant reste facultatif, séparé et non configuré.
+Le Coach est accessible sans compte, connexion, crédit API ni abonnement. Il propose une bibliothèque de **1 152 questions et réponses préparées par langue**, en plus des 67 sujets existants : 29 sujets de conseils avec trois variantes et 38 questions d’aide avec une réponse complète chacune. Il ne contient pas ChatGPT ni un modèle génératif. Les abonnements restent en démonstration, et le dialogue IA distant reste facultatif, séparé et non configuré.
+
+## Question en haut, réponse en bas
+
+Dans Coach, une première carte contient la question et le bouton pour demander un conseil. La carte de réponse se trouve immédiatement dessous. La question reste visible après l’envoi ; modifier son texte masque la réponse précédente pour éviter une association trompeuse. Seule cette paire courante reste en mémoire.
+
+Le bouton **Explorer 1 152 questions et réponses** ouvre la bibliothèque. Une recherche, huit rubriques et des pages de vingt questions facilitent le choix. Sélectionner une question la place dans la carte du haut, affiche sa réponse dessous et revient à cet endroit. L’aide **Comprendre Selkie** reste accessible plus bas.
+
+## Ce que contiennent les 1 152 questions
+
+La bibliothèque combine **48 situations concrètes et 24 types de conseils**, avec une question et une réponse distinctes pour chaque combinaison. Les situations couvrent huit rubriques : applications, moments de la journée, émotions et envies, travail et études, environnement, relations, activités sans écran et régularité. Les conseils proposent par exemple un premier geste de deux minutes, une alternative, un plan pour un obstacle, un objectif réaliste, une reprise après un écart ou un bilan de semaine.
+
+Les réponses sont composées à partir de textes préparés pour chaque situation et chaque type de conseil, avec trois étapes sur des lignes séparées. Il ne s’agit pas de 1 152 longs textes rédigés indépendamment ni d’un modèle qui invente de nouveaux conseils. Les variantes d’orthographe, les traductions et les suggestions ne gonflent pas le nombre de questions. Un exercice de sept jours proposé par le Coach ne valide pas automatiquement un défi et ne rapporte pas de points.
 
 ## Français et anglais
 
-Choisis Français ou English à l’accueil ou dans Plus. Chaque langue contient les mêmes 67 sujets et 125 réponses, dont 38 questions d’aide complètes. Le moteur reconnaît les expressions connues des deux langues, mais répond dans la langue choisie. Les données mesurées restent identiques, avec le séparateur de points adapté. La conversation en mémoire et ses menus sont recréés à la bascule ; les phrases enregistrées sur option restent dans leur langue d’origine. Voir [les langues](LANGUES.md).
+Choisis Français ou English à l’accueil ou dans Plus. Chaque langue contient les mêmes 1 152 questions de bibliothèque, 67 sujets et 125 réponses antérieures, dont 38 questions d’aide complètes. Les identifiants et rubriques correspondent entre les langues. Le moteur reconnaît les expressions connues des deux langues, mais répond dans la langue choisie. Les données mesurées restent identiques, avec le séparateur de points adapté. La question et la réponse en mémoire ainsi que les menus sont recréés à la bascule ; les phrases enregistrées sur option restent dans leur langue d’origine. Voir [les langues](LANGUES.md).
 
 ## Fonctionnement
 
-Les minuscules, accents, apostrophes et ponctuations sont normalisés. Les mots et expressions connus sont notés, avec une tolérance limitée à certaines petites fautes (dont « tiktoc »). Le sujet le mieux noté fournit une réponse. Les conseils disposent de variantes : la dernière variante de ce sujet n’est pas répétée dans le même onglet. Les questions d’aide ont une réponse de référence unique pour conserver l’ensemble des conditions et règles, plutôt qu’en omettre une selon un tirage aléatoire. Le moteur n’invente pas une réponse à une question nouvelle et ne comprend pas toutes les formulations.
+Les minuscules, accents, apostrophes et ponctuations sont normalisés. Une question reconnue de la bibliothèque fournit son conseil préparé ; une sélection dans la liste passe directement par son identifiant. La tolérance aux petites fautes reste conservatrice pour éviter d’intercepter une demande sans rapport. Sinon, les mots et expressions connus sont notés, avec une tolérance limitée à certaines petites fautes (dont « tiktoc »), et le sujet le mieux noté fournit une réponse. Les conseils de ces sujets disposent de variantes : la dernière variante n’est pas répétée dans le même onglet. Les questions d’aide ont une réponse de référence unique pour conserver l’ensemble des conditions et règles. Le moteur n’invente pas une réponse à une question nouvelle et ne comprend pas toutes les formulations. Les expressions de détresse reconnues ont priorité sur la bibliothèque et les autres sujets.
 
 Les sujets couvrent les applications, moments de la journée, émotions, astuces, règles de Selkie et motivation. Les conseils d’aide respectent les limites 10 / 50 / sans plafond commercial, les restrictions à zéro point, la réinitialisation à dix points et les durées et récompenses des défis.
 
@@ -22,7 +34,7 @@ Les expressions de détresse grave reconnues donnent une réponse bienveillante 
 
 ## Conservation facultative
 
-La conversation reste en mémoire pendant l’ouverture de l’onglet et n’est pas archivée. Dans **Coach → Mes choix de confidentialité**, l’utilisateur peut activer la conservation locale des seules phrases non comprises : option désactivée au départ, 50 phrases maximum, 800 caractères chacune, doublons retirés et plus anciennes remplacées.
+La question et la réponse courantes restent en mémoire pendant l’ouverture de l’onglet et ne sont pas archivées. Dans **Coach → Mes choix de confidentialité**, l’utilisateur peut activer la conservation locale des seules phrases non comprises : option désactivée au départ, 50 phrases maximum, 800 caractères chacune, doublons retirés et plus anciennes remplacées.
 
 Les messages identifiés comme sensibles sont exclus par précaution, sans garantie de détecter toute donnée privée. Les phrases ne sont pas transmises automatiquement à l’éditeur. Elles peuvent être consultées et effacées dans Coach ; désactiver l’option ou utiliser l’effacement global retire aussi leur stockage. Les préférences sont exclues des sauvegardes et transferts Android. Un compteur de génération empêche une ancienne écriture en attente de recréer les données après effacement.
 
@@ -33,4 +45,4 @@ source /workspace/.cloud-setup/activate.sh
 ./gradlew --no-daemon --max-workers=2 :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
 ```
 
-Les tests du moteur couvrent les formulations françaises, fautes admises, limites de mots, classement, variantes, suggestions, contexte réel et priorité de la détresse. Sur téléphone, essayer aussi le clavier, le défilement, les boutons de sujets, l’option locale, son effacement et la mise à jour depuis 0.8.1 ou 0.9.0. Ne pas décrire ces essais sur Samsung comme faits tant qu’ils n’ont pas été observés.
+Les tests vérifient le nombre et l’unicité des questions et réponses, la correspondance des deux langues, la recherche, la résolution des questions, les trois étapes, les formulations reconnues, variantes, suggestions, contexte réel et priorité de la détresse. Une revue du contenu couvre les 48 situations et les 24 intentions ; le mode nuit possède aussi des tests de persistance et de contraste. Les contrôles observés pour cet APK sont consignés dans [la validation 0.10.0](../downloads/VALIDATION-0.10.0.md). Sur téléphone, essayer aussi le clavier, le défilement, les boutons de sujets, l’option locale, son effacement et la mise à jour. Ne pas décrire les essais sur Samsung comme faits tant qu’ils n’ont pas été observés.

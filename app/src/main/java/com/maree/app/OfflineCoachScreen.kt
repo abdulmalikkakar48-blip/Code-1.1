@@ -10,9 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -21,7 +22,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,19 +31,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
-private data class OfflineCoachTurn(
-    val id: Long,
-    val fromUser: Boolean,
-    val text: String,
-    val suggestions: List<String> = emptyList()
-)
 
 @Composable
 private fun TopicButtons(ids: List<String>, topics: Map<String, CoachTopic>, enabled: Boolean,
@@ -86,6 +82,8 @@ private fun OfflineCoachTab(
     val engine = remember(language) { RuleCoach(language = language) }
     val history = remember { OfflineCoachHistory(context) }
     val scope = rememberCoroutineScope()
+    val focus = LocalFocusManager.current
+    val keyboard = LocalSoftwareKeyboardController.current
     val scroll = rememberLazyListState()
     val topics = remember(language) { coachTopicsFor(language).associateBy { it.id } }
     val appNames = remember(language, snapshot.apps.map { it.packageName }) {
@@ -93,9 +91,9 @@ private fun OfflineCoachTab(
     }
     val coachContext = OfflineCoachContext(snapshot.pointUnits, monitoringActive,
         snapshot.apps.map { OfflineCoachApp(appNames[it.packageName] ?: it.packageName, it.usedMillis) })
-    var turns by remember(language) { mutableStateOf<List<OfflineCoachTurn>>(emptyList()) }
-    var nextId by remember(language) { mutableStateOf(0L) }
     var question by remember(language) { mutableStateOf("") }
+    var answeredQuestion by remember(language) { mutableStateOf("") }
+    var answer by remember(language) { mutableStateOf<OfflineCoachReply?>(null) }
     var saving by remember { mutableStateOf(false) }
     var saveUnknown by remember { mutableStateOf(history.enabled) }
     var saved by remember { mutableStateOf(history.entries()) }
@@ -107,11 +105,22 @@ private fun OfflineCoachTab(
     val helpSections = remember(language) { helpEntries.groupBy { it.section } }
     var helpSection by rememberSaveable { mutableStateOf(helpSections.keys.first().name) }
     var chooseHelpSection by remember { mutableStateOf(false) }
-
-    LaunchedEffect(turns.size, nextId) {
-        if (turns.isNotEmpty()) scroll.animateScrollToItem(3 + turns.size)
-        else scroll.scrollToItem(0)
+    val preparedQuestions = remember(language) { preparedCoachQuestionsFor(language) }
+    val preparedSections = remember(language) { preparedCoachSectionsFor(language) }
+    var showLibrary by rememberSaveable { mutableStateOf(false) }
+    var libraryQuery by remember(language) { mutableStateOf("") }
+    var librarySection by rememberSaveable { mutableStateOf("all") }
+    var chooseLibrarySection by remember { mutableStateOf(false) }
+    var libraryPage by remember(language) { mutableStateOf(0) }
+    val libraryResults = remember(language, libraryQuery, librarySection) {
+        searchPreparedCoachQuestions(libraryQuery, language,
+            sectionId = librarySection.takeUnless { it == "all" }, limit = preparedQuestions.size)
     }
+    val pageSize = 20
+    val lastPage = ((libraryResults.size - 1).coerceAtLeast(0)) / pageSize
+    val currentPage = libraryPage.coerceIn(0, lastPage)
+    val visibleQuestions = libraryResults.drop(currentPage * pageSize).take(pageSize)
+    val visibleAnswer = answer.takeIf { question.trim() == answeredQuestion }
 
     fun storeAction(action: () -> Boolean) {
         if (saving) return
@@ -131,15 +140,22 @@ private fun OfflineCoachTab(
         }
     }
 
-    fun submit(text: String, topicId: String? = null) {
+    fun submit(text: String, topicId: String? = null, preparedId: String? = null,
+        returnToQuestion: Boolean = false) {
         if (saving) return
         val outgoing = text.trim().take(800)
         if (outgoing.isEmpty()) return
-        val reply = if (topicId == null) engine.reply(outgoing, coachContext)
-            else engine.replyForTopic(topicId, coachContext)
-        turns = (turns + OfflineCoachTurn(nextId++, true, outgoing) +
-            OfflineCoachTurn(nextId++, false, reply.text, reply.suggestions)).takeLast(40)
-        question = ""
+        val reply = when {
+            preparedId != null -> engine.replyForPreparedQuestion(preparedId, coachContext)
+            topicId != null -> engine.replyForTopic(topicId, coachContext)
+            else -> engine.reply(outgoing, coachContext)
+        }
+        question = outgoing
+        answeredQuestion = outgoing
+        answer = reply
+        focus.clearFocus()
+        keyboard?.hide()
+        if (returnToQuestion) scope.launch { scroll.animateScrollToItem(1) }
         if (reply.unrecognized && !reply.sensitive && saveUnknown) {
             val generation = history.generation()
             storeAction { history.recordUnknown(outgoing, expectedGeneration = generation) }
@@ -153,32 +169,125 @@ private fun OfflineCoachTab(
     ) {
         item {
             ScreenHeading("COACH", tr("Un conseil, un petit pas.", "One tip, one small step."),
-                tr("Gratuit, sans compte et disponible hors ligne.", "Free, without an account and available offline."))
+                tr("Tes questions en haut. Mes conseils juste dessous.", "Your questions above. My advice just below."))
         }
         item {
             AppCardSurface {
-                StatusPill(tr("${topics.size} sujets · conseils et aide Selkie", "${topics.size} topics · advice and Selkie help"))
-                Text(tr("Pose une question sur tes habitudes ou sur Selkie : points, limites, défis, offres et confidentialité. Je choisis des réponses écrites à l’avance pour les sujets connus.", "Ask about your habits or about Selkie: points, limits, challenges, plans and privacy. I choose prepared answers for topics I know."),
+                SectionLabel(tr("Ta question", "Your question"))
+                OutlinedTextField(value = question, onValueChange = { question = it.take(800) },
+                    label = { Text(tr("Écris ta question", "Write your question")) },
+                    placeholder = { Text(tr("Comment arrêter de scroller le soir ?", "How can I stop scrolling in the evening?")) },
+                    minLines = 2, maxLines = 5, modifier = Modifier.fillMaxWidth(),
+                    supportingText = { Text("${question.length}/800") }, shape = RoundedCornerShape(14.dp),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+                    keyboardActions = KeyboardActions(onSend = { submit(question) }))
+                PrimaryAction(tr("Envoyer", "Send"), onClick = { submit(question) },
+                    modifier = Modifier.fillMaxWidth(), enabled = !saving && question.isNotBlank())
+                if (question.isNotBlank() || answer != null) TextButton(onClick = {
+                    question = ""; answeredQuestion = ""; answer = null
+                }) { Text(tr("Nouvelle question", "New question")) }
+            }
+        }
+        item {
+            AppCardSurface {
+                SectionLabel(tr("La réponse du coach", "The coach’s answer"))
+                if (visibleAnswer != null) {
+                    Text(visibleAnswer.text, color = MareePalette.Ink, fontSize = 16.sp, lineHeight = 24.sp)
+                    if (visibleAnswer.suggestions.isNotEmpty()) TopicButtons(visibleAnswer.suggestions, topics, !saving) {
+                        submit(it.label, it.id, returnToQuestion = true)
+                    }
+                } else {
+                    Text(if (answer != null) tr("Ta question a changé. Appuie sur Envoyer pour obtenir le conseil correspondant.",
+                        "Your question has changed. Tap Send to get advice for the new question.")
+                        else tr("Écris une question au-dessus, ou choisis un sujet pour commencer.",
+                            "Write a question above, or choose a topic to get started."),
+                        color = MareePalette.Muted, fontSize = 15.sp, lineHeight = 22.sp)
+                }
+                if (answer == null) {
+                    TopicButtons(listOf("tiktok", "sleep", "boredom", "points"), topics, !saving) {
+                        submit(it.label, it.id, returnToQuestion = true)
+                    }
+                }
+                Text(tr("Conseils écrits à l’avance · gratuits et hors ligne. Le coach ne peut pas répondre à toutes les questions nouvelles.",
+                    "Prepared advice · free and offline. The coach cannot answer every new question."),
+                    color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
+                if (!monitoringActive) Text(tr("Le suivi est en pause : les durées ne sont pas utilisées dans les conseils.",
+                    "Tracking is paused: recorded usage is not used in advice."),
+                    color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
+            }
+        }
+        item {
+            OutlinedButton(onClick = { showLibrary = !showLibrary }, modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(14.dp)) {
+                Text(if (showLibrary) tr("Masquer la bibliothèque", "Hide the library")
+                    else tr("Explorer ${preparedQuestions.size} questions et réponses", "Explore ${preparedQuestions.size} questions and answers"))
+            }
+        }
+        if (showLibrary) item {
+            AppCardSurface {
+                SectionLabel(tr("La bibliothèque du coach", "The coach library"))
+                Text(tr("Des situations concrètes pour trouver un conseil utile. Choisis une question : elle s’affichera en haut, avec sa réponse juste dessous.",
+                    "Real-life situations to find useful advice. Choose a question: it will appear above, with its answer just below."),
                     color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
-                if (!monitoringActive) Text(tr("Le suivi est en pause : les durées ne seront pas utilisées dans mes conseils.", "Tracking is paused: recorded usage will not be used in my advice."),
-                    color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 19.sp)
+                OutlinedTextField(value = libraryQuery, onValueChange = {
+                    libraryQuery = it.take(120); libraryPage = 0
+                }, label = { Text(tr("Rechercher une question", "Search questions")) }, singleLine = true,
+                    modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp))
+                Box {
+                    TextButton(onClick = { chooseLibrarySection = true }) {
+                        Text("${preparedSections.firstOrNull { it.id == librarySection }?.label ?: tr("Toutes les rubriques", "All sections")} ▾")
+                    }
+                    DropdownMenu(expanded = chooseLibrarySection,
+                        onDismissRequest = { chooseLibrarySection = false }) {
+                        DropdownMenuItem(text = { Text(tr("Toutes les rubriques", "All sections")) }, onClick = {
+                            librarySection = "all"; libraryPage = 0; chooseLibrarySection = false
+                        })
+                        preparedSections.forEach { section ->
+                            DropdownMenuItem(text = { Text(section.label) }, onClick = {
+                                librarySection = section.id; libraryPage = 0; chooseLibrarySection = false
+                            })
+                        }
+                    }
+                }
+                Text(tr("${libraryResults.size} questions trouvées", "${libraryResults.size} questions found"),
+                    color = MareePalette.Muted, fontSize = 13.sp)
+                if (visibleQuestions.isEmpty()) Text(tr("Aucune question pour cette recherche. Essaie un mot plus simple ou une autre rubrique.",
+                    "No questions found. Try a simpler word or another section."),
+                    color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
+                visibleQuestions.forEach { prepared ->
+                    OutlinedButton(onClick = {
+                        submit(prepared.question, preparedId = prepared.id, returnToQuestion = true)
+                    }, enabled = !saving, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp)) {
+                        Text(prepared.question, modifier = Modifier.fillMaxWidth(), lineHeight = 21.sp)
+                    }
+                }
+                if (lastPage > 0) Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    TextButton(onClick = {
+                        libraryPage = currentPage - 1
+                        scope.launch { scroll.animateScrollToItem(4) }
+                    }, enabled = currentPage > 0) {
+                        Text(tr("‹ Précédent", "‹ Previous"))
+                    }
+                    Text("${currentPage + 1} / ${lastPage + 1}", color = MareePalette.Muted, fontSize = 13.sp)
+                    TextButton(onClick = {
+                        libraryPage = currentPage + 1
+                        scope.launch { scroll.animateScrollToItem(4) }
+                    }, enabled = currentPage < lastPage) {
+                        Text(tr("Suivant ›", "Next ›"))
+                    }
+                }
             }
         }
         item {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                if (turns.isEmpty() && !showHelp) AppCardSurface {
-                    SectionLabel(tr("Un conseil pour ta journée", "A tip for your day"))
-                    TopicButtons(listOf("tiktok", "sleep", "boredom", "points"), topics, !saving) {
-                        submit(it.label, it.id)
-                    }
-                }
                 OutlinedButton(onClick = { showHelp = !showHelp }, modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(14.dp)) {
                     Text(if (showHelp) tr("Masquer l’aide Selkie", "Hide Selkie help") else tr("Comprendre Selkie · ${helpEntries.size} questions", "Understand Selkie · ${helpEntries.size} questions"))
                 }
                 if (showHelp) AppCardSurface {
                     SectionLabel(tr("L’aide de l’application", "App help"))
-                    Text(tr("Choisis une rubrique, puis une question. Tu peux aussi écrire directement dans la discussion.", "Choose a section, then a question. You can also type directly in the chat."),
+                    Text(tr("Choisis une rubrique, puis une question. La réponse s’affichera au-dessus. Tu peux aussi écrire dans le champ Ta question.", "Choose a section, then a question. Its answer will appear above. You can also type in the Your question field."),
                         color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
                     Box {
                         TextButton(onClick = { chooseHelpSection = true }) {
@@ -197,39 +306,20 @@ private fun OfflineCoachTab(
                     val entries = helpSections.entries.firstOrNull { it.key.name == helpSection }?.value
                         ?: helpSections.values.first()
                     TopicButtons(entries.map { it.topic.id }, topics, !saving) {
-                        submit(it.label, it.id)
+                        submit(it.label, it.id, returnToQuestion = true)
                         showHelp = false
                     }
                 }
             }
         }
-        items(turns, key = { it.id }) { turn ->
-            AppCardSurface(containerColor = if (turn.fromUser) MareePalette.Subtle else MareePalette.Surface) {
-                SectionLabel(if (turn.fromUser) tr("Toi", "You") else tr("Coach hors ligne", "Offline coach"))
-                Text(turn.text, color = MareePalette.Ink, fontSize = 16.sp, lineHeight = 24.sp)
-                if (turn.suggestions.isNotEmpty()) TopicButtons(turn.suggestions, topics, !saving) {
-                    submit(it.label, it.id)
-                }
-            }
-        }
         item {
-            AppCardSurface {
-                OutlinedTextField(value = question, onValueChange = { question = it.take(800) },
-                    label = { Text(tr("Ta question", "Your question")) }, placeholder = { Text(tr("Je passe trop de temps sur tiktoc…", "I spend too much time on tiktoc…")) },
-                    minLines = 2, maxLines = 5, modifier = Modifier.fillMaxWidth(),
-                    supportingText = { Text("${question.length}/800") }, shape = RoundedCornerShape(14.dp))
-                PrimaryAction(tr("Envoyer", "Send"), onClick = { submit(question) }, modifier = Modifier.fillMaxWidth(),
-                    enabled = !saving && question.isNotBlank())
-                Text(tr("Tes échanges restent en mémoire pendant l’ouverture de cet onglet. Aucun message n’est envoyé.", "Your conversation stays in memory while this tab is open. No messages are sent."),
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(tr("Ta question et sa réponse restent en mémoire pendant l’ouverture de cet onglet. Aucun message n’est envoyé.",
+                    "Your question and its answer stay in memory while this tab is open. No messages are sent."),
                     color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
-                if (turns.isNotEmpty()) TextButton(onClick = { turns = emptyList(); question = "" }) {
-                    Text(tr("Nouvelle conversation", "New conversation"))
+                TextButton(onClick = { showSettings = !showSettings }) {
+                    Text(if (showSettings) tr("Masquer mes choix de confidentialité", "Hide my privacy choices") else tr("Mes choix de confidentialité", "My privacy choices"))
                 }
-            }
-        }
-        item {
-            TextButton(onClick = { showSettings = !showSettings }) {
-                Text(if (showSettings) tr("Masquer mes choix de confidentialité", "Hide my privacy choices") else tr("Mes choix de confidentialité", "My privacy choices"))
             }
         }
         if (showSettings) item {

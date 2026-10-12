@@ -26,7 +26,7 @@ The local Coach chooses advice and answers about Selkie from a prepared catalogu
 
 Conversations stay in memory while the Coach tab is open. Saving messages the Coach did not understand is an option that is off by default. If you enable it, up to fifty distinct messages of no more than eight hundred characters each remain in the phone’s private storage. No message is automatically sent to the publisher. Messages recognised as sensitive or related to a crisis are not saved; this detection may be imperfect, so avoid entering private information.
 
-Your French/English language preference is also stored only on your device. Changing the language sends no data to a server.
+Your French/English language preference and Light, Night or Follow phone appearance choice are also stored only on your device. Changing language or appearance sends no data to a server.
 
 ## Why is data used, and on what basis?
 
@@ -60,7 +60,7 @@ The contact address uses Gmail. The controller must still check and specify emai
 
 Settings and progress remain on your device until you delete them from Selkie or uninstall it. Removing an app from tracking deletes its entry, limit and lock; points and challenge totals remain until a full data reset. Today’s usage durations are recalculated from Android events; Selkie does not keep a detailed usage history.
 
-Deleting data removes Selkie’s local data, including tracked apps, locks, points, the selected demonstration plan, personal challenges with their steps and dates, and saved unrecognised Coach messages and their saving preference. On your next use, progress starts again from the initial values. This action does not delete Android statistics or automatically revoke permissions granted in the phone’s settings. It also clears your language preference: Selkie returns to English if the phone’s language is English, and to French otherwise.
+Deleting data removes Selkie’s local data, including tracked apps, locks, points, the selected demonstration plan, personal challenges with their steps and dates, and saved unrecognised Coach messages and their saving preference. On your next use, progress starts again from the initial values. This action does not delete Android statistics or automatically revoke permissions granted in the phone’s settings. It also clears your language preference: Selkie returns to English if the phone’s language is English, and to French otherwise. Appearance returns to Light.
 
 Check-in dates for Selkie’s built-in challenges are deleted when the challenge cycle renews, every 21 days. The total number of completed challenges and points remain until a full data reset. Personal challenges and their dates remain until you delete them individually or reset all data; they are not reset when the cycle changes.
 
