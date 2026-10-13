@@ -43,6 +43,8 @@ En cas de différence entre Android et le serveur, le serveur renvoie `PROVIDER_
 
 Le quota Selkie de la bêta et le quota du fournisseur sont indépendants : 100 questions pour un compte Selkie non abonné, au plus une demande toutes les cinq secondes, contre les limites du fournisseur selon son compte et son modèle. Une longue conversation utilise davantage de tokens qu’une question courte. Les messages de connexion et Supabase ont leurs propres limites et coûts éventuels. Les boutons locaux de démonstration Premium/Ultra ne modifient aucun droit côté serveur.
 
+La capacité est aussi limitée globalement, avec des plafonds vérifiés du compte à configurer dans PostgreSQL. [Le guide de capacité](CAPACITE_COACH.md) décrit surveillance, calcul d’utilisateurs et protections. Aucun plafond global n’est deviné à partir du nombre de clients ou d’un modèle réputé gratuit.
+
 ## Informer avant tout envoi
 
 Vérifier que le consentement et les textes du build Android nomment Groq lorsque ce fournisseur est choisi, et renseigner les conditions réellement vérifiées avant activation. Le serveur transmet la question et au plus douze messages précédents ; il n’ajoute pas le bilan du téléphone, les points, les défis, l’e-mail, l’identifiant Supabase ou le jeton de session. Le texte saisi peut toutefois contenir des informations personnelles choisies par la personne.
@@ -52,11 +54,12 @@ L’adaptateur ne garantit pas une conservation nulle chez Groq. Ne pas transpos
 ## Vérifications locales et réelles
 
 ```sh
-node --test supabase/functions/coach/protocol.test.mjs supabase/functions/coach/provider.test.mjs
+node --test supabase/functions/coach/*.test.mjs
+python3 tools/test_coach_capacity.py
 tsc --noEmit --strict --target ES2022 --module ESNext --moduleResolution bundler \
-  --allowImportingTsExtensions supabase/functions/coach/protocol.ts supabase/functions/coach/provider.ts
+  --allowImportingTsExtensions supabase/functions/coach/handler.ts
 ```
 
-Les 14 tests locaux utilisent des secrets synthétiques, sans contacter un fournisseur. Ils vérifient le choix explicite, la concordance du header de consentement, l’absence de basculement par configuration, les URL fixes, les formats, les limites et les champs transmis. Ils ne prouvent pas que le modèle existe encore, que le compte offre un quota gratuit ou que les migrations sont déployées.
+Les 27 tests locaux utilisent des secrets synthétiques, sans contacter un fournisseur. Ils vérifient le choix explicite, la concordance du header de consentement, l’absence de basculement par configuration, les URL fixes, les formats, les limites et les champs transmis. Ils ne prouvent pas que le modèle existe encore, que le compte offre un quota gratuit ou que les migrations sont déployées.
 
 Après configuration et information de l’utilisateur, valider un dialogue réel en bêta fermée, le contexte d’une seconde question, l’épuisement du quota Selkie, les refus et erreurs du fournisseur, la restitution du crédit et la déconnexion. Ne présenter le service comme actif qu’après cette validation.

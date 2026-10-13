@@ -1,5 +1,12 @@
 # Selkie — application Android de réduction du temps d'écran
 
+## Préparation serveur du 13 octobre : capacité commune
+
+Le coach connecté dispose d’une admission globale PostgreSQL : demandes/minute et jour, tokens réservés, appels simultanés, cooldown fournisseur et indicateurs privés à 80/95 %. Les plafonds réels sont à renseigner avant activation ; aucun compte gratuit illimité n’est supposé. Le suivi local et le coach préparé ne consomment pas d’API. [Capacité et calcul d’utilisateurs](docs/CAPACITE_COACH.md).
+
+27 tests serveur et TypeScript strict passent ; la migration a été exercée sur PostgreSQL 16 isolé, dont deux séries de 80 réservations concurrentes. Aucun projet Supabase, migration distante, alerting externe ou service IA n’est déployé. L’APK 0.10.4 reste la référence Android ; les changements concernent la préparation du serveur, pas ses sources Android archivées.
+
+
 ## Version 0.10.4 — Coach par offre, animation claire et confidentialité
 
 **Menu ☰ → Confidentialité et données** regroupe désormais trois pages FR/EN : **Conditions d’utilisation**, **Abonnements et résiliation**, **Éditeur et mentions**. Elles restent accessibles avant les autorisations. L’export JSON met les réglages et la progression à ta disposition, sans phrases du coach ni jetons de connexion ; la copie exportée reste séparée des données de l’application. L’effacement confirme ses écritures et retire les alertes. Les contours, libellés et commandes accessibles sont améliorés ; une vérification complète sur téléphone reste nécessaire.

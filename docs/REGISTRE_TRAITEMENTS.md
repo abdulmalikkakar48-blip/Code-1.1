@@ -24,3 +24,7 @@ Aucune publicité, mesure d’audience, facturation ou IA distante active dans l
 6. Prévoir un processus d’incident : analyser toute exposition, documenter les décisions et obligations de notification applicables, et corriger rapidement. Aucun incident n’est constaté ou notification envoyée par ce document.
 
 Les droits dépendent de leurs conditions légales. Le contact CNIL est indiqué dans la politique. Les principes doivent être revalidés avec les textes officiels applicables avant commercialisation ; les sources web officielles n’ont pas pu être lues depuis le cloud à cette date.
+
+## Préparation de capacité du futur coach connecté
+
+La préparation serveur du 13 octobre 2026 ajoute baux et compteurs techniques globaux privés : scope fournisseur, dates, budget de tokens, usage rapporté et résultat. Ils ne contiennent ni message, e-mail, ID utilisateur ou jeton. Les indicateurs et codes de logs servent à protéger les ressources et détecter les erreurs. Aucun service n’est actif ici. Avant activation : préciser les bases/rôles, contrats, destinataires et conservation réellement appliqués. La purge des entrées de plus de 48 heures existe mais doit être programmée pour les périodes inactives ; l’admission seule ne suffit pas à garantir ce délai. Voir [CAPACITE_COACH.md](CAPACITE_COACH.md).

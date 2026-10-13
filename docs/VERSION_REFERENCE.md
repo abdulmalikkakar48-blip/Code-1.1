@@ -1,5 +1,10 @@
 # Selkie : version de travail retenue le 12 octobre 2026
 
+## Préparation serveur : limites communes
+
+La branche contient maintenant la migration `20261013_coach_capacity.sql`, admission globale, compteurs privés et tests de concurrence. Voir [le guide de capacité](CAPACITE_COACH.md). Les comptes et plafonds réels restent à configurer et aucun serveur n’est activé. Aucun changement Android : l’APK et son archive 0.10.4 restent ceux de leur commit exact documenté.
+
+
 ## Préparation serveur : candidat Llama 3.3 70B
 
 Groq propose désormais le candidat configurable `llama-3.3-70b-versatile` par défaut dans le code serveur ; le précédent modèle 8B reste un choix explicite. Aucune connexion ni gratuité illimitée n’est annoncée. Voir [l’option IA et ses vérifications nécessaires](IA_AVEC_QUOTA_GRATUIT.md). Aucun code Android n’a changé : l’APK 0.10.4 et son archive exacte restent ceux validés au commit source indiqué dans leur manifeste. Le code serveur actuel est celui de la branche ; les artefacts 0.10.4 conservent leur historique exact.
