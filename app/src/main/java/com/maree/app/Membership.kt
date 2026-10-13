@@ -22,7 +22,7 @@ enum class BillingPeriod {
 
 /** null représente l’absence de plafond commercial sur les applications compatibles. */
 enum class PlanType(val maxTrackedApps: Int?, val monthlyPriceEuros: Int) {
-    FREE(10, 0), PREMIUM(50, 10), ULTRA(null, 20);
+    FREE(10, 0), PREMIUM(50, 5), ULTRA(null, 10);
 
     val canCreateCustomChallenges: Boolean get() = this != FREE
     /** Size of the prepared library, not a monthly quota or a usage counter. */

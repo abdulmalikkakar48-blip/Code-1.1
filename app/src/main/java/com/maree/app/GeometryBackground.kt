@@ -100,10 +100,10 @@ internal fun SelkieGeometryBackground(modifier: Modifier = Modifier) {
     }
 }
 
-private const val LIGHT_SHAPE_COUNT = 48
+private const val LIGHT_SHAPE_COUNT = 96
 private const val LIGHT_TURN = 6.283185307179586
-// 30/255 < 0.12: even the darkest outline keeps small muted text above 4.5:1.
-private const val LIGHT_MAX_ALPHA = 30
+// Decoration stays in separate cells; text remains on opaque reading surfaces.
+private const val LIGHT_MAX_ALPHA = 100
 
 /**
  * A sparse, gently twinkling constellation for the light appearance.
@@ -113,8 +113,9 @@ private const val LIGHT_MAX_ALPHA = 30
 private class SelkieLightConstellation {
     private val paints = arrayOf(
         lightOutlinePaint(0xFF174D38.toInt()),
-        lightOutlinePaint(0xFF2A6688.toInt()),
-        lightOutlinePaint(0xFF477B61.toInt())
+        lightOutlinePaint(0xFF3158A0.toInt()),
+        lightOutlinePaint(0xFF8A3D91.toInt()),
+        lightOutlinePaint(0xFFAD591A.toInt())
     )
     private val path = Path()
     private val star = floatArrayOf(
@@ -163,8 +164,8 @@ private class SelkieLightConstellation {
                 // Two smooth brightening cycles per 12 seconds; never blink or disappear.
                 val shimmer = (0.5 + 0.5 * sin(time * 2.0 + offsets[index])).toFloat()
                 val paint = paints[index % paints.size]
-                paint.alpha = (16f + (LIGHT_MAX_ALPHA - 16f) * shimmer).roundToInt()
-                    .coerceIn(16, LIGHT_MAX_ALPHA)
+                paint.alpha = (60f + (LIGHT_MAX_ALPHA - 60f) * shimmer).roundToInt()
+                    .coerceIn(60, LIGHT_MAX_ALPHA)
                 val radius = radii[index] * (0.95f + 0.05f * shimmer)
                 when (index % 6) {
                     2 -> nativeCanvas.drawCircle(x, y, radius * 0.8f, paint)
@@ -198,13 +199,13 @@ private class SelkieLightConstellation {
         val rows = LIGHT_SHAPE_COUNT / columns
         val cellWidth = width / columns
         val cellHeight = height / rows
-        val strokeWidth = 0.95f * density
+        val strokeWidth = 1.25f * density
         paints.forEach { it.strokeWidth = strokeWidth }
         var index = 0
         while (index < LIGHT_SHAPE_COUNT) {
             val jitterX = (unit(index, 1) - 0.5f) * cellWidth * 0.05f
             val jitterY = (unit(index, 2) - 0.5f) * cellHeight * 0.08f
-            val preferredRadius = (3f + 4f * unit(index, 3)) * density
+            val preferredRadius = (4f + 4f * unit(index, 3)) * density
             val availableRadius = min(
                 cellWidth * 0.5f - kotlin.math.abs(jitterX),
                 cellHeight * 0.5f - kotlin.math.abs(jitterY)

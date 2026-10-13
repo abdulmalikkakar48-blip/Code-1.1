@@ -13,3 +13,7 @@ Avant la fiche Play : confirmer les droits des captures, l’origine des fichier
 ## Inventaire observé dans la version 0.10.4
 
 Le seul fichier image inclus dans les ressources examinées est `app/src/main/res/drawable-nodpi/brand_mark.png` (SHA-256 `45c62cf5b7c406e833543b4c7e61d12cff33dac465ea44537ffc72ad121f1fad`). Les icônes adaptatives et de navigation sont des ressources vectorielles. Aucun fichier de police TTF/OTF personnalisé n’est embarqué dans ces ressources. Cet inventaire identifie les actifs présents ; il ne prouve ni leur originalité ni la disponibilité du nom Selkie.
+
+## Complément 0.11.0
+
+57 coordonnées distinctes du classpath Android debug ont été inventoriées ; leurs POM déclarent Apache-2.0, directement ou via leur parent pour Guava ListenableFuture. L’inventaire et les empreintes des POM sont dans DEPENDANCES-0.11.0.json. Le texte Apache-2.0 est embarqué et consultable dans Confidentialité et données → Licences des bibliothèques. Source du texte : dépôt JetBrains/kotlin, tag v1.9.24, license/LICENSE.txt (HTTPS vérifié). Ce relevé du classpath debug n’est pas une liste certifiée des classes de l’APK release ; renouveler l’inventaire de distribution et vérifier les notices supplémentaires avant Play. Les droits du phoque et la disponibilité de la marque restent à confirmer.

@@ -1,4 +1,0 @@
-[functions.coach]
-# Le handler vérifie lui-même le JWT utilisateur avec auth.getUser.
-# Compatible avec les nouvelles clés publishable et les clés de signature Auth.
-verify_jwt = false

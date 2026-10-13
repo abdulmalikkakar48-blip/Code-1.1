@@ -46,9 +46,9 @@ internal data class SelkieThemeColors(
 
 internal val SelkieLightColors = SelkieThemeColors(
     background = 0xFFF2F4F0, surface = 0xFFFFFFFF, subtle = 0xFFEEF4EE,
-    ink = 0xFF10251E, muted = 0xFF52645A, primary = 0xFF174D38,
+    ink = 0xFF10251E, muted = 0xFF263E30, primary = 0xFF123F2D,
     onPrimary = 0xFFFFFFFF, strongInk = 0xFF102B22, softAccent = 0xFFC9F79B,
-    outline = 0xFFE4E9E1, danger = 0xFFA33939, onDanger = 0xFFFFFFFF,
+    outline = 0xFFE4E9E1, danger = 0xFF741919, onDanger = 0xFFFFFFFF,
     heroBackground = 0xFF102B22, onHero = 0xFFFFFFFF, onHeroMuted = 0xFFCBDBD0,
     heroAccent = 0xFFC9F79B, onHeroAccent = 0xFF102B22,
     navigationBackground = 0xFF102B22, navigationMuted = 0xFFAFBEB5

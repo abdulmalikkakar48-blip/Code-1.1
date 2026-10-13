@@ -149,7 +149,6 @@ private fun MembershipPlanCard(option: PlanType, selected: Boolean, period: Bill
             }
             if (option == PlanType.ULTRA) {
                 OfferFeature(tr("Recherche et tri du suivi", "Search and sort tracked apps"), tr("Par nom, temps passé ou proximité de la limite.", "By name, usage time or how close you are to the limit."))
-                OfferFeature(tr("Dialogue IA en ligne illimité", "Unlimited online AI chat"), tr("Prévu pour Ultra · service à activer séparément.", "Planned for Ultra · the service must be activated separately."))
             }
 
             when {

@@ -1,18 +1,18 @@
 # Télécharger l’APK sur Android
 
-Fichier actuel : **Selkie-Android-0.10.4.apk**, environ 26 Mo, dans la branche `maree-apk-download`.
+Fichier actuel : **Selkie-Android-0.11.0.apk**, environ 26 Mo, dans la branche `maree-apk-download`.
 
 Les liens directs ont affiché une erreur 404 sur le téléphone de l’éditeur. Un téléchargement réussi depuis le cloud, qui dispose d’un accès GitHub au dépôt, ne prouve pas que le lien est accessible publiquement dans un autre navigateur. Il ne faut pas annoncer les liens raw comme des téléchargements publics garantis.
 
 ## Essayer l’accès avec le compte du dépôt
 
 1. Ouvrir Chrome et se connecter à [GitHub](https://github.com/login) avec le compte propriétaire `abdulmalikkakar48-blip` ou un compte ayant accès au dépôt.
-2. Ouvrir [la page de l’APK](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.10.4.apk).
+2. Ouvrir [la page de l’APK](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.11.0.apk).
 3. Si la page est accessible, choisir **Download raw file** (icône de téléchargement) ou **View raw**, puis retrouver le fichier dans Téléchargements.
 
 Si la page affiche encore 404 après connexion au bon compte, l’accès ou l’adresse effective du dépôt doit être vérifié avant de proposer un autre lien. Ne pas recommander de désinstaller l’application pour résoudre une erreur de téléchargement.
 
-Les [sources 0.10.4](../downloads/Selkie-Android-0.10.4-source.zip) et [contrôles 0.10.4](../downloads/VALIDATION-0.10.4.md) correspondent au nouveau fichier. VersionCode 19 ; 117 tests unitaires passent. Lint : 0 erreur, 4 avertissements, 1 information. Cet APK de test hors ligne ne vend aucun abonnement.
+Les [sources 0.11.0](../downloads/Selkie-Android-0.11.0-source.zip) et [contrôles 0.11.0](../downloads/VALIDATION-0.11.0.md) correspondent au nouveau fichier. VersionCode 20 ; 107 tests unitaires passent. Lint : 0 erreur, 4 avertissements, 1 information. Cet APK de test hors ligne ne vend aucun abonnement.
 
 ## Distribution sans connexion
 

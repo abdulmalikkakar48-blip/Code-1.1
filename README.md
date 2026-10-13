@@ -1,11 +1,22 @@
 # Selkie — application Android de réduction du temps d'écran
 
-## Préparation serveur du 13 octobre : capacité commune
+## Version actuelle 0.11.0 — Coach local et offres simplifiées
 
-Le coach connecté dispose d’une admission globale PostgreSQL : demandes/minute et jour, tokens réservés, appels simultanés, cooldown fournisseur et indicateurs privés à 80/95 %. Les plafonds réels sont à renseigner avant activation ; aucun compte gratuit illimité n’est supposé. Le suivi local et le coach préparé ne consomment pas d’API. [Capacité et calcul d’utilisateurs](docs/CAPACITE_COACH.md).
+Le dialogue IA, le client de connexion et la préparation serveur ont été retirés. Aucun fournisseur, compte de coach ou permission Internet ne peut être activé par des options de compilation. Le coach à réponses préparées reste disponible sans compte et sans frais par question.
 
-27 tests serveur et TypeScript strict passent ; la migration a été exercée sur PostgreSQL 16 isolé, dont deux séries de 80 réservations concurrentes. Aucun projet Supabase, migration distante, alerting externe ou service IA n’est déployé. L’APK 0.10.4 reste la référence Android ; les changements concernent la préparation du serveur, pas ses sources Android archivées.
+| Offre | Questions/réponses par langue | Applications suivies | Prix proposés |
+| --- | ---: | --- | --- |
+| Gratuit | 1 152 | 10 | 0 € |
+| Premium | 23 040 | 50 | 5 €/mois ou 60 €/an |
+| Ultra | 50 688 | Toutes les applications compatibles | 10 €/mois ou 120 €/an |
 
+Les contenus combinent 48 situations, 24 intentions et des contextes pratiques rédigés en français/anglais ; ce ne sont pas 50 688 textes indépendants. Les offres restent des démonstrations gratuites, sans facturation. Les défis personnalisés et les règles de points sont conservés. Le fond Clair contient 96 formes multicolores plus visibles à luminosité variable ; Nuit ajoute ondulations croisées et rides circulaires. Les animations s’arrêtent selon le système et hors activité.
+
+La politique locale et ses pages statiques ont été simplifiées. Les licences sont accessibles dans Confidentialité et données. Voir [les tâches de publication restantes](TACHES_RESTANTES.md), [le bilan des 19 points](docs/BILAN_CONFORMITE_FRANCE.md) et [le Coach](docs/COACH_HORS_LIGNE.md). L’identité publique, le public, la facturation et la publication sont à finaliser ; aucune certification juridique ou publication Play n’est annoncée.
+
+[APK 0.11.0 sur GitHub](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.11.0.apk) · [Sources exactes](downloads/Selkie-Android-0.11.0-source.zip) · [Validation](downloads/VALIDATION-0.11.0.md).
+
+## Historique — les versions ci-dessous ont leurs anciens prix et fonctions
 
 ## Version 0.10.4 — Coach par offre, animation claire et confidentialité
 

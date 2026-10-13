@@ -5,8 +5,8 @@ Les tarifs sans réduction fixés en 0.9.3 sont conservés. Les offres sont acce
 | Offre | Mensuel prévu | Annuel prévu, payé en une fois | Applications compatibles |
 | --- | --- | --- | --- |
 | Gratuit | 0 € | 0 € | 10 |
-| Premium | 10 € | 120 € | 50 |
-| Ultra | 20 € | 240 € | Sans plafond commercial |
+| Premium | 5 € | 60 € | 50 |
+| Ultra | 10 € | 120 € | Sans plafond commercial |
 
 L’année coûte douze mensualités, sans réduction. Les fonctions d’une offre sont les mêmes pour les deux durées. Les restrictions à zéro point restent identiques pour tous. Les prix doivent être définis et confirmés dans Google Play avant activation ; l’écran de confirmation Google Play sera la référence au moment de l’achat.
 
@@ -32,7 +32,7 @@ Google Play peut gérer un abonnement sans inscription à un compte propre à Se
 
 Choix demandé : **un seul téléphone connecté à la fois**, avec changement d’appareil possible. Une nouvelle connexion remplacerait la précédente. Cette règle ne doit pas condamner un utilisateur qui perd ou remplace son téléphone.
 
-Cette version ne propose pas encore ce compte : aucun serveur de comptes Selkie n’est déployé ou configuré. La connexion par code e-mail déjà préparée pour le dialogue IA distant n’est pas un système de restauration des abonnements, et les boutons de démonstration ne créent aucun droit serveur.
+Cette version ne propose pas encore ce compte : aucun serveur de comptes Selkie n’est déployé ou configuré. Le coach est entièrement local. Les boutons de démonstration ne créent aucun droit serveur.
 
 ## Ce qu’il faut réellement activer
 

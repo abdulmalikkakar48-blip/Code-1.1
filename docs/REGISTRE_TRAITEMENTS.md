@@ -1,6 +1,6 @@
 # Selkie — registre de travail des traitements et procédure de droits
 
-Base de travail du 12 octobre 2026 pour la version locale de test 0.10.4. Responsable actuellement déclaré : Abdul Malik Kakar ; contact 1kabdm@gmail.com. Responsable de la diffusion publique : non choisi. Le registre doit être confirmé et tenu à jour par le véritable responsable ; il n’atteste pas de sa conformité ou de démarches déjà exécutées dans Gmail.
+Base de travail du 13 octobre 2026 pour la version locale de test 0.11.0. Responsable actuellement déclaré : Abdul Malik Kakar ; contact 1kabdm@gmail.com. Responsable de la diffusion publique : non choisi. Le registre doit être confirmé et tenu à jour par le véritable responsable ; il n’atteste pas de sa conformité ou de démarches déjà exécutées dans Gmail.
 
 | Traitement | Données et finalité | Base de travail retenue | Destinataires et conservation | Mesures identifiées |
 | --- | --- | --- | --- | --- |
@@ -25,6 +25,4 @@ Aucune publicité, mesure d’audience, facturation ou IA distante active dans l
 
 Les droits dépendent de leurs conditions légales. Le contact CNIL est indiqué dans la politique. Les principes doivent être revalidés avec les textes officiels applicables avant commercialisation ; les sources web officielles n’ont pas pu être lues depuis le cloud à cette date.
 
-## Préparation de capacité du futur coach connecté
-
-La préparation serveur du 13 octobre 2026 ajoute baux et compteurs techniques globaux privés : scope fournisseur, dates, budget de tokens, usage rapporté et résultat. Ils ne contiennent ni message, e-mail, ID utilisateur ou jeton. Les indicateurs et codes de logs servent à protéger les ressources et détecter les erreurs. Aucun service n’est actif ici. Avant activation : préciser les bases/rôles, contrats, destinataires et conservation réellement appliqués. La purge des entrées de plus de 48 heures existe mais doit être programmée pour les périodes inactives ; l’admission seule ne suffit pas à garantir ce délai. Voir [CAPACITE_COACH.md](CAPACITE_COACH.md).
+Le dialogue IA et sa préparation serveur ont été retirés. Aucun compteur de capacité serveur ni envoi de questions n’est utilisé par cette version.

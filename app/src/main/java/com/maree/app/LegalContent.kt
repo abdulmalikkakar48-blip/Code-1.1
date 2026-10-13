@@ -4,13 +4,14 @@ package com.maree.app
 internal enum class LegalDocument(private val frenchTitle: String, private val englishTitle: String) {
     TERMS("Conditions d’utilisation", "Terms of use"),
     SUBSCRIPTIONS("Abonnements et résiliation", "Subscriptions and cancellation"),
-    PUBLISHER("Éditeur et mentions", "Publisher information");
+    PUBLISHER("Éditeur et mentions", "Publisher information"),
+    LICENSES("Licences des bibliothèques", "Library licences");
 
     val title: String get() = tr(frenchTitle, englishTitle)
 }
 
 internal object LegalContent {
-    val updatedOn: String get() = tr("12 octobre 2026", "12 October 2026")
+    val updatedOn: String get() = tr("13 octobre 2026", "13 October 2026")
 
     fun introduction(document: LegalDocument): String = when (document) {
         LegalDocument.TERMS -> tr(
@@ -21,6 +22,7 @@ internal object LegalContent {
             "Les offres sont actuellement des démonstrations gratuites. Voici les tarifs envisagés et les informations à connaître avant un éventuel achat futur.",
             "Plans are currently free demonstrations. Here are the proposed prices and information to know before any possible future purchase."
         )
+        LegalDocument.LICENSES -> tr("Bibliothèques utilisées et texte de leur licence.", "Libraries used and their licence text.")
         LegalDocument.PUBLISHER -> tr(
             "Le contact actuel de Selkie et l’état de préparation de sa future diffusion publique.",
             "Selkie’s current contact and the status of its future public release."
@@ -31,6 +33,7 @@ internal object LegalContent {
         LegalDocument.TERMS -> terms()
         LegalDocument.SUBSCRIPTIONS -> subscriptions()
         LegalDocument.PUBLISHER -> publisher()
+        LegalDocument.LICENSES -> ThirdPartyNotices.sections()
     }
 
     private fun terms() = listOf(

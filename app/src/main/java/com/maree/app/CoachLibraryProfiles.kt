@@ -542,7 +542,7 @@ internal val coachLibraryScenarios: List<CoachLibraryScenario> = listOf(
         barrier = profileText("Le matériel absent peut faire croire que seul l'écran reste possible. Chercher un achat ou tout préparer risque d'ajouter une nouvelle tâche au lieu d'offrir une pause.", "Missing equipment can make it seem that only the screen remains possible. Seeking a purchase or preparing everything can add a new task instead of offering a break."),
         goal = profileText("Fais une pause choisie avec ce qui existe déjà, même sans produire ni terminer l'activité prévue. Garde l'activité équipée pour un moment où ses ressources seront déjà disponibles.", "Take a chosen break with what already exists, even without producing or finishing the planned activity. Save the equipped activity for a time when its resources are already available.")
     )
-)
+) + extendedCoachLibraryScenarios
 
 /**
  * The present exercise follows the constraint. An incompatible original exercise is a later
@@ -625,7 +625,10 @@ private fun constrainedLibraryAction(base: CoachLibraryProfile, scenario: CoachL
                 "For ${base.label.en}, keep the first step as a mental decision: choose what would help with resources already present. If the activity cannot start without equipment, postpone it and keep a break without new content."
             )
         }
-        else -> error("Unknown prepared-coach scenario: ${scenario.id}")
+        else -> profileText(
+            "Pour ${base.label.fr}, applique ce choix au contenu facultatif : ${scenario.smallAction.fr} Si le moment ne convient pas, reporte cet essai. Ne retarde pas un usage nécessaire.",
+            "For ${base.label.en}, apply this choice to optional content: ${scenario.smallAction.en} If the moment does not suit it, postpone this attempt. Do not delay necessary use."
+        )
     }
 }
 
@@ -640,7 +643,7 @@ private fun constrainedLibraryDirection(base: CoachLibraryProfile, scenario: Coa
         "low_energy" -> profileText("plus tard, si l'effort te convient ; le repos choisi suffit aujourd'hui", "later, if the effort suits you; chosen rest is enough today")
         "caring_for_someone" -> profileText("plus tard, seulement quand les besoins et la supervision de la personne restent couverts", "later, only when the person's needs and supervision remain covered")
         "no_equipment" -> profileText("plus tard si le matériel est déjà disponible, sans achat requis ; la pause actuelle peut rester sans matériel", "later if equipment is already available, with no purchase required; the present break can stay equipment-free")
-        else -> error("Unknown prepared-coach scenario: ${scenario.id}")
+        else -> profileText("quand ce moment et tes obligations le permettent", "when this moment and your responsibilities allow it")
     }
     return profileText(
         "Pour ${base.label.fr}, la direction d'origine reste une option ${condition.fr} : « ${base.goal.fr} » Ce n'est pas une obligation pour l'essai actuel.",

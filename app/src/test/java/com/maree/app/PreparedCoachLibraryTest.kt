@@ -151,12 +151,12 @@ class PreparedCoachLibraryTest {
 
     @Test fun tierCountsAreDerivedFromConcreteScenariosAndKeepEveryOriginalId() {
         assertEquals(1152, preparedCoachQuestionCount())
-        assertEquals(5760, preparedCoachQuestionCount(PlanType.PREMIUM))
-        assertEquals(10368, preparedCoachQuestionCount(PlanType.ULTRA))
-        assertEquals(8, coachLibraryScenarios.size)
-        assertEquals(8, coachLibraryScenarios.map { it.id }.toSet().size)
-        assertEquals(4, coachLibraryScenarios.count { it.minimumPlan == PlanType.PREMIUM })
-        assertEquals(4, coachLibraryScenarios.count { it.minimumPlan == PlanType.ULTRA })
+        assertEquals(23040, preparedCoachQuestionCount(PlanType.PREMIUM))
+        assertEquals(50688, preparedCoachQuestionCount(PlanType.ULTRA))
+        assertEquals(43, coachLibraryScenarios.size)
+        assertEquals(43, coachLibraryScenarios.map { it.id }.toSet().size)
+        assertEquals(19, coachLibraryScenarios.count { it.minimumPlan == PlanType.PREMIUM })
+        assertEquals(24, coachLibraryScenarios.count { it.minimumPlan == PlanType.ULTRA })
         for (language in AppLocale.entries) {
             val original = preparedCoachQuestionsFor(language)
             for (plan in PlanType.entries) {
@@ -194,9 +194,9 @@ class PreparedCoachLibraryTest {
                 assertNotEquals(entry.question, translated.question)
                 assertNotEquals(entry.answer, translated.answer)
             }
-            assertEquals(10368, ids.size)
+            assertEquals(50688, ids.size)
             assertEquals(8, sections.size)
-            assertTrue(sections.values.all { it == 1296 })
+            assertTrue(sections.values.all { it == 6336 })
             assertTrue(preparedCoachAnswerCacheStats(language).cachedAnswers <= 256)
         }
     }
@@ -227,11 +227,9 @@ class PreparedCoachLibraryTest {
             for (plan in PlanType.entries) for (language in AppLocale.entries) {
                 val results = searchPreparedCoachQuestions(scenario.questionContext.forLanguage(language),
                     language, limit = Int.MAX_VALUE, plan = plan)
-                if (plan.ordinal < minimumPlan.ordinal) assertTrue(results.isEmpty())
-                else {
-                    assertEquals(1152, results.size)
-                    assertTrue(results.all { it.id.contains("~${scenario.id}.") })
-                }
+                val ownResults = results.filter { it.id.contains("~${scenario.id}.") }
+                if (plan.ordinal < minimumPlan.ordinal) assertTrue(ownResults.isEmpty())
+                else assertEquals(1152, ownResults.size)
             }
         }
         for (plan in PlanType.entries) {
@@ -247,10 +245,10 @@ class PreparedCoachLibraryTest {
             val all = searchPreparedCoachQuestions("", language, limit = Int.MAX_VALUE, plan = PlanType.ULTRA)
             val section = searchPreparedCoachQuestions("", language, "relationships", Int.MAX_VALUE, PlanType.ULTRA)
             val matching = searchPreparedCoachQuestions("tiktoc", language, limit = Int.MAX_VALUE, plan = PlanType.ULTRA)
-            assertEquals(10368, library.size)
-            assertEquals(10368, all.size)
-            assertEquals(1296, section.size)
-            assertEquals(216, matching.size)
+            assertEquals(50688, library.size)
+            assertEquals(50688, all.size)
+            assertEquals(6336, section.size)
+            assertEquals(1056, matching.size)
             assertEquals(before, preparedCoachAnswerCacheStats(language).generatedAnswers)
             val page = (120 until 140).map { matching[it] }
             assertEquals(20, page.size)

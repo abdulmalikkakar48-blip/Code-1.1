@@ -1,6 +1,6 @@
-# Confidentialité de Selkie — version de test 0.10.4
+# Confidentialité de Selkie — version de test 0.11.0
 
-Information mise à jour le **12 octobre 2026**. Elle décrit le suivi et le Coach locaux. Les comptes, les paiements et le dialogue IA distant ne sont pas activés.
+Information mise à jour le **13 octobre 2026**. Elle décrit le suivi et le Coach locaux. Les comptes et les paiements ne sont pas activés. Le dialogue IA a été retiré.
 
 Selkie t’aide à réduire ton temps d’écran. Dans cette version de test gratuite, tes données de suivi restent sur ton appareil et le suivi ne demande pas de compte. Le Coach local utilise des conseils préparés, sans compte ni envoi sur Internet. Tu peux lire cette information sans autoriser le suivi.
 
@@ -92,17 +92,10 @@ Les blocages et les points sont des aides personnelles au temps d’écran : ils
 
 Les demandes relatives à tes droits reçoivent en principe une réponse dans un délai d’un mois à compter de leur réception. En cas de complexité ou de demandes nombreuses, ce délai peut être prolongé de deux mois ; tu dois alors être informé du motif pendant le premier mois. N’envoie pas spontanément de pièce d’identité : une vérification proportionnée peut être demandée seulement en cas de doute raisonnable concernant l’identité du demandeur.
 
-## Un éventuel Coach IA en ligne
-
-Un dialogue IA avec Supabase et un fournisseur à choisir (OpenAI ou Groq) est préparé dans le code, mais il est distinct du Coach local et n’est pas activé. S’il est proposé à l’avenir, une information et un accord précéderont la connexion par e-mail et les envois. Il utilisera l’adresse e-mail, le compte, les jetons de session et un compteur de questions.
-
-Ce service transmettrait la question et au plus douze messages précédents à Supabase, puis au fournisseur IA configuré pour la réponse, sans joindre automatiquement les applications suivies, points ou défis. La route OpenAI demande de ne pas stocker les réponses via son API ; cela ne garantit pas l’absence de conservation technique et ne décrit pas les pratiques d’un autre fournisseur. Celles-ci devront être précisées avant activation. Les échanges resteraient en mémoire dans l’application ; les jetons de session seraient conservés localement jusqu’à une déconnexion ou un effacement. Ces actions ne supprimeraient pas le compte ni le quota serveur : leur suppression pourrait être demandée au responsable.
-
-Les bases juridiques, la région du projet, les contrats, les durées de conservation et les éventuels transferts hors EEE devront être précisés avant son ouverture. Une compilation connectée devrait déclarer la permission Internet ; cette permission seule ne prouverait pas qu’un service IA est actif.
 
 ## Si Selkie évolue
 
-L’ouverture publique du coach, une synchronisation, une publicité ou un paiement nécessiterait une nouvelle analyse et une information mise à jour avant activation. Cette politique décrit seulement les fonctions de la version actuelle et distingue le Coach local d’une éventuelle connexion future.
+Une synchronisation, une publicité ou un paiement nécessiterait une nouvelle analyse et une information mise à jour avant activation. Cette politique décrit seulement les fonctions de la version actuelle.
 
 ## Offres de démonstration et informations à finaliser
 
@@ -112,7 +105,7 @@ Cette politique et les fonctions de contrôle constituent une base de travail. E
 
 ## Repères officiels à vérifier avant diffusion
 
-Les références ci-dessous sont fournies comme repères ; leur contenu actuel et leurs URL n’ont pas été vérifiés en ligne pour cette rédaction du 12 octobre 2026. Leurs conditions applicables doivent être actualisées avant diffusion publique.
+Les références ci-dessous sont fournies comme repères ; leur contenu actuel et leurs URL n’ont pas été vérifiés en ligne pour cette rédaction du 13 octobre 2026. Leurs conditions applicables doivent être actualisées avant diffusion publique.
 
 - [RGPD / GDPR — règlement (UE) 2016/679](https://eur-lex.europa.eu/eli/reg/2016/679/oj)
 - [CNIL](https://www.cnil.fr/)

@@ -43,7 +43,7 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.DISCOVER, "coach_help", "Comment fonctionne le Coach ?",
         listOf("coach", "coach ia", "ia", "chatgpt", "intelligence artificielle", "comment fonctionne le coach", "coach gratuit", "coach hors ligne", "reponses preparees"),
         "Écris ta question dans Coach ou choisis un sujet de l’aide. Ce coach reconnaît des mots et expressions pour proposer des conseils préparés et expliquer Selkie. " +
-            "La saisie standard et l’aide fonctionnent gratuitement sur ton téléphone, sans compte ni Internet. La bibliothèque propose ${PlanType.FREE.coachQuestionCount} questions préparées en Gratuit, ${PlanType.PREMIUM.coachQuestionCount} en Premium et ${PlanType.ULTRA.coachQuestionCount} en Ultra. Ce coach ne comprend pas toutes les questions et ce n’est pas ChatGPT. Un dialogue IA en ligne reste un service distinct, non activé."
+            "La saisie standard et l’aide fonctionnent gratuitement sur ton téléphone, sans compte ni Internet. La bibliothèque propose ${PlanType.FREE.coachQuestionCount} questions préparées en Gratuit, ${PlanType.PREMIUM.coachQuestionCount} en Premium et ${PlanType.ULTRA.coachQuestionCount} en Ultra. Ce coach ne comprend pas toutes les questions et ce n’est pas ChatGPT."
     ),
     help(
         SelkieHelpSection.DISCOVER, "coach_unknown", "Si le Coach ne comprend pas ?",
@@ -184,7 +184,7 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.OFFERS, "ultra", "Que contient Ultra ?",
         listOf("ultra", "ultra premium", "prix ultra", "applications illimitees", "sans plafond", "tri du suivi", "recherche du suivi", "coach illimite"),
         "Ultra est prévu à ${PlanType.ULTRA.monthlyPriceEuros} €/mois ou ${PlanType.ULTRA.annualPriceEuros} €/an : pas de plafond commercial sur les applications compatibles, " +
-            "défis personnalisés, recherche et tri du suivi, et ${PlanType.ULTRA.coachQuestionCount} questions/réponses préparées dans le Coach. Un dialogue IA en ligne illimité est envisagé mais n’est pas activé ; le Coach local fonctionne déjà. " +
+            "défis personnalisés, recherche et tri du suivi, et ${PlanType.ULTRA.coachQuestionCount} questions/réponses préparées dans le Coach. " +
             "Aucun paiement n’est possible dans cette version de test, et Ultra ne contourne pas les règles de points."
     ),
     help(

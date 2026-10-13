@@ -1,13 +1,12 @@
-# Selkie : version de travail retenue le 12 octobre 2026
+# Selkie : version de travail retenue le 13 octobre 2026
 
-## Préparation serveur : limites communes
+## Version actuelle 0.11.0
 
-La branche contient maintenant la migration `20261013_coach_capacity.sql`, admission globale, compteurs privés et tests de concurrence. Voir [le guide de capacité](CAPACITE_COACH.md). Les comptes et plafonds réels restent à configurer et aucun serveur n’est activé. Aucun changement Android : l’APK et son archive 0.10.4 restent ceux de leur commit exact documenté.
+Le coach distant et sa préparation serveur ont été retirés, à la demande de l’éditeur. Coach local : 1 152 / 23 040 / 50 688 questions-réponses par langue, contenus combinés explicitement décrits. Premium : 5 €/mois ou 60 €/an. Ultra : 10 €/mois ou 120 €/an. Aucune réduction, aucun paiement réel. 96 formes claires multicolores, contraste renforcé, ondulations nocturnes supplémentaires et licences consultables. VersionCode 20 ; même certificat de développement que 0.10.4. Les décisions de lancement restent dans TACHES_RESTANTES.md.
 
+[APK](../downloads/Selkie-Android-0.11.0.apk), [sources](../downloads/Selkie-Android-0.11.0-source.zip), [validation](../downloads/VALIDATION-0.11.0.md).
 
-## Préparation serveur : candidat Llama 3.3 70B
-
-Groq propose désormais le candidat configurable `llama-3.3-70b-versatile` par défaut dans le code serveur ; le précédent modèle 8B reste un choix explicite. Aucune connexion ni gratuité illimitée n’est annoncée. Voir [l’option IA et ses vérifications nécessaires](IA_AVEC_QUOTA_GRATUIT.md). Aucun code Android n’a changé : l’APK 0.10.4 et son archive exacte restent ceux validés au commit source indiqué dans leur manifeste. Le code serveur actuel est celui de la branche ; les artefacts 0.10.4 conservent leur historique exact.
+## Historique (anciens tarifs et anciennes préparations)
 
 ## Version de travail 0.10.4
 

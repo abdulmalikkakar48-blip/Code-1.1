@@ -135,6 +135,8 @@ fun appLabel(context: android.content.Context, pkg: String): String = try {
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Retired online coach: remove any legacy session credentials on upgrade.
+        deleteSharedPreferences("selkie_coach_session")
         setContent { MareeTheme { MareeApp() } }
     }
 
@@ -559,7 +561,7 @@ private fun MareeApp() {
                     val cleared = withContext(Dispatchers.IO) {
                         val onboarding = setup.reset()
                         val local = store.clearPersonalData()
-                        val coach = try { CoachSessionStore(context).clear(); true } catch (_: CoachError) { false }
+                        val coach = context.deleteSharedPreferences("selkie_coach_session")
                         val offlineCoach = OfflineCoachHistory(context).clear()
                         val language = AppLanguage.reset(context)
                         val appearance = AppAppearance.reset(context)

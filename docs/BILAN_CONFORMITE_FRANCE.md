@@ -1,14 +1,14 @@
-# Selkie 0.10.4 — bilan des 19 points de la capture
+# Selkie 0.11.0 — bilan des 19 points de la capture
 
-Bilan technique et documentaire du 12 octobre 2026. Périmètre : APK de test gratuit, natif Android, suivi et coach locaux, aucune vente ni compte serveur actif. L’éditeur de la future version publique n’a pas encore été choisi. Ce document ne certifie pas la conformité du service ni l’absence de sanction.
+Bilan technique et documentaire du 13 octobre 2026. Périmètre : APK de test gratuit, natif Android, suivi et coach locaux, aucune vente ni compte serveur actif. L’éditeur de la future version publique n’a pas encore été choisi. Ce document ne certifie pas la conformité du service ni l’absence de sanction.
 
 La capture est une liste de contrôle générale. Elle ne constitue pas une source de droit et ses 19 points ne sont pas 19 obligations identiques pour chaque application française. Les règles dépendent des traitements, du public, du statut de l’éditeur, du service et de la présence réelle de ventes. Une application gratuite n’est pas automatiquement exemptée des règles sur les données, les pratiques trompeuses ou les droits d’auteur.
 
-La préparation serveur a été réexaminée après le choix d’un candidat Llama 3.3 70B via Groq. Ce changement n’active aucune IA et ne transmet aucune donnée : le compte, la clé et le serveur restent non configurés. Le périmètre de l’APK local 0.10.4 et le décompte ci-dessous restent identiques. Les conditions des fournisseurs et les textes officiels actuels restent à vérifier ; ce bilan n’est pas une validation d’une future version connectée.
+Le dialogue IA et sa préparation serveur ont été retirés. La bibliothèque préparée locale est agrandie, les animations sont renforcées avec vérification de contraste et les licences Apache-2.0 des bibliothèques relevées sont consultables. Aucun paiement, compte serveur ou traceur ne fonctionne dans cette version. L’inventaire des licences avance le point 9, mais ne vérifie pas la marque ni les droits du logo. Les essais limités d’émulateur ne remplacent pas les essais Samsung/TalkBack complets.
 
 ## Résultat pour le prototype corrigé
 
-**9 points en place, 6 à compléter ou valider, 4 hors du périmètre actuel.** « En place » signifie un élément ou contrôle identifié dans cette version, avec les limites précisées ci-dessous ; cela ne certifie pas tous les écrans ou une publication commerciale. Les résultats de compilation et les tests effectués sont dans [la validation de cette version](../downloads/VALIDATION-0.10.4.md).
+**9 points en place, 6 à compléter ou valider, 4 hors du périmètre actuel.** « En place » signifie un élément ou contrôle identifié dans cette version, avec les limites précisées ci-dessous ; cela ne certifie pas tous les écrans ou une publication commerciale. Les résultats de compilation et les tests effectués sont dans [la validation de cette version](../downloads/VALIDATION-0.11.0.md).
 
 | Nº | Point de la capture | État | Preuve, portée et suite |
 | --- | --- | --- | --- |
@@ -42,7 +42,7 @@ Avant ces corrections, plusieurs éléments ci-dessus existaient déjà (suivi e
 4. Vérifier les actifs, le nom/logo et les licences, puis tester l’accessibilité réelle. Les obligations légales d’accessibilité ont un périmètre précis, notamment selon le service et le statut ; elles ne se résument pas à une règle identique pour chaque APK.
 5. Héberger publiquement la politique finalisée, compléter les déclarations Play et les exigences techniques actuelles, puis finaliser la vraie facturation. Avant vente : prix et taxes applicables, renouvellement, résiliation accessible, rétractation et ses exceptions exactes, garanties légales, réclamations, médiation et CGV adaptées. Ne pas vendre tant que ces parcours ne sont pas opérationnels.
 
-Les comptes, paiements et IA distante sont préparés ou envisagés mais non activés. Les données et obligations de ces futurs services devront faire l’objet d’une nouvelle analyse ; ce bilan ne les valide pas.
+Les comptes et paiements restent envisagés mais non activés. Le dialogue IA a été retiré. Les données et obligations de ces futurs services devront faire l’objet d’une nouvelle analyse ; ce bilan ne les valide pas.
 
 ## Sources officielles à contrôler
 

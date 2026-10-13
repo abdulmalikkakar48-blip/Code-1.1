@@ -1,6 +1,6 @@
-# Selkie privacy policy — test version 0.10.4
+# Selkie privacy policy — test version 0.11.0
 
-Information updated on **12 October 2026**. This policy describes local tracking and the local Coach. Accounts, payments and remote AI dialogue are not enabled.
+Information updated on **13 October 2026**. This policy describes local tracking and the local Coach. Accounts, payments and remote AI dialogue are not enabled.
 
 Selkie helps you reduce your screen time. In this free test version, tracking data stays on your device and tracking does not require an account. The local Coach uses prepared advice, without an account or sending data over the Internet. You can read this information without granting tracking access.
 
@@ -92,17 +92,10 @@ Blocking and points are personal screen-time aids: they are not decisions produc
 
 Requests about your rights normally receive a response within one month of receipt. Complex or numerous requests may require a two-month extension; you must be told the reason during the first month. Do not send identity documents unsolicited: proportionate verification may be requested only where there is reasonable doubt about the requester’s identity.
 
-## A possible future online AI Coach
-
-AI dialogue using Supabase and a provider to be chosen (OpenAI or Groq) is prepared in the code, but is separate from the local Coach and is not enabled. If offered in the future, information and agreement will come before email sign-in and sending messages. It would use your email address, account, session tokens and a question counter.
-
-This service would send your question and up to twelve previous messages to Supabase, then to the configured AI provider for a response, without automatically attaching tracked apps, points or challenges. The OpenAI route asks its API not to store responses; this does not guarantee no technical retention or describe another provider’s practices. Those practices must be specified before activation. Conversations would stay in the app’s memory; session tokens would be kept locally until you sign out or delete data. These actions would not delete the account or server quota: their deletion could be requested from the controller.
-
-Legal bases, the project region, contracts, retention periods and any transfers outside the EEA must be specified before this service opens. An online build would need Internet permission; that permission alone would not establish that an AI service is active.
 
 ## If Selkie changes
 
-Publicly opening the online coach, synchronisation, advertising or payments would require a new assessment and updated information before activation. This policy describes only the features of the current version and distinguishes the local Coach from a possible future connection.
+Synchronisation, advertising or payments would require a new assessment and updated information before activation. This policy describes only the features of the current version.
 
 ## Demonstration plans and information to finalise
 
@@ -112,7 +105,7 @@ This policy and the control features are a working basis. They are not a compreh
 
 ## Official references to check before release
 
-The following references are provided for orientation; their current content and URLs were not checked online for this text dated 12 October 2026. Applicable requirements must be reviewed before public release.
+The following references are provided for orientation; their current content and URLs were not checked online for this text dated 13 October 2026. Applicable requirements must be reviewed before public release.
 
 - [RGPD / GDPR — règlement (UE) 2016/679](https://eur-lex.europa.eu/eli/reg/2016/679/oj)
 - [CNIL](https://www.cnil.fr/)

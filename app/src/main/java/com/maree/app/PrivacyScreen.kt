@@ -84,7 +84,7 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit, onExportData: ()
                     PrivacyFact(tr("Tu gardes le contrôle", "You stay in control"),
                         tr("Arrête le suivi dans le menu ☰ → Accès Android ou efface tes données ci-dessous. Pour retirer un accès, utilise les réglages Android.", "Stop tracking in the ☰ menu → Android access or erase your data below. Use Android settings to revoke access."))
                     PrivacyFact(tr("Le Coach, aujourd’hui", "The coach today"),
-                        tr("Le coach à conseils préparés fonctionne sans compte ni envoi. Les questions non comprises restent sur ce téléphone uniquement si tu actives leur enregistrement ; tu peux les consulter et les effacer dans Coach. Un futur dialogue IA en ligne demanderait ton accord pour transmettre les échanges. Les paiements restent inactifs.", "The coach uses prepared advice, without an account or sending messages anywhere. Unrecognised questions stay on this phone only if you enable saving; you can view and erase them in Coach. A future online AI chat would ask for your agreement before transmitting messages. Payments remain inactive."))
+                        tr("Le coach à conseils préparés fonctionne sans compte ni envoi. Les questions non comprises restent sur ce téléphone uniquement si tu actives leur enregistrement ; tu peux les consulter et les effacer dans Coach. Les paiements restent inactifs.", "The coach uses prepared advice, without an account or sending messages anywhere. Unrecognised questions stay on this phone only if you enable saving; you can view and erase them in Coach. Payments remain inactive."))
                 }
             }
             item {

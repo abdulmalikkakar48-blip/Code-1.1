@@ -81,10 +81,12 @@ internal class SelkieWaterParticleField {
             // Neighbouring points share the same waves, preserving visible flowing rows.
             val crest = sin(x * primaryX + y * primaryY - time)
             val crossWave = cos(x * secondaryX - y * secondaryY + time * 2.0)
-            val movedX = (x + cos(x * horizontalX + y * horizontalY + time) *
+            val ripple = sin(sqrt((x - width * 0.5) * (x - width * 0.5) +
+                (y - height * 0.45) * (y - height * 0.45)) / (90.0 * density) - time * 3.0)
+            val movedX = (x + sin(y / (150.0 * density) + time * 2.0) * 4.0 * density + cos(x * horizontalX + y * horizontalY + time) *
                 horizontalAmplitude).toFloat()
             val movedY = (y + crest * primaryAmplitude +
-                crossWave * secondaryAmplitude).toFloat()
+                crossWave * secondaryAmplitude + ripple * 5.0 * density).toFloat()
             when {
                 crest > 0.36 -> {
                     highPoints[highCount] = movedX
@@ -127,8 +129,8 @@ internal class SelkieWaterParticleField {
             rows = ceil(heightDouble / spacing).toInt() + 5
         }
         val newPointCount = columns * rows
-        val verticalMotion = 23.0 * densityDouble
-        val horizontalMotion = 6.0 * densityDouble
+        val verticalMotion = 28.0 * densityDouble
+        val horizontalMotion = 10.0 * densityDouble
         // Reject any geometry whose offscreen margin could overflow native float coordinates.
         if (!(spacing * 2.0 + verticalMotion).toFloat().isFinite() ||
             !((columns - 3) * spacing + horizontalMotion).toFloat().isFinite() ||

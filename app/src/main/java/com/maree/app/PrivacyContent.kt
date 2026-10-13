@@ -11,7 +11,7 @@ data class PrivacySection(val title: String, val paragraphs: List<String>)
 /** Texte embarqué : sa consultation ne dépend d'aucun serveur ni compte. */
 object PrivacyContent {
     val updatedOn: String
-        get() = tr("12 octobre 2026", "12 October 2026")
+        get() = tr("13 octobre 2026", "13 October 2026")
     val introduction: String
         get() = tr("Selkie t’aide à réduire ton temps d’écran. Dans cette version de test gratuite, tes données de suivi restent sur ton appareil et le suivi ne demande pas de compte. Le Coach local utilise des conseils préparés, sans compte ni envoi sur Internet. Tu peux lire cette information sans autoriser le suivi.", "Selkie helps you reduce your screen time. In this free test version, tracking data stays on your device and tracking does not require an account. The local Coach uses prepared advice, without an account or sending data over the Internet. You can read this information without granting tracking access.")
 
@@ -163,24 +163,10 @@ object PrivacyContent {
                     "Requests about your rights normally receive a response within one month. Complex or numerous requests may require a two-month extension; you must be told the reason during the first month. Do not send identity documents unsolicited: proportionate verification may be requested only where there is reasonable doubt."
                 )
             )),
-            PrivacySection(tr("Un éventuel Coach IA en ligne", "A possible future online AI Coach"), listOf(
-                tr(
-                    "Un dialogue IA avec Supabase et un fournisseur à choisir (OpenAI ou Groq) est préparé dans le code, mais il est distinct du Coach local et n’est pas activé. S’il est proposé à l’avenir, une information et un accord précéderont la connexion par e-mail et les envois. Il utilisera l’adresse e-mail, le compte, les jetons de session et un compteur de questions.",
-                    "AI dialogue using Supabase and a provider to be chosen (OpenAI or Groq) is prepared in the code, but is separate from the local Coach and is not enabled. If offered in the future, information and agreement will come before email sign-in and sending messages. It would use your email address, account, session tokens and a question counter."
-                ),
-                tr(
-                    "Ce service transmettrait la question et au plus douze messages précédents à Supabase, puis au fournisseur IA configuré pour la réponse, sans joindre automatiquement les applications suivies, points ou défis. La route OpenAI demande de ne pas stocker les réponses via son API ; cela ne garantit pas l’absence de conservation technique et ne décrit pas les pratiques d’un autre fournisseur. Celles-ci devront être précisées avant activation. Les échanges resteraient en mémoire dans l’application ; les jetons de session seraient conservés localement jusqu’à une déconnexion ou un effacement. Ces actions ne supprimeraient pas le compte ni le quota serveur : leur suppression pourrait être demandée au responsable.",
-                    "This service would send your question and up to twelve previous messages to Supabase, then to the configured AI provider for a response, without automatically attaching tracked apps, points or challenges. The OpenAI route asks its API not to store responses; this does not guarantee no technical retention or describe another provider’s practices. Those practices must be specified before activation. Conversations would stay in the app’s memory; session tokens would be kept locally until you sign out or delete data. These actions would not delete the account or server quota: their deletion could be requested from the controller."
-                ),
-                tr(
-                    "Les bases juridiques, la région du projet, les contrats, les durées de conservation et les éventuels transferts hors EEE devront être précisés avant son ouverture. Une compilation connectée devrait déclarer la permission Internet ; cette permission seule ne prouverait pas qu’un service IA est actif.",
-                    "Legal bases, the project region, contracts, retention periods and any transfers outside the EEA must be specified before this service opens. An online build would need Internet permission; that permission alone would not establish that an AI service is active."
-                )
-            )),
             PrivacySection(tr("Si Selkie évolue", "If Selkie changes"), listOf(
                 tr(
-                    "L’ouverture publique du coach, une synchronisation, une publicité ou un paiement nécessiterait une nouvelle analyse et une information mise à jour avant activation. Cette politique décrit seulement les fonctions de la version actuelle et distingue le Coach local d’une éventuelle connexion future.",
-                    "Publicly opening the online coach, synchronisation, advertising or payments would require a new assessment and updated information before activation. This policy describes only the features of the current version and distinguishes the local Coach from a possible future connection."
+                    "Une synchronisation, une publicité ou un paiement nécessiterait une nouvelle analyse et une information mise à jour avant activation. Cette politique décrit seulement les fonctions de la version actuelle.",
+                    "Synchronisation, advertising or payments would require a new assessment and updated information before activation. This policy describes only the features of the current version."
                 )
             ))
         )

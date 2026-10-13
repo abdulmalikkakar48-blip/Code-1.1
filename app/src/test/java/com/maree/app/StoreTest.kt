@@ -316,8 +316,8 @@ class StoreTest {
         assertEquals(10, PlanType.FREE.maxTrackedApps)
         assertEquals(50, PlanType.PREMIUM.maxTrackedApps)
         assertNull(PlanType.ULTRA.maxTrackedApps)
-        assertEquals(10, PlanType.PREMIUM.monthlyPriceEuros)
-        assertEquals(20, PlanType.ULTRA.monthlyPriceEuros)
+        assertEquals(5, PlanType.PREMIUM.monthlyPriceEuros)
+        assertEquals(10, PlanType.ULTRA.monthlyPriceEuros)
     }
 
     @Test

@@ -1,6 +1,5 @@
 package com.maree.app
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +23,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +33,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -44,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -58,23 +62,13 @@ private fun TopicButtons(ids: List<String>, topics: Map<String, CoachTopic>, ena
     }
 }
 
+private data class LocalCoachRequest(val id: Int, val text: String, val topicId: String?,
+    val preparedId: String?, val returnToQuestion: Boolean)
+
 @Composable
 internal fun CoachTab(snapshot: MareeSnapshot, monitoringActive: Boolean, getName: (String) -> String,
     onOffers: (() -> Unit)? = null) {
-    var online by rememberSaveable { mutableStateOf(false) }
-    val configured = BuildConfig.SUPABASE_URL.isNotBlank() && BuildConfig.SUPABASE_PUBLIC_KEY.isNotBlank()
-    BackHandler(enabled = online) { online = false }
-    if (online && configured) {
-        Column(Modifier.fillMaxSize()) {
-            TextButton(onClick = { online = false }, modifier = Modifier.padding(horizontal = 12.dp)) {
-                Text(tr("‹ Revenir au coach hors ligne", "‹ Back to the offline coach"))
-            }
-            OnlineCoachTab()
-        }
-    } else {
-        OfflineCoachTab(snapshot, monitoringActive, getName,
-            onOnline = if (configured) ({ online = true }) else null, onOffers = onOffers)
-    }
+    OfflineCoachTab(snapshot, monitoringActive, getName, onOffers = onOffers)
 }
 
 @Composable
@@ -82,7 +76,6 @@ private fun OfflineCoachTab(
     snapshot: MareeSnapshot,
     monitoringActive: Boolean,
     getName: (String) -> String,
-    onOnline: (() -> Unit)?,
     onOffers: (() -> Unit)?
 ) {
     val context = LocalContext.current
@@ -104,6 +97,8 @@ private fun OfflineCoachTab(
     var answeredQuestion by remember(language, plan) { mutableStateOf("") }
     var answer by remember(language, plan) { mutableStateOf<OfflineCoachReply?>(null) }
     var saving by remember { mutableStateOf(false) }
+    var requestId by remember(language, plan) { mutableIntStateOf(0) }
+    var queuedRequest by remember(language, plan) { mutableStateOf<LocalCoachRequest?>(null) }
     var saveUnknown by remember { mutableStateOf(history.enabled) }
     var saved by remember { mutableStateOf(history.entries()) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
@@ -121,9 +116,18 @@ private fun OfflineCoachTab(
     var librarySection by rememberSaveable(language, plan) { mutableStateOf("all") }
     var chooseLibrarySection by remember(language, plan) { mutableStateOf(false) }
     var libraryPage by remember(language, plan) { mutableStateOf(0) }
-    val libraryResults = remember(language, plan, libraryQuery, librarySection) {
-        searchPreparedCoachQuestions(libraryQuery, language,
-            sectionId = librarySection.takeUnless { it == "all" }, limit = preparedQuestions.size, plan = plan)
+    var libraryResults by remember(language, plan, libraryQuery, librarySection) {
+        mutableStateOf<List<PreparedCoachQuestion>>(emptyList())
+    }
+    var searching by remember(language, plan, libraryQuery, librarySection) { mutableStateOf(true) }
+    LaunchedEffect(language, plan, libraryQuery, librarySection) {
+        try {
+            if (libraryQuery.isNotBlank()) delay(200)
+            libraryResults = withContext(Dispatchers.Default) {
+                searchPreparedCoachQuestions(libraryQuery, language,
+                    sectionId = librarySection.takeUnless { it == "all" }, limit = preparedQuestions.size, plan = plan)
+            }
+        } finally { searching = false }
     }
     val pageSize = 20
     val lastPage = ((libraryResults.size - 1).coerceAtLeast(0)) / pageSize
@@ -157,20 +161,36 @@ private fun OfflineCoachTab(
         if (saving) return
         val outgoing = text.trim().take(800)
         if (outgoing.isEmpty()) return
-        val reply = when {
-            preparedId != null -> engine.replyForPreparedQuestion(preparedId, coachContext)
-            topicId != null -> engine.replyForTopic(topicId, coachContext)
-            else -> engine.reply(outgoing, coachContext)
-        }
+        requestId++
         question = outgoing
-        answeredQuestion = outgoing
-        answer = reply
+        answeredQuestion = ""
+        answer = null
+        queuedRequest = LocalCoachRequest(requestId, outgoing, topicId, preparedId, returnToQuestion)
+    }
+
+    LaunchedEffect(queuedRequest) {
+        val request = queuedRequest ?: return@LaunchedEffect
         focus.clearFocus()
         keyboard?.hide()
-        if (returnToQuestion) scope.launch { scroll.animateScrollToItem(1) }
-        if (reply.unrecognized && !reply.sensitive && saveUnknown) {
-            val generation = history.generation()
-            storeAction { history.recordUnknown(outgoing, expectedGeneration = generation) }
+        try {
+            val reply = withContext(Dispatchers.Default) {
+                when {
+                    request.preparedId != null -> engine.replyForPreparedQuestion(request.preparedId, coachContext)
+                    request.topicId != null -> engine.replyForTopic(request.topicId, coachContext)
+                    else -> engine.reply(request.text, coachContext)
+                }
+            }
+            if (question.trim() == request.text) {
+                answeredQuestion = request.text
+                answer = reply
+                if (request.returnToQuestion) scroll.animateScrollToItem(1)
+                if (reply.unrecognized && !reply.sensitive && saveUnknown) {
+                    val generation = history.generation()
+                    storeAction { history.recordUnknown(request.text, expectedGeneration = generation) }
+                }
+            }
+        } finally {
+            if (queuedRequest == request) queuedRequest = null
         }
     }
 
@@ -190,17 +210,33 @@ private fun OfflineCoachTab(
         item {
             AppCardSurface {
                 SectionLabel(tr("Ta question", "Your question"))
-                OutlinedTextField(value = question, onValueChange = { question = it.take(800) },
+                OutlinedTextField(value = question, onValueChange = { queuedRequest = null; question = it.take(800) },
                     label = { Text(tr("Écris ta question", "Write your question")) },
                     placeholder = { Text(tr("Comment arrêter de scroller le soir ?", "How can I stop scrolling in the evening?")) },
-                    minLines = 2, maxLines = 5, modifier = Modifier.fillMaxWidth(),
+                    minLines = 2, maxLines = 5, modifier = Modifier.fillMaxWidth().onPreviewKeyEvent { event ->
+                        when {
+                            event.key == Key.Tab -> {
+                                if (event.type == KeyEventType.KeyDown) {
+                                    keyboard?.hide()
+                                    focus.moveFocus(if (event.isShiftPressed) FocusDirection.Previous else FocusDirection.Next)
+                                }
+                                true
+                            }
+                            event.key == Key.Enter && event.isCtrlPressed -> {
+                                if (event.type == KeyEventType.KeyDown) submit(question)
+                                true
+                            }
+                            else -> false
+                        }
+                    },
                     supportingText = { Text("${question.length}/800") }, shape = RoundedCornerShape(14.dp),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
                     keyboardActions = KeyboardActions(onSend = { submit(question) }))
                 PrimaryAction(tr("Envoyer", "Send"), onClick = { submit(question) },
-                    modifier = Modifier.fillMaxWidth(), enabled = !saving && question.isNotBlank())
+                    modifier = Modifier.fillMaxWidth(), enabled = !saving && queuedRequest == null && question.isNotBlank())
+                if (queuedRequest != null) Text(tr("Je prépare ton conseil…", "Preparing your advice…"), color = MareePalette.Muted)
                 if (question.isNotBlank() || answer != null) TextButton(onClick = {
-                    question = ""; answeredQuestion = ""; answer = null
+                    queuedRequest = null; question = ""; answeredQuestion = ""; answer = null
                 }) { Text(tr("Nouvelle question", "New question")) }
             }
         }
@@ -275,9 +311,9 @@ private fun OfflineCoachTab(
                         }
                     }
                 }
-                Text(tr("${libraryResults.size} questions trouvées", "${libraryResults.size} questions found"),
+                Text(if (searching) tr("Recherche…", "Searching…") else tr("${libraryResults.size} questions trouvées", "${libraryResults.size} questions found"),
                     color = MareePalette.Muted, fontSize = 13.sp)
-                if (visibleQuestions.isEmpty()) Text(tr("Aucune question pour cette recherche. Essaie un mot plus simple ou une autre rubrique.",
+                if (!searching && visibleQuestions.isEmpty()) Text(tr("Aucune question pour cette recherche. Essaie un mot plus simple ou une autre rubrique.",
                     "No questions found. Try a simpler word or another section."),
                     color = MareePalette.Muted, fontSize = 14.sp, lineHeight = 21.sp)
                 visibleQuestions.forEach { prepared ->
@@ -379,8 +415,6 @@ private fun OfflineCoachTab(
             }
         }
         notice?.let { message -> item { Text(message, color = MareePalette.Muted, fontSize = 13.sp) } }
-        if (onOnline != null) item {
-            TextButton(onClick = onOnline) { Text(tr("Ouvrir le dialogue IA en ligne", "Open online AI chat")) }
-        }
+
     }
 }
