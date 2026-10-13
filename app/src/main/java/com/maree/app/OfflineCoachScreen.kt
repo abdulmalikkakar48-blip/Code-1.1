@@ -83,6 +83,7 @@ private fun OfflineCoachTab(
     val plan = snapshot.plan
     val engine = remember(language, plan) { RuleCoach(language = language, plan = plan) }
     val history = remember { OfflineCoachHistory(context) }
+    val favoritesStore = remember { CoachFavoritesStore(context) }
     val scope = rememberCoroutineScope()
     val focus = LocalFocusManager.current
     val keyboard = LocalSoftwareKeyboardController.current
@@ -96,15 +97,25 @@ private fun OfflineCoachTab(
     var question by remember(language) { mutableStateOf("") }
     var answeredQuestion by remember(language, plan) { mutableStateOf("") }
     var answer by remember(language, plan) { mutableStateOf<OfflineCoachReply?>(null) }
+    var answeredPreparedId by remember(language, plan) { mutableStateOf<String?>(null) }
+    var answerLanguage by remember(language, plan) { mutableStateOf(language) }
     var saving by remember { mutableStateOf(false) }
     var requestId by remember(language, plan) { mutableIntStateOf(0) }
     var queuedRequest by remember(language, plan) { mutableStateOf<LocalCoachRequest?>(null) }
     var saveUnknown by remember { mutableStateOf(history.enabled) }
     var saved by remember { mutableStateOf(history.entries()) }
+    var favorites by remember { mutableStateOf<List<CoachFavorite>>(emptyList()) }
+    var favoriteReadGeneration by remember { mutableIntStateOf(0) }
+    var showFavorites by rememberSaveable { mutableStateOf(false) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
     var showSaved by remember { mutableStateOf(false) }
     var notice by remember(language) { mutableStateOf<String?>(null) }
     var showHelp by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(favoritesStore) {
+        val generation = favoriteReadGeneration
+        val loaded = withContext(Dispatchers.IO) { favoritesStore.entries() }
+        if (favoriteReadGeneration == generation) favorites = loaded
+    }
     val helpEntries = remember(language) { helpEntriesFor(language) }
     val helpSections = remember(language) { helpEntries.groupBy { it.section } }
     var helpSection by rememberSaveable { mutableStateOf(helpSections.keys.first().name) }
@@ -141,12 +152,16 @@ private fun OfflineCoachTab(
     fun storeAction(action: () -> Boolean) {
         if (saving) return
         saving = true
+        favoriteReadGeneration++
         notice = null
         scope.launch {
             try {
-                val ok = withContext(Dispatchers.IO) { action() }
+                val (ok, refreshedHistory, refreshedFavorites) = withContext(Dispatchers.IO) {
+                    Triple(action(), history.entries(), favoritesStore.entries())
+                }
                 saveUnknown = history.enabled
-                saved = history.entries()
+                saved = refreshedHistory
+                favorites = refreshedFavorites
                 if (!ok) notice = tr("Le changement n’a pas pu être enregistré. Réessaie.", "The change could not be saved. Try again.")
             } catch (cancelled: CancellationException) {
                 throw cancelled
@@ -165,24 +180,32 @@ private fun OfflineCoachTab(
         question = outgoing
         answeredQuestion = ""
         answer = null
+        answeredPreparedId = null
+        answerLanguage = language
         queuedRequest = LocalCoachRequest(requestId, outgoing, topicId, preparedId, returnToQuestion)
     }
 
-    LaunchedEffect(queuedRequest) {
+    LaunchedEffect(queuedRequest, language, plan) {
         val request = queuedRequest ?: return@LaunchedEffect
         focus.clearFocus()
         keyboard?.hide()
         try {
-            val reply = withContext(Dispatchers.Default) {
-                when {
+            val (reply, preparedId) = withContext(Dispatchers.Default) {
+                // A complete typed library question retains its paid origin instead of becoming free advice.
+                val prepared = request.preparedId ?: if (request.topicId == null)
+                    findPreparedCoachQuestion(request.text, language, plan)?.id else null
+                val response = when {
                     request.preparedId != null -> engine.replyForPreparedQuestion(request.preparedId, coachContext)
                     request.topicId != null -> engine.replyForTopic(request.topicId, coachContext)
                     else -> engine.reply(request.text, coachContext)
                 }
+                response to prepared
             }
             if (question.trim() == request.text) {
                 answeredQuestion = request.text
                 answer = reply
+                answeredPreparedId = preparedId.takeUnless { reply.unrecognized || reply.sensitive }
+                answerLanguage = language
                 if (request.returnToQuestion) scroll.animateScrollToItem(1)
                 if (reply.unrecognized && !reply.sensitive && saveUnknown) {
                     val generation = history.generation()
@@ -236,7 +259,7 @@ private fun OfflineCoachTab(
                     modifier = Modifier.fillMaxWidth(), enabled = !saving && queuedRequest == null && question.isNotBlank())
                 if (queuedRequest != null) Text(tr("Je prépare ton conseil…", "Preparing your advice…"), color = MareePalette.Muted)
                 if (question.isNotBlank() || answer != null) TextButton(onClick = {
-                    queuedRequest = null; question = ""; answeredQuestion = ""; answer = null
+                    queuedRequest = null; question = ""; answeredQuestion = ""; answer = null; answeredPreparedId = null
                 }) { Text(tr("Nouvelle question", "New question")) }
             }
         }
@@ -246,6 +269,31 @@ private fun OfflineCoachTab(
                 if (visibleAnswer != null) {
                     Text(visibleAnswer.text, color = MareePalette.Ink, fontSize = 16.sp, lineHeight = 24.sp,
                         modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
+                    if (answerLanguage != language) Text(tr("Conseil enregistré en ${answerLanguage.nativeLabel}.",
+                        "Advice saved in ${answerLanguage.nativeLabel}."), color = MareePalette.Muted, fontSize = 12.sp)
+                    val authoredTopic = coachTopicsFor(answerLanguage).firstOrNull { it.id == visibleAnswer.topicId }
+                    val preparedOrigin = answeredPreparedId
+                    val savedLanguage = answerLanguage
+                    val alreadySaved = favorites.any { favorite ->
+                        favorite.language == savedLanguage && if (preparedOrigin != null)
+                            favorite.preparedId == preparedOrigin else
+                            favorite.preparedId == null && favorite.topicId == visibleAnswer.topicId &&
+                                favorite.reply == visibleAnswer.text
+                    }
+                    if (!visibleAnswer.unrecognized && !visibleAnswer.sensitive && (answeredPreparedId != null ||
+                            (authoredTopic != null && CoachFavoritesStore.coachFavoriteAdviceIsValid(authoredTopic.id,
+                                authoredTopic.label, visibleAnswer.text, answerLanguage)))) {
+                        TextButton(enabled = !saving && !alreadySaved, onClick = {
+                            // Capture the displayed authored response only; the input field never reaches this store.
+                            val reply = visibleAnswer
+                            storeAction {
+                                if (preparedOrigin != null) favoritesStore.savePrepared(preparedOrigin, savedLanguage) != null
+                                else authoredTopic != null && favoritesStore.saveAdvice(authoredTopic.id,
+                                    authoredTopic.label, reply.text, savedLanguage) != null
+                            }
+                        }) { Text(if (alreadySaved) tr("Dans mes favoris", "Saved to favorites")
+                            else tr("Ajouter aux favoris", "Save to favorites")) }
+                    }
                     if (visibleAnswer.suggestions.isNotEmpty()) TopicButtons(visibleAnswer.suggestions, topics, !saving) {
                         submit(it.label, it.id, returnToQuestion = true)
                     }
@@ -267,6 +315,56 @@ private fun OfflineCoachTab(
                 if (!monitoringActive) Text(tr("Le suivi est en pause : les durées ne sont pas utilisées dans les conseils.",
                     "Tracking is paused: recorded usage is not used in advice."),
                     color = MareePalette.Muted, fontSize = 12.sp, lineHeight = 18.sp)
+            }
+        }
+        item {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                TextButton(onClick = { showFavorites = !showFavorites }) {
+                    Text(if (showFavorites) tr("Mes favoris · masquer", "My favorites · hide")
+                        else tr("Mes favoris · ${favorites.size}", "My favorites · ${favorites.size}"))
+                }
+                if (showFavorites) AppCardSurface {
+                    SectionLabel(tr("Mes favoris", "My favorites"))
+                    Text(tr("Jusqu’à 50 conseils choisis par toi, sur ce téléphone. Ta question saisie n’est pas enregistrée dans les favoris. Les plus anciens sont remplacés.",
+                        "Up to 50 tips you choose, on this phone. Your typed question is not saved in favorites. The oldest are replaced."),
+                        color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 19.sp)
+                    if (favorites.isEmpty()) Text(tr("Ajoute un conseil depuis sa réponse pour le retrouver ici.",
+                        "Save a tip beneath its answer to find it here."), color = MareePalette.Muted, fontSize = 14.sp)
+                    favorites.asReversed().forEach { favorite ->
+                        val prepared = favorite.preparedQuestion(language, plan)
+                        val locked = favorite.isLocked(plan)
+                        val label = if (favorite.preparedId != null) prepared?.question ?: favorite.label else favorite.label
+                        OutlinedButton(enabled = !saving && !locked, onClick = {
+                            if (prepared != null) submit(prepared.question, preparedId = prepared.id, returnToQuestion = true)
+                            else if (favorite.preparedId == null && favorite.reply != null) {
+                                queuedRequest = null
+                                question = favorite.label
+                                answeredQuestion = favorite.label
+                                answer = OfflineCoachReply(favorite.topicId, favorite.reply)
+                                answeredPreparedId = null
+                                answerLanguage = favorite.language
+                                focus.clearFocus()
+                                keyboard?.hide()
+                                scope.launch { scroll.animateScrollToItem(1) }
+                            }
+                        }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(14.dp)) {
+                            Text(label, modifier = Modifier.fillMaxWidth(), lineHeight = 21.sp)
+                        }
+                        if (locked) {
+                            Text(tr("Conservé · réponse disponible avec ${favorite.minimumPlan.displayName}.",
+                                "Kept · answer available with ${favorite.minimumPlan.displayName}."),
+                                color = MareePalette.Muted, fontSize = 13.sp)
+                            if (onOffers != null) TextButton(onClick = onOffers) {
+                                Text(tr("Voir les offres", "View plans"))
+                            }
+                        } else if (favorite.preparedId == null && favorite.language != language) {
+                            Text(favorite.language.nativeLabel, color = MareePalette.Muted, fontSize = 12.sp)
+                        }
+                        TextButton(enabled = !saving, onClick = { storeAction { favoritesStore.remove(favorite.id) } }) {
+                            Text(tr("Retirer ce favori", "Remove favorite"))
+                        }
+                    }
+                }
             }
         }
         item {
@@ -327,14 +425,14 @@ private fun OfflineCoachTab(
                     horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                     TextButton(onClick = {
                         libraryPage = currentPage - 1
-                        scope.launch { scroll.animateScrollToItem(4) }
+                        scope.launch { scroll.animateScrollToItem(5) }
                     }, enabled = currentPage > 0) {
                         Text(tr("‹ Précédent", "‹ Previous"))
                     }
                     Text("${currentPage + 1} / ${lastPage + 1}", color = MareePalette.Muted, fontSize = 13.sp)
                     TextButton(onClick = {
                         libraryPage = currentPage + 1
-                        scope.launch { scroll.animateScrollToItem(4) }
+                        scope.launch { scroll.animateScrollToItem(5) }
                     }, enabled = currentPage < lastPage) {
                         Text(tr("Suivant ›", "Next ›"))
                     }

@@ -1,12 +1,22 @@
 # Selkie : version de travail retenue le 13 octobre 2026
 
-## Version actuelle 0.11.0
+## Version actuelle 0.12.0
+
+VersionCode 21. Le calendrier, le bilan hebdomadaire et les favoris sont gratuits. Premium ajoute les créneaux et le widget ; Ultra ajoute les programmes guidés. Les tarifs restent de 5 €/mois ou 60 €/an pour Premium et de 10 €/mois ou 120 €/an pour Ultra, sans réduction. L’historique couvre une fenêtre de 90 jours ; les données restent locales, sans modèle d’IA ni paiement actif. Voir [les fonctions quotidiennes](FONCTIONS_QUOTIDIENNES.md) et la validation exacte de l’APK.
+
+Les 204 tests unitaires passent. Android Lint indique 0 erreur, 5 avertissements et 3 informations.
+
+[APK](../downloads/Selkie-Android-0.12.0.apk) · [Sources](../downloads/Selkie-Android-0.12.0-source.zip) · [Validation](../downloads/VALIDATION-0.12.0.md).
+
+## Historique (anciens tarifs et anciennes préparations)
+
+## Version 0.11.0
 
 Le coach distant et sa préparation serveur ont été retirés, à la demande de l’éditeur. Coach local : 1 152 / 23 040 / 50 688 questions-réponses par langue, contenus combinés explicitement décrits. Premium : 5 €/mois ou 60 €/an. Ultra : 10 €/mois ou 120 €/an. Aucune réduction, aucun paiement réel. 96 formes claires multicolores, contraste renforcé, ondulations nocturnes supplémentaires et licences consultables. VersionCode 20 ; même certificat de développement que 0.10.4. Les décisions de lancement restent dans TACHES_RESTANTES.md.
 
 [APK](../downloads/Selkie-Android-0.11.0.apk), [sources](../downloads/Selkie-Android-0.11.0-source.zip), [validation](../downloads/VALIDATION-0.11.0.md).
 
-## Historique (anciens tarifs et anciennes préparations)
+
 
 ## Version de travail 0.10.4
 

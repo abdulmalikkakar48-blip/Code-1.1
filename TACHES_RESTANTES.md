@@ -1,6 +1,6 @@
 # Selkie — ce qui reste avant une diffusion publique
 
-État du 13 octobre 2026, prototype Android 0.11.0. Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
+État du 13 octobre 2026, prototype Android 0.12.0. Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
 
 ## Terminé dans le prototype
 
@@ -11,6 +11,10 @@
 - Politique locale FR/EN actualisée ; export filtré, effacement, consentement facultatif des questions inconnues et documents légaux conservés.
 - Calculs des réponses et recherche hors du thread de l’interface, annulation des résultats obsolètes, Tab pour naviguer et Ctrl+Entrée pour envoyer.
 - Inventaire de 57 coordonnées de bibliothèques, licences Apache-2.0 consultables. Les droits du logo et de la marque restent un contrôle séparé.
+
+## Fonctions ajoutées en 0.12.0
+
+Le calendrier et le résumé hebdomadaire sont locaux, et les favoris sont gratuits. Premium ajoute les détails hebdomadaires, les créneaux et le widget ; Ultra ajoute les programmes guidés. Les prix de 5 €/mois pour Premium et de 10 €/mois pour Ultra sont conservés. Voir [les fonctions quotidiennes](docs/FONCTIONS_QUOTIDIENNES.md) et [la validation 0.12.0](downloads/VALIDATION-0.12.0.md) pour les contrôles réalisés, les limites et la persistance.
 
 ## Décisions laissées en attente par l’éditeur
 

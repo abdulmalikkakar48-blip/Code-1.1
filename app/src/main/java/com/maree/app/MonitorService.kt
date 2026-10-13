@@ -37,6 +37,7 @@ class MonitorService : Service() {
         }
 
         fun stop(context: Context) {
+            Store(context).pauseObservation()
             context.stopService(Intent(context, MonitorService::class.java))
             clearAlerts(context)
         }
@@ -139,7 +140,11 @@ class MonitorService : Service() {
             main.post { overlay.hide(); stopSelf() }
             return
         }
-        val tick = store.tick(usage)
+        val tick = synchronized(LocalFeatureLock.lock) {
+            if (destroyed || !setup.isMonitoringEnabled()) return
+            store.tick(usage)
+        }
+        SelkieWidgetProvider.refresh(this)
         val foreground = tick.foregroundPackage
         val locked = tick.snapshot.apps.firstOrNull {
             it.packageName == foreground && it.isLocked
@@ -197,6 +202,10 @@ class MonitorService : Service() {
     override fun onDestroy() {
         destroyed = true
         worker.shutdownNow()
+        if (::store.isInitialized) synchronized(LocalFeatureLock.lock) {
+            // A delayed service teardown must not recreate history after a full reset.
+            if (setup.isCompleted()) store.pauseObservation()
+        }
         main.removeCallbacksAndMessages(null)
         if (::overlay.isInitialized) overlay.hide()
         clearAlerts(this)

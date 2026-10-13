@@ -15,12 +15,12 @@ internal object LegalContent {
 
     fun introduction(document: LegalDocument): String = when (document) {
         LegalDocument.TERMS -> tr(
-            "Les conditions de cette version de test gratuite de Selkie. Aucun achat ni abonnement payant n’est proposé ici.",
-            "The terms for this free Selkie test version. No purchases or paid subscriptions are offered here."
+            "Les conditions de Selkie 0.12.0, version de test gratuite. Aucun achat ni abonnement payant n’est proposé ici.",
+            "The terms for Selkie 0.12.0, a free test version. No purchases or paid subscriptions are offered here."
         )
         LegalDocument.SUBSCRIPTIONS -> tr(
-            "Les offres sont actuellement des démonstrations gratuites. Voici les tarifs envisagés et les informations à connaître avant un éventuel achat futur.",
-            "Plans are currently free demonstrations. Here are the proposed prices and information to know before any possible future purchase."
+            "Selkie 0.12.0 ne vend aucun abonnement. Les choix Premium et Ultra de l’APK DEBUG sont des démonstrations gratuites ; voici les tarifs envisagés pour un éventuel achat futur.",
+            "Selkie 0.12.0 sells no subscriptions. Premium and Ultra selections in the DEBUG APK are free demonstrations; these are the proposed prices for any possible future purchase."
         )
         LegalDocument.LICENSES -> tr("Bibliothèques utilisées et texte de leur licence.", "Libraries used and their licence text.")
         LegalDocument.PUBLISHER -> tr(
@@ -45,12 +45,24 @@ internal object LegalContent {
             tr(
                 "Les limites et les écrans de pause sont une aide volontaire. Ils ne garantissent ni un blocage impossible à contourner, ni une réduction précise du temps d’écran.",
                 "Limits and pause screens are a voluntary aid. They do not guarantee a block that cannot be bypassed or a particular reduction in screen time."
+            ),
+            tr(
+                "Le calendrier et le bilan hebdomadaire disponibles dès Gratuit reposent sur au maximum 90 jours locaux d’observations et de validations. L’historique concerne les seules applications choisies et les intervalles réellement observés pendant le suivi actif ; les pauses et les lacunes ne sont pas comptées et aucune journée passée n’est inventée. Les moyennes couvrent uniquement les jours observés. Les mentions de dépassements observés ne certifient pas une journée parfaite. Le calendrier du téléphone n’est pas utilisé.",
+                "The calendar and weekly summary available from Free use at most 90 local days of observations and check-ins. History covers only selected apps and intervals actually observed during active tracking; pauses and gaps are not counted and no past day is invented. Averages cover observed days only. Observed-breach labels do not certify a perfect day. The phone’s calendar is not used."
+            ),
+            tr(
+                "Premium et Ultra proposent le détail hebdomadaire par application, jusqu’à 20 plages horaires et un widget de points et de défi proposé, visible sur l’écran d’accueil. Les plages changent la limite du compteur en cours sans remettre son temps à zéro ; un verrouillage de 24 h continue après leur fin. Leur création, modification, activation et suppression sont bloquées à 0 point. Les programmes Ultra Sommeil (7 jours), Études (14 jours) et Réseaux sociaux (30 jours) sont validés manuellement, au maximum une fois par jour entre tous les programmes, sans points supplémentaires.",
+                "Premium and Ultra provide weekly details for each app, up to 20 time slots and a points-and-suggested-challenge widget visible on the home screen. Slots change the current counter’s allowance without resetting its usage; a 24-hour lock continues after they end. Creating, editing, enabling and deleting slots are blocked at 0 points. The Ultra Sleep (7 days), Studies (14 days) and Social media (30 days) programmes use manual check-ins, at most once per day across all programmes, with no extra points."
+            ),
+            tr(
+                "Les 50 favoris maximum accessibles dès Gratuit conservent des références de conseils préparés ou des réponses rédigées sélectionnées, leur langue d’origine et leur offre minimale. Ils ne sauvegardent aucune saisie brute, phrase non comprise ou phrase sensible ; les réponses payantes préparées ne sont pas recopiées dans les favoris ni dans l’export. Un favori réservé à une offre supérieure reste conservé mais sa lecture est bloquée après un changement vers une offre inférieure.",
+                "The maximum of 50 favourites available from Free keeps prepared tip references or selected authored replies, their original language and minimum plan. Favourites save no raw input, unrecognised message or sensitive message; paid prepared answers are not copied into favourites or exports. A favourite requiring a higher plan remains saved but cannot be read after a downgrade."
             )
         )),
         PrivacySection(tr("Version gratuite et points virtuels", "Free version and virtual points"), listOf(
             tr(
-                "Cette version de test est gratuite. Choisir Premium ou Ultra dans la démonstration ne crée aucun achat, paiement, prélèvement ou renouvellement.",
-                "This test version is free. Choosing Premium or Ultra in the demonstration creates no purchase, payment, charge or renewal."
+                "Cette version de test est gratuite. Les choix Premium et Ultra sont des démonstrations locales réservées à l’APK DEBUG ; ils ne créent aucun achat, paiement, prélèvement ou renouvellement. La version RELEASE ne propose aucun achat actif.",
+                "This test version is free. Premium and Ultra selections are local demonstrations available only in the DEBUG APK; they create no purchase, payment, charge or renewal. The RELEASE version offers no active purchases."
             ),
             tr(
                 "Les points indiquent ta progression dans Selkie. Ils ne sont pas de l’argent, ne s’achètent pas dans cette version et ne peuvent pas être échangés contre de l’argent. Les mêmes règles de points s’appliquent à toutes les offres.",
@@ -71,8 +83,8 @@ internal object LegalContent {
                 "Tracking can be interrupted by Android, battery settings, revoked access or an error. Check tracking status before relying on a limit; displayed minutes also depend on information provided by your phone."
             ),
             tr(
-                "Les informations de confidentialité et l’effacement local sont disponibles dans le menu ☰ → Confidentialité et données. L’effacement demande une confirmation et supprime la progression de Selkie sur ce téléphone.",
-                "Privacy information and local data deletion are available in the ☰ menu → Privacy and data. Deletion requires confirmation and removes Selkie progress on this phone."
+                "Les informations de confidentialité, l’export JSON local et l’effacement sont disponibles dans le menu ☰ → Confidentialité et données. L’effacement confirmé supprime toutes les préférences privées de Selkie, y compris l’historique, les plages, les favoris et les programmes. L’export inclut leurs données structurées et les identifiants et dates de programmes, mais aucune saisie brute du Coach, jeton ou adresse e-mail ; les copies exportées doivent être supprimées séparément.",
+                "Privacy information, local JSON export and data deletion are available in the ☰ menu → Privacy and data. Confirmed deletion clears all Selkie’s private preferences, including history, slots, favourites and programmes. Export includes their structured data and programme identifiers and dates, but no raw Coach input, token or email address; exported copies must be deleted separately."
             )
         )),
         PrivacySection(tr("Conseils et droits", "Advice and your rights"), listOf(
@@ -94,8 +106,8 @@ internal object LegalContent {
     private fun subscriptions() = listOf(
         PrivacySection(tr("Aucun abonnement vendu ici", "No subscriptions are sold here"), listOf(
             tr(
-                "Premium et Ultra sont des démonstrations gratuites dans cet APK. Aucun abonnement réel, prélèvement, renouvellement ou remboursement n’est déclenché par le choix d’une offre.",
-                "Premium and Ultra are free demonstrations in this APK. Selecting a plan triggers no real subscription, charge, renewal or refund."
+                "Premium et Ultra sont des démonstrations gratuites et locales dans l’APK DEBUG. Aucun abonnement réel, prélèvement, renouvellement ou remboursement n’est déclenché par le choix d’une offre. La version RELEASE n’active aucun achat.",
+                "Premium and Ultra are free local demonstrations in the DEBUG APK. Selecting a plan triggers no real subscription, charge, renewal or refund. The RELEASE version activates no purchases."
             ),
             tr(
                 "Une future vente nécessitera des conditions de vente complètes et un écran d’achat indiquant le prix, la durée, le renouvellement et les droits applicables avant confirmation.",
@@ -177,8 +189,8 @@ internal object LegalContent {
                 "Developer and currently declared data controller: ${PrivacyIdentity.controllerName}. Contact: ${PrivacyIdentity.contactEmail}."
             ),
             tr(
-                "Ces coordonnées correspondent à cette version de test. L’éditeur de la future diffusion publique n’a pas encore été désigné. Aucune entreprise ni identité d’un futur vendeur n’est annoncée ici.",
-                "These details relate to this test version. The publisher for a future public release has not yet been designated. No company or future seller’s identity is announced here."
+                "Ces coordonnées correspondent à cette version de test. L’éditeur et le public de la future diffusion publique restent à définir. Aucune entreprise ni identité d’un futur vendeur n’est annoncée ici.",
+                "These details relate to this test version. The publisher and audience for a future public release remain to be determined. No company or future seller’s identity is announced here."
             )
         )),
         PrivacySection(tr("Avant une version commerciale", "Before a commercial release"), listOf(

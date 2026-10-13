@@ -70,7 +70,7 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit, onExportData: ()
                     ScreenHeading(
                         eyebrow = tr("CONFIDENTIALITÉ", "PRIVACY"),
                         title = tr("Tes données, tes choix.", "Your data, your choices."),
-                        description = tr("L’essentiel sur cette version de Selkie. Le texte complet est disponible ci-dessous.", "The essentials for this version of Selkie. The full policy is available below.")
+                        description = tr("Version 0.12.0 · 13 octobre 2026. Le texte complet est disponible ci-dessous.", "Version 0.12.0 · 13 October 2026. The full policy is available below.")
                     )
                 }
             }
@@ -78,13 +78,15 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit, onExportData: ()
                 AppCardSurface {
                     StatusPill(tr("Suivi local · coach facultatif", "Local tracking · optional coach"))
                     PrivacyFact(tr("Ce qui est enregistré", "What is saved"),
-                        tr("Tes applications suivies, tes limites, tes points et tes défis restent sur ton appareil.", "Your tracked apps, limits, points and challenges stay on your device."))
+                        tr("Tes applications, limites, points, défis, plages horaires, favoris et programmes restent dans le stockage privé de ce téléphone. Le calendrier et les bilans gardent au maximum 90 jours locaux d’observations et de validations.", "Your apps, limits, points, challenges, time slots, favourites and programmes stay in this phone’s private storage. The calendar and summaries keep at most 90 local days of observations and check-ins."))
                     PrivacyFact(tr("Ce qui reste privé", "What stays private"),
                         tr("Selkie ne lit ni les messages de tes autres applications, ni tes photos, ni le contenu de ton écran. Les durées sont consultées uniquement après ton autorisation.", "Selkie does not read messages from your other apps, photos or screen content. Usage times are accessed only after you give permission."))
                     PrivacyFact(tr("Tu gardes le contrôle", "You stay in control"),
                         tr("Arrête le suivi dans le menu ☰ → Accès Android ou efface tes données ci-dessous. Pour retirer un accès, utilise les réglages Android.", "Stop tracking in the ☰ menu → Android access or erase your data below. Use Android settings to revoke access."))
                     PrivacyFact(tr("Le Coach, aujourd’hui", "The coach today"),
-                        tr("Le coach à conseils préparés fonctionne sans compte ni envoi. Les questions non comprises restent sur ce téléphone uniquement si tu actives leur enregistrement ; tu peux les consulter et les effacer dans Coach. Les paiements restent inactifs.", "The coach uses prepared advice, without an account or sending messages anywhere. Unrecognised questions stay on this phone only if you enable saving; you can view and erase them in Coach. Payments remain inactive."))
+                        tr("Le coach à conseils préparés fonctionne sans IA, compte ni envoi. Ses 50 favoris maximum gardent des références de conseils préparés ou des réponses rédigées sélectionnées, avec leur langue et leur offre minimale. Les réponses payantes préparées ne sont pas recopiées. La conservation facultative des questions non comprises est distincte, désactivée par défaut. Les paiements restent inactifs.", "The coach uses prepared advice, without AI, an account or sending messages anywhere. Its maximum of 50 favourites keeps prepared tip references or selected authored replies, with their language and minimum plan. Paid prepared answers are not copied. Optional saving of unrecognised questions is separate, off by default. Payments remain inactive."))
+                    PrivacyFact(tr("Historique observé et widget", "Observed history and widget"),
+                        tr("L’historique exclut les pauses et les intervalles non observés ; il n’invente pas les journées passées. Le calendrier de Selkie n’accède pas à celui du téléphone. Si tu ajoutes le widget Premium ou Ultra, tes points et un défi proposé sont visibles sur l’écran d’accueil Android.", "History excludes pauses and unobserved gaps; it never invents past days. Selkie’s calendar does not access your phone’s calendar. If you add the Premium or Ultra widget, your points and a suggested challenge are visible on the Android home screen."))
                 }
             }
             item {
@@ -103,8 +105,8 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit, onExportData: ()
             item {
                 AppCardSurface {
                     SectionLabel(tr("Une copie de tes données", "A copy of your data"))
-                    Text(tr("Enregistre un fichier JSON de tes réglages et de ta progression à l’endroit que tu choisis. Il peut contenir des informations privées. Les phrases du coach sont exclues. Une copie exportée doit être supprimée séparément si tu le souhaites.",
-                        "Save a JSON file of your settings and progress in a location you choose. It may contain private information. Coach messages are excluded. Delete any exported copy separately if you wish."),
+                    Text(tr("Enregistre un fichier JSON de tes réglages, de ta progression et des données structurées de l’historique, des plages horaires, des favoris préparés et des programmes. Il peut contenir des informations privées. Les saisies brutes du Coach, jetons et adresses e-mail sont exclus. Une copie exportée doit être supprimée séparément.",
+                        "Save a JSON file of your settings, progress and structured history, time-slot, prepared-favourite and programme data. It may contain private information. Raw Coach input, tokens and email addresses are excluded. Delete any exported copy separately."),
                         color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium)
                     OutlinedButton(onClick = onExportData,
                         modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
@@ -163,7 +165,7 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit, onExportData: ()
                 AppCardSurface {
                     Text(tr("Repartir de zéro", "Start fresh"), fontSize = 17.sp,
                         fontWeight = FontWeight.SemiBold, color = MareePalette.Ink)
-                    Text(tr("Cela supprime tes réglages, tes points et tes défis de Selkie.", "This erases your Selkie settings, points and challenges."),
+                    Text(tr("Cela supprime toutes les données locales de Selkie : réglages, points, défis, historique, plages horaires, favoris, programmes et questions du Coach enregistrées.", "This erases all Selkie’s local data: settings, points, challenges, history, time slots, favourites, programmes and saved Coach questions."),
                         fontSize = 14.sp, lineHeight = 21.sp, color = MareePalette.Muted)
                     Button(onClick = onDeleteData, modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),

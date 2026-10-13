@@ -1,6 +1,18 @@
 # Selkie — application Android de réduction du temps d'écran
 
-## Version actuelle 0.11.0 — Coach local et offres simplifiées
+## Version actuelle 0.12.0 — calendrier et outils du quotidien
+
+Quotidien est organisé en Jour, Calendrier, Bilan et Outils. Gratuit inclut le calendrier, le résumé hebdomadaire et les favoris du coach. Premium ajoute le détail hebdomadaire, les créneaux et le widget. Ultra ajoute les programmes Sommeil de 7 jours, Études de 14 jours et Réseaux sociaux de 30 jours. Tout fonctionne sur le téléphone, sans IA ni compte. Les observations de suivi sont locales, partielles et limitées à une fenêtre de 90 jours ; aucune durée ancienne ou journée parfaite n’est inventée.
+
+Prix proposés inchangés : Premium 5 €/mois ou 60 €/an ; Ultra 10 €/mois ou 120 €/an, sans réduction. Les offres de l’APK DEBUG restent des démonstrations gratuites, sans paiement actif. Le coach conserve 1 152 / 23 040 / 50 688 questions préparées par langue, selon l’offre.
+
+Les 204 tests unitaires passent. Android Lint indique 0 erreur, 5 avertissements et 3 informations.
+
+[APK 0.12.0 sur GitHub](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.12.0.apk) · [Sources exactes](downloads/Selkie-Android-0.12.0-source.zip) · [Validation](downloads/VALIDATION-0.12.0.md) · [Fonctions et limites](docs/FONCTIONS_QUOTIDIENNES.md).
+
+## Historique — les versions ci-dessous ont leurs anciens prix et fonctions
+
+## Version 0.11.0 — Coach local et offres simplifiées
 
 Le dialogue IA, le client de connexion et la préparation serveur ont été retirés. Aucun fournisseur, compte de coach ou permission Internet ne peut être activé par des options de compilation. Le coach à réponses préparées reste disponible sans compte et sans frais par question.
 
@@ -16,7 +28,7 @@ La politique locale et ses pages statiques ont été simplifiées. Les licences 
 
 [APK 0.11.0 sur GitHub](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.11.0.apk) · [Sources exactes](downloads/Selkie-Android-0.11.0-source.zip) · [Validation](downloads/VALIDATION-0.11.0.md).
 
-## Historique — les versions ci-dessous ont leurs anciens prix et fonctions
+
 
 ## Version 0.10.4 — Coach par offre, animation claire et confidentialité
 

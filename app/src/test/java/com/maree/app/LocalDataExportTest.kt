@@ -21,7 +21,7 @@ class LocalDataExportTest {
 
         assertEquals(before, prefs.all)
         assertEquals("selkie-local-data", json.getString("format"))
-        assertEquals(1, json.getInt("schemaVersion"))
+        assertEquals(2, json.getInt("schemaVersion"))
         assertEquals(Instant.ofEpochMilli(NOW + DAY).toString(), json.getString("exportedAt"))
         val preferences = json.getJSONObject("preferences")
         assertEquals("fr", preferences.getString("language"))
@@ -82,7 +82,7 @@ class LocalDataExportTest {
             assertFalse(exported.contains(privateValue))
         }
         val data = JSONObject(exported).getJSONObject("storedData")
-        assertEquals(setOf("points", "membership", "tracking", "standardChallenges", "customChallenges"),
+        assertEquals(setOf("points", "membership", "tracking", "standardChallenges", "customChallenges", "dailyHistory", "limitSchedules", "coachFavorites", "guidedPrograms"),
             data.keys().asSequence().toSet())
         assertEquals("Déconnecter 🐚", data.getJSONArray("customChallenges").getJSONObject(0).getString("title"))
     }

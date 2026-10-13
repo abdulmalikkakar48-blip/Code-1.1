@@ -18,7 +18,7 @@ internal object LocalDataExport {
         now: Long = System.currentTimeMillis()
     ): String = JSONObject().apply {
         put("format", "selkie-local-data")
-        put("schemaVersion", 1)
+        put("schemaVersion", 2)
         put("exportedAt", Instant.ofEpochMilli(now).toString())
         put("localTimeZone", ZoneId.systemDefault().id)
         put("application", JSONObject().apply {
@@ -30,7 +30,7 @@ internal object LocalDataExport {
             put("appearance", appearance.tag)
             put("effectiveAppearance", if (effectiveNight) "dark" else "light")
         })
-        put("storedData", store.exportLocalState())
+        put("storedData", store.exportLocalState(now))
     }.toString(2)
 
     fun write(resolver: ContentResolver, destination: Uri, json: String) {

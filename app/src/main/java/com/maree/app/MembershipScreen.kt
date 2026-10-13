@@ -143,11 +143,31 @@ private fun MembershipPlanCard(option: PlanType, selected: Boolean, period: Bill
                 tr("Bibliothèque en français et en anglais, utilisable hors ligne. C’est un choix de contenus, pas un quota de messages ; la saisie libre et l’aide restent accessibles dans toutes les offres.",
                     "A French and English library you can use offline. This is a content library, not a message quota; free-text input and help remain available on every plan.")
             )
+            OfferFeature(tr("Calendrier et bilan hebdomadaire", "Calendar and weekly summary"),
+                tr("90 jours glissants sur ton téléphone : usage observé des applications choisies et validations. Les pauses ne comptent pas ; les jours sans observation restent inconnus.",
+                    "90 rolling days on your phone: observed usage of selected apps and validations. Pauses do not count; days without observations stay unknown."))
+            OfferFeature(tr("50 conseils favoris", "50 favorite tips"),
+                tr("Enregistre uniquement des conseils et réponses préparés, dans leur langue d’origine. Après un retour à une offre inférieure, les contenus payants restent verrouillés.",
+                    "Save authored tips and prepared answers in their original language. Paid content stays locked after switching to a lower plan."))
+            if (option != PlanType.FREE) {
+                OfferFeature(tr("Bilan détaillé par application", "Detailed summary by app"),
+                    tr("Le détail hebdomadaire des applications choisies, à partir des jours réellement observés.",
+                        "Weekly details for selected apps, based on days actually observed."))
+                OfferFeature(tr("20 créneaux de limites", "20 scheduled limits"),
+                    tr("Choisis des horaires par application. La limite utilise le compteur actuel, sans le remettre à zéro ; un verrou de 24 h continue jusqu’à son terme.",
+                        "Choose times for each app. The limit uses its current counter without resetting it; a 24-hour lock continues until it expires."))
+                OfferFeature(tr("Widget sur l’écran d’accueil", "Home screen widget"),
+                    tr("Tes points et un défi suggéré visibles sur l’accueil. Pour l’ajouter : appui long sur l’accueil → Widgets → Selkie.",
+                        "See your points and a suggested challenge on your home screen. To add it: long-press the home screen → Widgets → Selkie."))
+            }
             if (option.canCreateCustomChallenges) {
                 OfferFeature(tr("Tes propres défis", "Your own challenges"),
                     tr("3 étapes chaque jour · durée de 2 à 365 jours · +0,25 point une fois le défi terminé.", "3 steps each day · 2 to 365 days · +0.25 point when the challenge is completed."))
             }
             if (option == PlanType.ULTRA) {
+                OfferFeature(tr("Programmes guidés inclus", "Guided programs included"),
+                    tr("Sommeil : 7 jours · Études : 14 jours · Réseaux sociaux : 30 jours. Choisis ton programme et valide manuellement au maximum une étape par jour, tous programmes confondus, sans points supplémentaires.",
+                        "Sleep: 7 days · Studies: 14 days · Social media: 30 days. Choose a program and manually validate at most one step per day across all programs, with no extra points."))
                 OfferFeature(tr("Recherche et tri du suivi", "Search and sort tracked apps"), tr("Par nom, temps passé ou proximité de la limite.", "By name, usage time or how close you are to the limit."))
             }
 

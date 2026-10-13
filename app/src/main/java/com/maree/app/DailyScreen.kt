@@ -2,6 +2,8 @@ package com.maree.app
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -35,7 +38,11 @@ internal fun DailyTab(
     getName: (String) -> String,
     onAddApp: () -> Unit,
     monitoringActive: Boolean,
-    onActivateTracking: () -> Unit
+    onActivateTracking: () -> Unit,
+    history: List<DailyHistoryEntry> = emptyList(),
+    onOffers: () -> Unit = {},
+    onToolsChanged: () -> Unit = {},
+    onProgramValidated: (String) -> Unit = {}
 ) {
     val today = LocalDate.now()
     val tips = dailyTips
@@ -51,6 +58,7 @@ internal fun DailyTab(
         snapshot.challengeProgress[it]?.validatedToday == true
     }
     val personalValidationsToday = snapshot.customChallenges.count { it.validatedToday }
+    var section by rememberSaveable { mutableStateOf("today") }
     var showAllApps by rememberSaveable { mutableStateOf(false) }
     var showCounterDetails by rememberSaveable { mutableStateOf(false) }
 
@@ -65,6 +73,14 @@ internal fun DailyTab(
             title = tr("Un peu plus de vie.", "A little more life."),
             description = tr("Une pause, un repère, un petit pas à la fois.", "A break, a fresh perspective, one small step at a time.")
         )
+        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            listOf("today" to tr("Jour", "Day"), "calendar" to tr("Calendrier", "Calendar"),
+                "week" to tr("Bilan", "Review"), "tools" to tr("Outils", "Tools")).forEach { (id, label) ->
+                FilterChip(selected = section == id, onClick = { section = id }, label = { Text(label) })
+            }
+        }
+        if (section == "today") {
         AppCardSurface(containerColor = MareePalette.Mint) {
             SectionLabel(tr("Ta pause du jour", "Your daily pause"))
             Text(tip.first, color = MareePalette.Ink, fontWeight = FontWeight.Bold,
@@ -170,6 +186,16 @@ internal fun DailyTab(
             Text(tr("Pose ta question sur tes habitudes ou sur Selkie : conseils et aide disponibles hors ligne.", "Ask about your habits or Selkie: tips and app help are available offline."),
                 color = MareePalette.Muted, fontSize = 15.sp, lineHeight = 22.sp)
             PrimaryAction(tr("Ouvrir le coach", "Open the coach"), onClick = onCoach)
+        }
+        }
+        when (section) {
+            "calendar" -> ProgressCalendarSection(history)
+            "week" -> WeeklyReviewSection(history, snapshot.plan, getName, onOffers)
+            "tools" -> {
+                LimitSchedulesSection(snapshot, getName, onOffers, onToolsChanged)
+                GuidedProgramsSection(snapshot.plan, onOffers, onProgramValidated)
+                HomeWidgetSection(snapshot.plan, onOffers)
+            }
         }
         Spacer(Modifier.height(4.dp))
     }

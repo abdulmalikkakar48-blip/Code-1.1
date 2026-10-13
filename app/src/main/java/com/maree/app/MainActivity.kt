@@ -133,11 +133,19 @@ fun appLabel(context: android.content.Context, pkg: String): String = try {
 } catch (_: Exception) { pkg.substringAfterLast('.') }
 
 class MainActivity : ComponentActivity() {
+    private val widgetDestination = mutableStateOf<String?>(null)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Retired online coach: remove any legacy session credentials on upgrade.
         deleteSharedPreferences("selkie_coach_session")
-        setContent { MareeTheme { MareeApp() } }
+        widgetDestination.value = intent?.getStringExtra("selkie_destination")
+        setContent { MareeTheme { MareeApp(widgetDestination.value) { widgetDestination.value = null; intent.removeExtra("selkie_destination") } } }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        widgetDestination.value = intent.getStringExtra("selkie_destination")
     }
 
     override fun onResume() {
@@ -147,7 +155,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun MareeApp() {
+private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> Unit = {}) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     var storeGeneration by remember { mutableIntStateOf(0) }
@@ -169,6 +177,7 @@ private fun MareeApp() {
     var installedLoadFailed by remember { mutableStateOf(false) }
     var installedLoadKey by remember { mutableIntStateOf(0) }
     var refreshKey by remember { mutableIntStateOf(0) }
+    var dailyHistory by remember(storeGeneration) { mutableStateOf<List<DailyHistoryEntry>>(emptyList()) }
     var lastReading by remember(storeGeneration) { mutableStateOf(UsageReading(emptyMap(), null)) }
     var snapshot by remember(storeGeneration) {
         mutableStateOf(store.readSnapshot(UsageReading(emptyMap(), null)))
@@ -192,6 +201,11 @@ private fun MareeApp() {
 
     fun display(text: String) { scope.launch { snackbars.showSnackbar(text) } }
     fun refresh() { refreshKey++ }
+    fun explainHistoryWriteFailure() {
+        if (!store.lastValidationHistoryWriteSucceeded) infoMessage = tr(
+            "Le défi est validé, mais sa journée n’a pas pu être enregistrée dans le calendrier.",
+            "The challenge check-in is saved, but its day could not be recorded in the calendar.")
+    }
     fun refreshPermissions() { permissions = PermissionStatus.read(context); refresh() }
     val settingsRequest = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -267,6 +281,19 @@ private fun MareeApp() {
     BackHandler(enabled = !showSetup && setupComplete && !showPrivacy && drawerState.isOpen) {
         scope.launch { drawerState.close() }
     }
+    LaunchedEffect(widgetDestination, setupComplete, showSetup) {
+        if (widgetDestination != null && setupComplete && !showSetup) {
+            when (widgetDestination) {
+                "daily" -> { settingsPage = null; tab = 1 }
+                "challenges" -> { settingsPage = null; tab = 2 }
+                "subscriptions" -> settingsPage = SettingsPage.SUBSCRIPTIONS
+            }
+            onWidgetHandled()
+        }
+    }
+    LaunchedEffect(AppLanguage.current, snapshot.plan) {
+        SelkieWidgetProvider.refresh(context, force = true)
+    }
     LaunchedEffect(showPicker, installedLoadKey) {
         if (!showPicker) return@LaunchedEffect
         installed = null
@@ -279,17 +306,33 @@ private fun MareeApp() {
     }
     LaunchedEffect(lifecycle, refreshKey, setupComplete, monitoringEnabled, showSetup, storeGeneration) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            var lastPrunedDay: LocalDate? = null
             while (true) {
+                val todayForCleanup = LocalDate.now()
+                if (!deleting && setupComplete && lastPrunedDay != todayForCleanup) {
+                    val cleaned = withContext(Dispatchers.IO) { store.pruneHistory() }
+                    if (!cleaned && !deleting) infoMessage = tr(
+                        "Le nettoyage de l’ancien historique n’a pas pu être confirmé. Réessaie en rouvrant Selkie.",
+                        "Cleanup of older history could not be confirmed. Try opening Selkie again.")
+                    lastPrunedDay = todayForCleanup
+                }
                 permissions = PermissionStatus.read(context)
-                if (setupComplete && !showSetup) {
+                if (setupComplete && !showSetup && !deleting) {
                     try {
-                        val (reading, currentSnapshot) = withContext(Dispatchers.IO) {
+                        val observedGeneration = storeGeneration
+                        val (reading, currentSnapshot, currentHistory) = withContext(Dispatchers.IO) {
                             val currentReading = if (setup.isMonitoringEnabled() && permissions.readyForMonitoring)
                                 reader.read(store.packages()) else lastReading
-                            currentReading to store.readSnapshot(currentReading)
+                            Triple(currentReading, store.readSnapshot(currentReading), store.historyEntries())
+                        }
+                        if (deleting || observedGeneration != storeGeneration || !setup.isCompleted()) {
+                            delay(2500L)
+                            continue
                         }
                         lastReading = reading
                         snapshot = currentSnapshot
+                        dailyHistory = currentHistory
+                        SelkieWidgetProvider.refresh(context)
                         if (setup.isMonitoringEnabled() && permissions.readyForMonitoring)
                             MonitorService.start(context)
                     } catch (cancelled: CancellationException) {
@@ -426,7 +469,7 @@ private fun MareeApp() {
                                 active = monitoringEnabled && permissions.readyForMonitoring,
                                 onSetup = { showSetup = true },
                                 onChallenges = { tab = 2 },
-                                onAdd = ::addApplication, onEdit = { editApp = it },
+                                onAdd = ::addApplication, onEdit = { editApp = it.copy(limitMinutes = it.configuredLimitMinutes) },
                                 onRemove = { removeApp = it },
                                 onReset = {
                                     if (monitoringEnabled && permissions.readyForMonitoring) resetApp = it
@@ -436,10 +479,18 @@ private fun MareeApp() {
                             )
                             1 -> DailyTab(snapshot, onCoach = { tab = 3 }, getName = { appLabel(context, it) }, onAddApp = ::addApplication,
                                 monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
-                                onActivateTracking = { showSetup = true })
+                                onActivateTracking = { showSetup = true }, history = dailyHistory,
+                                onOffers = { openMenuPage(SettingsPage.SUBSCRIPTIONS) }, onToolsChanged = ::refresh,
+                                onProgramValidated = { id ->
+                                    if (!store.recordProgramValidation(id)) display(tr(
+                                        "Le programme est validé, mais sa journée n’a pas pu être enregistrée dans le calendrier.",
+                                        "The program check-in is saved, but its day could not be recorded in the calendar."))
+                                    refresh()
+                                })
                             2 -> ChallengeTab(snapshot,
                                 onComplete = { index ->
                                     if (store.completeChallenge(index)) {
+                                        explainHistoryWriteFailure()
                                         snapshot = store.readSnapshot(lastReading)
                                         refresh()
                                     }
@@ -457,7 +508,7 @@ private fun MareeApp() {
                                 },
                                 onValidateCustom = { id ->
                                     store.validateCustomChallengeToday(id).also { issue ->
-                                        if (issue == null) { snapshot = store.readSnapshot(lastReading); refresh() }
+                                        if (issue == null) { explainHistoryWriteFailure(); snapshot = store.readSnapshot(lastReading); refresh() }
                                     }
                                 },
                                 onDeleteCustom = { id ->
@@ -551,7 +602,7 @@ private fun MareeApp() {
     if (deleteConfirmation) {
         AlertDialog(onDismissRequest = { if (!deleting) deleteConfirmation = false },
             title = { Text(tr("Effacer les données de Selkie ?", "Delete Selkie data?")) },
-            text = { Text(tr("Tes applications suivies, limites, verrous, points, défis, choix de démonstration, d’accueil, de langue et d’apparence, ainsi que les questions du coach enregistrées sur ce téléphone seront effacés. Le suivi sera arrêté. Cette action est irréversible et ne supprime pas les statistiques Android.", "Your tracked apps, limits, locks, points, challenges, demo, onboarding, language and appearance choices, and coach questions saved on this phone will be deleted. Tracking will stop. This cannot be undone and does not delete Android usage statistics.")) },
+            text = { Text(tr("Tes applications suivies, limites, verrous, points, défis, choix de démonstration, d’accueil, de langue et d’apparence, ainsi que l’historique du calendrier, les créneaux, les favoris, les programmes guidés et les questions du coach enregistrées sur ce téléphone seront effacés. Le suivi sera arrêté. Cette action est irréversible et ne supprime pas les statistiques Android.", "Your tracked apps, limits, locks, points, challenges, demo, onboarding, language and appearance choices, calendar history, time slots, favorites, guided programs and coach questions saved on this phone will be deleted. Tracking will stop. This cannot be undone and does not delete Android usage statistics.")) },
             confirmButton = { Button(enabled = !deleting, onClick = {
                 scope.launch {
                     deleting = true
@@ -565,7 +616,8 @@ private fun MareeApp() {
                         val offlineCoach = OfflineCoachHistory(context).clear()
                         val language = AppLanguage.reset(context)
                         val appearance = AppAppearance.reset(context)
-                        onboarding && local && coach && offlineCoach && language && appearance
+                        val widget = SelkieWidgetProvider.refreshNow(context)
+                        onboarding && local && coach && offlineCoach && language && appearance && widget
                     }
                     deleting = false
                     deleteConfirmation = false
@@ -757,6 +809,10 @@ private fun AppCard(
         }
         if (app.isLocked && active) Text(tr("Écran de pause · encore ${remainingTime(app.lockedUntil)}", "Pause screen · ${remainingTime(app.lockedUntil)} remaining"),
             color = Warning, fontSize = 13.sp)
+        if (app.limitMinutes != app.configuredLimitMinutes) Text(
+            tr("Créneau actif · limite habituelle : ${app.configuredLimitMinutes} min",
+                "Time slot active · usual limit: ${app.configuredLimitMinutes} min"),
+            color = Muted, fontSize = 13.sp)
         TextButton(onClick = onEdit, enabled = canEdit) {
             Text(tr("Modifier la limite", "Edit limit"), fontSize = 13.sp)
         }

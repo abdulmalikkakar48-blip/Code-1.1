@@ -35,15 +35,17 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
     ),
     help(
         SelkieHelpSection.DISCOVER, "daily", "Que trouve-t-on dans Quotidien ?",
-        listOf("quotidien", "bilan du jour", "pause du jour", "conseil du jour", "bilan quotidien", "que mesure ce bilan", "exercices quotidiens", "activites quotidiennes", "routine quotidienne"),
+        listOf("quotidien", "bilan du jour", "pause du jour", "conseil du jour", "bilan quotidien", "que mesure ce bilan", "exercices quotidiens", "activites quotidiennes", "routine quotidienne", "calendrier selkie", "bilan hebdomadaire", "historique observe"),
         "Quotidien propose une idée de pause sans points ni validation, additionne les compteurs des applications suivies et montre ta progression dans les défis. " +
-            "Ce bilan ne mesure pas tout ton temps d’écran. Les compteurs peuvent repartir à zéro après un ajout, une réinitialisation ou la fin d’un verrou ; le suivi doit être actif pour les actualiser."
+            "Ce bilan ne mesure pas tout ton temps d’écran. Les compteurs peuvent repartir à zéro après un ajout, une réinitialisation ou la fin d’un verrou ; le suivi doit être actif pour les actualiser. " +
+            "Le calendrier et le bilan hebdomadaire sont inclus dès Gratuit : ils gardent au maximum 90 jours locaux de durées et validations observées, sans inventer de passé. Seules les applications choisies et les périodes observées pendant le suivi actif sont comptées ; les pauses et lacunes sont exclues de cet historique. Les moyennes portent sur les seuls jours observés, et les badges de dépassements observés ne prouvent pas une journée parfaite. Premium et Ultra ajoutent le détail par application. Le calendrier du téléphone n’est ni lu ni modifié."
     ),
     help(
         SelkieHelpSection.DISCOVER, "coach_help", "Comment fonctionne le Coach ?",
-        listOf("coach", "coach ia", "ia", "chatgpt", "intelligence artificielle", "comment fonctionne le coach", "coach gratuit", "coach hors ligne", "reponses preparees"),
+        listOf("coach", "coach ia", "ia", "chatgpt", "intelligence artificielle", "comment fonctionne le coach", "coach gratuit", "coach hors ligne", "reponses preparees", "favoris du coach", "conseils favoris"),
         "Écris ta question dans Coach ou choisis un sujet de l’aide. Ce coach reconnaît des mots et expressions pour proposer des conseils préparés et expliquer Selkie. " +
-            "La saisie standard et l’aide fonctionnent gratuitement sur ton téléphone, sans compte ni Internet. La bibliothèque propose ${PlanType.FREE.coachQuestionCount} questions préparées en Gratuit, ${PlanType.PREMIUM.coachQuestionCount} en Premium et ${PlanType.ULTRA.coachQuestionCount} en Ultra. Ce coach ne comprend pas toutes les questions et ce n’est pas ChatGPT."
+            "La saisie standard et l’aide fonctionnent gratuitement sur ton téléphone, sans compte ni Internet. La bibliothèque propose ${PlanType.FREE.coachQuestionCount} questions préparées en Gratuit, ${PlanType.PREMIUM.coachQuestionCount} en Premium et ${PlanType.ULTRA.coachQuestionCount} en Ultra. Ce coach ne comprend pas toutes les questions et ce n’est pas ChatGPT. " +
+            "Dès Gratuit, tu peux sélectionner jusqu’à 50 favoris de conseils rédigés et préparés. Aucune saisie brute, phrase non comprise ou phrase sensible n’est copiée dans les favoris. Leur langue d’origine et leur offre minimale sont gardées ; un favori réservé à une offre supérieure reste enregistré mais sa lecture est bloquée après un passage à une offre inférieure."
     ),
     help(
         SelkieHelpSection.DISCOVER, "coach_unknown", "Si le Coach ne comprend pas ?",
@@ -60,9 +62,10 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
     ),
     help(
         SelkieHelpSection.TRACKING, "limits", "Fixer ou modifier une limite",
-        listOf("fixer une limite", "choisir une limite", "modifier une limite", "changer ma limite", "changer la limite", "limite quotidienne", "combien de minutes choisir", "regler une limite"),
+        listOf("fixer une limite", "choisir une limite", "modifier une limite", "changer ma limite", "changer la limite", "limite quotidienne", "combien de minutes choisir", "regler une limite", "plages horaires", "limite selon les heures", "horaire de nuit"),
         "À l’ajout, choisis une limite adaptée à ton usage : de 5 à 1 440 minutes, par pas de 5 minutes. Pour la changer, appuie sur Modifier la limite sur sa carte dans Accueil. " +
-            "La modification demande un solde supérieur à 0 point, même en Premium ou Ultra. Modifier la limite ne lève pas un verrou déjà actif : il faut attendre sa fin ou réinitialiser avec 10 points."
+            "La modification demande un solde supérieur à 0 point, même en Premium ou Ultra. Modifier la limite ne lève pas un verrou déjà actif : il faut attendre sa fin ou réinitialiser avec 10 points. " +
+            "Dans Quotidien, Premium et Ultra permettent jusqu’à 20 plages horaires pour des applications déjà suivies : choisis les jours, des heures HH:mm et une limite de 5 à 240 minutes. Une plage nocturne finit le lendemain du jour sélectionné ; deux plages actives de la même application ne peuvent pas se chevaucher. La plage change la limite du compteur existant sans remise à zéro, et un verrou de 24 h continue après sa fin. À 0 point, créer, modifier, activer ou supprimer une plage reste bloqué. En Gratuit, ces plages sont conservées mais ne s’appliquent pas."
     ),
     help(
         SelkieHelpSection.TRACKING, "red_screen", "Pourquoi une application est-elle bloquée ?",
@@ -104,7 +107,7 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.TRACKING, "pause_tracking", "Mettre le suivi en pause ou le reprendre",
         listOf("mettre le suivi en pause", "pause du suivi", "arreter le suivi", "desactiver le suivi", "reprendre le suivi", "activer le suivi", "suivi en pause"),
         "Dans le menu ☰ → Accès Android, choisis Mettre le suivi en pause : la surveillance et les écrans de pause s’arrêtent, mais tes applications, limites et verrous enregistrés restent conservés. " +
-            "Pour reprendre, choisis Activer le suivi et vérifie les accès Android. À la reprise, Android peut fournir l’usage de la journée : une pause du service ne garantit pas que toutes ces minutes seront exclues des compteurs."
+            "Pour reprendre, choisis Activer le suivi et vérifie les accès Android. À la reprise, Android peut fournir l’usage de la journée : une pause du service ne garantit pas que toutes ces minutes seront exclues des compteurs. L’historique du calendrier et du bilan hebdomadaire est distinct : il exclut les pauses et les intervalles non observés, sans reconstituer les journées manquantes."
     ),
     help(
         SelkieHelpSection.TRACKING, "usage", "Que mesurent les minutes affichées ?",
@@ -128,7 +131,7 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.POINTS, "earn_points", "Comment gagner des points ?",
         listOf("gagner des points", "regagner des points", "recuperer des points", "obtenir des points", "augmenter mes points", "recompenses", "bonus de points"),
         "Trois gains existent : +10 points par période de 24 heures sans dépassement enregistré ; +5 points à chaque groupe de cinq défis standard entièrement terminés ; " +
-            "+0,25 point une seule fois à la fin d’un défi personnalisé en Premium ou Ultra. Les journées intermédiaires ne donnent pas de points, et écrire au Coach n’en ajoute pas."
+            "+0,25 point une seule fois à la fin d’un défi personnalisé en Premium ou Ultra. Les journées intermédiaires ne donnent pas de points, et écrire au Coach n’en ajoute pas. Les programmes guidés Ultra ne donnent aucun point supplémentaire."
     ),
     help(
         SelkieHelpSection.POINTS, "lose_points", "Pourquoi ai-je perdu des points ?",
@@ -139,7 +142,7 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
     help(
         SelkieHelpSection.POINTS, "zero_points", "Que faire à 0 point ?",
         listOf("zero point", "0 point", "plus de points", "aucun point", "bloque a zero", "a zero", "solde nul"),
-        "À 0 point, tu ne peux pas ajouter une application ni modifier une limite, même en Premium ou Ultra. Réinitialiser demande au moins 10 points. " +
+        "À 0 point, tu ne peux pas ajouter une application ni modifier une limite, même en Premium ou Ultra. Tu ne peux pas non plus créer, modifier, activer ou supprimer une plage horaire. Réinitialiser demande au moins 10 points. " +
             "Tu peux toujours retirer une application, mettre le suivi en pause, utiliser le Coach et terminer des défis pour regagner des points. Le bonus de discipline peut aussi en ajouter si aucun dépassement n’est enregistré sur la période."
     ),
     help(
@@ -176,16 +179,16 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.OFFERS, "premium", "Que contient Premium ?",
         listOf("premium", "offres", "offre gratuite", "gratuit", "difference des offres", "combien d applications", "limite d applications", "prix premium", "abonnement", "abonnements", "prix des offres", "prix des abonnements"),
         "Les offres sont dans le menu ☰ → Abonnements. Gratuit permet 10 applications suivies. Premium est prévu à " +
-            "${PlanType.PREMIUM.monthlyPriceEuros} €/mois ou ${PlanType.PREMIUM.annualPriceEuros} €/an, avec 50 applications et les défis personnalisés. " +
+            "${PlanType.PREMIUM.monthlyPriceEuros} €/mois ou ${PlanType.PREMIUM.annualPriceEuros} €/an, avec 50 applications, les défis personnalisés, le détail hebdomadaire par application, 20 plages horaires maximum et un widget. Gratuit inclut le calendrier, le bilan hebdomadaire et jusqu’à 50 favoris préparés. " +
             "Ultra est prévu à ${PlanType.ULTRA.monthlyPriceEuros} €/mois ou ${PlanType.ULTRA.annualPriceEuros} €/an, sans plafond commercial sur les applications compatibles. " +
-            "La bibliothèque préparée comprend ${PlanType.FREE.coachQuestionCount} questions en Gratuit, ${PlanType.PREMIUM.coachQuestionCount} en Premium et ${PlanType.ULTRA.coachQuestionCount} en Ultra. La saisie standard, l’aide du Coach et les défis proposés sont inclus dans toutes les offres. Le choix d’offre ici est une démonstration locale : aucun abonnement ni prélèvement. Les règles de points restent les mêmes, y compris à 0 point."
+            "La bibliothèque préparée comprend ${PlanType.FREE.coachQuestionCount} questions en Gratuit, ${PlanType.PREMIUM.coachQuestionCount} en Premium et ${PlanType.ULTRA.coachQuestionCount} en Ultra. La saisie standard, l’aide du Coach et les défis proposés sont inclus dans toutes les offres. Pour installer le widget Premium ou Ultra, appuie longuement sur l’écran d’accueil Android → Widgets → Selkie : tes points et un défi proposé y seront visibles. Le choix d’offre est une démonstration locale dans l’APK DEBUG : aucun abonnement ni prélèvement. L’année correspond à douze mensualités, sans réduction. Les règles de points restent les mêmes, y compris à 0 point."
     ),
     help(
         SelkieHelpSection.OFFERS, "ultra", "Que contient Ultra ?",
-        listOf("ultra", "ultra premium", "prix ultra", "applications illimitees", "sans plafond", "tri du suivi", "recherche du suivi", "coach illimite"),
+        listOf("ultra", "ultra premium", "prix ultra", "applications illimitees", "sans plafond", "tri du suivi", "recherche du suivi", "coach illimite", "programmes guides", "programme sommeil", "programme revisions", "programme etudes", "programme reseaux sociaux"),
         "Ultra est prévu à ${PlanType.ULTRA.monthlyPriceEuros} €/mois ou ${PlanType.ULTRA.annualPriceEuros} €/an : pas de plafond commercial sur les applications compatibles, " +
-            "défis personnalisés, recherche et tri du suivi, et ${PlanType.ULTRA.coachQuestionCount} questions/réponses préparées dans le Coach. " +
-            "Aucun paiement n’est possible dans cette version de test, et Ultra ne contourne pas les règles de points."
+            "toutes les fonctions Premium, recherche et tri du suivi, et ${PlanType.ULTRA.coachQuestionCount} questions/réponses préparées dans le Coach. " +
+            "Dans Quotidien, choisis un programme guidé Sommeil de 7 jours, Études de 14 jours ou Réseaux sociaux de 30 jours. Après avoir réalisé l’activité, valide manuellement : au maximum une validation par jour entre tous les programmes, même si tu changes de programme. Ces validations ne donnent pas de points supplémentaires. La progression reste locale et est conservée si tu changes d’offre ; sa poursuite nécessite Ultra. Aucun paiement n’est possible dans cette version de test, et Ultra ne contourne pas les règles de points."
     ),
     help(
         SelkieHelpSection.OFFERS, "subscription_monthly", "Comment fonctionnerait l’abonnement mensuel ?",
@@ -198,7 +201,7 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.OFFERS, "subscription_annual", "Quel est le prix de l’offre annuelle ?",
         listOf("annuel", "annuelle", "par an", "par annee", "chaque annee", "tous les ans", "abonnement annuel", "reduction", "120 euros", "240 euros"),
         "L’offre annuelle est prévue à ${PlanType.PREMIUM.annualPriceEuros} € pour Premium ou ${PlanType.ULTRA.annualPriceEuros} € pour Ultra, payés en une fois pour un an. " +
-            "Cela correspond à douze mensualités, avec les mêmes fonctions. " +
+            "Cela correspond à douze mensualités, sans réduction, avec les mêmes fonctions. " +
             "Elle se renouvellera chaque année sauf résiliation lorsque les paiements seront activés. Aucun abonnement annuel n’est vendu ici."
     ),
     help(
@@ -241,16 +244,16 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
     help(
         SelkieHelpSection.PRIVACY, "privacy", "Où sont mes données et la confidentialité ?",
         listOf("confidentialite", "politique de confidentialite", "donnees personnelles", "mes donnees", "rgpd", "cnil", "responsable", "nom et prenom", "nom prenom", "mon vrai nom", "vie privee", "messages lus"),
-        "Lis la politique dans le menu ☰ → Confidentialité et données. Tes applications suivies, limites, points et défis restent sur le téléphone ; le Coach local ne transmet pas tes questions à l’éditeur. " +
+        "Lis la politique de Selkie 0.12.0 dans le menu ☰ → Confidentialité et données. Tes applications suivies, limites, points, défis, historique de 90 jours, plages horaires, favoris et programmes restent dans le stockage privé du téléphone ; le Coach local ne transmet pas tes questions à l’éditeur. " +
             "Selkie ne lit ni les messages de tes autres applications, ni tes photos, ni le contenu de l’écran. La politique doit permettre d’identifier le responsable réel et de le contacter : ici, " +
             "${PrivacyIdentity.controllerName}, ${PrivacyIdentity.contactEmail}. Elle décrit cette version ; l’ouverture de comptes ou paiements nécessitera une mise à jour."
     ),
     help(
         SelkieHelpSection.PRIVACY, "delete_data", "Comment effacer mes données ?",
         listOf("effacer mes donnees", "effacer toutes mes donnees", "supprimer mes donnees", "supprimer toutes mes donnees", "effacement", "tout effacer", "repartir de zero", "suppression de donnees", "effacer mon compte", "supprimer mon compte"),
-        "Dans le menu ☰ → Confidentialité et données → Effacer mes données, confirme pour arrêter le suivi et supprimer les réglages, points, défis, choix locaux et questions du Coach sauvegardées. " +
+        "Dans le menu ☰ → Confidentialité et données → Effacer mes données, confirme pour arrêter le suivi et supprimer les réglages, points, défis, historique, plages horaires, favoris, programmes, choix locaux et questions du Coach sauvegardées. " +
             "C’est irréversible ; les points reviennent à leur valeur initiale à la prochaine utilisation. Les statistiques et autorisations Android restent inchangées. " +
-            "Aucun compte serveur actif n’est supprimé ici, et cet effacement n’annulerait pas un futur abonnement Google Play."
+            "Aucun compte serveur actif n’est supprimé ici, et cet effacement n’annulerait pas un futur abonnement Google Play. Exporter mes données crée une copie JSON locale avec les observations, règles, favoris préparés et identifiants et dates de programmes, sans saisie brute du Coach, jeton ni adresse e-mail. Une copie exportée doit être supprimée séparément."
     ),
     help(
         SelkieHelpSection.PRIVACY, "contact", "Comment contacter Selkie ?",

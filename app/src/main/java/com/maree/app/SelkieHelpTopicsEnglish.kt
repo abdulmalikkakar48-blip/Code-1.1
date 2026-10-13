@@ -16,15 +16,17 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
     ),
     englishHelp(
         SelkieHelpSection.DISCOVER, "daily", "What is in the Daily tab?",
-        listOf("daily", "daily overview", "break of the day", "daily tip", "daily summary", "what does this overview measure", "daily exercises", "daily activities", "daily routine"),
+        listOf("daily", "daily overview", "break of the day", "daily tip", "daily summary", "what does this overview measure", "daily exercises", "daily activities", "daily routine", "selkie calendar", "weekly summary", "observed history"),
         "Daily suggests a break idea without points or a completion check, adds up the counters for tracked apps and shows your challenge progress. " +
-            "This overview does not measure all your screen time. Counters may restart after adding an app, resetting a limit or the end of a lock; tracking must be active to update them."
+            "This overview does not measure all your screen time. Counters may restart after adding an app, resetting a limit or the end of a lock; tracking must be active to update them. " +
+            "The calendar and weekly summary are included from Free: they keep at most 90 local days of observed usage and check-ins, without inventing a past history. Only selected apps and intervals observed during active tracking are counted; pauses and gaps are excluded from this history. Averages cover observed days only, and observed-breach badges do not prove a perfect day. Premium and Ultra add details for each app. Your phone’s calendar is neither read nor changed."
     ),
     englishHelp(
         SelkieHelpSection.DISCOVER, "coach_help", "How does the Coach work?",
-        listOf("coach", "ai coach", "ai", "chatgpt", "artificial intelligence", "how does the coach work", "free coach", "offline coach", "prepared replies"),
+        listOf("coach", "ai coach", "ai", "chatgpt", "artificial intelligence", "how does the coach work", "free coach", "offline coach", "prepared replies", "coach favourites", "coach favorites", "favourite advice"),
         "Write your question in Coach or choose a help topic. This coach recognizes words and phrases to offer prepared advice and explain Selkie. " +
-            "Standard input and help work free on your phone, without an account or Internet. The library offers ${PlanType.FREE.coachQuestionCount} prepared questions in Free, ${PlanType.PREMIUM.coachQuestionCount} in Premium and ${PlanType.ULTRA.coachQuestionCount} in Ultra. This coach does not understand every question and it is not ChatGPT."
+            "Standard input and help work free on your phone, without an account or Internet. The library offers ${PlanType.FREE.coachQuestionCount} prepared questions in Free, ${PlanType.PREMIUM.coachQuestionCount} in Premium and ${PlanType.ULTRA.coachQuestionCount} in Ultra. This coach does not understand every question and it is not ChatGPT. " +
+            "From Free, you can select up to 50 favourites of authored, prepared advice. No raw input, unrecognised message or sensitive message is copied into favourites. Their original language and minimum plan are kept; a favourite requiring a higher plan stays saved but cannot be read after a downgrade."
     ),
     englishHelp(
         SelkieHelpSection.DISCOVER, "coach_unknown", "What if the Coach does not understand?",
@@ -41,9 +43,10 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
     ),
     englishHelp(
         SelkieHelpSection.TRACKING, "limits", "Set or change a limit",
-        listOf("set a limit", "choose a limit", "change a limit", "change my limit", "change the limit", "daily limit", "how many minutes", "adjust a limit"),
+        listOf("set a limit", "choose a limit", "change a limit", "change my limit", "change the limit", "daily limit", "how many minutes", "adjust a limit", "time slots", "scheduled limit", "overnight schedule"),
         "When adding an app, choose a limit that suits your use: from 5 to 1,440 minutes, in 5-minute steps. To change it, tap Change limit on its card in Home. " +
-            "Changing a limit requires a balance above 0 points, even with Premium or Ultra. Changing the limit does not lift an active lock: wait for it to end or reset it for 10 points."
+            "Changing a limit requires a balance above 0 points, even with Premium or Ultra. Changing the limit does not lift an active lock: wait for it to end or reset it for 10 points. " +
+            "In Daily, Premium and Ultra allow up to 20 time slots for apps already tracked: choose days, HH:mm times and an allowance of 5 to 240 minutes. An overnight slot ends on the day after each selected day; two enabled slots for the same app cannot overlap. A slot changes the existing counter’s allowance without resetting usage, and a 24-hour lock continues after the slot ends. At 0 points, creating, editing, enabling and deleting slots stay blocked. On Free, these slots are kept but do not apply."
     ),
     englishHelp(
         SelkieHelpSection.TRACKING, "red_screen", "Why is an app blocked?",
@@ -85,7 +88,7 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.TRACKING, "pause_tracking", "Pause or resume tracking",
         listOf("pause tracking", "tracking pause", "stop tracking service", "disable tracking", "resume tracking", "enable tracking", "tracking paused"),
         "In the ☰ menu → Android access, choose Pause tracking: monitoring and break screens stop, but your saved apps, limits and locks are kept. " +
-            "To resume, choose Turn on tracking and check the Android permissions. On resuming, Android may provide usage for the day: pausing the service does not guarantee that all those minutes are excluded from the counters."
+            "To resume, choose Turn on tracking and check the Android permissions. On resuming, Android may provide usage for the day: pausing the service does not guarantee that all those minutes are excluded from the counters. Calendar and weekly history are separate: they exclude pauses and unobserved gaps, without reconstructing missing days."
     ),
     englishHelp(
         SelkieHelpSection.TRACKING, "usage", "What do the displayed minutes measure?",
@@ -109,7 +112,7 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.POINTS, "earn_points", "How can I earn points?",
         listOf("earn points", "earn back points", "get points back", "get points", "increase my points", "rewards", "point bonus"),
         "There are three ways: +10 points per 24-hour period without a recorded overrun; +5 points for every group of five fully completed standard challenges; " +
-            "+0.25 points once at the end of a custom challenge on Premium or Ultra. Intermediate days do not award points, and writing to the Coach does not add any."
+            "+0.25 points once at the end of a custom challenge on Premium or Ultra. Intermediate days do not award points, and writing to the Coach does not add any. Ultra guided programmes award no extra points."
     ),
     englishHelp(
         SelkieHelpSection.POINTS, "lose_points", "Why did I lose points?",
@@ -120,7 +123,7 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
     englishHelp(
         SelkieHelpSection.POINTS, "zero_points", "What can I do at 0 points?",
         listOf("zero points", "0 points", "no points left", "no points", "stuck at zero", "at zero", "zero balance"),
-        "At 0 points, you cannot add an app or change a limit, even with Premium or Ultra. Resetting requires at least 10 points. " +
+        "At 0 points, you cannot add an app or change a limit, even with Premium or Ultra. You also cannot create, edit, enable or delete a time slot. Resetting requires at least 10 points. " +
             "You can still remove an app, pause tracking, use the Coach and complete challenges to earn points back. The discipline bonus can also add points if no overrun is recorded during the period."
     ),
     englishHelp(
@@ -157,16 +160,16 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.OFFERS, "premium", "What does Premium include?",
         listOf("premium", "plans", "free plan", "free", "plan differences", "how many apps", "app limit", "premium price", "subscription", "subscriptions", "plan prices", "subscription prices"),
         "Find the plans in the ☰ menu → Subscriptions. Free allows 10 tracked apps. Premium is planned at " +
-            "€${PlanType.PREMIUM.monthlyPriceEuros}/month or €${PlanType.PREMIUM.annualPriceEuros}/year, with 50 apps and custom challenges. " +
+            "€${PlanType.PREMIUM.monthlyPriceEuros}/month or €${PlanType.PREMIUM.annualPriceEuros}/year, with 50 apps, custom challenges, weekly details for each app, up to 20 time slots and a widget. Free includes the calendar, weekly summary and up to 50 prepared favourites. " +
             "Ultra is planned at €${PlanType.ULTRA.monthlyPriceEuros}/month or €${PlanType.ULTRA.annualPriceEuros}/year, with no commercial cap on compatible apps. " +
-            "The prepared library includes ${PlanType.FREE.coachQuestionCount} questions in Free, ${PlanType.PREMIUM.coachQuestionCount} in Premium and ${PlanType.ULTRA.coachQuestionCount} in Ultra. Standard input, Coach help and suggested challenges are included in every plan. Selecting a plan here is a local demo: no subscription or charge is created. Point rules stay the same, including at 0 points."
+            "The prepared library includes ${PlanType.FREE.coachQuestionCount} questions in Free, ${PlanType.PREMIUM.coachQuestionCount} in Premium and ${PlanType.ULTRA.coachQuestionCount} in Ultra. Standard input, Coach help and suggested challenges are included in every plan. To install the Premium or Ultra widget, long-press the Android home screen → Widgets → Selkie: your points and a suggested challenge will be visible there. Plan selection is a local demonstration in the DEBUG APK: no subscription or charge is created. The annual price equals twelve monthly payments, with no discount. Point rules stay the same, including at 0 points."
     ),
     englishHelp(
         SelkieHelpSection.OFFERS, "ultra", "What does Ultra include?",
-        listOf("ultra", "ultra premium", "ultra price", "unlimited apps", "no cap", "tracking sort", "tracking search", "unlimited coach"),
+        listOf("ultra", "ultra premium", "ultra price", "unlimited apps", "no cap", "tracking sort", "tracking search", "unlimited coach", "guided programmes", "sleep programme", "studies programme", "social media programme"),
         "Ultra is planned at €${PlanType.ULTRA.monthlyPriceEuros}/month or €${PlanType.ULTRA.annualPriceEuros}/year: no commercial cap on compatible apps, " +
-            "custom challenges, search and sorting for tracking, and ${PlanType.ULTRA.coachQuestionCount} prepared Coach question-and-answer pairs. " +
-            "No payments are possible in this test version, and Ultra does not bypass point rules."
+            "all Premium features, search and sorting for tracking, and ${PlanType.ULTRA.coachQuestionCount} prepared Coach question-and-answer pairs. " +
+            "In Daily, choose a guided Sleep programme of 7 days, Studies of 14 days or Social media of 30 days. After doing the activity, check in manually: at most one check-in per day across all programmes, even if you switch programmes. These check-ins award no extra points. Progress stays local and is kept if you change plans; continuing requires Ultra. No payments are possible in this test version, and Ultra does not bypass point rules."
     ),
     englishHelp(
         SelkieHelpSection.OFFERS, "subscription_monthly", "How would the monthly subscription work?",
@@ -179,7 +182,7 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.OFFERS, "subscription_annual", "What is the annual plan price?",
         listOf("annual", "yearly", "per year", "each year", "every year", "annual subscription", "discount", "120 euros", "240 euros"),
         "The planned annual price is €${PlanType.PREMIUM.annualPriceEuros} for Premium or €${PlanType.ULTRA.annualPriceEuros} for Ultra, paid once for a year. " +
-            "This equals twelve monthly payments, with the same features. " +
+            "This equals twelve monthly payments, without a discount, with the same features. " +
             "It will renew each year unless canceled once payments are activated. No annual subscription is sold here."
     ),
     englishHelp(
@@ -222,16 +225,16 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
     englishHelp(
         SelkieHelpSection.PRIVACY, "privacy", "Where are my data and privacy information?",
         listOf("privacy", "privacy policy", "personal data", "my data", "gdpr", "cnil", "controller", "first and last name", "full name", "my real name", "private life", "messages read"),
-        "Read the policy in the ☰ menu → Privacy and data. Your tracked apps, limits, points and challenges stay on your phone; the local Coach does not send your questions to the publisher. " +
+        "Read Selkie 0.12.0’s policy in the ☰ menu → Privacy and data. Your tracked apps, limits, points, challenges, 90-day history, time slots, favourites and programmes stay in the phone’s private storage; the local Coach does not send your questions to the publisher. " +
             "Selkie does not read messages from your other apps, photos or screen content. The policy must identify the actual data controller and provide a way to contact them: here, " +
             "${PrivacyIdentity.controllerName}, ${PrivacyIdentity.contactEmail}. It describes this version; opening accounts or payments will require an update."
     ),
     englishHelp(
         SelkieHelpSection.PRIVACY, "delete_data", "How do I delete my data?",
         listOf("delete my data", "delete all my data", "erase my data", "erase all my data", "data deletion", "delete everything", "start from zero", "delete my account", "erase my account"),
-        "In the ☰ menu → Privacy and data → Delete my data, confirm to stop tracking and delete settings, points, challenges, local choices and saved Coach questions. " +
+        "In the ☰ menu → Privacy and data → Delete my data, confirm to stop tracking and delete settings, points, challenges, history, time slots, favourites, programmes, local choices and saved Coach questions. " +
             "This is irreversible; points return to their initial value the next time you use the app. Android statistics and permissions are unchanged. " +
-            "No active server account is deleted here, and this deletion would not cancel a future Google Play subscription."
+            "No active server account is deleted here, and this deletion would not cancel a future Google Play subscription. Export my data creates a local JSON copy with observations, rules, prepared favourites and programme identifiers and dates, without raw Coach input, tokens or email addresses. Delete any exported copy separately."
     ),
     englishHelp(
         SelkieHelpSection.PRIVACY, "contact", "How do I contact Selkie?",

@@ -56,7 +56,8 @@ data class AppSnapshot(
     val limitMinutes: Int,
     val usedMillis: Long,
     val lockedUntil: Long,
-    val warnedOn: String
+    val warnedOn: String,
+    val configuredLimitMinutes: Int = limitMinutes
 ) {
     val usedMinutes: Int get() = (usedMillis / 60_000L).toInt()
     val progress: Float get() = (usedMillis / (limitMinutes * 60_000f)).coerceIn(0f, 1f)
@@ -109,7 +110,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
     constructor(context: Context) : this(
         context.applicationContext.getSharedPreferences("maree", Context.MODE_PRIVATE)
     )
-    companion object { private val lock = Any() }
+    companion object { private val lock = LocalFeatureLock.lock }
 
     init {
         synchronized(lock) {
@@ -130,6 +131,17 @@ class Store internal constructor(private val prefs: SharedPreferences) {
                 prefs.edit().putString("day", SimpleDateFormat("yyyyMMdd", Locale.ROOT).format(Date())).apply()
         }
     }
+
+    private val history by lazy { DailyHistoryStore(prefs) }
+    private val schedules by lazy { LimitScheduleStore(prefs) }
+
+    internal fun historyEntries(now: Long = System.currentTimeMillis()): List<DailyHistoryEntry> = history.entries(now)
+    internal fun pruneHistory(now: Long = System.currentTimeMillis()): Boolean = history.prune(now)
+    @Volatile internal var lastValidationHistoryWriteSucceeded = true
+        private set
+    fun pauseObservation(now: Long = System.currentTimeMillis()): Boolean = history.pause(now)
+    fun recordProgramValidation(id: String, now: Long = System.currentTimeMillis()): Boolean =
+        history.recordValidation("program:$id", now)
 
     private fun readApps(): MutableList<TrackedApp> {
         val data = try { JSONArray(prefs.getString("apps", "[]")) } catch (_: Exception) { JSONArray() }
@@ -176,7 +188,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
     fun clearPersonalData(): Boolean = synchronized(lock) { prefs.edit().clear().commit() }
 
     /** Copie structurée des seules données métier stockées, sans lecture Android ni mutation. */
-    internal fun exportLocalState(): JSONObject = synchronized(lock) {
+    internal fun exportLocalState(now: Long = System.currentTimeMillis()): JSONObject = synchronized(lock) {
         val apps = JSONArray()
         readApps().forEach { app ->
             apps.put(JSONObject().apply {
@@ -247,7 +259,24 @@ class Store internal constructor(private val prefs: SharedPreferences) {
                 put("challenges", standardChallenges)
             })
             put("customChallenges", customChallenges)
+            put("dailyHistory", history.exportJson(now))
+            put("limitSchedules", schedules.exportJson())
+            put("coachFavorites", CoachFavoritesStore(prefs).exportJson())
+            put("guidedPrograms", GuidedProgramStore(prefs).exportJson())
         }
+    }
+
+    /** Compact, read-only state for a widget: no history/coach export or period advancement. */
+    internal fun widgetLocalState(): JSONObject = synchronized(lock) {
+        val series = (prefs.getLong("challengeNumber", 0) % 2L).toInt()
+        val completed = checked()
+        val rows = JSONArray()
+        for (index in 0..19) rows.put(JSONObject().apply {
+            put("index", index)
+            put("inCurrentSeries", index / 10 == series)
+            put("completed", index in completed)
+        })
+        JSONObject().put("standardChallenges", JSONObject().put("challenges", rows))
     }
 
     /** Une éventuelle brèche de la période ne disparaît pas quand on retire l'application. */
@@ -308,6 +337,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
         saveApps(apps)
         prefs.edit().putInt("pointUnits", shiftedPointUnits(-5 * POINT_UNITS_PER_POINT)).apply()
         recordBreach()
+        history.recordBreach(packageName, now)
         true
     }
 
@@ -384,6 +414,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
         }
         // Dates, défi terminé, compteur et récompense sont enregistrés ensemble.
         editor.apply()
+        lastValidationHistoryWriteSucceeded = history.recordValidation("standard:${prefs.getLong("challengeNumber", 0)}-$index", now)
         true
     }
 
@@ -511,6 +542,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
         if (earnsReward) editor.putInt("pointUnits", shiftedPointUnits(1))
         // Le solde exact et le marqueur de récompense sont dans une seule transaction.
         editor.apply()
+        lastValidationHistoryWriteSucceeded = history.recordValidation("custom:$id", now)
         null
     }
 
@@ -539,12 +571,14 @@ class Store internal constructor(private val prefs: SharedPreferences) {
                     (dates.lastOrNull()?.let { today > it } ?: true)
             )
         }
+        val activeSchedules = schedules.entries()
+        val activePlan = planType()
         return MareeSnapshot(
             points(),
             apps.map {
-                AppSnapshot(it.packageName, it.limitMinutes,
+                AppSnapshot(it.packageName, effectiveScheduledLimit(activeSchedules, it.packageName, it.limitMinutes, activePlan, now),
                     ((raw[it.packageName] ?: 0L) - it.baselineMillis).coerceAtLeast(0L),
-                    it.lockedUntil, it.warnedOn)
+                    it.lockedUntil, it.warnedOn, configuredLimitMinutes = it.limitMinutes)
             },
             isPremium(),
             series,
@@ -578,16 +612,19 @@ class Store internal constructor(private val prefs: SharedPreferences) {
         val changedDay = prefs.getString("day", "") != today
         val warnings = mutableListOf<Pair<String, Int>>()
         val newLocks = mutableSetOf<String>()
+        val activeSchedules = schedules.entries()
+        val activePlan = planType()
         val apps = readApps().map { original ->
             val raw = usage.elapsedMillis[original.packageName] ?: 0L
             var app = normalizeApp(original, raw, now, changedDay)
             if (app.lockedUntil == 0L) {
                 val used = (raw - app.baselineMillis).coerceAtLeast(0L)
-                val threshold = app.limitMinutes * 60_000L
+                val threshold = effectiveScheduledLimit(activeSchedules, app.packageName, app.limitMinutes, activePlan, now) * 60_000L
                 if (used >= threshold) {
                     app = app.copy(lockedUntil = now + DAY)
                     newLocks.add(app.packageName)
                     recordBreach()
+                    history.recordBreach(app.packageName, now)
                 } else if (used >= threshold * 0.8 && app.warnedOn != today) {
                     app = app.copy(warnedOn = today)
                     warnings.add(app.packageName to ceil((threshold - used) / 60_000.0).toInt().coerceAtLeast(1))
@@ -596,6 +633,8 @@ class Store internal constructor(private val prefs: SharedPreferences) {
             app
         }
         saveApps(apps)
+        val observedPackages = apps.map { it.packageName }.toSet()
+        history.recordUsage(usage.elapsedMillis.filterKeys { it in observedPackages }, now)
         if (changedDay) prefs.edit().putString("day", today).apply()
 
         TickResult(snapshot(apps, usage.elapsedMillis, now), warnings, newLocks, usage.foregroundPackage)
