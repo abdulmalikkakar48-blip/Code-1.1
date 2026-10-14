@@ -93,6 +93,32 @@ internal val readingResources = listOf(
         sourceLabel = "Self-Help (1859), édition John Murray 1897, chapitre IX · GITenberg",
         editionNoteFr = "Un paragraphe de l’édition John Murray 1897, première publication 1859, dans le domaine public. Traduction française préparée pour Selkie, sans reproduire l’ouvrage entier.",
         editionNoteEn = "One paragraph from the public-domain John Murray 1897 edition, first published in 1859. French translation prepared for Selkie, without reproducing the complete book."
+    ),
+    ReadingResource(
+        id = "taymiyya-worship",
+        titleFr = "Ibn Taymiyya · le sens des actes",
+        titleEn = "Ibn Taymiyya · the meaning of actions",
+        author = "Ibn Taymiyya (1263–1328)",
+        descriptionFr = "Une courte définition de l’adoration reliant les paroles et les actes, intérieurs comme extérieurs.",
+        descriptionEn = "A short definition of worship connecting inward and outward words and deeds.",
+        sourceUrl = "https://raw.githubusercontent.com/OpenITI/0750AH/master/data/0728IbnTaymiyya/0728IbnTaymiyya.Cubudiyya/0728IbnTaymiyya.Cubudiyya.Shamela0022647-ara1",
+        assetName = "taymiyya-worship",
+        sourceLabel = "Al-ʿUbūdiyya, p. 44 · également Majmūʿ al-fatāwā, 10/149 · OpenITI/Shamela",
+        editionNoteFr = "Courte citation de l’original arabe médiéval, ponctuation normalisée. Traductions FR/EN préparées pour Selkie. Références : Al-ʿUbūdiyya, p. 44, et Majmūʿ al-fatāwā, 10/149 ; citation seule, sans notes modernes.",
+        editionNoteEn = "Short quotation from the medieval Arabic original, punctuation normalised. FR/EN translations prepared for Selkie. References: Al-ʿUbūdiyya, p. 44, and Majmūʿ al-fatāwā, 10/149; quotation only, without modern notes."
+    ),
+    ReadingResource(
+        id = "taymiyya-good-deeds",
+        titleFr = "Ibn Taymiyya · les bonnes actions quotidiennes",
+        titleEn = "Ibn Taymiyya · everyday good deeds",
+        author = "Ibn Taymiyya (1263–1328)",
+        descriptionFr = "Dire vrai, être digne de confiance et tenir ses engagements : un fragment sur les gestes du quotidien.",
+        descriptionEn = "Speak truthfully, be trustworthy and keep commitments: a fragment about everyday actions.",
+        sourceUrl = "https://raw.githubusercontent.com/OpenITI/0750AH/master/data/0728IbnTaymiyya/0728IbnTaymiyya.Cubudiyya/0728IbnTaymiyya.Cubudiyya.Shamela0022647-ara1",
+        assetName = "taymiyya-good-deeds",
+        sourceLabel = "Al-ʿUbūdiyya, p. 44 · également Majmūʿ al-fatāwā, 10/149 · OpenITI/Shamela",
+        editionNoteFr = "Fragment sélectionné d’une liste dans l’original arabe médiéval : Al-ʿUbūdiyya, p. 44, également Majmūʿ al-fatāwā, 10/149. Les autres éléments sont omis et les coupures signalées. Traductions FR/EN préparées pour Selkie ; aucune annotation moderne reprise.",
+        editionNoteEn = "Selected fragment of a list in the medieval Arabic original: Al-ʿUbūdiyya, p. 44, also Majmūʿ al-fatāwā, 10/149. Other items are omitted and cuts indicated. FR/EN translations prepared for Selkie; no modern annotations reproduced."
     )
 )
 

@@ -84,8 +84,8 @@ internal fun DailyTab(
         if (section == "today") {
         AppCardSurface {
             SectionLabel(tr("Ta pause lecture", "Your reading break"))
-            Text(tr("Six textes courts sur l’apprentissage, l’observation et les habitudes, à lire hors ligne.",
-                "Six short texts on learning, observation and habits, available offline."), color = MareePalette.Muted)
+            Text(tr("${readingResources.size} textes courts sur l’apprentissage, l’observation et les habitudes, à lire hors ligne.",
+                "${readingResources.size} short texts on learning, observation and habits, available offline."), color = MareePalette.Muted)
             PrimaryAction(tr("Découvrir les lectures", "Explore readings"), onClick = { onSectionChange("reading") })
         }
 

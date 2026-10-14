@@ -106,5 +106,55 @@
       "fr": "b1169bfa9366b09a90d455b51d601868f1493ba0254cdf02917541516f408524",
       "en": "0f266ede84bce068b4121103b97d167703de9aa7bdc5f73778987ba3caebe2e6"
     }
+  },
+  {
+    "author": "Ibn Taymiyya (1263–1328)",
+    "sourceUrl": "https://raw.githubusercontent.com/OpenITI/0750AH/master/data/0728IbnTaymiyya/0728IbnTaymiyya.Cubudiyya/0728IbnTaymiyya.Cubudiyya.Shamela0022647-ara1",
+    "sourceLabel": "Al-ʿUbūdiyya, p. 44 · également Majmūʿ al-fatāwā, 10/149 · OpenITI/Shamela",
+    "id": "taymiyya-worship",
+    "assetName": "taymiyya-worship",
+    "titleFr": "Ibn Taymiyya · le sens des actes",
+    "titleEn": "Ibn Taymiyya · the meaning of actions",
+    "descriptionFr": "Une courte définition de l’adoration reliant les paroles et les actes, intérieurs comme extérieurs.",
+    "descriptionEn": "A short definition of worship connecting inward and outward words and deeds.",
+    "editionNoteFr": "Courte citation de l’original arabe médiéval, ponctuation normalisée. Traductions FR/EN préparées pour Selkie. Références : Al-ʿUbūdiyya, p. 44, et Majmūʿ al-fatāwā, 10/149 ; citation seule, sans notes modernes.",
+    "editionNoteEn": "Short quotation from the medieval Arabic original, punctuation normalised. FR/EN translations prepared for Selkie. References: Al-ʿUbūdiyya, p. 44, and Majmūʿ al-fatāwā, 10/149; quotation only, without modern notes.",
+    "source_snapshot_sha256": "5537ec2845de487787489ddedb9adebb3c7911d0ed9c692bf601b089b3af27fe",
+    "source_reference": "Al-ʿUbūdiyya, p. 44, 7th ed. 1426 AH/2005. Only selected medieval original words, no editorial notes.",
+    "independent_witness": "Al-ʿUbūdiyya, Al-Maktab al-Islami, 7th ed. 1426 AH/2005, p. 44.",
+    "assets": {
+      "fr": "6746e88b24a2c39ecae7baf0d9d5a4849b63ce8752ba7fb6814e065c78328e85",
+      "en": "6de8e7e4735776408ce4dd2e33105b1fd58411c284c47fcc6afa71d8e9cb8a5d"
+    },
+    "alternate_source": {
+      "url": "https://raw.githubusercontent.com/OpenITI/0750AH/master/data/0728IbnTaymiyya/0728IbnTaymiyya.MajmucFatawa/0728IbnTaymiyya.MajmucFatawa.Shamela0007289-ara1",
+      "sha256": "411bb82b015f9a6099bf917fd9d7ec1d5c4bded2a6ce50fe7c6560a6aaef1b7b",
+      "reference": "Majmūʿ al-fatāwā 10/149, edition 1416 AH/1995"
+    }
+  },
+  {
+    "author": "Ibn Taymiyya (1263–1328)",
+    "sourceUrl": "https://raw.githubusercontent.com/OpenITI/0750AH/master/data/0728IbnTaymiyya/0728IbnTaymiyya.Cubudiyya/0728IbnTaymiyya.Cubudiyya.Shamela0022647-ara1",
+    "sourceLabel": "Al-ʿUbūdiyya, p. 44 · également Majmūʿ al-fatāwā, 10/149 · OpenITI/Shamela",
+    "id": "taymiyya-good-deeds",
+    "assetName": "taymiyya-good-deeds",
+    "titleFr": "Ibn Taymiyya · les bonnes actions quotidiennes",
+    "titleEn": "Ibn Taymiyya · everyday good deeds",
+    "descriptionFr": "Dire vrai, être digne de confiance et tenir ses engagements : un fragment sur les gestes du quotidien.",
+    "descriptionEn": "Speak truthfully, be trustworthy and keep commitments: a fragment about everyday actions.",
+    "editionNoteFr": "Fragment sélectionné d’une liste dans l’original arabe médiéval : Al-ʿUbūdiyya, p. 44, également Majmūʿ al-fatāwā, 10/149. Les autres éléments sont omis et les coupures signalées. Traductions FR/EN préparées pour Selkie ; aucune annotation moderne reprise.",
+    "editionNoteEn": "Selected fragment of a list in the medieval Arabic original: Al-ʿUbūdiyya, p. 44, also Majmūʿ al-fatāwā, 10/149. Other items are omitted and cuts indicated. FR/EN translations prepared for Selkie; no modern annotations reproduced.",
+    "source_snapshot_sha256": "5537ec2845de487787489ddedb9adebb3c7911d0ed9c692bf601b089b3af27fe",
+    "source_reference": "Al-ʿUbūdiyya, p. 44, 7th ed. 1426 AH/2005. Only selected medieval original words, no editorial notes.",
+    "independent_witness": "Al-ʿUbūdiyya, Al-Maktab al-Islami, 7th ed. 1426 AH/2005, p. 44.",
+    "assets": {
+      "fr": "92ec73705fdbb6dbfc62de863bc21bd39e80792552469a272e774535bd0944d8",
+      "en": "08a96721d8a50b723e428894696b7bcbb43867f8c9092845a3ce68c6d6934a42"
+    },
+    "alternate_source": {
+      "url": "https://raw.githubusercontent.com/OpenITI/0750AH/master/data/0728IbnTaymiyya/0728IbnTaymiyya.MajmucFatawa/0728IbnTaymiyya.MajmucFatawa.Shamela0007289-ara1",
+      "sha256": "411bb82b015f9a6099bf917fd9d7ec1d5c4bded2a6ce50fe7c6560a6aaef1b7b",
+      "reference": "Majmūʿ al-fatāwā 10/149, edition 1416 AH/1995"
+    }
   }
 ]

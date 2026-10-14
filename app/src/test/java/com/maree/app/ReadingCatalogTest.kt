@@ -13,8 +13,8 @@ class ReadingCatalogTest {
         projectFile("src/main/assets/reading/${resource.assetName}-${language.tag}.txt").readText(Charsets.UTF_8)
 
     @Test fun catalogueHasUniqueStableEntriesAndBothReadableLanguageAssets() {
-        assertEquals(6, readingResources.size)
-        assertEquals(6, readingResources.map { it.id }.toSet().size)
+        assertEquals(8, readingResources.size)
+        assertEquals(8, readingResources.map { it.id }.toSet().size)
         readingResources.forEach { resource ->
             assertTrue(resource.assetName.matches(Regex("[a-z0-9-]+")))
             assertTrue(resource.titleFr.isNotBlank() && resource.titleEn.isNotBlank())

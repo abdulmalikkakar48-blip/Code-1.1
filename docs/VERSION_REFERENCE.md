@@ -1,6 +1,16 @@
 # Selkie : version de travail retenue le 13 octobre 2026
 
-## Version actuelle 0.14.0 — accueil et guide simplifiés
+## Version actuelle 0.14.1 — deux lectures d’Ibn Taymiyya
+
+Lecture ajoute deux courtes citations d’Ibn Taymiyya, avec original arabe, traductions françaises/anglaises préparées pour Selkie et références vérifiées dans deux éditions. Le catalogue compte désormais huit sélections et seize textes FR/EN ; les six lectures précédentes restent disponibles. Voir [la provenance](LECTURES.md).
+
+[APK 0.14.1](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.14.1.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.14.1-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.14.1.md).
+
+Les passages portent sur le sens des actes et les bonnes actions quotidiennes. Le fragment de liste est signalé ; aucune redistribution de l’ouvrage complet ou de traduction commerciale moderne. Le nouveau parcours d’accueil, les règles, les prix et les autres fonctions sont conservés.
+
+## Archives
+
+## Version 0.14.0 — accueil et guide simplifiés
 
 Le premier lancement explique Selkie en trois étapes avant la configuration Android. L’accueil propose des raccourcis clairs et une carte des points plus compacte. Comprendre Selkie reste accessible depuis l’accueil et le menu, avec des liens directs vers les rubriques. Voir [le parcours](ACCUEIL_ET_GUIDE.md).
 

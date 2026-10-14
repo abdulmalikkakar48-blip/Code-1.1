@@ -1,6 +1,6 @@
 # Selkie — ce qui reste avant une diffusion publique
 
-État du 14 octobre 2026, prototype Android 0.14.0. Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
+État du 14 octobre 2026, prototype Android 0.14.1. Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
 
 ## Terminé dans le prototype
 
@@ -43,3 +43,7 @@ Six sélections historiques relues, douze textes FR/EN, sources et notes d’éd
 ## Accueil en 0.14.0
 
 Bienvenue en trois étapes, explication des rubriques, accès Android présentés avant activation, guide permanent avec navigation directe et accueil plus clair. Aucun changement des règles, droits Android ou catalogues. Voir docs/ACCUEIL_ET_GUIDE.md.
+
+## Lectures d’Ibn Taymiyya — 0.14.1
+
+Deux courts passages de l’original arabe, versions FR/EN indépendantes, références Al-ʿUbūdiyya p. 44 / Majmūʿ al-fatāwā 10/149. Huit sélections au total. Original et commentaire séparés ; pas de reprise de notes modernes ni de l’ouvrage complet.
