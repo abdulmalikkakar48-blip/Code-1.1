@@ -1,0 +1,20 @@
+{
+  "version_name": "0.14.1",
+  "version_code": 25,
+  "source_commit": "9c3b00d0e83f5df05a2b908e02c8e0eec343a489",
+  "apk": "Selkie-Android-0.14.1.apk",
+  "size_bytes": 27068422,
+  "sha256": "5d76fb84c345bb322168b142e2d63ba4739bf87fbb72c9719faa51efdd611eb3",
+  "certificate_sha256": "9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50",
+  "source_archive": "Selkie-Android-0.14.1-source.zip",
+  "source_archive_sha256": "821ea0de9c5ab5a091aee9dee6b8f758aa8ca9a7547c99e72ca6d0e93adc00f1",
+  "source_archive_size_bytes": 879937,
+  "min_sdk": 29,
+  "target_sdk": 34,
+  "unit_tests": 215,
+  "lint_errors": 0,
+  "lint_warnings": 5,
+  "lint_information": 4,
+  "online_ai": false,
+  "real_payments": false
+}
