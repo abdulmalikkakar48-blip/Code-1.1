@@ -76,11 +76,18 @@ internal fun DailyTab(
         Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf("today" to tr("Jour", "Day"), "calendar" to tr("Calendrier", "Calendar"),
-                "week" to tr("Bilan", "Review"), "tools" to tr("Outils", "Tools")).forEach { (id, label) ->
+                "week" to tr("Bilan", "Review"), "reading" to tr("Lecture", "Reading"), "tools" to tr("Outils", "Tools")).forEach { (id, label) ->
                 FilterChip(selected = section == id, onClick = { section = id }, label = { Text(label) })
             }
         }
         if (section == "today") {
+        AppCardSurface {
+            SectionLabel(tr("Ta pause lecture", "Your reading break"))
+            Text(tr("Six textes courts sur l’apprentissage, l’observation et les habitudes, à lire hors ligne.",
+                "Six short texts on learning, observation and habits, available offline."), color = MareePalette.Muted)
+            PrimaryAction(tr("Découvrir les lectures", "Explore readings"), onClick = { section = "reading" })
+        }
+
         AppCardSurface(containerColor = MareePalette.Mint) {
             SectionLabel(tr("Ta pause du jour", "Your daily pause"))
             Text(tip.first, color = MareePalette.Ink, fontWeight = FontWeight.Bold,
@@ -189,6 +196,7 @@ internal fun DailyTab(
         }
         }
         when (section) {
+            "reading" -> ReadingSection()
             "calendar" -> ProgressCalendarSection(history)
             "week" -> WeeklyReviewSection(history, snapshot.plan, getName, onOffers)
             "tools" -> {

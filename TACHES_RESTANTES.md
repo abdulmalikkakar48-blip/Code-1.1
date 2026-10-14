@@ -1,6 +1,6 @@
 # Selkie — ce qui reste avant une diffusion publique
 
-État du 14 octobre 2026, prototype Android 0.12.1. Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
+État du 14 octobre 2026, prototype Android 0.13.0. Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
 
 ## Terminé dans le prototype
 
@@ -35,3 +35,7 @@ Aucun achat, hébergement public, publication Play ni démarche au nom d’un pa
 ## Corrections du calendrier en 0.12.1
 
 Choix des dates passées et futures, tâches gratuites (ajout, modification, case terminé, suppression), export schéma 3 et effacement global. L’historique de suivi conserve sa fenêtre de 90 jours. Aucun nouveau rappel ni accès au calendrier Android.
+
+## Lecture en 0.13.0
+
+Six sélections historiques relues, douze textes FR/EN, sources et notes d’édition, lecture hors ligne et export .txt. Aucun paiement, compte, suivi de lecture ou nouveau droit Android. Les copies et liens externes sont expliqués en confidentialité ; les passages extérieurs ne sont pas déclarés relus.

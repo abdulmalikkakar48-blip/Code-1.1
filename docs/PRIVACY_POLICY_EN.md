@@ -130,3 +130,7 @@ The following references are provided for orientation; the official pages could 
 ## Calendar tasks — version 0.12.1
 
 Calendar tasks are free: their text, date and completion state stay in private phone storage until you delete them, reset all data or uninstall the app. They are separate from the 90-day tracking history. They award no points and send no reminders. Your chosen export includes these tasks; avoid sensitive information and protect the file. No Android Calendar access is requested.
+
+## Offline reading — 0.13.0
+
+Reading offers six selected historical passages and translations prepared for Selkie, free and offline. No account or reading history is saved. Saving an excerpt creates a text copy through Android’s file picker; resetting Selkie does not delete it. Opening a source uses your browser and the external site’s privacy rules; it may see the request and network address, but the app does not attach points, tasks or statistics. Sources contain larger works than the reviewed passages.

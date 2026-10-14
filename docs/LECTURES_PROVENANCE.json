@@ -1,0 +1,110 @@
+[
+  {
+    "id": "descartes-method",
+    "titleFr": "Discours de la méthode · quatre règles",
+    "titleEn": "Discourse on Method · four rules",
+    "author": "René Descartes (1596–1650)",
+    "descriptionFr": "Apprendre à vérifier, décomposer et ordonner un problème avant de conclure.",
+    "descriptionEn": "Learn to check, break down and order a problem before reaching a conclusion.",
+    "sourceUrl": "https://raw.githubusercontent.com/GITenberg/Discours-de-la-m-thode_13846/master/13846-0.txt",
+    "assetName": "descartes-method",
+    "sourceLabel": "Discours de la méthode (1637), deuxième partie · GITenberg",
+    "editionNoteFr": "Passage français ancien du domaine public. Orthographe modernisée pour Selkie ; « taire » corrigé en « faire ». Traduction anglaise préparée pour Selkie.",
+    "editionNoteEn": "Public-domain historical French passage. Spelling modernised for Selkie; “taire” corrected to “faire”. English translation prepared for Selkie.",
+    "source_snapshot_sha256": "eb29dd66cba5ed120fbbb9675e1d6310a03473d5fb415cef95b32457f115eae5",
+    "assets": {
+      "fr": "cbb21375e7581dda326c163655c560c66ad570861918c53199ce8e3cff198f3c",
+      "en": "a1d9bb7ead9db7484d6cc4db4747e45a88fee5ced032e076eee8b3ccfbb7d21d"
+    }
+  },
+  {
+    "id": "bacon-studies",
+    "titleFr": "De l’étude · lire et réfléchir",
+    "titleEn": "Of Studies · reading and reflection",
+    "author": "Francis Bacon (1561–1626)",
+    "descriptionFr": "Ne pas seulement accumuler des pages : peser les idées, discuter et écrire.",
+    "descriptionEn": "Go beyond counting pages: weigh ideas, discuss and write.",
+    "sourceUrl": "https://raw.githubusercontent.com/GITenberg/The-Essays-or-Counsels-Civil-and-Moral_575/master/575.txt",
+    "assetName": "bacon-studies",
+    "sourceLabel": "Essays, « Of Studies » (1625) · GITenberg",
+    "editionNoteFr": "Deux passages séparés de l’original anglais du domaine public. Traduction française préparée pour Selkie. Le reste de l’essai est exclu.",
+    "editionNoteEn": "Two separate passages from the public-domain English original. French translation prepared for Selkie. The rest of the essay is excluded.",
+    "source_snapshot_sha256": "6d24b0b28b793b57e09e95a3e01ca0170d87bd33d0b5725c8590cee920ecc6ab",
+    "assets": {
+      "fr": "cb07bbd858628938ca192a9cf3af0760d1ff04a72114bcbdd9ddfe898b2b215a",
+      "en": "e5fcec9a135fbfb154d7d8df736f16041cc5618915125e99b8339f80bcb370a0"
+    }
+  },
+  {
+    "id": "franklin-habits",
+    "titleFr": "Autobiographie · trois habitudes",
+    "titleEn": "Autobiography · three habits",
+    "author": "Benjamin Franklin (1706–1790)",
+    "descriptionFr": "L’ordre, les engagements et l’emploi du temps : trois repères concrets.",
+    "descriptionEn": "Order, commitments and time: three practical guidelines.",
+    "sourceUrl": "https://raw.githubusercontent.com/standardebooks/benjamin-franklin_the-autobiography-of-benjamin-franklin/master/src/epub/text/chapter-9.xhtml",
+    "assetName": "franklin-habits",
+    "sourceLabel": "Autobiography, chapitre IX · Standard Ebooks",
+    "editionNoteFr": "Seulement Order, Resolution et Industry de l’original anglais du domaine public, sans les autres passages ni les notes. Traduction française préparée pour Selkie.",
+    "editionNoteEn": "Only Order, Resolution and Industry from the public-domain English original, without other passages or notes. French translation prepared for Selkie.",
+    "source_snapshot_sha256": "c5b420f5189af29cbe77d1109fe403b4fa3eadf96a053872e032292cc98390dc",
+    "assets": {
+      "fr": "7a9fa487fa67b6e24be459198739ad1eae24cb6274aca4355ffd46c42ab2c26f",
+      "en": "1c3721d89fac9d6e790022b8bd475d6a7c887f077ec86846fc39e5f58dae2bf1"
+    }
+  },
+  {
+    "id": "ghazali-observation",
+    "titleFr": "Al-Ghazali · observer une ombre",
+    "titleEn": "Al-Ghazali · observing a shadow",
+    "author": "Al-Ghazali (1058–1111)",
+    "descriptionFr": "Un auteur musulman : distinguer une impression immédiate d’une observation patiente.",
+    "descriptionEn": "A Muslim author: distinguish an immediate impression from patient observation.",
+    "sourceUrl": "https://raw.githubusercontent.com/GITenberg/The-Confessions-of-Al-Ghazzali_58977/master/58977-0.txt",
+    "assetName": "ghazali-observation",
+    "sourceLabel": "The Confessions of Al Ghazzali, traduction Claud Field (1909) · GITenberg",
+    "editionNoteFr": "Seul l’exemple de l’ombre est retenu. Traduction anglaise historique de Claud Field (1863–1941), dans le domaine public ; version française préparée pour Selkie. Aucune introduction ni note reprise.",
+    "editionNoteEn": "Only the shadow example is selected. Historical public-domain English translation by Claud Field (1863–1941); French version prepared for Selkie. No introduction or notes reproduced.",
+    "source_snapshot_sha256": "807ce1ee163e40c201fa97880ac8e2080815465b4c510ba685eafbd17bb13e3b",
+    "assets": {
+      "fr": "ed3c68911513262c488f75a2eecf55e3d3f6804e0d320f8fa6631750263ef65c",
+      "en": "86bd26959f898cfdaf74fd7058eef1fb8d9582be70f181ffc837ecc4d4c103e4"
+    }
+  },
+  {
+    "id": "fontaine-patience",
+    "titleFr": "Le Lion et le Rat · patience et entraide",
+    "titleEn": "The Lion and the Rat · patience and help",
+    "author": "Jean de La Fontaine (1621–1695)",
+    "descriptionFr": "Une courte fable sur la patience, l’entraide et la force des petits gestes.",
+    "descriptionEn": "A short fable about patience, helping others and the strength of small actions.",
+    "sourceUrl": "https://raw.githubusercontent.com/GITenberg/Fables-de-La-FontaineTome-Second_17942/master/17942-8.txt",
+    "assetName": "fontaine-patience",
+    "sourceLabel": "Fables (1668), livre II, fable XI · GITenberg",
+    "editionNoteFr": "Texte français complet de cette seule fable, du domaine public ; les autres fables sont exclues. Traduction anglaise en prose préparée pour Selkie.",
+    "editionNoteEn": "Complete public-domain French text of this one fable; other fables are excluded. English prose translation prepared for Selkie.",
+    "source_snapshot_sha256": "6a387d22e799c6916067693f61aa4cef180362bc9c238ee898cf1da87b34d596",
+    "assets": {
+      "fr": "5fdf2215fa80e5efd0c24fafaf25b721f508f4935d82a3eb75eea2bd1a8cea06",
+      "en": "d51641841efe40a76ef4e162882ad46bad625014044cdd5cc1e2749a04de0dea"
+    }
+  },
+  {
+    "id": "smiles-method",
+    "titleFr": "Self-Help · attention et méthode",
+    "titleEn": "Self-Help · attention and method",
+    "author": "Samuel Smiles (1812–1904)",
+    "descriptionFr": "Prendre soin des petites actions répétées et travailler avec méthode.",
+    "descriptionEn": "Care for small repeated actions and work methodically.",
+    "sourceUrl": "https://raw.githubusercontent.com/GITenberg/Self-Help-with-Illustrations-of-Conduct-and-Perseverance_935/master/935-0.txt",
+    "assetName": "smiles-method",
+    "sourceLabel": "Self-Help (1859), édition John Murray 1897, chapitre IX · GITenberg",
+    "editionNoteFr": "Un paragraphe de l’édition John Murray 1897, première publication 1859, dans le domaine public. Traduction française préparée pour Selkie, sans reproduire l’ouvrage entier.",
+    "editionNoteEn": "One paragraph from the public-domain John Murray 1897 edition, first published in 1859. French translation prepared for Selkie, without reproducing the complete book.",
+    "source_snapshot_sha256": "5621c48a98a2f6432d27baa32ca75e00d37f4a4a2d18c6cfa2e4bab8a5688c7e",
+    "assets": {
+      "fr": "b1169bfa9366b09a90d455b51d601868f1493ba0254cdf02917541516f408524",
+      "en": "0f266ede84bce068b4121103b97d167703de9aa7bdc5f73778987ba3caebe2e6"
+    }
+  }
+]

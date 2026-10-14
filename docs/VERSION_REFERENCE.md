@@ -1,6 +1,16 @@
 # Selkie : version de travail retenue le 13 octobre 2026
 
-## Version actuelle 0.12.1 — calendrier de tâches et fond clair sobre
+## Version actuelle 0.13.0 — lectures hors ligne
+
+Quotidien → Lecture ajoute six textes courts sur la méthode, l’observation, la patience et les habitudes. Lecture gratuite dans l’app, export .txt via Android, source et traduction indiquées. Les livres complets extérieurs ne sont pas présentés comme relus. Voir [la sélection et la provenance](LECTURES.md).
+
+[APK 0.13.0](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.13.0.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.13.0-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.13.0.md).
+
+Les tâches du calendrier, les fonds, les offres et les catalogues de questions sont conservés. Les prix restent 5/10 €/mois et 60/120 €/an sans réduction ; paiements inactifs.
+
+## Archives
+
+## Version 0.12.1 — calendrier de tâches et fond clair sobre
 
 Le calendrier permet de choisir des dates passées ou futures et d’ajouter, modifier, cocher et supprimer des tâches personnelles gratuites. Le mode Clair remplace les étoiles multicolores par six lignes ondulantes monochromes. Le suivi, les offres et les 1 152 / 23 040 / 50 688 questions du Coach sont conservés.
 

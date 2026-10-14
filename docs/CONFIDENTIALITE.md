@@ -130,3 +130,7 @@ Les références ci-dessous sont fournies comme repères ; les pages officielles
 ## Tâches du calendrier — version 0.12.1
 
 Les tâches personnelles du calendrier sont gratuites : leur texte, leur date et leur état terminé restent dans le stockage privé du téléphone jusqu’à leur suppression, l’effacement global ou la désinstallation. Elles sont distinctes de l’historique de suivi limité à 90 jours. Elles n’accordent pas de points et n’envoient aucun rappel. L’export choisi inclut ces tâches ; évite les informations sensibles et protège ton fichier. Aucun accès au calendrier Android n’est demandé.
+
+## Lectures locales — 0.13.0
+
+Lecture propose gratuitement six passages historiques sélectionnés et des traductions préparées pour Selkie, lisibles hors ligne. Aucun compte ou historique de lecture n’est enregistré. Enregistrer un extrait crée une copie texte avec le sélecteur Android ; elle n’est pas effacée lors d’un reset de Selkie. Ouvrir la source utilise le navigateur et les règles de confidentialité du site extérieur, qui peut voir la requête et l’adresse réseau ; l’app ne lui joint pas les points, tâches ou statistiques. Les sources contiennent des ouvrages plus larges que les passages relus.
