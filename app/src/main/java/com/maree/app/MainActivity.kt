@@ -12,9 +12,17 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -79,6 +87,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -305,7 +314,13 @@ private fun MareeApp() {
                 }
             }
         ) { inner ->
-            Column(Modifier.fillMaxSize().padding(inner)) {
+            Box(Modifier.fillMaxSize().padding(inner)) {
+                Canvas(Modifier.fillMaxSize()) {
+                    drawRect(brush = Brush.verticalGradient(listOf(Color(0xFFF7FAFF), Color(0xFFEDF4FF), Color(0xFFF8FBFF))))
+                    drawCircle(color = Color(0x183F75D8), radius = size.width * 0.58f, center = androidx.compose.ui.geometry.Offset(size.width * 1.03f, size.height * 0.08f))
+                    drawCircle(color = Color(0x1238BFC7), radius = size.width * 0.46f, center = androidx.compose.ui.geometry.Offset(-size.width * 0.18f, size.height * 0.72f))
+                }
+                Column(Modifier.fillMaxSize()) {
                 Row(
                     Modifier.fillMaxWidth().padding(start = 22.dp, end = 22.dp, top = 16.dp, bottom = 20.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -322,7 +337,11 @@ private fun MareeApp() {
                         StatusPill(snapshot.plan.displayName)
                     }
                 }
-                when (tab) {
+                AnimatedContent(targetState = tab, transitionSpec = {
+                    (fadeIn(animationSpec = tween(260)) + slideInHorizontally(animationSpec = tween(320)) { it / 10 }) togetherWith
+                        (fadeOut(animationSpec = tween(130)) + slideOutHorizontally(animationSpec = tween(180)) { -it / 14 })
+                }, label = "section-transition") { selectedTab ->
+                    when (selectedTab) {
                     0 -> HomeTab(
                         snapshot = snapshot,
                         active = monitoringEnabled && permissions.readyForMonitoring,
@@ -389,7 +408,9 @@ private fun MareeApp() {
                         },
                         onAccount = { infoMessage = "Selkie fonctionne sans compte : pas d’inscription et tes données restent sur ton téléphone. Un compte pourra être proposé plus tard, uniquement pour une sauvegarde facultative." }
                     )
+                    }
                 }
+            }
             }
         }
     }
