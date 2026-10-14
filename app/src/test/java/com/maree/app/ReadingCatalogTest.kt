@@ -13,8 +13,8 @@ class ReadingCatalogTest {
         projectFile("src/main/assets/reading/${resource.assetName}-${language.tag}.txt").readText(Charsets.UTF_8)
 
     @Test fun catalogueHasUniqueStableEntriesAndBothReadableLanguageAssets() {
-        assertEquals(8, readingResources.size)
-        assertEquals(8, readingResources.map { it.id }.toSet().size)
+        assertEquals(16, readingResources.size)
+        assertEquals(16, readingResources.map { it.id }.toSet().size)
         readingResources.forEach { resource ->
             assertTrue(resource.assetName.matches(Regex("[a-z0-9-]+")))
             assertTrue(resource.titleFr.isNotBlank() && resource.titleEn.isNotBlank())
@@ -53,4 +53,20 @@ class ReadingCatalogTest {
             assertNull(uri.userInfo); assertNull(uri.query)
         }
     }
+    @Test fun catalogueSearchIgnoresAccentsAndCaseAndRequiresAllWords() {
+        assertTrue(filterReadingResources("MÉTHODE", null, AppLocale.FRENCH).any { it.id == "descartes-method" })
+        assertEquals(listOf("descartes-method"), filterReadingResources("four rules", null, AppLocale.ENGLISH).map { it.id })
+        assertTrue(filterReadingResources("four rules unrelatedzzz", null, AppLocale.ENGLISH).isEmpty())
+        assertEquals(2, filterReadingResources("IBN TAYMIYYA", ReadingGenre.REFLECTION, AppLocale.FRENCH).size)
+    }
+    @Test fun genreFilterKeepsAllExistingResourcesAndRestrictsSearch() {
+        val poems = filterReadingResources("", ReadingGenre.POETRY, AppLocale.FRENCH)
+        assertTrue(poems.any { it.id == "fontaine-patience" }); assertTrue(poems.all { it.genre == ReadingGenre.POETRY })
+        assertTrue(filterReadingResources("Ghazali", ReadingGenre.POETRY, AppLocale.FRENCH).isEmpty())
+        assertEquals(readingResources.size, filterReadingResources("", null, AppLocale.ENGLISH).size)
+        val originalIds = setOf("descartes-method", "bacon-studies", "franklin-habits", "ghazali-observation",
+            "fontaine-patience", "smiles-method", "taymiyya-worship", "taymiyya-good-deeds")
+        assertTrue(readingResources.map { it.id }.toSet().containsAll(originalIds))
+    }
+
 }

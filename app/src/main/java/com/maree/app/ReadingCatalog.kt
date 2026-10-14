@@ -1,5 +1,7 @@
 package com.maree.app
 
+internal enum class ReadingGenre { REFLECTION, POETRY }
+
 /** Reviewed short selections, independent of account, plan or tracking. */
 internal data class ReadingResource(
     val id: String,
@@ -12,7 +14,8 @@ internal data class ReadingResource(
     val assetName: String,
     val sourceLabel: String,
     val editionNoteFr: String,
-    val editionNoteEn: String
+    val editionNoteEn: String,
+    val genre: ReadingGenre = ReadingGenre.REFLECTION
 )
 
 internal val readingResources = listOf(
@@ -70,6 +73,7 @@ internal val readingResources = listOf(
     ),
     ReadingResource(
         id = "fontaine-patience",
+        genre = ReadingGenre.POETRY,
         titleFr = "Le Lion et le Rat · patience et entraide",
         titleEn = "The Lion and the Rat · patience and help",
         author = "Jean de La Fontaine (1621–1695)",
@@ -120,7 +124,7 @@ internal val readingResources = listOf(
         editionNoteFr = "Fragment sélectionné d’une liste dans l’original arabe médiéval : Al-ʿUbūdiyya, p. 44, également Majmūʿ al-fatāwā, 10/149. Les autres éléments sont omis et les coupures signalées. Traductions FR/EN préparées pour Selkie ; aucune annotation moderne reprise.",
         editionNoteEn = "Selected fragment of a list in the medieval Arabic original: Al-ʿUbūdiyya, p. 44, also Majmūʿ al-fatāwā, 10/149. Other items are omitted and cuts indicated. FR/EN translations prepared for Selkie; no modern annotations reproduced."
     )
-)
+) + poetryReadingResources
 
 /** Build only the chosen passage and its references; no personal data or other books. */
 internal fun readingExportContent(resource: ReadingResource, language: AppLocale, body: String): String {
@@ -135,5 +139,21 @@ internal fun readingExportContent(resource: ReadingResource, language: AppLocale
         appendLine()
         append(body)
         appendLine()
+    }
+}
+
+/** Search only local catalogue metadata, never contacts, external pages or reading history. */
+internal fun filterReadingResources(query: String, genre: ReadingGenre?, language: AppLocale): List<ReadingResource> {
+    fun normalise(value: String): String = java.text.Normalizer.normalize(value, java.text.Normalizer.Form.NFD)
+        .replace(Regex("\\p{M}+"), "").lowercase(java.util.Locale.ROOT)
+        .replace(Regex("[^\\p{L}\\p{N}]+"), " ").trim()
+    val words = normalise(query).split(' ').filter(String::isNotBlank)
+    return readingResources.filter { resource ->
+        if (genre != null && resource.genre != genre) false else {
+            val fields = if (language == AppLocale.ENGLISH)
+                resource.titleEn + " " + resource.descriptionEn else resource.titleFr + " " + resource.descriptionFr
+            val searchable = normalise(fields + " " + resource.author)
+            words.all(searchable::contains)
+        }
     }
 }

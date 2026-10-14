@@ -2,8 +2,6 @@ package com.maree.app
 
 import android.animation.ValueAnimator
 import android.database.ContentObserver
-import android.graphics.Paint
-import android.graphics.Path
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -21,10 +19,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -33,7 +27,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import kotlin.math.sin
 
 /** Decorative drawing only: no input, layout changes or per-frame app recomposition. */
 @Composable
@@ -42,7 +35,7 @@ internal fun SelkieGeometryBackground(modifier: Modifier = Modifier) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val phase = remember { mutableFloatStateOf(0f) }
     val water = remember { SelkieWaterParticleField() }
-    val calmLines = remember { SelkieLightContours() }
+    val octagons = remember { SelkieOctagonField() }
     var motionAllowed by remember { mutableStateOf(ValueAnimator.areAnimatorsEnabled()) }
 
     DisposableEffect(context, lifecycle) {
@@ -91,35 +84,7 @@ internal fun SelkieGeometryBackground(modifier: Modifier = Modifier) {
             val waterColor = MareePalette.Teal.copy(alpha = 0.32f)
             water.draw(this, phase.floatValue, waterColor)
         } else {
-            calmLines.draw(this, phase.floatValue, MareePalette.Teal.toArgb())
-        }
-    }
-}
-
-/** Six slow contour lines: one colour, no sparkling stars or scattered shapes. */
-private class SelkieLightContours {
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.STROKE
-        strokeCap = Paint.Cap.ROUND
-    }
-    private val path = Path()
-    fun draw(scope: DrawScope, phase: Float, primary: Int) {
-        if (scope.size.width <= 0f || scope.size.height <= 0f || !phase.isFinite()) return
-        paint.color = primary
-        paint.alpha = 22
-        paint.strokeWidth = 1f * scope.density
-        val time = phase * 6.2831853f
-        scope.drawIntoCanvas { canvas ->
-            repeat(6) { line ->
-                path.rewind()
-                val base = scope.size.height * (0.08f + line * 0.18f)
-                for (step in 0..40) {
-                    val x = scope.size.width * step / 40f
-                    val y = base + sin(step / 40f * 4f + time + line * 0.7f) * 18f * scope.density
-                    if (step == 0) path.moveTo(x, y) else path.lineTo(x, y)
-                }
-                canvas.nativeCanvas.drawPath(path, paint)
-            }
+            octagons.draw(this, phase.floatValue)
         }
     }
 }

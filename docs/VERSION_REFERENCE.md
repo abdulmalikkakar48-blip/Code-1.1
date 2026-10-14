@@ -1,14 +1,24 @@
 # Selkie : version de travail retenue le 13 octobre 2026
 
-## Version actuelle 0.14.1 — deux lectures d’Ibn Taymiyya
+## Version actuelle 0.15.0 — poésies et octogones lumineux
+
+Lecture ajoute huit poèmes complets sur la nature, le regard, le temps et l’effort. Les seize sélections sont disponibles hors ligne en français et en anglais, avec recherche par titre ou auteur et filtres Tout, Réflexion et Poésie. Les originaux, traductions préparées pour Selkie et conseils sont séparés ; seuls les textes nommés ont été sélectionnés, pas les recueils externes complets. Voir [la provenance](LECTURES.md).
+
+Le fond Clair remplace les six lignes par un champ d’octogones mobiles aux contours anthracite et lueurs corail. Les cartes restent opaques et les réglages Android des animations sont respectés. Le mouvement d’eau de Nuit est conservé.
+
+[APK 0.15.0](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.15.0.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.15.0-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.15.0.md).
+
+Les huit lectures précédentes, l’accueil, le calendrier, le coach local, les règles et les prix sont conservés. Les prix restent 5/10 €/mois et 60/120 €/an sans réduction ; aucun paiement réel dans cet APK de test.
+
+## Archives
+
+## Version 0.14.1 — deux lectures d’Ibn Taymiyya
 
 Lecture ajoute deux courtes citations d’Ibn Taymiyya, avec original arabe, traductions françaises/anglaises préparées pour Selkie et références vérifiées dans deux éditions. Le catalogue compte désormais huit sélections et seize textes FR/EN ; les six lectures précédentes restent disponibles. Voir [la provenance](LECTURES.md).
 
 [APK 0.14.1](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.14.1.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.14.1-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.14.1.md).
 
 Les passages portent sur le sens des actes et les bonnes actions quotidiennes. Le fragment de liste est signalé ; aucune redistribution de l’ouvrage complet ou de traduction commerciale moderne. Le nouveau parcours d’accueil, les règles, les prix et les autres fonctions sont conservés.
-
-## Archives
 
 ## Version 0.14.0 — accueil et guide simplifiés
 

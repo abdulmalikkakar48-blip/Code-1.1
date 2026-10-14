@@ -1,0 +1,242 @@
+[
+  {
+    "id": "poetry-rain",
+    "titleFr": "La pluie · regarder dehors",
+    "titleEn": "Rain · looking outside",
+    "author": "Robert Louis Stevenson (1850–1894)",
+    "descriptionFr": "Quatre vers pour observer comment une même pluie touche des lieux différents.",
+    "descriptionEn": "Four lines observing how the same rain reaches different places.",
+    "sourceUrl": "https://raw.githubusercontent.com/GITenberg/A-Child-s-Garden-of-Verses_19722/master/19722.txt",
+    "assetName": "poetry-rain",
+    "sourceLabel": "A Child’s Garden of Verses (1885), « Rain » · édition 1916 · GITenberg",
+    "editionNoteFr": "Poème anglais intégral du domaine public, publié dans A Child’s Garden of Verses (1885). Témoin : édition M. A. Donohue, 1916 ; seul le texte de Stevenson est repris, sans introduction ni illustrations. Traduction française en vers libres préparée pour Selkie.",
+    "editionNoteEn": "Complete public-domain English poem from A Child’s Garden of Verses (1885). Witness: M. A. Donohue edition, 1916; only Stevenson’s text is reproduced, without introduction or illustrations. French free-verse translation prepared for Selkie.",
+    "genre": "POETRY",
+    "source_snapshot_sha256": "51eabb6314ea4d046a2fa1ebc71aab8e61d72a0782ec0f04fb3c030a03a86bb6",
+    "author_death_year": 1894,
+    "first_publication": 1885,
+    "source_reference": "A Child’s Garden of Verses, poem headed RAIN, between TIME TO RISE and FOREIGN CHILDREN; full 4-line poem.",
+    "selected_boundaries": {
+      "type": "complete_poem",
+      "heading": "RAIN",
+      "first_line": "The rain is raining all around.",
+      "last_line": "  And on the ships at sea."
+    },
+    "review_scope": "Only the named poem was selected and read in full. No romance, sexual content or attacks on religious belief occur in the selected text. This is an editorial content selection, not a religious certification; the linked complete volume contains other texts not selected or endorsed.",
+    "translation": "New French translation prepared for Selkie; no modern commercial translation, illustration, introductory text or editorial annotation reproduced.",
+    "assets": {
+      "fr": "02fad2daa08c15181ba41b5ff082104b41df7c992d4471d9a2459b60079ba2c8",
+      "en": "cc5a5fa290ffc79c2ee116a0546f755b47a3109100af762de8b2c3ef8575a019"
+    }
+  },
+  {
+    "id": "poetry-wind",
+    "titleFr": "Le vent · observer l’invisible",
+    "titleEn": "The Wind · observing the unseen",
+    "author": "Robert Louis Stevenson (1850–1894)",
+    "descriptionFr": "Une question sur le vent : comprendre une chose invisible en observant ses effets.",
+    "descriptionEn": "A question about wind: understand something unseen by observing its effects.",
+    "sourceUrl": "https://raw.githubusercontent.com/GITenberg/A-Child-s-Garden-of-Verses_19722/master/19722.txt",
+    "assetName": "poetry-wind",
+    "sourceLabel": "A Child’s Garden of Verses (1885), « The Wind » · édition 1916 · GITenberg",
+    "editionNoteFr": "Poème anglais intégral du domaine public, publié dans A Child’s Garden of Verses (1885). Témoin : édition M. A. Donohue, 1916 ; seul le texte de Stevenson est repris, sans introduction ni illustrations. Traduction française en vers libres préparée pour Selkie.",
+    "editionNoteEn": "Complete public-domain English poem from A Child’s Garden of Verses (1885). Witness: M. A. Donohue edition, 1916; only Stevenson’s text is reproduced, without introduction or illustrations. French free-verse translation prepared for Selkie.",
+    "genre": "POETRY",
+    "source_snapshot_sha256": "51eabb6314ea4d046a2fa1ebc71aab8e61d72a0782ec0f04fb3c030a03a86bb6",
+    "author_death_year": 1894,
+    "first_publication": 1885,
+    "source_reference": "A Child’s Garden of Verses, poem headed THE WIND, between MY SHIP AND I and A GOOD BOY; full 3 stanzas (18 lines).",
+    "selected_boundaries": {
+      "type": "complete_poem",
+      "heading": "THE WIND",
+      "first_line": "I saw you toss the kites on high",
+      "last_line": "  O wind, that sings so loud a song!"
+    },
+    "review_scope": "Only the named poem was selected and read in full. No romance, sexual content or attacks on religious belief occur in the selected text. This is an editorial content selection, not a religious certification; the linked complete volume contains other texts not selected or endorsed.",
+    "translation": "New French translation prepared for Selkie; no modern commercial translation, illustration, introductory text or editorial annotation reproduced.",
+    "assets": {
+      "fr": "36067a91a92371a25b8d7635c2401fd4b6c58ab199568567026c1cd8f6513fbf",
+      "en": "654231180589ab73451f88f20e2038d74af3973b01f03682c7b17217bc4747be"
+    }
+  },
+  {
+    "id": "poetry-swing",
+    "titleFr": "La balançoire · changer de perspective",
+    "titleEn": "The Swing · changing perspective",
+    "author": "Robert Louis Stevenson (1850–1894)",
+    "descriptionFr": "Un paysage vu d’en haut, à travers le mouvement simple d’une balançoire.",
+    "descriptionEn": "A landscape seen from above through the simple movement of a swing.",
+    "sourceUrl": "https://raw.githubusercontent.com/GITenberg/A-Child-s-Garden-of-Verses_19722/master/19722.txt",
+    "assetName": "poetry-swing",
+    "sourceLabel": "A Child’s Garden of Verses (1885), « The Swing » · édition 1916 · GITenberg",
+    "editionNoteFr": "Poème anglais intégral du domaine public, publié dans A Child’s Garden of Verses (1885). Témoin : édition M. A. Donohue, 1916 ; seul le texte de Stevenson est repris, sans introduction ni illustrations. Traduction française en vers libres préparée pour Selkie.",
+    "editionNoteEn": "Complete public-domain English poem from A Child’s Garden of Verses (1885). Witness: M. A. Donohue edition, 1916; only Stevenson’s text is reproduced, without introduction or illustrations. French free-verse translation prepared for Selkie.",
+    "genre": "POETRY",
+    "source_snapshot_sha256": "51eabb6314ea4d046a2fa1ebc71aab8e61d72a0782ec0f04fb3c030a03a86bb6",
+    "author_death_year": 1894,
+    "first_publication": 1885,
+    "source_reference": "A Child’s Garden of Verses, poem headed THE SWING, between PICTURE-BOOKS IN WINTER and A THOUGHT; full 3 stanzas (12 lines).",
+    "selected_boundaries": {
+      "type": "complete_poem",
+      "heading": "THE SWING",
+      "first_line": "How do you like to go up in a swing,",
+      "last_line": "  Up in the air and down!"
+    },
+    "review_scope": "Only the named poem was selected and read in full. No romance, sexual content or attacks on religious belief occur in the selected text. This is an editorial content selection, not a religious certification; the linked complete volume contains other texts not selected or endorsed.",
+    "translation": "New French translation prepared for Selkie; no modern commercial translation, illustration, introductory text or editorial annotation reproduced.",
+    "assets": {
+      "fr": "332713bc68739ca7e31ed5913b7a857debecad2ee0237fda303ece7ee4b94e91",
+      "en": "4bc0e1c4be88386e27554ca59e771da03e2b7dadd025beb2f609139a5ede6621"
+    }
+  },
+  {
+    "id": "poetry-echoing-green",
+    "titleFr": "La prairie aux échos · les saisons de la vie",
+    "titleEn": "The Echoing Green · seasons of life",
+    "author": "William Blake (1757–1827)",
+    "descriptionFr": "Du matin au repos du soir : la nature, l’enfance et les souvenirs des aînés.",
+    "descriptionEn": "From morning to evening rest: nature, childhood and the memories of older people.",
+    "sourceUrl": "https://raw.githubusercontent.com/GITenberg/Poems-of-William-Blake_574/master/574.txt",
+    "assetName": "poetry-echoing-green",
+    "sourceLabel": "Songs of Innocence (1789), « The Echoing Green » · GITenberg",
+    "editionNoteFr": "Poème anglais intégral du domaine public, dans Songs of Innocence (1789). Seul ce poème est repris, sans les autres textes du recueil. Traduction française en vers libres préparée pour Selkie.",
+    "editionNoteEn": "Complete public-domain English poem from Songs of Innocence (1789). Only this poem is reproduced, without the other poems in the collection. French free-verse translation prepared for Selkie.",
+    "genre": "POETRY",
+    "source_snapshot_sha256": "c46efb8dab4f445eaba88e59fe826f6d308972bf34ce2ec812535e27d783b204",
+    "author_death_year": 1827,
+    "first_publication": 1789,
+    "source_reference": "Songs of Innocence, poem headed THE ECHOING GREEN, between INTRODUCTION and THE LAMB; full 3 stanzas (30 lines).",
+    "selected_boundaries": {
+      "type": "complete_poem",
+      "heading": "THE ECHOING GREEN",
+      "first_line": "The sun does arise,",
+      "last_line": "On the darkening green."
+    },
+    "review_scope": "Only the named poem was selected and read in full. No romance, sexual content or attacks on religious belief occur in the selected text. This is an editorial content selection, not a religious certification; the linked complete volume contains other texts not selected or endorsed.",
+    "translation": "New French translation prepared for Selkie; no modern commercial translation, illustration, introductory text or editorial annotation reproduced.",
+    "assets": {
+      "fr": "2b08a7d20be2051205858007918c0a1eff650ffd4cab2e3fd5b429ab3fcea8be",
+      "en": "cee2bea43aa00db1fc6993830a756b3c9496d9c81e5bb19203786961893c8318"
+    }
+  },
+  {
+    "id": "poetry-arrow-song",
+    "titleFr": "La flèche et le chant · la portée des gestes",
+    "titleEn": "The Arrow and the Song · the reach of actions",
+    "author": "Henry Wadsworth Longfellow (1807–1882)",
+    "descriptionFr": "Une courte image sur les traces que laissent nos actes et nos paroles chez les autres.",
+    "descriptionEn": "A short image about the traces our actions and words leave with others.",
+    "sourceUrl": "https://raw.githubusercontent.com/GITenberg/The-Complete-Poetical-Works-of-Henry-Wadsworth-Longfellow_1365/master/1365.txt",
+    "assetName": "poetry-arrow-song",
+    "sourceLabel": "The Belfry of Bruges and Other Poems (1845), « The Arrow and the Song » · édition 1902 · GITenberg",
+    "editionNoteFr": "Poème anglais intégral du domaine public (1845), repris dans l’édition Houghton Mifflin de 1902. Aucune autre œuvre ni note de l’édition n’est reprise. Traduction française en vers libres préparée pour Selkie.",
+    "editionNoteEn": "Complete public-domain English poem (1845), included in the Houghton Mifflin edition of 1902. No other work or editorial note is reproduced. French free-verse translation prepared for Selkie.",
+    "genre": "POETRY",
+    "source_snapshot_sha256": "9a2594213268bb8eed98081881264b23515a762eadf19d1ab14031231ceb397d",
+    "author_death_year": 1882,
+    "first_publication": 1845,
+    "source_reference": "The Belfry of Bruges and Other Poems, poem headed THE ARROW AND THE SONG, immediately before SONNETS / MEZZO CAMMIN in the 1902 collected edition; full 3 stanzas (12 lines).",
+    "selected_boundaries": {
+      "type": "complete_poem",
+      "heading": "THE ARROW AND THE SONG",
+      "first_line": "I shot an arrow into the air,",
+      "last_line": "I found again in the heart of a friend."
+    },
+    "review_scope": "Only the named poem was selected and read in full. No romance, sexual content or attacks on religious belief occur in the selected text. This is an editorial content selection, not a religious certification; the linked complete volume contains other texts not selected or endorsed.",
+    "translation": "New French translation prepared for Selkie; no modern commercial translation, illustration, introductory text or editorial annotation reproduced.",
+    "assets": {
+      "fr": "924f2cd5aeb6606dc4b023795289e79c7753939888d93874f5e5d87504b30e73",
+      "en": "d3aaa3469f87172e9d7b8f4982d73d2b5aea08f5a6d97ccdc5f7b21500a2aff3"
+    }
+  },
+  {
+    "id": "poetry-laboureur",
+    "titleFr": "Le Laboureur et ses Enfants · le travail comme trésor",
+    "titleEn": "The Farmer and His Children · work as a treasure",
+    "author": "Jean de La Fontaine (1621–1695)",
+    "descriptionFr": "Une fable en vers sur l’effort régulier et ce que l’on transmet à ses enfants.",
+    "descriptionEn": "A verse fable about steady effort and what we pass on to our children.",
+    "sourceUrl": "https://raw.githubusercontent.com/GITenberg/Fables_56327/master/56327-0.txt",
+    "assetName": "poetry-laboureur",
+    "sourceLabel": "Fables (1668), livre V, fable IX · édition Garnier Frères, Paris, 1868 · GITenberg",
+    "editionNoteFr": "Fable française intégrale du domaine public, livre V, IX (1668), témoin Garnier Frères 1868. Orthographe conservée ; « faire l’oût » signifie ici faire la moisson. Traduction anglaise en vers libres préparée pour Selkie. Les illustrations, notes et autres fables sont exclues.",
+    "editionNoteEn": "Complete public-domain French verse fable, book V, IX (1668), Garnier Frères 1868 witness. Original spelling retained; “faire l’oût” means harvesting here. English free-verse translation prepared for Selkie. Illustrations, notes and other fables are excluded.",
+    "genre": "POETRY",
+    "source_snapshot_sha256": "062e03a6cdf08e3428dede08b130070b7e92043d64e92f017a076d3440eb9410",
+    "author_death_year": 1695,
+    "first_publication": 1668,
+    "source_reference": "Fables, livre V, fable IX, LE LABOUREUR ET SES ENFANTS; complete 18-line verse fable. Source edition Garnier Frères 1868.",
+    "selected_boundaries": {
+      "type": "complete_poem",
+      "heading": "Le Laboureur et ses Enfants",
+      "first_line": "Travaillez, prenez de la peine;",
+      "last_line": "Que le travail est un trésor."
+    },
+    "review_scope": "Travail, héritage, champs et enseignement du père ; décès naturel du père explicitement mentionné. Aucun amour, sexualité, anti-Dieu ou divinité mythologique. Only the named poem was selected and read in full. This is an editorial selection, not a religious certification; the linked complete volume contains other texts not selected or endorsed.",
+    "translation": "New English translation prepared for Selkie; no modern commercial translation, illustration, introductory text or editorial annotation reproduced.",
+    "assets": {
+      "fr": "381ff4e10efb08835a7f3be558408b2246f7845054dcdd5e00c81d4a26402479",
+      "en": "1cd85e4c958b323ff22d6d08bfb696b33c5fed27f0df57008c564f71f3028919"
+    }
+  },
+  {
+    "id": "poetry-renard-raisins",
+    "titleFr": "Le Renard et les Raisins · regarder ses prétextes",
+    "titleEn": "The Fox and the Grapes · noticing excuses",
+    "author": "Jean de La Fontaine (1621–1695)",
+    "descriptionFr": "Huit vers pour réfléchir à la manière dont on réagit devant un obstacle.",
+    "descriptionEn": "Eight lines reflecting on how we react when faced with an obstacle.",
+    "sourceUrl": "https://raw.githubusercontent.com/GITenberg/Fables_56327/master/56327-0.txt",
+    "assetName": "poetry-renard-raisins",
+    "sourceLabel": "Fables (1668), livre III, fable XI · édition Garnier Frères, Paris, 1868 · GITenberg",
+    "editionNoteFr": "Fable française intégrale du domaine public, livre III, XI (1668), témoin Garnier Frères 1868. Orthographe conservée : « pouvoit » = « pouvait » ; « le galant » désigne ici le renard. Traduction anglaise en vers libres préparée pour Selkie. Les autres fables et illustrations sont exclues.",
+    "editionNoteEn": "Complete public-domain French verse fable, book III, XI (1668), Garnier Frères 1868 witness. Original spelling retained; “le galant” refers to the fox here. English free-verse translation prepared for Selkie. Other fables and illustrations are excluded.",
+    "genre": "POETRY",
+    "source_snapshot_sha256": "062e03a6cdf08e3428dede08b130070b7e92043d64e92f017a076d3440eb9410",
+    "author_death_year": 1695,
+    "first_publication": 1668,
+    "source_reference": "Fables, livre III, fable XI, LE RENARD ET LES RAISINS; complete 8-line verse fable. Source edition Garnier Frères 1868.",
+    "selected_boundaries": {
+      "type": "complete_poem",
+      "heading": "Le Renard et les Raisins",
+      "first_line": "Certain renard gascon, d'autres disent normand,",
+      "last_line": "Fit-il pas mieux que de se plaindre?"
+    },
+    "review_scope": "Renard affamé incapable d’atteindre des raisins, réflexion sur les prétextes. Aucun amour, sexualité, anti-Dieu ou divinité mythologique. « Le galant » signifie ici le personnage/renard, pas une relation amoureuse. « goujats » est une insulte ancienne. Only the named poem was selected and read in full. This is an editorial selection, not a religious certification; the linked complete volume contains other texts not selected or endorsed.",
+    "translation": "New English translation prepared for Selkie; no modern commercial translation, illustration, introductory text or editorial annotation reproduced.",
+    "assets": {
+      "fr": "9b5d7b700c6b39c685016f1c339beda0cab8f9e0e1affc9c29728e6261991a84",
+      "en": "20cd3dad9c653011741e250341a8cc88c8e2f21d0eb8be593dc68c96f0765248"
+    }
+  },
+  {
+    "id": "poetry-plaine-hiver",
+    "titleFr": "Une plaine d’hiver · observer les nuances",
+    "titleEn": "A Winter Plain · observing shades",
+    "author": "Paul Verlaine (1844–1896)",
+    "descriptionFr": "Un paysage enneigé et mélancolique : ciel, arbres et animaux sous le vent.",
+    "descriptionEn": "A snowy, melancholy landscape: sky, trees and animals in the wind.",
+    "sourceUrl": "https://raw.githubusercontent.com/GITenberg/-uvres-compl-tes---Volume-1--13-Po-mes-Saturniens-F-tes-Galantes-Bonne-chanson-Romances-sans-__15112/master/15112-8.txt",
+    "assetName": "poetry-plaine-hiver",
+    "sourceLabel": "Romances sans paroles (1874), Ariettes oubliées, VIII · Œuvres complètes, tome I, troisième édition, 1902 · GITenberg",
+    "editionNoteFr": "Poème français intégral du domaine public : « Dans l’interminable ennui de la plaine », Ariettes oubliées, VIII, Romances sans paroles (1874). Témoin : Œuvres complètes, tome I, 1902. Seul ce poème de paysage est retenu ; les autres poèmes sont exclus. Traduction anglaise en vers libres préparée pour Selkie.",
+    "editionNoteEn": "Complete public-domain French poem: “Dans l’interminable ennui de la plaine”, Ariettes oubliées, VIII, Romances sans paroles (1874). Witness: Œuvres complètes, volume I, 1902. Only this landscape poem is selected; the other poems are excluded. English free-verse translation prepared for Selkie.",
+    "genre": "POETRY",
+    "source_snapshot_sha256": "ec1d37473184bb76f84c3f5c16c128369fc3d63ccc93a5206b6646d3e04464bf",
+    "author_death_year": 1896,
+    "first_publication": 1874,
+    "source_reference": "Romances sans paroles (1874), Ariettes oubliées VIII; six complete quatrains (24 lines), from Dans l’interminable to Luit comme du sable. Source Œuvres complètes, tome I, third edition 1902.",
+    "selected_boundaries": {
+      "type": "complete_poem",
+      "heading": "Dans l’interminable ennui de la plaine",
+      "first_line": "Dans l'interminable",
+      "last_line": "Luit comme du sable."
+    },
+    "review_scope": "Paysage enneigé, ciel, nuages, arbres, oiseaux, loups et observation du monde en hiver. Ton mélancolique ; image de la lune qui vit et meurt. Aucun amour, sexualité, thème religieux, anti-Dieu ou divinité mythologique dans cette sélection. Only the named poem was selected and read in full. This is an editorial selection, not a religious certification; the linked complete volume contains other texts not selected or endorsed.",
+    "translation": "New English translation prepared for Selkie; no modern commercial translation, illustration, introductory text or editorial annotation reproduced.",
+    "assets": {
+      "fr": "106dc7d7482fb2afa9432846c408211586d4501d3d8400086e6661879a0ad480",
+      "en": "c0021bcc969106cdd2892e7af7333735da2ced50baa4669efe09e2dcb4e2d137"
+    }
+  }
+]

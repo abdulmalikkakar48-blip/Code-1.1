@@ -1,0 +1,117 @@
+package com.maree.app
+
+/** Complete public-domain poems, reviewed individually; translations are prepared for Selkie. */
+internal val poetryReadingResources: List<ReadingResource> = listOf(
+    ReadingResource(
+        id = "poetry-rain",
+        titleFr = "La pluie · regarder dehors",
+        titleEn = "Rain · looking outside",
+        author = "Robert Louis Stevenson (1850–1894)",
+        descriptionFr = "Quatre vers pour observer comment une même pluie touche des lieux différents.",
+        descriptionEn = "Four lines observing how the same rain reaches different places.",
+        sourceUrl = "https://raw.githubusercontent.com/GITenberg/A-Child-s-Garden-of-Verses_19722/master/19722.txt",
+        assetName = "poetry-rain",
+        sourceLabel = "A Child’s Garden of Verses (1885), « Rain » · édition 1916 · GITenberg",
+        editionNoteFr = "Poème anglais intégral du domaine public, publié dans A Child’s Garden of Verses (1885). Témoin : édition M. A. Donohue, 1916 ; seul le texte de Stevenson est repris, sans introduction ni illustrations. Traduction française en vers libres préparée pour Selkie.",
+        editionNoteEn = "Complete public-domain English poem from A Child’s Garden of Verses (1885). Witness: M. A. Donohue edition, 1916; only Stevenson’s text is reproduced, without introduction or illustrations. French free-verse translation prepared for Selkie.",
+        genre = ReadingGenre.POETRY
+    ),
+    ReadingResource(
+        id = "poetry-wind",
+        titleFr = "Le vent · observer l’invisible",
+        titleEn = "The Wind · observing the unseen",
+        author = "Robert Louis Stevenson (1850–1894)",
+        descriptionFr = "Une question sur le vent : comprendre une chose invisible en observant ses effets.",
+        descriptionEn = "A question about wind: understand something unseen by observing its effects.",
+        sourceUrl = "https://raw.githubusercontent.com/GITenberg/A-Child-s-Garden-of-Verses_19722/master/19722.txt",
+        assetName = "poetry-wind",
+        sourceLabel = "A Child’s Garden of Verses (1885), « The Wind » · édition 1916 · GITenberg",
+        editionNoteFr = "Poème anglais intégral du domaine public, publié dans A Child’s Garden of Verses (1885). Témoin : édition M. A. Donohue, 1916 ; seul le texte de Stevenson est repris, sans introduction ni illustrations. Traduction française en vers libres préparée pour Selkie.",
+        editionNoteEn = "Complete public-domain English poem from A Child’s Garden of Verses (1885). Witness: M. A. Donohue edition, 1916; only Stevenson’s text is reproduced, without introduction or illustrations. French free-verse translation prepared for Selkie.",
+        genre = ReadingGenre.POETRY
+    ),
+    ReadingResource(
+        id = "poetry-swing",
+        titleFr = "La balançoire · changer de perspective",
+        titleEn = "The Swing · changing perspective",
+        author = "Robert Louis Stevenson (1850–1894)",
+        descriptionFr = "Un paysage vu d’en haut, à travers le mouvement simple d’une balançoire.",
+        descriptionEn = "A landscape seen from above through the simple movement of a swing.",
+        sourceUrl = "https://raw.githubusercontent.com/GITenberg/A-Child-s-Garden-of-Verses_19722/master/19722.txt",
+        assetName = "poetry-swing",
+        sourceLabel = "A Child’s Garden of Verses (1885), « The Swing » · édition 1916 · GITenberg",
+        editionNoteFr = "Poème anglais intégral du domaine public, publié dans A Child’s Garden of Verses (1885). Témoin : édition M. A. Donohue, 1916 ; seul le texte de Stevenson est repris, sans introduction ni illustrations. Traduction française en vers libres préparée pour Selkie.",
+        editionNoteEn = "Complete public-domain English poem from A Child’s Garden of Verses (1885). Witness: M. A. Donohue edition, 1916; only Stevenson’s text is reproduced, without introduction or illustrations. French free-verse translation prepared for Selkie.",
+        genre = ReadingGenre.POETRY
+    ),
+    ReadingResource(
+        id = "poetry-echoing-green",
+        titleFr = "La prairie aux échos · les saisons de la vie",
+        titleEn = "The Echoing Green · seasons of life",
+        author = "William Blake (1757–1827)",
+        descriptionFr = "Du matin au repos du soir : la nature, l’enfance et les souvenirs des aînés.",
+        descriptionEn = "From morning to evening rest: nature, childhood and the memories of older people.",
+        sourceUrl = "https://raw.githubusercontent.com/GITenberg/Poems-of-William-Blake_574/master/574.txt",
+        assetName = "poetry-echoing-green",
+        sourceLabel = "Songs of Innocence (1789), « The Echoing Green » · GITenberg",
+        editionNoteFr = "Poème anglais intégral du domaine public, dans Songs of Innocence (1789). Seul ce poème est repris, sans les autres textes du recueil. Traduction française en vers libres préparée pour Selkie.",
+        editionNoteEn = "Complete public-domain English poem from Songs of Innocence (1789). Only this poem is reproduced, without the other poems in the collection. French free-verse translation prepared for Selkie.",
+        genre = ReadingGenre.POETRY
+    ),
+    ReadingResource(
+        id = "poetry-arrow-song",
+        titleFr = "La flèche et le chant · la portée des gestes",
+        titleEn = "The Arrow and the Song · the reach of actions",
+        author = "Henry Wadsworth Longfellow (1807–1882)",
+        descriptionFr = "Une courte image sur les traces que laissent nos actes et nos paroles chez les autres.",
+        descriptionEn = "A short image about the traces our actions and words leave with others.",
+        sourceUrl = "https://raw.githubusercontent.com/GITenberg/The-Complete-Poetical-Works-of-Henry-Wadsworth-Longfellow_1365/master/1365.txt",
+        assetName = "poetry-arrow-song",
+        sourceLabel = "The Belfry of Bruges and Other Poems (1845), « The Arrow and the Song » · édition 1902 · GITenberg",
+        editionNoteFr = "Poème anglais intégral du domaine public (1845), repris dans l’édition Houghton Mifflin de 1902. Aucune autre œuvre ni note de l’édition n’est reprise. Traduction française en vers libres préparée pour Selkie.",
+        editionNoteEn = "Complete public-domain English poem (1845), included in the Houghton Mifflin edition of 1902. No other work or editorial note is reproduced. French free-verse translation prepared for Selkie.",
+        genre = ReadingGenre.POETRY
+    ),
+    ReadingResource(
+        id = "poetry-laboureur",
+        titleFr = "Le Laboureur et ses Enfants · le travail comme trésor",
+        titleEn = "The Farmer and His Children · work as a treasure",
+        author = "Jean de La Fontaine (1621–1695)",
+        descriptionFr = "Une fable en vers sur l’effort régulier et ce que l’on transmet à ses enfants.",
+        descriptionEn = "A verse fable about steady effort and what we pass on to our children.",
+        sourceUrl = "https://raw.githubusercontent.com/GITenberg/Fables_56327/master/56327-0.txt",
+        assetName = "poetry-laboureur",
+        sourceLabel = "Fables (1668), livre V, fable IX · édition Garnier Frères, Paris, 1868 · GITenberg",
+        editionNoteFr = "Fable française intégrale du domaine public, livre V, IX (1668), témoin Garnier Frères 1868. Orthographe conservée ; « faire l’oût » signifie ici faire la moisson. Traduction anglaise en vers libres préparée pour Selkie. Les illustrations, notes et autres fables sont exclues.",
+        editionNoteEn = "Complete public-domain French verse fable, book V, IX (1668), Garnier Frères 1868 witness. Original spelling retained; “faire l’oût” means harvesting here. English free-verse translation prepared for Selkie. Illustrations, notes and other fables are excluded.",
+        genre = ReadingGenre.POETRY
+    ),
+    ReadingResource(
+        id = "poetry-renard-raisins",
+        titleFr = "Le Renard et les Raisins · regarder ses prétextes",
+        titleEn = "The Fox and the Grapes · noticing excuses",
+        author = "Jean de La Fontaine (1621–1695)",
+        descriptionFr = "Huit vers pour réfléchir à la manière dont on réagit devant un obstacle.",
+        descriptionEn = "Eight lines reflecting on how we react when faced with an obstacle.",
+        sourceUrl = "https://raw.githubusercontent.com/GITenberg/Fables_56327/master/56327-0.txt",
+        assetName = "poetry-renard-raisins",
+        sourceLabel = "Fables (1668), livre III, fable XI · édition Garnier Frères, Paris, 1868 · GITenberg",
+        editionNoteFr = "Fable française intégrale du domaine public, livre III, XI (1668), témoin Garnier Frères 1868. Orthographe conservée : « pouvoit » = « pouvait » ; « le galant » désigne ici le renard. Traduction anglaise en vers libres préparée pour Selkie. Les autres fables et illustrations sont exclues.",
+        editionNoteEn = "Complete public-domain French verse fable, book III, XI (1668), Garnier Frères 1868 witness. Original spelling retained; “le galant” refers to the fox here. English free-verse translation prepared for Selkie. Other fables and illustrations are excluded.",
+        genre = ReadingGenre.POETRY
+    ),
+    ReadingResource(
+        id = "poetry-plaine-hiver",
+        titleFr = "Une plaine d’hiver · observer les nuances",
+        titleEn = "A Winter Plain · observing shades",
+        author = "Paul Verlaine (1844–1896)",
+        descriptionFr = "Un paysage enneigé et mélancolique : ciel, arbres et animaux sous le vent.",
+        descriptionEn = "A snowy, melancholy landscape: sky, trees and animals in the wind.",
+        sourceUrl = "https://raw.githubusercontent.com/GITenberg/-uvres-compl-tes---Volume-1--13-Po-mes-Saturniens-F-tes-Galantes-Bonne-chanson-Romances-sans-__15112/master/15112-8.txt",
+        assetName = "poetry-plaine-hiver",
+        sourceLabel = "Romances sans paroles (1874), Ariettes oubliées, VIII · Œuvres complètes, tome I, troisième édition, 1902 · GITenberg",
+        editionNoteFr = "Poème français intégral du domaine public : « Dans l’interminable ennui de la plaine », Ariettes oubliées, VIII, Romances sans paroles (1874). Témoin : Œuvres complètes, tome I, 1902. Seul ce poème de paysage est retenu ; les autres poèmes sont exclus. Traduction anglaise en vers libres préparée pour Selkie.",
+        editionNoteEn = "Complete public-domain French poem: “Dans l’interminable ennui de la plaine”, Ariettes oubliées, VIII, Romances sans paroles (1874). Witness: Œuvres complètes, volume I, 1902. Only this landscape poem is selected; the other poems are excluded. English free-verse translation prepared for Selkie.",
+        genre = ReadingGenre.POETRY
+    )
+)

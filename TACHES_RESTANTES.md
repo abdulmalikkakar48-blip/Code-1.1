@@ -1,13 +1,14 @@
 # Selkie — ce qui reste avant une diffusion publique
 
-État du 14 octobre 2026, prototype Android 0.14.1. Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
+État du 14 octobre 2026, prototype Android 0.15.0. Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
 
 ## Terminé dans le prototype
 
 - Retrait du dialogue IA, de la connexion du coach, des options de compilation connectées et du serveur inutilisé ; l’historique Git conserve l’ancienne préparation.
 - Coach local français/anglais, question au-dessus de la réponse, bibliothèque classée et paginée : 1 152 / 23 040 / 50 688 questions selon l’offre. Les situations, contextes et intentions sont combinés, pas des réponses médicales ni des textes indépendants.
 - Prix proposés 5/10 €/mois, 60/120 €/an sans réduction ; offres de démonstration gratuites, défis personnels et règles à zéro point conservés.
-- Fond clair sobre avec six lignes ondulantes monochromes, mouvements nocturnes supplémentaires ; arrêt selon réglage Android et cycle de vie.
+- Fond clair avec octogones mobiles et lueurs corail, mouvements nocturnes supplémentaires ; arrêt selon réglage Android et cycle de vie.
+- Lecture gratuite hors ligne : seize sélections FR/EN, dont neuf poésies et fables en vers, filtres et recherche. Provenance et export .txt séparés des recueils externes.
 - Politique locale FR/EN actualisée ; export filtré, effacement, consentement facultatif des questions inconnues et documents légaux conservés.
 - Calculs des réponses et recherche hors du thread de l’interface, annulation des résultats obsolètes, Tab pour naviguer et Ctrl+Entrée pour envoyer.
 - Inventaire de 57 coordonnées de bibliothèques, licences Apache-2.0 consultables. Les droits du logo et de la marque restent un contrôle séparé.

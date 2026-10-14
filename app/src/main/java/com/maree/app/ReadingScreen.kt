@@ -7,12 +7,16 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -47,6 +51,10 @@ internal fun ReadingSection() {
     var selectedId by rememberSaveable { mutableStateOf<String?>(null) }
     var pendingExportId by rememberSaveable { mutableStateOf<String?>(null) }
     var pendingExportLanguage by rememberSaveable { mutableStateOf<String?>(null) }
+    var searchQuery by remember(language) { mutableStateOf("") }
+    var genreTag by rememberSaveable { mutableStateOf("all") }
+    val genre = ReadingGenre.entries.firstOrNull { it.name == genreTag }
+    val catalogue = remember(language, genre, searchQuery) { filterReadingResources(searchQuery, genre, language) }
     var exporting by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
     var messageIsError by remember { mutableStateOf(false) }
@@ -118,8 +126,8 @@ internal fun ReadingSection() {
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         if (selected == null) {
             ScreenHeading(tr("LECTURES", "READING"), tr("Quelques pages pour réfléchir.", "A few pages to reflect."),
-                tr("Une sélection gratuite autour de l’apprentissage, de l’attention et des habitudes.",
-                    "A free selection about learning, attention and habits."))
+                tr("Poésies et textes courts sur la nature, la réflexion et les habitudes.",
+                    "Poems and short texts about nature, reflection and habits."))
             AppCardSurface {
                 StatusPill(tr("Gratuit · Hors ligne", "Free · Offline"))
                 Text(tr("Tu lis ici des extraits sélectionnés, pas les livres complets. Chaque fiche précise l’auteur, la source et l’édition utilisée.",
@@ -129,7 +137,20 @@ internal fun ReadingSection() {
                     "Links open your browser. External pages may contain other texts that are not part of this selection."),
                     color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 20.sp)
             }
-            readingResources.forEach { resource ->
+            OutlinedTextField(value = searchQuery, onValueChange = { searchQuery = it.take(120) },
+                label = { Text(tr("Rechercher un titre ou un auteur", "Search a title or author")) },
+                singleLine = true, modifier = Modifier.fillMaxWidth())
+            Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                listOf("all" to tr("Tout", "All"), ReadingGenre.REFLECTION.name to tr("Réflexion", "Reflection"),
+                    ReadingGenre.POETRY.name to tr("Poésie", "Poetry")).forEach { (tag, label) ->
+                    FilterChip(selected = genreTag == tag, onClick = { genreTag = tag }, label = { Text(label) })
+                }
+            }
+            Text(tr("${catalogue.size} lecture(s) · ${readingResources.size} au total", "${catalogue.size} reading(s) · ${readingResources.size} total"),
+                color = MareePalette.Muted, fontSize = 13.sp)
+            if (catalogue.isEmpty()) Text(tr("Aucun titre trouvé. Essaie un auteur ou un autre mot.",
+                "No title found. Try an author or a different word."), color = MareePalette.Muted)
+            catalogue.forEach { resource ->
                 AppCardSurface {
                     SectionLabel(if (language == AppLocale.ENGLISH) resource.titleEn else resource.titleFr)
                     Text(resource.author, color = MareePalette.Teal, fontWeight = FontWeight.Medium, fontSize = 14.sp)

@@ -109,18 +109,25 @@ class AppAppearanceTest {
         assertTrue((SelkieNightColors.primary and 0xFF) > (SelkieNightColors.primary shr 16 and 0xFF))
     }
 
-    @Test fun strongerDayDecorationPreservesTextContrastAtItsDarkestPoint() {
-        val background = SelkieLightColors.background
-        for (outline in listOf(0xFF123F2DL, 0xFF3158A0L, 0xFF8A3D91L, 0xFFAD591AL)) {
-            var composite = 0xFF000000L
+    @Test fun octagonMaximumLayerStackPreservesNormalTextContrast() {
+        var composite = SelkieLightColors.background
+        // Same maximum layers and order as the renderer; cell clipping prevents tile stacking.
+        val layers = listOf(OctagonStyle.FACE_COLOR to OctagonStyle.FACE_MAX_ALPHA,
+            OctagonStyle.FACET_COLOR to OctagonStyle.FACET_MAX_ALPHA,
+            OctagonStyle.OUTLINE_COLOR to OctagonStyle.OUTLINE_MAX_ALPHA,
+            OctagonStyle.LIGHT_COLOR to OctagonStyle.HALO_MAX_ALPHA,
+            OctagonStyle.LIGHT_COLOR to OctagonStyle.SEAM_MAX_ALPHA)
+        layers.forEach { (color, alpha) ->
+            var next = 0xFF000000L
             for (shift in listOf(16, 8, 0)) {
-                val component = (((outline shr shift and 255) * 100 +
-                    (background shr shift and 255) * 155) / 255)
-                composite = composite or (component shl shift)
+                val component = (((color shr shift and 255) * alpha +
+                    (composite shr shift and 255) * (255 - alpha)) / 255)
+                next = next or (component shl shift)
             }
+            composite = next
             for (foreground in listOf(SelkieLightColors.ink, SelkieLightColors.muted,
                 SelkieLightColors.primary, SelkieLightColors.strongInk, SelkieLightColors.danger)) {
-                assertContrast("darkest animated outline", foreground, composite)
+                assertContrast("octagon compositing stack", foreground, composite)
             }
         }
     }
