@@ -1,0 +1,20 @@
+{
+  "version_name": "0.13.0",
+  "version_code": 23,
+  "source_commit": "c7d555462afb9011b1707ca74ba64a8d677691e1",
+  "apk": "Selkie-Android-0.13.0.apk",
+  "size_bytes": 26851948,
+  "sha256": "cb088a5b8ab0b0b4f598df59edcda6a7f8405c86f165ef725d49d8d8c181a2df",
+  "certificate_sha256": "9a7487f626169300b57b897c488827428b9517ac8bac8a805f6508fddb932a50",
+  "source_archive": "Selkie-Android-0.13.0-source.zip",
+  "source_archive_sha256": "6faa5c945e890ceb167fa6fb0c15891700ccbbc5ab2c127786f5307ea8e915d9",
+  "source_archive_size_bytes": 863829,
+  "min_sdk": 29,
+  "target_sdk": 34,
+  "unit_tests": 215,
+  "lint_errors": 0,
+  "lint_warnings": 5,
+  "lint_information": 4,
+  "online_ai": false,
+  "real_payments": false
+}
