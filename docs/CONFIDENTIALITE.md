@@ -126,3 +126,7 @@ Les références ci-dessous sont fournies comme repères ; les pages officielles
 - [Réclamation / Complaint — CNIL](https://www.cnil.fr/fr/adresser-une-plainte)
 
 [Version anglaise de la politique](PRIVACY_POLICY_EN.md).
+
+## Tâches du calendrier — version 0.12.1
+
+Les tâches personnelles du calendrier sont gratuites : leur texte, leur date et leur état terminé restent dans le stockage privé du téléphone jusqu’à leur suppression, l’effacement global ou la désinstallation. Elles sont distinctes de l’historique de suivi limité à 90 jours. Elles n’accordent pas de points et n’envoient aucun rappel. L’export choisi inclut ces tâches ; évite les informations sensibles et protège ton fichier. Aucun accès au calendrier Android n’est demandé.

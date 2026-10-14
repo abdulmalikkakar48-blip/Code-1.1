@@ -1,5 +1,10 @@
 package com.maree.app
 
+import android.app.DatePickerDialog
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -46,10 +51,16 @@ import java.time.format.TextStyle
 @Composable
 internal fun ProgressCalendarSection(entries: List<DailyHistoryEntry>) {
     val today = LocalDate.now()
-    val earliest = today.minusDays(89)
-    val firstMonth = YearMonth.from(earliest)
-    val lastMonth = YearMonth.from(today)
-    var monthKey by rememberSaveable(today.toString()) { mutableStateOf(lastMonth.toString()) }
+    val firstMonth = YearMonth.of(1900, 1)
+    val lastMonth = YearMonth.of(2200, 12)
+    val context = LocalContext.current
+    val taskStore = remember(context) { CalendarTaskStore(context) }
+    var taskRevision by remember { mutableStateOf(0) }
+    var taskDates by remember { mutableStateOf<Set<LocalDate>>(emptySet()) }
+    LaunchedEffect(taskRevision) {
+        taskDates = withContext(Dispatchers.IO) { taskStore.entries().map { it.date }.toSet() }
+    }
+    var monthKey by rememberSaveable(today.toString()) { mutableStateOf(YearMonth.from(today).toString()) }
     var selectedKey by rememberSaveable(today.toString()) { mutableStateOf(today.toString()) }
     val month = YearMonth.parse(monthKey)
     val selectedDate = LocalDate.parse(selectedKey)
@@ -61,14 +72,14 @@ internal fun ProgressCalendarSection(entries: List<DailyHistoryEntry>) {
     fun showMonth(nextMonth: YearMonth) {
         val candidate = nextMonth.atDay(selectedDate.dayOfMonth.coerceAtMost(nextMonth.lengthOfMonth()))
         monthKey = nextMonth.toString()
-        selectedKey = candidate.coerceIn(earliest, today).toString()
+        selectedKey = candidate.toString()
     }
 
     AppCardSurface {
-        SectionLabel(tr("Ton calendrier de progrès", "Your progress calendar"))
+        SectionLabel(tr("Ton calendrier", "Your calendar"))
         Text(
-            tr("Tes validations et tes mesures sur les 90 derniers jours. Les journées sans mesure restent inconnues.",
-                "Your check-ins and measurements over the last 90 days. Days without measurements remain unknown."),
+            tr("Prévois tes tâches pour la date de ton choix. Ton historique de suivi couvre les 90 derniers jours.",
+                "Plan tasks for any date you choose. Your tracking history covers the last 90 days."),
             color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium
         )
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
@@ -91,6 +102,19 @@ internal fun ProgressCalendarSection(entries: List<DailyHistoryEntry>) {
                 }
             ) { Text("›", modifier = Modifier.clearAndSetSemantics {}) }
         }
+        TextButton(onClick = {
+            DatePickerDialog(context, { _, year, monthIndex, day ->
+                val chosen = LocalDate.of(year, monthIndex + 1, day)
+                if (chosen.year in 1900..2200) {
+                    monthKey = YearMonth.from(chosen).toString()
+                    selectedKey = chosen.toString()
+                }
+            }, selectedDate.year, selectedDate.monthValue - 1, selectedDate.dayOfMonth).apply {
+                datePicker.minDate = LocalDate.of(1900, 1, 1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
+                datePicker.maxDate = LocalDate.of(2200, 12, 31).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
+                show()
+            }
+        }) { Text(tr("Choisir une date", "Choose a date")) }
         // Keep date targets at least 48 dp wide, including on a narrow phone or large text.
         BoxWithConstraints(Modifier.fillMaxWidth()) {
             val cellWidth = (maxWidth / 7).coerceAtLeast(52.dp)
@@ -121,7 +145,8 @@ internal fun ProgressCalendarSection(entries: List<DailyHistoryEntry>) {
                                     CalendarDateButton(
                                         date = date,
                                         entry = byDate[date],
-                                        enabled = date in earliest..today,
+                                        enabled = date.year in 1900..2200,
+                                        hasTask = date in taskDates,
                                         isSelected = date == selectedDate,
                                         modifier = Modifier.width(cellWidth),
                                         onClick = { selectedKey = date.toString() }
@@ -133,14 +158,19 @@ internal fun ProgressCalendarSection(entries: List<DailyHistoryEntry>) {
                 }
             }
         }
-        Text(tr("• validation · ! limite atteinte · — usage mesuré · ? aucune mesure",
-            "• check-in · ! limit reached · — measured usage · ? no measurement"),
+        Text(tr("○ tâche · • validation · ! limite atteinte · — usage mesuré · ? aucune mesure",
+            "○ task · • check-in · ! limit reached · — measured usage · ? no measurement"),
             color = MareePalette.Muted, style = MaterialTheme.typography.bodySmall)
         HorizontalDivider(color = MareePalette.Outline)
         Text(calendarDateLabel(selectedDate).replaceFirstChar { it.titlecase(AppLanguage.locale) },
             color = MareePalette.Ink, fontWeight = FontWeight.SemiBold,
             style = MaterialTheme.typography.titleMedium)
-        if (selectedEntry == null) {
+        CalendarTaskSection(selectedDate, onTasksChanged = { taskRevision++ })
+        HorizontalDivider(color = MareePalette.Outline)
+        SectionLabel(tr("Historique du suivi", "Tracking history"))
+        if (selectedDate > today) {
+            Text(tr("Journée à venir : aucune mesure de suivi pour l’instant.", "Future day: no tracking measurements yet."), color = MareePalette.Muted)
+        } else if (selectedEntry == null) {
             Text(tr("Aucune donnée enregistrée pour cette journée.", "No data recorded for this day."),
                 color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium)
         } else {
@@ -182,13 +212,14 @@ private fun CalendarDateButton(
     date: LocalDate,
     entry: DailyHistoryEntry?,
     enabled: Boolean,
+    hasTask: Boolean,
     isSelected: Boolean,
     modifier: Modifier,
     onClick: () -> Unit
 ) {
     val hasValidation = entry?.validationIds?.isNotEmpty() == true
     val hasBreach = entry?.breachedPackages?.isNotEmpty() == true
-    val marker = when {
+    val marker = (if (hasTask) "○ " else "") + when {
         !enabled -> ""
         hasValidation && hasBreach -> "• !"
         hasBreach -> "!"
@@ -198,7 +229,7 @@ private fun CalendarDateButton(
     }
     val label = calendarDateLabel(date) + ". " + if (!enabled)
         tr("Hors de l’historique disponible", "Outside the available history")
-    else calendarEntryStatus(entry)
+    else (if (hasTask) tr("Tâches prévues. ", "Planned tasks. ") else "") + calendarEntryStatus(entry)
     Surface(
         onClick = onClick,
         enabled = enabled,

@@ -38,3 +38,7 @@ L’historique applique des bornes techniques de **500 identifiants d’applicat
 Les droits dépendent de leurs conditions légales. Le contact CNIL est indiqué dans la politique. Les principes doivent être revalidés avec les textes officiels applicables avant commercialisation ; les sources web officielles n’ont pas pu être lues depuis le cloud à cette date. Aucune garantie d’actualité juridique ou de conformité n’est donnée par ce registre de travail.
 
 Le dialogue IA et sa préparation serveur ont été retirés. Aucun compteur de capacité serveur ni envoi de questions n’est utilisé par cette version.
+
+## Tâches du calendrier — version 0.12.1
+
+Les tâches personnelles du calendrier sont gratuites : leur texte, leur date et leur état terminé restent dans le stockage privé du téléphone jusqu’à leur suppression, l’effacement global ou la désinstallation. Elles sont distinctes de l’historique de suivi limité à 90 jours. Elles n’accordent pas de points et n’envoient aucun rappel. L’export choisi inclut ces tâches ; évite les informations sensibles et protège ton fichier. Aucun accès au calendrier Android n’est demandé.

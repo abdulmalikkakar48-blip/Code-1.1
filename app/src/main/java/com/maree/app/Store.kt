@@ -185,7 +185,10 @@ class Store internal constructor(private val prefs: SharedPreferences) {
      * instance de Store recrée les horloges initiales ; les points reviennent à 100 par défaut.
      * false signale un échec de persistance : l'interface ne doit pas annoncer un succès.
      */
-    fun clearPersonalData(): Boolean = synchronized(lock) { prefs.edit().clear().commit() }
+    fun clearPersonalData(): Boolean = synchronized(lock) {
+        LocalFeatureLock.erasureGeneration++
+        prefs.edit().clear().commit()
+    }
 
     /** Copie structurée des seules données métier stockées, sans lecture Android ni mutation. */
     internal fun exportLocalState(now: Long = System.currentTimeMillis()): JSONObject = synchronized(lock) {
@@ -260,6 +263,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
             })
             put("customChallenges", customChallenges)
             put("dailyHistory", history.exportJson(now))
+            put("calendarTasks", CalendarTaskStore(prefs).exportJson())
             put("limitSchedules", schedules.exportJson())
             put("coachFavorites", CoachFavoritesStore(prefs).exportJson())
             put("guidedPrograms", GuidedProgramStore(prefs).exportJson())

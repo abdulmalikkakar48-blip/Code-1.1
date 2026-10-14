@@ -1,6 +1,16 @@
 # Selkie : version de travail retenue le 13 octobre 2026
 
-## Version actuelle 0.12.0
+## Version actuelle 0.12.1 — calendrier de tâches et fond clair sobre
+
+Le calendrier permet de choisir des dates passées ou futures et d’ajouter, modifier, cocher et supprimer des tâches personnelles gratuites. Le mode Clair remplace les étoiles multicolores par six lignes ondulantes monochromes. Le suivi, les offres et les 1 152 / 23 040 / 50 688 questions du Coach sont conservés.
+
+[APK 0.12.1](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.12.1.apk) · [Sources](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.12.1-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.12.1.md).
+
+Les observations de suivi restent limitées à 90 jours ; les tâches sont conservées jusqu’à suppression. L’export schéma 3 et l’effacement global couvrent les tâches. Les offres restent des démonstrations sans paiement, aux prix prévus de 5 € et 10 €/mois, sans réduction annuelle.
+
+## Archives
+
+## Version 0.12.0
 
 VersionCode 21. Le calendrier, le bilan hebdomadaire et les favoris sont gratuits. Premium ajoute les créneaux et le widget ; Ultra ajoute les programmes guidés. Les tarifs restent de 5 €/mois ou 60 €/an pour Premium et de 10 €/mois ou 120 €/an pour Ultra, sans réduction. L’historique couvre une fenêtre de 90 jours ; les données restent locales, sans modèle d’IA ni paiement actif. Voir [les fonctions quotidiennes](FONCTIONS_QUOTIDIENNES.md) et la validation exacte de l’APK.
 

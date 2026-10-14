@@ -1,13 +1,13 @@
 # Selkie — ce qui reste avant une diffusion publique
 
-État du 13 octobre 2026, prototype Android 0.12.0. Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
+État du 14 octobre 2026, prototype Android 0.12.1. Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
 
 ## Terminé dans le prototype
 
 - Retrait du dialogue IA, de la connexion du coach, des options de compilation connectées et du serveur inutilisé ; l’historique Git conserve l’ancienne préparation.
 - Coach local français/anglais, question au-dessus de la réponse, bibliothèque classée et paginée : 1 152 / 23 040 / 50 688 questions selon l’offre. Les situations, contextes et intentions sont combinés, pas des réponses médicales ni des textes indépendants.
 - Prix proposés 5/10 €/mois, 60/120 €/an sans réduction ; offres de démonstration gratuites, défis personnels et règles à zéro point conservés.
-- Fond clair plus dense, multicolore et scintillant, mouvements nocturnes supplémentaires ; arrêt selon réglage Android et cycle de vie.
+- Fond clair sobre avec six lignes ondulantes monochromes, mouvements nocturnes supplémentaires ; arrêt selon réglage Android et cycle de vie.
 - Politique locale FR/EN actualisée ; export filtré, effacement, consentement facultatif des questions inconnues et documents légaux conservés.
 - Calculs des réponses et recherche hors du thread de l’interface, annulation des résultats obsolètes, Tab pour naviguer et Ctrl+Entrée pour envoyer.
 - Inventaire de 57 coordonnées de bibliothèques, licences Apache-2.0 consultables. Les droits du logo et de la marque restent un contrôle séparé.
@@ -31,3 +31,7 @@ Le responsable public et le public visé restent indécis. Ne pas inventer d’a
 7. Essais réels Samsung A16, permissions, surcouche et limites, TalkBack, grandes polices et navigation clavier complète. Les contrôles unitaires et essais d’émulateur consignés ne remplacent pas ces essais.
 
 Aucun achat, hébergement public, publication Play ni démarche au nom d’un parent n’a été effectué. Ces étapes ne peuvent pas être déclarées terminées sans décisions, accès et vérifications correspondants. Les obligations de remboursement légales sont conservées ; une exclusion générale de tout remboursement n’a pas été ajoutée.
+
+## Corrections du calendrier en 0.12.1
+
+Choix des dates passées et futures, tâches gratuites (ajout, modification, case terminé, suppression), export schéma 3 et effacement global. L’historique de suivi conserve sa fenêtre de 90 jours. Aucun nouveau rappel ni accès au calendrier Android.

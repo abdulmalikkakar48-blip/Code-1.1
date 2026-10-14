@@ -1,4 +1,4 @@
-# Selkie 0.12.0 — calendrier, bilans et outils locaux
+# Selkie 0.12.1 — calendrier, bilans et outils locaux
 
 ## Où les trouver
 
@@ -6,7 +6,8 @@ L’onglet Quotidien propose quatre vues : Jour, avec les compteurs existants ; 
 
 | Fonction | Gratuit | Premium | Ultra |
 | --- | --- | --- | --- |
-| Calendrier sur 90 jours | Oui | Oui | Oui |
+| Historique du calendrier sur 90 jours | Oui | Oui | Oui |
+| Tâches sur dates passées ou futures | Oui | Oui | Oui |
 | Résumé hebdomadaire observé | Oui | Oui | Oui |
 | Favoris du Coach (50 au maximum) | Oui | Oui | Oui |
 | Détail hebdomadaire par application et comparaison | — | Oui | Oui |
@@ -42,4 +43,10 @@ Les trois programmes contiennent 51 activités concrètes bilingues, affichées 
 
 Dans Outils, Ajouter le widget utilise la demande native du lanceur lorsque celui-ci la prend en charge. Sinon, faire un appui long sur une zone vide de l’écran d’accueil, puis choisir Widgets → Selkie. Avec l’offre Gratuit, le widget affiche une invitation à consulter les offres ; avec Premium ou Ultra, il affiche les points et un défi proposé. Ses boutons ouvrent Selkie : ils ne valident rien et ne dépensent rien. Les mises à jour ordinaires sont limitées à une par minute lorsque l’application est active. Android contrôle les mises à jour périodiques, qui peuvent être différées. Un changement d’offre, de langue ou l’effacement des données force une mise à jour. Les informations affichées sont visibles par toute personne qui peut voir cet écran d’accueil.
 
-Toutes ces données restent dans le stockage privé local « maree », sans permission Internet ni nouvel accès aux contacts, aux photos ou au calendrier du téléphone. L’export JSON utilise le schéma 2 et inclut les données structurées validées de ces fonctions. Il exclut les messages libres, les données d’authentification et le dernier échantillon brut. L’effacement global couvre tous les nouveaux champs et met le widget à jour ; un échec d’écriture ou de mise à jour n’est pas annoncé comme un succès. Les copies exportées doivent être supprimées séparément. Voir les politiques de confidentialité en français et en anglais, ainsi que le registre.
+Toutes ces données restent dans le stockage privé local « maree », sans permission Internet ni nouvel accès aux contacts, aux photos ou au calendrier du téléphone. L’export JSON utilise le schéma 3 et inclut les données structurées validées de ces fonctions. Il exclut les messages libres, les données d’authentification et le dernier échantillon brut. L’effacement global couvre tous les nouveaux champs et met le widget à jour ; un échec d’écriture ou de mise à jour n’est pas annoncé comme un succès. Les copies exportées doivent être supprimées séparément. Voir les politiques de confidentialité en français et en anglais, ainsi que le registre.
+
+## Planifier une date — 0.12.1
+
+Calendrier permet maintenant de parcourir les mois et de choisir une date passée ou future avec « Choisir une date » (1900–2200). Les tâches personnelles sont gratuites : ajout, modification, case terminé et suppression avec confirmation. Le symbole ○ indique les journées avec des tâches. Jusqu’à 500 tâches au total ; les listes longues s’affichent progressivement. Ces tâches restent jusqu’à leur suppression, l’effacement global ou la désinstallation, indépendamment des 90 jours d’historique. Elles sont incluses dans l’export, sans points ni notification automatique.
+
+Le mode Clair remplace les 96 formes scintillantes par six lignes ondulantes, fines, monochromes et discrètes. Le mode Nuit conserve ses vagues de points. Le respect des animations système et du cycle de vie reste actif.

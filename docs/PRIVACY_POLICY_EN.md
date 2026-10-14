@@ -126,3 +126,7 @@ The following references are provided for orientation; the official pages could 
 - [Réclamation / Complaint — CNIL](https://www.cnil.fr/fr/adresser-une-plainte)
 
 [French version of the policy](CONFIDENTIALITE.md).
+
+## Calendar tasks — version 0.12.1
+
+Calendar tasks are free: their text, date and completion state stay in private phone storage until you delete them, reset all data or uninstall the app. They are separate from the 90-day tracking history. They award no points and send no reminders. Your chosen export includes these tasks; avoid sensitive information and protect the file. No Android Calendar access is requested.

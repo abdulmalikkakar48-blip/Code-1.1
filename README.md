@@ -1,6 +1,16 @@
 # Selkie — application Android de réduction du temps d'écran
 
-## Version actuelle 0.12.0 — calendrier et outils du quotidien
+## Version actuelle 0.12.1 — calendrier de tâches et fond clair sobre
+
+Le calendrier permet de choisir des dates passées ou futures et d’ajouter, modifier, cocher et supprimer des tâches personnelles gratuites. Le mode Clair remplace les étoiles multicolores par six lignes ondulantes monochromes. Le suivi, les offres et les 1 152 / 23 040 / 50 688 questions du Coach sont conservés.
+
+[APK 0.12.1](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.12.1.apk) · [Sources](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.12.1-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.12.1.md).
+
+Les observations de suivi restent limitées à 90 jours ; les tâches sont conservées jusqu’à suppression. L’export schéma 3 et l’effacement global couvrent les tâches. Les offres restent des démonstrations sans paiement, aux prix prévus de 5 € et 10 €/mois, sans réduction annuelle.
+
+## Archives
+
+## Version 0.12.0 — calendrier et outils du quotidien
 
 Quotidien est organisé en Jour, Calendrier, Bilan et Outils. Gratuit inclut le calendrier, le résumé hebdomadaire et les favoris du coach. Premium ajoute le détail hebdomadaire, les créneaux et le widget. Ultra ajoute les programmes Sommeil de 7 jours, Études de 14 jours et Réseaux sociaux de 30 jours. Tout fonctionne sur le téléphone, sans IA ni compte. Les observations de suivi sont locales, partielles et limitées à une fenêtre de 90 jours ; aucune durée ancienne ou journée parfaite n’est inventée.
 

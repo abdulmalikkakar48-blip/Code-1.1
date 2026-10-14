@@ -78,7 +78,7 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit, onExportData: ()
                 AppCardSurface {
                     StatusPill(tr("Suivi local · coach facultatif", "Local tracking · optional coach"))
                     PrivacyFact(tr("Ce qui est enregistré", "What is saved"),
-                        tr("Tes applications, limites, points, défis, plages horaires, favoris et programmes restent dans le stockage privé de ce téléphone. Le calendrier et les bilans gardent au maximum 90 jours locaux d’observations et de validations.", "Your apps, limits, points, challenges, time slots, favourites and programmes stay in this phone’s private storage. The calendar and summaries keep at most 90 local days of observations and check-ins."))
+                        tr("Tes applications, limites, points, défis, plages horaires, favoris et programmes restent dans le stockage privé de ce téléphone. L’historique du calendrier et les bilans gardent au maximum 90 jours locaux d’observations et de validations. Tes tâches personnelles restent jusqu’à leur suppression et sont incluses dans ton export.", "Your apps, limits, points, challenges, time slots, favourites and programmes stay in this phone’s private storage. Calendar history and summaries keep at most 90 local days of observations and check-ins. Your personal tasks remain until deleted and are included in your export."))
                     PrivacyFact(tr("Ce qui reste privé", "What stays private"),
                         tr("Selkie ne lit ni les messages de tes autres applications, ni tes photos, ni le contenu de ton écran. Les durées sont consultées uniquement après ton autorisation.", "Selkie does not read messages from your other apps, photos or screen content. Usage times are accessed only after you give permission."))
                     PrivacyFact(tr("Tu gardes le contrôle", "You stay in control"),
@@ -165,7 +165,7 @@ fun PrivacyScreen(onBack: () -> Unit, onDeleteData: () -> Unit, onExportData: ()
                 AppCardSurface {
                     Text(tr("Repartir de zéro", "Start fresh"), fontSize = 17.sp,
                         fontWeight = FontWeight.SemiBold, color = MareePalette.Ink)
-                    Text(tr("Cela supprime toutes les données locales de Selkie : réglages, points, défis, historique, plages horaires, favoris, programmes et questions du Coach enregistrées.", "This erases all Selkie’s local data: settings, points, challenges, history, time slots, favourites, programmes and saved Coach questions."),
+                    Text(tr("Cela supprime toutes les données locales de Selkie : réglages, points, défis, historique, tâches du calendrier, plages horaires, favoris, programmes et questions du Coach enregistrées.", "This erases all Selkie’s local data: settings, points, challenges, history, calendar tasks, time slots, favourites, programmes and saved Coach questions."),
                         fontSize = 14.sp, lineHeight = 21.sp, color = MareePalette.Muted)
                     Button(onClick = onDeleteData, modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
