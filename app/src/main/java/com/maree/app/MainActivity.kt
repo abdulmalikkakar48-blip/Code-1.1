@@ -168,8 +168,10 @@ private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> U
     var monitoringEnabled by remember { mutableStateOf(setup.isMonitoringEnabled()) }
     var permissions by remember { mutableStateOf(PermissionStatus.read(context)) }
     var showSetup by rememberSaveable { mutableStateOf(!setupComplete) }
+    var onboardingStep by rememberSaveable { mutableIntStateOf(if (setupComplete) 2 else 0) }
     var showPrivacy by rememberSaveable { mutableStateOf(false) }
     var tab by rememberSaveable { mutableIntStateOf(0) }
+    var dailySection by rememberSaveable { mutableStateOf("today") }
     var settingsPage by rememberSaveable { mutableStateOf<SettingsPage?>(null) }
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     var notificationAsked by rememberSaveable { mutableStateOf(false) }
@@ -196,6 +198,34 @@ private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> U
         scope.launch {
             drawerState.close()
             if (page == SettingsPage.PRIVACY) showPrivacy = true else settingsPage = page
+        }
+    }
+
+    fun openSetup() {
+        onboardingStep = if (setupComplete) 2 else 0
+        showSetup = true
+    }
+    fun openGuideDestination(destination: GuideDestination) {
+        when (destination) {
+            GuideDestination.HOME -> { settingsPage = null; tab = 0 }
+            GuideDestination.DAILY, GuideDestination.CALENDAR, GuideDestination.REVIEW,
+            GuideDestination.READING, GuideDestination.TOOLS -> {
+                dailySection = when (destination) {
+                    GuideDestination.CALENDAR -> "calendar"
+                    GuideDestination.REVIEW -> "week"
+                    GuideDestination.READING -> "reading"
+                    GuideDestination.TOOLS -> "tools"
+                    else -> "today"
+                }
+                settingsPage = null; tab = 1
+            }
+            GuideDestination.CHALLENGES -> { settingsPage = null; tab = 2 }
+            GuideDestination.COACH -> { settingsPage = null; tab = 3 }
+            GuideDestination.ACCESS -> openMenuPage(SettingsPage.ACCESS)
+            GuideDestination.SUBSCRIPTIONS -> openMenuPage(SettingsPage.SUBSCRIPTIONS)
+            GuideDestination.APPEARANCE -> openMenuPage(SettingsPage.APPEARANCE)
+            GuideDestination.LANGUAGES -> openMenuPage(SettingsPage.LANGUAGES)
+            GuideDestination.PRIVACY -> { showPrivacy = true }
         }
     }
 
@@ -254,7 +284,7 @@ private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> U
     }
     fun addApplication() {
         if (setup.isMonitoringEnabled() && permissions.readyForMonitoring) showPicker = true
-        else { pendingAdd = true; showSetup = true }
+        else { pendingAdd = true; openSetup() }
     }
     fun finishSetup(enableMonitoring: Boolean) {
         val current = PermissionStatus.read(context)
@@ -371,7 +401,8 @@ private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> U
             onNotificationPermission = ::askNotifications,
             onPrivacy = { showPrivacy = true },
             onComplete = { finishSetup(true) },
-            onExplore = { finishSetup(false) }
+            onExplore = { finishSetup(false) },
+            currentStep = onboardingStep, onStepChange = { onboardingStep = it }, permissionsOnly = setupComplete
         )
         else -> Box(Modifier.fillMaxSize().background(Background)) {
             SelkieGeometryBackground(Modifier.fillMaxSize())
@@ -445,11 +476,16 @@ private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> U
                                 modifier = Modifier.padding(horizontal = 12.dp)) {
                                 Text(tr("‹ Retour", "‹ Back"))
                             }
-                            key(currentPage) {
+                            if (currentPage == SettingsPage.GUIDE) {
+                                Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+                                    .padding(horizontal = 20.dp, vertical = 4.dp)) {
+                                    FeatureGuideSection(onOpen = ::openGuideDestination)
+                                }
+                            } else key(currentPage) {
                                 SettingsPageContent(page = currentPage, snapshot = snapshot,
                                     monitoring = monitoringEnabled && permissions.readyForMonitoring,
                                     notificationsGranted = permissions.notificationsGranted,
-                                    onSetup = { showSetup = true }, onStart = { showSetup = true },
+                                    onSetup = { openSetup() }, onStart = { openSetup() },
                                     onStop = {
                                         setup.setMonitoringEnabled(false)
                                         monitoringEnabled = false
@@ -467,19 +503,21 @@ private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> U
                             0 -> HomeTab(
                                 snapshot = snapshot,
                                 active = monitoringEnabled && permissions.readyForMonitoring,
-                                onSetup = { showSetup = true },
+                                onSetup = { openSetup() },
                                 onChallenges = { tab = 2 },
+                                onGuide = { openMenuPage(SettingsPage.GUIDE) }, onOpen = ::openGuideDestination,
                                 onAdd = ::addApplication, onEdit = { editApp = it.copy(limitMinutes = it.configuredLimitMinutes) },
                                 onRemove = { removeApp = it },
                                 onReset = {
                                     if (monitoringEnabled && permissions.readyForMonitoring) resetApp = it
-                                    else { showSetup = true }
+                                    else { openSetup() }
                                 },
                                 getName = { appLabel(context, it) }
                             )
                             1 -> DailyTab(snapshot, onCoach = { tab = 3 }, getName = { appLabel(context, it) }, onAddApp = ::addApplication,
                                 monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
-                                onActivateTracking = { showSetup = true }, history = dailyHistory,
+                                onActivateTracking = { openSetup() }, history = dailyHistory,
+                                section = dailySection, onSectionChange = { dailySection = it },
                                 onOffers = { openMenuPage(SettingsPage.SUBSCRIPTIONS) }, onToolsChanged = ::refresh,
                                 onProgramValidated = { id ->
                                     if (!store.recordProgramValidation(id)) display(tr(
@@ -626,11 +664,11 @@ private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> U
                         setupComplete = false
                         showPrivacy = false
                         settingsPage = null
-                        showSetup = true
+                        openSetup()
                         showPicker = false
                         pendingAdd = false
                         editApp = null; removeApp = null; resetApp = null
-                        tab = 0
+                        tab = 0; dailySection = "today"; onboardingStep = 0
                         refresh()
                     } else {
                         setupComplete = setup.isCompleted()
@@ -649,6 +687,7 @@ private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> U
 @Composable
 private fun HomeTab(
     snapshot: MareeSnapshot, active: Boolean, onSetup: () -> Unit, onChallenges: () -> Unit,
+    onGuide: () -> Unit, onOpen: (GuideDestination) -> Unit,
     onAdd: () -> Unit, onEdit: (AppSnapshot) -> Unit, onRemove: (AppSnapshot) -> Unit,
     onReset: (AppSnapshot) -> Unit, getName: (String) -> String
 ) {
@@ -667,12 +706,39 @@ private fun HomeTab(
         contentPadding = PaddingValues(start = 20.dp, end = 20.dp, bottom = 24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         item {
-            ScreenHeading(tr("TON ESPACE", "YOUR SPACE"), tr("Reprends ton temps.", "Take back your time."),
-                tr("Des limites simples. Plus de place pour toi.", "Simple limits. More room for you."))
+            ScreenHeading(tr("TON QUOTIDIEN", "YOUR EVERYDAY LIFE"),
+                tr("Du temps pour ce qui compte.", "Time for what matters."),
+                tr("Choisis des limites, organise ta journée et avance avec de petites habitudes.",
+                    "Set limits, plan your day and build small habits."))
+            TextButton(onClick = onGuide, modifier = Modifier.heightIn(min = 48.dp)) {
+                Text(tr("Comprendre Selkie · le guide", "Understand Selkie · the guide"))
+            }
         }
         item {
-            DisciplineCard(snapshot, onChallenges)
+            AppCardSurface {
+                SectionLabel(if (snapshot.apps.isEmpty()) tr("Par où commencer ?", "Where to start?")
+                    else tr("Tes raccourcis", "Your shortcuts"))
+                Text(if (snapshot.apps.isEmpty())
+                    tr("Choisis une application et une limite. Tu peux aussi préparer ta journée ou demander un conseil, sans activer le suivi.",
+                        "Choose an app and a limit. You can also plan your day or get advice without turning on tracking.")
+                    else tr("Ton suivi est ici. Le calendrier organise ta journée ; le coach t’aide à faire une pause.",
+                        "Your tracking is here. The calendar organises your day; the coach helps you take a break."),
+                    color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium)
+                PrimaryAction(if (snapshot.apps.isEmpty()) tr("Choisir ma première application", "Choose my first app")
+                    else tr("Ajouter une application", "Add an app"), onClick = onAdd,
+                    enabled = snapshot.points > 0 && (appLimit == null || snapshot.apps.size < appLimit),
+                    modifier = Modifier.fillMaxWidth())
+                TextButton(onClick = { onOpen(GuideDestination.CALENDAR) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+                    Text(tr("Prévoir mes tâches · Calendrier", "Plan my tasks · Calendar"))
+                }
+                TextButton(onClick = { onOpen(GuideDestination.COACH) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+                    Text(tr("Trouver un conseil · Coach", "Find advice · Coach"))
+                }
+                if (snapshot.points <= 0) Text(tr("À 0 point, termine des défis pour pouvoir ajouter ou modifier une limite.",
+                    "At 0 points, complete challenges to add or change a limit."), color = MareePalette.Muted)
+            }
         }
+        item { DisciplineCard(snapshot, onChallenges) }
         item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 HomeMetric(
@@ -1005,42 +1071,27 @@ private fun MinutesDialog(
 
 @Composable
 private fun DisciplineCard(snapshot: MareeSnapshot, onChallenges: () -> Unit) {
-    Card(shape = RoundedCornerShape(28.dp),
+    Card(shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = MareePalette.HeroBackground)) {
-        Column(Modifier.fillMaxWidth().padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(tr("TON CAPITAL\nDISCIPLINE", "YOUR DISCIPLINE\nBALANCE"), color = MareePalette.HeroAccent,
-                    style = MaterialTheme.typography.labelMedium, letterSpacing = 1.5.sp,
-                    modifier = Modifier.weight(1f))
-                Surface(color = MareePalette.HeroAccent, shape = CircleShape) {
-                    Icon(painterResource(R.drawable.ic_nav_challenges), contentDescription = null,
-                        tint = MareePalette.OnHeroAccent,
-                        modifier = Modifier.padding(12.dp).size(24.dp))
+                horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Column(Modifier.weight(1f)) {
+                    Text(tr("TES POINTS", "YOUR POINTS"), color = MareePalette.OnHeroMuted,
+                        style = MaterialTheme.typography.labelMedium)
+                    Text(formatPoints(snapshot.points), color = MareePalette.OnHero,
+                        fontSize = 42.sp, lineHeight = 48.sp, fontWeight = FontWeight.Bold)
                 }
+                Icon(painterResource(R.drawable.ic_nav_challenges), contentDescription = null,
+                    tint = MareePalette.HeroAccent, modifier = Modifier.size(30.dp))
             }
-            Column {
-                Text(formatPoints(snapshot.points), color = MareePalette.OnHero,
-                    fontSize = 64.sp, lineHeight = 70.sp, fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = (-2).sp)
-                Text(tr("points pour avancer", "points to keep moving"), color = MareePalette.OnHeroMuted,
-                    style = MaterialTheme.typography.bodyMedium)
-            }
-            HorizontalDivider(color = MareePalette.OnHero.copy(alpha = 0.18f))
-            Text(tr("Chaque petit pas compte.", "Every small step counts."), color = MareePalette.OnHero,
-                style = MaterialTheme.typography.titleMedium)
-            Button(onClick = onChallenges,
-                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MareePalette.HeroAccent,
-                    contentColor = MareePalette.OnHeroAccent)) {
-                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(tr("Explorer les défis", "Explore challenges"), style = MaterialTheme.typography.labelLarge,
-                        modifier = Modifier.weight(1f))
-                    Text("→", fontSize = 22.sp)
-                }
+            Text(tr("Les défis réalisés sur plusieurs jours te permettent d’en gagner. À 0 point, l’ajout d’applications et la modification des limites sont bloqués.",
+                "Challenges completed over several days help you earn points. At 0 points, adding apps and changing limits are blocked."),
+                color = MareePalette.OnHeroMuted, style = MaterialTheme.typography.bodyMedium)
+            Button(onClick = onChallenges, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+                shape = RoundedCornerShape(16.dp), colors = ButtonDefaults.buttonColors(
+                    containerColor = MareePalette.HeroAccent, contentColor = MareePalette.OnHeroAccent)) {
+                Text(tr("Choisir un défi", "Choose a challenge"))
             }
         }
     }

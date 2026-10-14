@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 
 /** Stable destinations keep the menu selection when the language changes. */
 internal enum class SettingsPage(private val frenchTitle: String, private val englishTitle: String) {
+    GUIDE("Comprendre Selkie", "Understand Selkie"),
     LANGUAGES("Langue", "Language"),
     APPEARANCE("Apparence", "Appearance"),
     ACCESS("Accès Android", "Android access"),
@@ -68,6 +69,9 @@ internal fun SelkieMenuSheet(
             }
             item(key = "menu_divider") {
                 HorizontalDivider(Modifier.padding(vertical = 12.dp), color = MareePalette.Outline)
+            }
+            item(key = SettingsPage.GUIDE.name) {
+                MenuDestination(SettingsPage.GUIDE, selectedPage == SettingsPage.GUIDE, onSelect)
             }
             item(key = "settings_label") { MenuGroupLabel(tr("Réglages", "Settings")) }
             items(listOf(SettingsPage.LANGUAGES, SettingsPage.APPEARANCE, SettingsPage.ACCESS),
@@ -204,7 +208,7 @@ internal fun SettingsPageContent(
                     items(helpEntriesFor(AppLanguage.current).filter { it.topic.id in ruleTopicIds },
                         key = { it.topic.id }) { entry -> HelpRuleCard(entry) }
                 }
-                SettingsPage.PRIVACY -> Unit
+                SettingsPage.GUIDE, SettingsPage.PRIVACY -> Unit
             }
         }
     }

@@ -1,6 +1,18 @@
 # Selkie — application Android de réduction du temps d'écran
 
-## Version actuelle 0.13.0 — lectures hors ligne
+## Version actuelle 0.14.0 — accueil et guide simplifiés
+
+Le premier lancement explique Selkie en trois étapes avant la configuration Android. L’accueil propose des raccourcis clairs et une carte des points plus compacte. Comprendre Selkie reste accessible depuis l’accueil et le menu, avec des liens directs vers les rubriques. Voir [le parcours](docs/ACCUEIL_ET_GUIDE.md).
+
+[APK 0.14.0](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.14.0.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.14.0-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.14.0.md).
+
+Les tâches, lectures, coach, règles de points et offres sont conservés. Notifications facultatives ; les accès restent ouverts seulement sur demande. Les prix et l’absence de paiement réel restent identiques.
+
+215 tests réussis ; Android Lint : zéro erreur, cinq avertissements et quatre informations.
+
+## Archives
+
+## Version 0.13.0 — lectures hors ligne
 
 Quotidien → Lecture ajoute six textes courts sur la méthode, l’observation, la patience et les habitudes. Lecture gratuite dans l’app, export .txt via Android, source et traduction indiquées. Les livres complets extérieurs ne sont pas présentés comme relus. Voir [la sélection et la provenance](docs/LECTURES.md).
 

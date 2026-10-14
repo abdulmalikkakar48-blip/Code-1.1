@@ -1,6 +1,6 @@
 # Selkie — ce qui reste avant une diffusion publique
 
-État du 14 octobre 2026, prototype Android 0.13.0. Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
+État du 14 octobre 2026, prototype Android 0.14.0. Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
 
 ## Terminé dans le prototype
 
@@ -39,3 +39,7 @@ Choix des dates passées et futures, tâches gratuites (ajout, modification, cas
 ## Lecture en 0.13.0
 
 Six sélections historiques relues, douze textes FR/EN, sources et notes d’édition, lecture hors ligne et export .txt. Aucun paiement, compte, suivi de lecture ou nouveau droit Android. Les copies et liens externes sont expliqués en confidentialité ; les passages extérieurs ne sont pas déclarés relus.
+
+## Accueil en 0.14.0
+
+Bienvenue en trois étapes, explication des rubriques, accès Android présentés avant activation, guide permanent avec navigation directe et accueil plus clair. Aucun changement des règles, droits Android ou catalogues. Voir docs/ACCUEIL_ET_GUIDE.md.

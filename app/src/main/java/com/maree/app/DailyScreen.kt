@@ -42,7 +42,9 @@ internal fun DailyTab(
     history: List<DailyHistoryEntry> = emptyList(),
     onOffers: () -> Unit = {},
     onToolsChanged: () -> Unit = {},
-    onProgramValidated: (String) -> Unit = {}
+    onProgramValidated: (String) -> Unit = {},
+    section: String = "today",
+    onSectionChange: (String) -> Unit = {}
 ) {
     val today = LocalDate.now()
     val tips = dailyTips
@@ -58,7 +60,6 @@ internal fun DailyTab(
         snapshot.challengeProgress[it]?.validatedToday == true
     }
     val personalValidationsToday = snapshot.customChallenges.count { it.validatedToday }
-    var section by rememberSaveable { mutableStateOf("today") }
     var showAllApps by rememberSaveable { mutableStateOf(false) }
     var showCounterDetails by rememberSaveable { mutableStateOf(false) }
 
@@ -77,7 +78,7 @@ internal fun DailyTab(
             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf("today" to tr("Jour", "Day"), "calendar" to tr("Calendrier", "Calendar"),
                 "week" to tr("Bilan", "Review"), "reading" to tr("Lecture", "Reading"), "tools" to tr("Outils", "Tools")).forEach { (id, label) ->
-                FilterChip(selected = section == id, onClick = { section = id }, label = { Text(label) })
+                FilterChip(selected = section == id, onClick = { onSectionChange(id) }, label = { Text(label) })
             }
         }
         if (section == "today") {
@@ -85,7 +86,7 @@ internal fun DailyTab(
             SectionLabel(tr("Ta pause lecture", "Your reading break"))
             Text(tr("Six textes courts sur l’apprentissage, l’observation et les habitudes, à lire hors ligne.",
                 "Six short texts on learning, observation and habits, available offline."), color = MareePalette.Muted)
-            PrimaryAction(tr("Découvrir les lectures", "Explore readings"), onClick = { section = "reading" })
+            PrimaryAction(tr("Découvrir les lectures", "Explore readings"), onClick = { onSectionChange("reading") })
         }
 
         AppCardSurface(containerColor = MareePalette.Mint) {
