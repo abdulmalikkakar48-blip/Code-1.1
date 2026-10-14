@@ -12,7 +12,7 @@ Les liens directs ont affiché une erreur 404 sur le téléphone de l’éditeur
 
 Si la page affiche encore 404 après connexion au bon compte, l’accès ou l’adresse effective du dépôt doit être vérifié avant de proposer un autre lien. Ne pas recommander de désinstaller l’application pour résoudre une erreur de téléchargement.
 
-Les [sources 0.12.1](../downloads/Selkie-Android-0.12.1-source.zip) et [contrôles 0.12.1](../downloads/VALIDATION-0.12.1.md) correspondent au nouveau fichier. VersionCode 22 ; les 211 tests unitaires passent. Android Lint indique 0 erreur, 5 avertissements et 3 informations. Cet APK de test hors ligne ne vend aucun abonnement.
+Les [sources 0.12.1](../downloads/Selkie-Android-0.12.1-source.zip) et [contrôles 0.12.1](../downloads/VALIDATION-0.12.1.md) correspondent au nouveau fichier. VersionCode 22 ; les 211 tests unitaires passent. Android Lint indique 0 erreur, 5 avertissements et 4 informations. Cet APK de test hors ligne ne vend aucun abonnement.
 
 ## Distribution sans connexion
 

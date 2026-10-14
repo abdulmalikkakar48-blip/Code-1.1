@@ -8,6 +8,8 @@ Le calendrier permet de choisir des dates passées ou futures et d’ajouter, mo
 
 Les observations de suivi restent limitées à 90 jours ; les tâches sont conservées jusqu’à suppression. L’export schéma 3 et l’effacement global couvrent les tâches. Les offres restent des démonstrations sans paiement, aux prix prévus de 5 € et 10 €/mois, sans réduction annuelle.
 
+211 tests unitaires réussis ; Android Lint : zéro erreur, cinq avertissements et quatre informations.
+
 ## Archives
 
 ## Version 0.12.0 — calendrier et outils du quotidien
