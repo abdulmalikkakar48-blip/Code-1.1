@@ -1,5 +1,7 @@
 package com.maree.app
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,6 +26,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,7 +50,10 @@ internal fun BrandIcon(size: Dp = 36.dp) {
 
 @Composable
 internal fun ScreenHeading(eyebrow: String, title: String, description: String? = null) {
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    var revealed by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { revealed = true }
+    val entrance by animateFloatAsState(if (revealed) 1f else 0f, tween(480), label = "heading-entrance")
+    Column(modifier = Modifier.graphicsLayer { alpha = entrance; translationY = (1f - entrance) * 14.dp.toPx() }, verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Surface(color = MareePalette.Mint, shape = RoundedCornerShape(6.dp)) {
             Text(eyebrow, color = MareePalette.Teal, style = MaterialTheme.typography.labelMedium,
                 letterSpacing = 1.4.sp, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
@@ -54,7 +66,7 @@ internal fun ScreenHeading(eyebrow: String, title: String, description: String? 
 
 @Composable
 internal fun AppCardSurface(modifier: Modifier = Modifier, containerColor: Color = MareePalette.Surface, content: @Composable ColumnScope.() -> Unit) {
-    Card(modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp),
+    Card(modifier = modifier.fillMaxWidth().shadow(12.dp, RoundedCornerShape(26.dp), ambientColor = Color(0x102A5597), spotColor = Color(0x122A5597)), shape = RoundedCornerShape(26.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         border = BorderStroke(1.dp, MareePalette.Outline)) {
