@@ -1,6 +1,14 @@
 # Selkie — application Android de réduction du temps d'écran
 
-## Version actuelle 0.16.0 — volumes pastel et accueil réorganisé
+## Version actuelle 0.16.1 — mouvement du fond clair
+
+Le fond Clair ajoute deux larges voiles lavande et pêche qui ondulent lentement, avec des bords adoucis. La palette, les cartes, la mise en page, les sculptures en relief et le mode Nuit restent ceux de 0.16.0. Le mouvement utilise l’horloge existante et se fige si Android désactive les animations.
+
+[APK 0.16.1](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.16.1.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.16.1-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.16.1.md).
+
+## Archive 0.16.0
+
+## Version 0.16.0 — volumes pastel et accueil réorganisé
 
 Le mode Clair adopte un fond blanc doux, des cartes lavande, pêche et menthe, une navigation prune et des reliefs discrets. Un anneau, des billes et une capsule colorés flottent dans des zones décoratives séparées du texte : les dégradés, ombres et reflets donnent un effet 3D dessiné par le code, sans moteur 3D ni image téléchargée. Le fond est composé de deux lavis légers ; les octogones de 0.15.0 sont remplacés. Nuit conserve les vagues pointillées, avec une palette bleu nuit et lilas.
 

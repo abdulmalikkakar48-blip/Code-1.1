@@ -111,9 +111,13 @@ class AppAppearanceTest {
 
     @Test fun ambientMaximumLayerStackPreservesNormalTextContrast() {
         var composite = SelkieLightColors.background
-        // Actual two background washes and maximum shader alpha, in drawing order.
+        // Ribbon alpha sums conservatively bound their overlapping feather passes.
+        assertTrue(AmbientStyle.LILAC_RIBBON_ALPHAS.sum() <= AmbientStyle.LILAC_RIBBON_MAX_ALPHA)
+        assertTrue(AmbientStyle.PEACH_RIBBON_ALPHAS.sum() <= AmbientStyle.PEACH_RIBBON_MAX_ALPHA)
         val layers = listOf(AmbientStyle.LILAC_COLOR to AmbientStyle.LILAC_MAX_ALPHA,
-            AmbientStyle.PEACH_COLOR to AmbientStyle.PEACH_MAX_ALPHA)
+            AmbientStyle.PEACH_COLOR to AmbientStyle.PEACH_MAX_ALPHA,
+            AmbientStyle.LILAC_COLOR to AmbientStyle.LILAC_RIBBON_MAX_ALPHA,
+            AmbientStyle.PEACH_COLOR to AmbientStyle.PEACH_RIBBON_MAX_ALPHA)
         layers.forEach { (color, alpha) ->
             var next = 0xFF000000L
             for (shift in listOf(16, 8, 0)) {

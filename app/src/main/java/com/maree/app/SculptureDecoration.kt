@@ -2,6 +2,7 @@ package com.maree.app
 
 import android.graphics.LinearGradient
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.RadialGradient
 import android.graphics.RectF
 import android.graphics.Shader
@@ -15,18 +16,23 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import kotlin.math.PI
+import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
 
-/** Maximum alpha of the only two layers placed behind ordinary text. */
+/** Actual drawing limits of the background; ribbon sums conservatively bound nested passes. */
 internal object AmbientStyle {
     const val LILAC_COLOR: Long = 0xFFB8A0ECL
     const val LILAC_MAX_ALPHA = 24
     const val PEACH_COLOR: Long = 0xFFF2AA8DL
     const val PEACH_MAX_ALPHA = 14
+    val LILAC_RIBBON_ALPHAS = intArrayOf(3, 5, 8, 12, 16)
+    val PEACH_RIBBON_ALPHAS = intArrayOf(2, 3, 5, 7, 9)
+    const val LILAC_RIBBON_MAX_ALPHA = 44
+    const val PEACH_RIBBON_MAX_ALPHA = 26
 }
 
-/** Broad colour washes, without tiles, particles or sharp contours behind labels. */
+/** Slow satin waves: broad, feathered filled bands, no particles, narrow lines or flashing. */
 internal class SelkieAmbientField {
     private fun wash(color: Long, alpha: Int) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         val rgb = color.toInt() and 0xFFFFFF
@@ -35,6 +41,16 @@ internal class SelkieAmbientField {
     }
     private val lilac = wash(AmbientStyle.LILAC_COLOR, AmbientStyle.LILAC_MAX_ALPHA)
     private val peach = wash(AmbientStyle.PEACH_COLOR, AmbientStyle.PEACH_MAX_ALPHA)
+    private val ribbon = Path()
+    private val featherWidths = floatArrayOf(1f, 0.82f, 0.66f, 0.5f, 0.34f)
+    private fun silk(color: Long) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        val rgb = color.toInt() and 0xFFFFFF
+        shader = LinearGradient(-0.25f, 0f, 1.25f, 0f,
+            intArrayOf(rgb, rgb or 0xFF000000.toInt(), rgb or 0xFF000000.toInt(), rgb),
+            floatArrayOf(0f, 0.25f, 0.75f, 1f), Shader.TileMode.CLAMP)
+    }
+    private val lilacSilk = silk(AmbientStyle.LILAC_COLOR)
+    private val peachSilk = silk(AmbientStyle.PEACH_COLOR)
 
     fun draw(scope: DrawScope, phase: Float) {
         if (scope.size.width <= 0 || scope.size.height <= 0 || !phase.isFinite()) return
@@ -42,15 +58,46 @@ internal class SelkieAmbientField {
         scope.drawIntoCanvas { canvas ->
             val native = canvas.nativeCanvas
             native.save()
-            native.translate(scope.size.width * (0.9f + sin(t) * 0.04f), scope.size.height * 0.16f)
+            native.translate(scope.size.width * (0.9f + sin(t) * 0.10f), scope.size.height * 0.16f)
             native.scale(scope.size.width * 1.1f, scope.size.height * 0.65f)
             native.drawCircle(0f, 0f, 1f, lilac)
             native.restore()
             native.save()
-            native.translate(scope.size.width * 0.05f, scope.size.height * (0.74f + sin(t) * 0.025f))
+            native.translate(scope.size.width * 0.05f, scope.size.height * (0.74f + sin(t) * 0.075f))
             native.scale(scope.size.width * 1.2f, scope.size.height * 0.55f)
             native.drawCircle(0f, 0f, 1f, peach)
             native.restore()
+            native.save()
+            native.scale(scope.size.width, scope.size.height)
+            drawSilk(native, lilacSilk, AmbientStyle.LILAC_RIBBON_ALPHAS,
+                center = 0.17f + 0.10f * sin(t),
+                bendA = -0.20f + 0.025f * cos(2f * t),
+                bendB = 0.18f + 0.06f * sin(t + 1.1f),
+                slope = 0.08f * cos(t + 0.4f), width = 0.25f + 0.025f * cos(2f * t))
+            drawSilk(native, peachSilk, AmbientStyle.PEACH_RIBBON_ALPHAS,
+                center = 0.69f + 0.11f * cos(t + 0.7f),
+                bendA = 0.19f + 0.025f * sin(2f * t),
+                bendB = -0.19f + 0.05f * cos(t + 1.8f),
+                slope = -0.05f * sin(t), width = 0.31f + 0.02f * sin(2f * t + 0.6f))
+            native.restore()
+        }
+    }
+
+    private fun drawSilk(canvas: android.graphics.Canvas, paint: Paint, alphas: IntArray,
+                         center: Float, bendA: Float, bendB: Float, slope: Float, width: Float) {
+        // Nested filled bands approximate a soft feather without blur layers or per-frame allocation.
+        for (index in featherWidths.indices) {
+            val half = width * featherWidths[index] / 2f
+            ribbon.rewind()
+            ribbon.moveTo(-0.25f, center - half)
+            ribbon.cubicTo(0.10f, center + bendA - half, 0.74f, center + bendB - half,
+                1.25f, center + slope - half)
+            ribbon.lineTo(1.25f, center + slope + half)
+            ribbon.cubicTo(0.74f, center + bendB + half, 0.10f, center + bendA + half,
+                -0.25f, center + half)
+            ribbon.close()
+            paint.alpha = alphas[index]
+            canvas.drawPath(ribbon, paint)
         }
     }
 }
