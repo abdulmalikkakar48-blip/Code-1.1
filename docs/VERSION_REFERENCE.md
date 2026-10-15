@@ -1,6 +1,14 @@
 # Selkie : version de travail au 15 octobre 2026
 
-## Version actuelle 0.16.1 — mouvement du fond clair
+## Version actuelle 0.16.2 — voiles légèrement plus visibles
+
+Seule l’intensité des voiles du fond Clair est renforcée : environ 20 % d’opacité relative supplémentaire, avec les mêmes couleurs, courbes et rythme. Les cartes, textes, sculptures, mise en page et mode Nuit sont conservés. Le contrôle de contraste continue de vérifier la superposition maximale.
+
+[APK 0.16.2](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.16.2.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.16.2-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.16.2.md).
+
+## Archive 0.16.1
+
+## Version 0.16.1 — mouvement du fond clair
 
 Le fond Clair ajoute deux larges voiles lavande et pêche qui ondulent lentement, avec des bords adoucis. La palette, les cartes, la mise en page, les sculptures en relief et le mode Nuit restent ceux de 0.16.0. Le mouvement utilise l’horloge existante et se fige si Android désactive les animations.
 

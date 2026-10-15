@@ -1,6 +1,6 @@
 # Selkie — ce qui reste avant une diffusion publique
 
-État du 15 octobre 2026, prototype Android 0.16.1 (versionCode 27). Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
+État du 15 octobre 2026, prototype Android 0.16.2 (versionCode 27). Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
 
 ## Terminé dans le prototype
 

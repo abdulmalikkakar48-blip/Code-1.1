@@ -26,10 +26,10 @@ internal object AmbientStyle {
     const val LILAC_MAX_ALPHA = 24
     const val PEACH_COLOR: Long = 0xFFF2AA8DL
     const val PEACH_MAX_ALPHA = 14
-    val LILAC_RIBBON_ALPHAS = intArrayOf(3, 5, 8, 12, 16)
-    val PEACH_RIBBON_ALPHAS = intArrayOf(2, 3, 5, 7, 9)
-    const val LILAC_RIBBON_MAX_ALPHA = 44
-    const val PEACH_RIBBON_MAX_ALPHA = 26
+    val LILAC_RIBBON_ALPHAS = intArrayOf(4, 6, 10, 14, 19)
+    val PEACH_RIBBON_ALPHAS = intArrayOf(2, 4, 6, 8, 11)
+    const val LILAC_RIBBON_MAX_ALPHA = 53
+    const val PEACH_RIBBON_MAX_ALPHA = 31
 }
 
 /** Slow satin waves: broad, feathered filled bands, no particles, narrow lines or flashing. */
