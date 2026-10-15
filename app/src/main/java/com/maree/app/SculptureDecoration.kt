@@ -1,0 +1,155 @@
+package com.maree.app
+
+import android.graphics.LinearGradient
+import android.graphics.Paint
+import android.graphics.RadialGradient
+import android.graphics.RectF
+import android.graphics.Shader
+import android.graphics.SweepGradient
+import androidx.compose.foundation.Canvas
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import kotlin.math.PI
+import kotlin.math.min
+import kotlin.math.sin
+
+/** Maximum alpha of the only two layers placed behind ordinary text. */
+internal object AmbientStyle {
+    const val LILAC_COLOR: Long = 0xFFB8A0ECL
+    const val LILAC_MAX_ALPHA = 24
+    const val PEACH_COLOR: Long = 0xFFF2AA8DL
+    const val PEACH_MAX_ALPHA = 14
+}
+
+/** Broad colour washes, without tiles, particles or sharp contours behind labels. */
+internal class SelkieAmbientField {
+    private fun wash(color: Long, alpha: Int) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        val rgb = color.toInt() and 0xFFFFFF
+        shader = RadialGradient(0f, 0f, 1f, intArrayOf(rgb or (alpha shl 24), rgb),
+            floatArrayOf(0f, 1f), Shader.TileMode.CLAMP)
+    }
+    private val lilac = wash(AmbientStyle.LILAC_COLOR, AmbientStyle.LILAC_MAX_ALPHA)
+    private val peach = wash(AmbientStyle.PEACH_COLOR, AmbientStyle.PEACH_MAX_ALPHA)
+
+    fun draw(scope: DrawScope, phase: Float) {
+        if (scope.size.width <= 0 || scope.size.height <= 0 || !phase.isFinite()) return
+        val t = (phase * PI * 2).toFloat()
+        scope.drawIntoCanvas { canvas ->
+            val native = canvas.nativeCanvas
+            native.save()
+            native.translate(scope.size.width * (0.9f + sin(t) * 0.04f), scope.size.height * 0.16f)
+            native.scale(scope.size.width * 1.1f, scope.size.height * 0.65f)
+            native.drawCircle(0f, 0f, 1f, lilac)
+            native.restore()
+            native.save()
+            native.translate(scope.size.width * 0.05f, scope.size.height * (0.74f + sin(t) * 0.025f))
+            native.scale(scope.size.width * 1.2f, scope.size.height * 0.55f)
+            native.drawCircle(0f, 0f, 1f, peach)
+            native.restore()
+        }
+    }
+}
+
+/** Original illustration: shaded ceramic ring, peach sphere and mint beads. No image or network. */
+@Composable
+internal fun SelkieSculpture(modifier: Modifier = Modifier) {
+    val phase = LocalDecorationPhase.current
+    val sculpture = remember { SelkieSculptureRenderer() }
+    Canvas(modifier.clearAndSetSemantics { }) { sculpture.draw(this, phase.value) }
+}
+
+private class SelkieSculptureRenderer {
+    private val ringBounds = RectF(-82f, -57f, 82f, 57f)
+    private val capsuleBounds = RectF(-12f, -25f, 12f, 25f)
+    private val shadow = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        shader = RadialGradient(0f, 0f, 1f,
+            intArrayOf(0x302B194F, 0x002B194F), null, Shader.TileMode.CLAMP)
+    }
+    private val ringOuter = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        strokeWidth = 36f
+        shader = SweepGradient(0f, 0f, intArrayOf(0xFF8756BF.toInt(), 0xFF69439D.toInt(),
+            0xFFBD99E8.toInt(), 0xFFF4E7FF.toInt(), 0xFF8756BF.toInt()),
+            floatArrayOf(0f, 0.25f, 0.55f, 0.77f, 1f))
+    }
+    private val ringInner = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        strokeWidth = 23f
+        shader = LinearGradient(-65f, -60f, 65f, 62f,
+            intArrayOf(0xFFF7EEFF.toInt(), 0xFFC6A6F1.toInt(), 0xFF9568CA.toInt()),
+            floatArrayOf(0f, 0.45f, 1f), Shader.TileMode.CLAMP)
+    }
+    private val ringHighlight = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = 0xBCFFFFFF.toInt()
+        style = Paint.Style.STROKE
+        strokeCap = Paint.Cap.ROUND
+        strokeWidth = 2f
+    }
+    private val peach = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        shader = RadialGradient(-14f, -17f, 78f,
+            intArrayOf(0xFFFFF4DA.toInt(), 0xFFF2B684.toInt(), 0xFFB96B58.toInt()),
+            floatArrayOf(0f, 0.55f, 1f), Shader.TileMode.CLAMP)
+    }
+    private val mint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        shader = RadialGradient(-9f, -11f, 46f,
+            intArrayOf(0xFFF4FFF2.toInt(), 0xFFA7D6BC.toInt(), 0xFF4D9589.toInt()),
+            floatArrayOf(0f, 0.55f, 1f), Shader.TileMode.CLAMP)
+    }
+    private val lilac = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        shader = RadialGradient(-5f, -6f, 25f,
+            intArrayOf(0xFFFAF5FF.toInt(), 0xFFAC91DA.toInt(), 0xFF7553AC.toInt()),
+            floatArrayOf(0f, 0.55f, 1f), Shader.TileMode.CLAMP)
+    }
+    private val capsule = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        shader = LinearGradient(-12f, -20f, 14f, 24f,
+            intArrayOf(0xFFEEFFF1.toInt(), 0xFFB8DFC2.toInt(), 0xFF79B19B.toInt()),
+            floatArrayOf(0f, 0.5f, 1f), Shader.TileMode.CLAMP)
+    }
+
+    fun draw(scope: DrawScope, phase: Float) {
+        if (scope.size.width <= 0f || scope.size.height <= 0f || !phase.isFinite()) return
+        val scale = min(scope.size.width / 300f, scope.size.height / 240f)
+        val wave = sin(phase * (2 * PI).toFloat())
+        scope.drawIntoCanvas { canvas ->
+            val n = canvas.nativeCanvas
+            n.save()
+            n.translate((scope.size.width - 300f * scale) / 2, (scope.size.height - 240f * scale) / 2)
+            n.scale(scale, scale)
+            n.save()
+            n.translate(159f, 214f)
+            n.scale(110f, 15f)
+            n.drawCircle(0f, 0f, 1f, shadow)
+            n.restore()
+            n.save()
+            n.translate(149f, 125f + wave * 5f)
+            n.rotate(-31f + wave * 3f)
+            n.drawOval(ringBounds, ringOuter)
+            n.drawOval(ringBounds, ringInner)
+            n.drawArc(ringBounds, 205f, 61f, false, ringHighlight)
+            n.restore()
+            n.save()
+            n.translate(226f, 68f - wave * 4f)
+            n.drawCircle(0f, 0f, 41f, peach)
+            n.restore()
+            n.save()
+            n.translate(70f, 177f - wave * 3f)
+            n.drawCircle(0f, 0f, 27f, mint)
+            n.restore()
+            n.save()
+            n.translate(246f, 183f + wave * 4f)
+            n.drawCircle(0f, 0f, 14f, lilac)
+            n.restore()
+            n.save()
+            n.translate(58f, 58f + wave * 4f)
+            n.rotate(35f - wave * 5f)
+            n.drawRoundRect(capsuleBounds, 12f, 12f, capsule)
+            n.restore()
+            n.restore()
+        }
+    }
+}

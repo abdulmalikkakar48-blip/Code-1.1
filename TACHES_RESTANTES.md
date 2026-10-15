@@ -1,13 +1,13 @@
 # Selkie — ce qui reste avant une diffusion publique
 
-État du 14 octobre 2026, prototype Android 0.15.0. Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
+État du 15 octobre 2026, prototype Android 0.16.0 (versionCode 27). Le bilan des 19 points reste 9 en place, 6 partiels, 4 hors périmètre actuel : il ne mesure pas une conformité juridique.
 
 ## Terminé dans le prototype
 
 - Retrait du dialogue IA, de la connexion du coach, des options de compilation connectées et du serveur inutilisé ; l’historique Git conserve l’ancienne préparation.
 - Coach local français/anglais, question au-dessus de la réponse, bibliothèque classée et paginée : 1 152 / 23 040 / 50 688 questions selon l’offre. Les situations, contextes et intentions sont combinés, pas des réponses médicales ni des textes indépendants.
 - Prix proposés 5/10 €/mois, 60/120 €/an sans réduction ; offres de démonstration gratuites, défis personnels et règles à zéro point conservés.
-- Fond clair avec octogones mobiles et lueurs corail, mouvements nocturnes supplémentaires ; arrêt selon réglage Android et cycle de vie.
+- Interface claire blanc doux, lavande, pêche et menthe ; cartes opaques arrondies et reliefs discrets. Anneau, billes et capsule à effet 3D dessinés dans des zones décoratives, deux lavis légers derrière le texte. Vagues nocturnes conservées en bleu nuit/lilas ; horloge partagée, arrêt selon réglage Android et cycle de vie.
 - Lecture gratuite hors ligne : seize sélections FR/EN, dont neuf poésies et fables en vers, filtres et recherche. Provenance et export .txt séparés des recueils externes.
 - Politique locale FR/EN actualisée ; export filtré, effacement, consentement facultatif des questions inconnues et documents légaux conservés.
 - Calculs des réponses et recherche hors du thread de l’interface, annulation des résultats obsolètes, Tab pour naviguer et Ctrl+Entrée pour envoyer.
@@ -48,3 +48,7 @@ Bienvenue en trois étapes, explication des rubriques, accès Android présenté
 ## Lectures d’Ibn Taymiyya — 0.14.1
 
 Deux courts passages de l’original arabe, versions FR/EN indépendantes, références Al-ʿUbūdiyya p. 44 / Majmūʿ al-fatāwā 10/149. Huit sélections au total. Original et commentaire séparés ; pas de reprise de notes modernes ni de l’ouvrage complet.
+
+## Apparence et accueil en 0.16.0
+
+Les octogones clairs de 0.15.0 sont remplacés par une composition pastel et des volumes ombrés dessinés par le code. Aucun visuel des captures Dribbble n’est embarqué. Le résumé points/suivi et la liste des applications remontent avant les raccourcis et les détails. L’illustration et les textes occupent des zones distinctes ; les animations de l’accueil, de l’introduction et du fond utilisent une seule horloge. Les seize lectures et les catalogues du coach restent identiques. Voir [l’apparence](docs/APPARENCE_CLAIRE.md) et [la validation 0.16.0](downloads/VALIDATION-0.16.0.md) pour les contrôles réalisés et leurs limites.

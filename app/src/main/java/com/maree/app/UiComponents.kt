@@ -2,7 +2,6 @@ package com.maree.app
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -28,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -42,17 +40,21 @@ import androidx.compose.ui.unit.Dp
 
 @Composable
 internal fun BrandIcon(size: Dp = 36.dp) {
-    Image(painterResource(R.drawable.brand_mark), contentDescription = null,
-        modifier = Modifier.size(size).clip(RoundedCornerShape(11.dp))
-            .background(MareePalette.BrandBackground).padding((size.value * 0.15f).dp))
+    Surface(modifier = Modifier.size(size), color = MareePalette.BrandBackground,
+        shape = RoundedCornerShape((size.value * 0.32f).dp),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.72f)),
+        shadowElevation = 2.dp) {
+        Image(painterResource(R.drawable.brand_mark), contentDescription = null,
+            modifier = Modifier.padding((size.value * 0.15f).dp))
+    }
 }
 
 @Composable
 internal fun ScreenHeading(eyebrow: String, title: String, description: String? = null) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Surface(color = MareePalette.Mint, shape = RoundedCornerShape(6.dp)) {
-            Text(eyebrow, color = MareePalette.Teal, style = MaterialTheme.typography.labelMedium,
-                letterSpacing = 1.4.sp, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
+        Surface(color = MareePalette.Lilac, shape = RoundedCornerShape(50)) {
+            Text(eyebrow, color = MareePalette.Lavender, style = MaterialTheme.typography.labelMedium,
+                letterSpacing = 1.2.sp, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
         }
         Text(title, color = MareePalette.Ink, style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.semantics { heading() })
@@ -63,9 +65,9 @@ internal fun ScreenHeading(eyebrow: String, title: String, description: String? 
 
 @Composable
 internal fun AppCardSurface(modifier: Modifier = Modifier, containerColor: Color = MareePalette.Surface, content: @Composable ColumnScope.() -> Unit) {
-    Card(modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp),
+    Card(modifier = modifier.fillMaxWidth(), shape = RoundedCornerShape(26.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (AppAppearance.isNight) 1.dp else 2.dp),
         border = BorderStroke(1.dp, MareePalette.Outline)) {
         Column(Modifier.fillMaxWidth().padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
@@ -96,9 +98,10 @@ internal fun StatusPill(label: String, color: Color = MareePalette.Teal,
 @Composable
 internal fun PrimaryAction(label: String, onClick: () -> Unit,
                            modifier: Modifier = Modifier, enabled: Boolean = true) {
-    Button(onClick = onClick, enabled = enabled, shape = RoundedCornerShape(18.dp),
+    Button(onClick = onClick, enabled = enabled, shape = RoundedCornerShape(50),
         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 14.dp),
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp, pressedElevation = 0.dp),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp, pressedElevation = 0.dp,
+            focusedElevation = 3.dp, hoveredElevation = 3.dp),
         modifier = modifier.heightIn(min = 52.dp)) {
         Text(label, style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Center)
     }
@@ -140,9 +143,9 @@ internal fun AppearanceSelector() {
             color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium)
         listOf(
             Triple(ThemeMode.LIGHT, tr("Clair", "Light"),
-                tr("Crème et vert", "Cream and green")),
+                tr("Blanc doux, lavande et pêche", "Soft white, lavender and peach")),
             Triple(ThemeMode.DARK, tr("Nuit", "Night"),
-                tr("Noir, bleu marine et bleu doux", "Black, navy and soft blue")),
+                tr("Bleu nuit, prune et reflets lilas", "Midnight blue, plum and lilac highlights")),
             Triple(ThemeMode.SYSTEM, tr("Comme le téléphone", "Follow phone settings"),
                 tr("Suit le mode clair ou sombre d’Android", "Follows Android’s light or dark mode"))
         ).forEach { (mode, label, description) ->

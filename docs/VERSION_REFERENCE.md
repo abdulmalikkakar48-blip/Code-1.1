@@ -1,6 +1,18 @@
-# Selkie : version de travail retenue le 13 octobre 2026
+# Selkie : version de travail au 15 octobre 2026
 
-## Version actuelle 0.15.0 — poésies et octogones lumineux
+## Version actuelle 0.16.0 — volumes pastel et accueil réorganisé
+
+Le mode Clair adopte un fond blanc doux, des cartes lavande, pêche et menthe, une navigation prune et des reliefs discrets. Un anneau, des billes et une capsule colorés flottent dans des zones décoratives séparées du texte : les dégradés, ombres et reflets donnent un effet 3D dessiné par le code, sans moteur 3D ni image téléchargée. Le fond est composé de deux lavis légers ; les octogones de 0.15.0 sont remplacés. Nuit conserve les vagues pointillées, avec une palette bleu nuit et lilas.
+
+L’accueil place la présentation et son illustration, le résumé des points et du suivi, puis les applications suivies avant les raccourcis et le détail des points. Les cartes restent opaques. L’animation partage une seule horloge avec le parcours de bienvenue et s’arrête selon les réglages Android et le cycle de vie. Voir [l’apparence](APPARENCE_CLAIRE.md).
+
+[APK 0.16.0](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.16.0.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.16.0-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.16.0.md).
+
+VersionCode 27, package `com.maree.app`, Android 10+. Le certificat de développement est conservé. Les seize lectures FR/EN, le coach local (1 152 / 23 040 / 50 688 questions préparées par langue), les règles et les données sont conservés. Premium reste à 5 €/mois ou 60 €/an ; Ultra à 10 €/mois ou 120 €/an, sans réduction. Cet APK de test ne comporte ni IA distante, ni achat réel, ni nouvelle permission. Les résultats de compilation, de tests et les limites des essais visuels sont consignés dans la validation de cette version.
+
+## Archives
+
+## Version 0.15.0 — poésies et octogones lumineux
 
 Lecture ajoute huit poèmes complets sur la nature, le regard, le temps et l’effort. Les seize sélections sont disponibles hors ligne en français et en anglais, avec recherche par titre ou auteur et filtres Tout, Réflexion et Poésie. Les originaux, traductions préparées pour Selkie et conseils sont séparés ; seuls les textes nommés ont été sélectionnés, pas les recueils externes complets. Voir [la provenance](LECTURES.md).
 

@@ -109,14 +109,11 @@ class AppAppearanceTest {
         assertTrue((SelkieNightColors.primary and 0xFF) > (SelkieNightColors.primary shr 16 and 0xFF))
     }
 
-    @Test fun octagonMaximumLayerStackPreservesNormalTextContrast() {
+    @Test fun ambientMaximumLayerStackPreservesNormalTextContrast() {
         var composite = SelkieLightColors.background
-        // Same maximum layers and order as the renderer; cell clipping prevents tile stacking.
-        val layers = listOf(OctagonStyle.FACE_COLOR to OctagonStyle.FACE_MAX_ALPHA,
-            OctagonStyle.FACET_COLOR to OctagonStyle.FACET_MAX_ALPHA,
-            OctagonStyle.OUTLINE_COLOR to OctagonStyle.OUTLINE_MAX_ALPHA,
-            OctagonStyle.LIGHT_COLOR to OctagonStyle.HALO_MAX_ALPHA,
-            OctagonStyle.LIGHT_COLOR to OctagonStyle.SEAM_MAX_ALPHA)
+        // Actual two background washes and maximum shader alpha, in drawing order.
+        val layers = listOf(AmbientStyle.LILAC_COLOR to AmbientStyle.LILAC_MAX_ALPHA,
+            AmbientStyle.PEACH_COLOR to AmbientStyle.PEACH_MAX_ALPHA)
         layers.forEach { (color, alpha) ->
             var next = 0xFF000000L
             for (shift in listOf(16, 8, 0)) {
@@ -127,7 +124,23 @@ class AppAppearanceTest {
             composite = next
             for (foreground in listOf(SelkieLightColors.ink, SelkieLightColors.muted,
                 SelkieLightColors.primary, SelkieLightColors.strongInk, SelkieLightColors.danger)) {
-                assertContrast("octagon compositing stack", foreground, composite)
+                assertContrast("ambient compositing stack", foreground, composite)
+            }
+        }
+    }
+
+    @Test fun pastelCardsAndTheirSemanticAccentsRemainReadableInBothModes() {
+        listOf(ThemeMode.LIGHT, ThemeMode.DARK).forEach { mode ->
+            assertTrue(AppAppearance.set(AppearanceMemoryPreferences(), mode))
+            fun argb(color: androidx.compose.ui.graphics.Color) = color.toArgb().toLong() and 0xffffffffL
+            listOf(MareePalette.Peach, MareePalette.Lilac, MareePalette.Mint, MareePalette.Sand).forEach { background ->
+                listOf(MareePalette.Ink, MareePalette.Muted, MareePalette.Teal).forEach { foreground ->
+                    assertContrast("${mode.tag} pastel card", argb(foreground), argb(background))
+                }
+            }
+            listOf(MareePalette.Coral to MareePalette.Peach, MareePalette.Lavender to MareePalette.Lilac,
+                MareePalette.Amber to MareePalette.Sand).forEach { (foreground, background) ->
+                assertContrast("${mode.tag} semantic accent", argb(foreground), argb(background))
             }
         }
     }

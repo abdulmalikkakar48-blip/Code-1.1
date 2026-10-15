@@ -139,7 +139,7 @@ class MainActivity : ComponentActivity() {
         // Retired online coach: remove any legacy session credentials on upgrade.
         deleteSharedPreferences("selkie_coach_session")
         widgetDestination.value = intent?.getStringExtra("selkie_destination")
-        setContent { MareeTheme { MareeApp(widgetDestination.value) { widgetDestination.value = null; intent.removeExtra("selkie_destination") } } }
+        setContent { MareeTheme { SelkieMotion { MareeApp(widgetDestination.value) { widgetDestination.value = null; intent.removeExtra("selkie_destination") } } } }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -446,12 +446,12 @@ private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> U
                 ) { inner ->
                     Column(Modifier.fillMaxSize().padding(inner)) {
                         Row(
-                            Modifier.fillMaxWidth().padding(start = 22.dp, end = 22.dp, top = 16.dp, bottom = 20.dp),
+                            Modifier.fillMaxWidth().padding(start = 22.dp, end = 22.dp, top = 10.dp, bottom = 12.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                                BrandIcon(40.dp)
+                                BrandIcon(36.dp)
                                 Spacer(Modifier.width(12.dp))
                                 Text(stringResource(R.string.app_name), color = Cream, fontSize = 23.sp,
                                     fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis,
@@ -705,74 +705,10 @@ private fun HomeTab(
     LazyColumn(Modifier.fillMaxSize(),
         contentPadding = PaddingValues(start = 20.dp, end = 20.dp, bottom = 24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        item {
-            ScreenHeading(tr("TON QUOTIDIEN", "YOUR EVERYDAY LIFE"),
-                tr("Du temps pour ce qui compte.", "Time for what matters."),
-                tr("Choisis des limites, organise ta journée et avance avec de petites habitudes.",
-                    "Set limits, plan your day and build small habits."))
-            TextButton(onClick = onGuide, modifier = Modifier.heightIn(min = 48.dp)) {
-                Text(tr("Comprendre Selkie · le guide", "Understand Selkie · the guide"))
-            }
-        }
-        item {
-            AppCardSurface {
-                SectionLabel(if (snapshot.apps.isEmpty()) tr("Par où commencer ?", "Where to start?")
-                    else tr("Tes raccourcis", "Your shortcuts"))
-                Text(if (snapshot.apps.isEmpty())
-                    tr("Choisis une application et une limite. Tu peux aussi préparer ta journée ou demander un conseil, sans activer le suivi.",
-                        "Choose an app and a limit. You can also plan your day or get advice without turning on tracking.")
-                    else tr("Ton suivi est ici. Le calendrier organise ta journée ; le coach t’aide à faire une pause.",
-                        "Your tracking is here. The calendar organises your day; the coach helps you take a break."),
-                    color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium)
-                PrimaryAction(if (snapshot.apps.isEmpty()) tr("Choisir ma première application", "Choose my first app")
-                    else tr("Ajouter une application", "Add an app"), onClick = onAdd,
-                    enabled = snapshot.points > 0 && (appLimit == null || snapshot.apps.size < appLimit),
-                    modifier = Modifier.fillMaxWidth())
-                TextButton(onClick = { onOpen(GuideDestination.CALENDAR) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
-                    Text(tr("Prévoir mes tâches · Calendrier", "Plan my tasks · Calendar"))
-                }
-                TextButton(onClick = { onOpen(GuideDestination.COACH) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
-                    Text(tr("Trouver un conseil · Coach", "Find advice · Coach"))
-                }
-                if (snapshot.points <= 0) Text(tr("À 0 point, termine des défis pour pouvoir ajouter ou modifier une limite.",
-                    "At 0 points, complete challenges to add or change a limit."), color = MareePalette.Muted)
-            }
-        }
-        item { DisciplineCard(snapshot, onChallenges) }
-        item {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                HomeMetric(
-                    value = snapshot.apps.size.toString(),
-                    label = tr("Applications suivies", "Tracked apps"),
-                    modifier = Modifier.weight(1f)
-                )
-                HomeMetric(
-                    value = snapshot.checkedChallenges.size.toString(),
-                    label = tr("Défis terminés · série", "Completed challenges · series"),
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-        if (!active) item {
-            AppCardSurface {
-                StatusPill(tr("Suivi en pause", "Tracking paused"))
-                Text(tr("Active le suivi pour mesurer tes limites et afficher les écrans de pause.", "Turn on tracking to measure your limits and show pause screens."),
-                    color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
-                PrimaryAction(tr("Activer le suivi", "Turn on tracking"), onClick = onSetup, modifier = Modifier.fillMaxWidth())
-            }
-        }
-        item {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalAlignment = Alignment.CenterVertically) {
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(tr("Tes applications", "Your apps"), color = Cream, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
-                    Text(if (appLimit == null) tr("${snapshot.apps.size} suivies · sans plafond", "${snapshot.apps.size} tracked · no limit")
-                        else tr("${snapshot.apps.size} sur $appLimit suivies", "${snapshot.apps.size} of $appLimit tracked"), color = Muted, fontSize = 12.sp)
-                }
-                PrimaryAction(tr("+ Ajouter", "+ Add"), onClick = onAdd,
-                    enabled = snapshot.points > 0 && (appLimit == null || snapshot.apps.size < appLimit))
-            }
-        }
+        item { HomeWelcomeCard(onGuide) }
+        item { HomeTrackingStrip(snapshot.points, active, onChallenges, onSetup) }
+        item { HomeAppsHeader(snapshot.apps.size, appLimit,
+            canAdd = snapshot.points > 0 && (appLimit == null || snapshot.apps.size < appLimit), onAdd = onAdd) }
         if (snapshot.points <= 0) item {
             Text(tr("À 0 point, gagne des points avec les défis pour ajouter ou modifier une limite.", "At 0 points, earn points through challenges to add or edit a limit."),
                 color = Warning, fontSize = 13.sp, lineHeight = 20.sp)
@@ -788,10 +724,9 @@ private fun HomeTab(
                 Text(tr("Ta première limite", "Your first limit"), fontWeight = FontWeight.SemiBold, fontSize = 19.sp)
                 Text(tr("Choisis l’application qui prend le plus de place dans ta journée. Fixe une limite qui te ressemble.", "Choose the app that takes up most of your day. Set a limit that works for you."),
                     color = Muted, fontSize = 14.sp, lineHeight = 21.sp)
-                OutlinedButton(onClick = onAdd, enabled = snapshot.points > 0,
-                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp), shape = RoundedCornerShape(14.dp)) {
-                    Text(tr("Choisir une application", "Choose an app"))
-                }
+                Text(tr("Utilise Ajouter juste au-dessus pour choisir ton application.",
+                    "Use Add just above to choose your app."), color = MareePalette.Teal,
+                    style = MaterialTheme.typography.bodySmall)
             }
         } else {
             if (snapshot.plan == PlanType.ULTRA) {
@@ -816,6 +751,14 @@ private fun HomeTab(
             items(displayedApps, key = { it.packageName }) { app ->
                 AppCard(app, getName(app.packageName), snapshot.points > 0, snapshot.points >= 10, active,
                     onEdit = { onEdit(app) }, onRemove = { onRemove(app) }, onReset = { onReset(app) })
+            }
+        }
+        item { HomeShortcuts(onCalendar = { onOpen(GuideDestination.CALENDAR) }, onCoach = { onOpen(GuideDestination.COACH) }) }
+        item { DisciplineCard(snapshot, onChallenges) }
+        item {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                HomeMetric(snapshot.apps.size.toString(), tr("Applications suivies", "Tracked apps"), Modifier.weight(1f))
+                HomeMetric(snapshot.checkedChallenges.size.toString(), tr("Défis terminés · série", "Completed challenges · series"), Modifier.weight(1f))
             }
         }
     }

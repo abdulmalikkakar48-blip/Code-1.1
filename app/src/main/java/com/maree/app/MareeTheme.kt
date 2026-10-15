@@ -45,23 +45,23 @@ internal data class SelkieThemeColors(
 )
 
 internal val SelkieLightColors = SelkieThemeColors(
-    background = 0xFFF2F4F0, surface = 0xFFFFFFFF, subtle = 0xFFEEF4EE,
-    ink = 0xFF10251E, muted = 0xFF263E30, primary = 0xFF123F2D,
-    onPrimary = 0xFFFFFFFF, strongInk = 0xFF102B22, softAccent = 0xFFC9F79B,
-    outline = 0xFFE4E9E1, danger = 0xFF741919, onDanger = 0xFFFFFFFF,
-    heroBackground = 0xFF102B22, onHero = 0xFFFFFFFF, onHeroMuted = 0xFFCBDBD0,
-    heroAccent = 0xFFC9F79B, onHeroAccent = 0xFF102B22,
-    navigationBackground = 0xFF102B22, navigationMuted = 0xFFAFBEB5
+    background = 0xFFF7F6FB, surface = 0xFFFFFFFF, subtle = 0xFFF0EDF8,
+    ink = 0xFF242035, muted = 0xFF484255, primary = 0xFF5143A8,
+    onPrimary = 0xFFFFFFFF, strongInk = 0xFF342657, softAccent = 0xFFE2F2EB,
+    outline = 0xFFE2DDEB, danger = 0xFF902D45, onDanger = 0xFFFFFFFF,
+    heroBackground = 0xFF26213B, onHero = 0xFFFFFFFF, onHeroMuted = 0xFFD9D2ED,
+    heroAccent = 0xFFD8C8FF, onHeroAccent = 0xFF2D2247,
+    navigationBackground = 0xFF252137, navigationMuted = 0xFFC3BCD6
 )
 
 internal val SelkieNightColors = SelkieThemeColors(
-    background = 0xFF070C14, surface = 0xFF101B2B, subtle = 0xFF17263B,
-    ink = 0xFFEDF3FF, muted = 0xFFA6B8D0, primary = 0xFF8DBEFF,
-    onPrimary = 0xFF081B33, strongInk = 0xFFCBDFFF, softAccent = 0xFF152D4B,
-    outline = 0xFF354A66, danger = 0xFFFF9EAA, onDanger = 0xFF3E0C18,
-    heroBackground = 0xFF10213B, onHero = 0xFFEDF3FF, onHeroMuted = 0xFFBBCBE2,
-    heroAccent = 0xFF8DBEFF, onHeroAccent = 0xFF081B33,
-    navigationBackground = 0xFF070D17, navigationMuted = 0xFFB3C2D8
+    background = 0xFF0B0C16, surface = 0xFF17182A, subtle = 0xFF212139,
+    ink = 0xFFF5F0FF, muted = 0xFFBDB4D4, primary = 0xFFB4B7FF,
+    onPrimary = 0xFF222044, strongInk = 0xFFDDD3FF, softAccent = 0xFF203A39,
+    outline = 0xFF38334F, danger = 0xFFFFAFBD, onDanger = 0xFF461328,
+    heroBackground = 0xFF1D1B33, onHero = 0xFFF5F0FF, onHeroMuted = 0xFFCEC4E5,
+    heroAccent = 0xFFCEC0FF, onHeroAccent = 0xFF2E224A,
+    navigationBackground = 0xFF0E0F1C, navigationMuted = 0xFFBFB5D3
 )
 
 internal object MareePalette {
@@ -76,14 +76,15 @@ internal object MareePalette {
     val OnPrimary: Color get() = Color(colors.onPrimary)
     val DeepTeal: Color get() = Color(colors.strongInk)
     val Mint: Color get() = Color(colors.softAccent)
-    // The seal and its existing light background remain readable in either appearance.
-    val BrandBackground = Color(0xFFC9F79B)
-    val Coral: Color get() = Teal
-    val Peach: Color get() = Subtle
-    val Lavender: Color get() = Teal
-    val Lilac: Color get() = Subtle
-    val Amber: Color get() = Teal
-    val Sand: Color get() = Subtle
+    // Keep a light shell around the original seal in both appearances.
+    val BrandBackground = Color(0xFFE8DDF8)
+    // Saturated colours are for text/icons; their paired pastels are opaque containers.
+    val Coral: Color get() = if (AppAppearance.isNight) Color(0xFFFFB39D) else Color(0xFF9D4137)
+    val Peach: Color get() = if (AppAppearance.isNight) Color(0xFF3B272B) else Color(0xFFFFF0E8)
+    val Lavender: Color get() = if (AppAppearance.isNight) Color(0xFFC7B0FF) else Color(0xFF6350A7)
+    val Lilac: Color get() = if (AppAppearance.isNight) Color(0xFF2B2543) else Color(0xFFF0EAFE)
+    val Amber: Color get() = if (AppAppearance.isNight) Color(0xFFF4CE83) else Color(0xFF805300)
+    val Sand: Color get() = if (AppAppearance.isNight) Color(0xFF352D20) else Color(0xFFF7EEDC)
     val Outline: Color get() = Color(colors.outline)
     // Control borders need more contrast than decorative card separators.
     val ControlOutline: Color get() = Color(colors.muted)
@@ -110,8 +111,8 @@ private fun mareeScheme(night: Boolean) =
         surface = MareePalette.Surface, onSurface = MareePalette.Ink,
         surfaceVariant = MareePalette.Subtle, onSurfaceVariant = MareePalette.Muted,
         outline = MareePalette.ControlOutline, error = MareePalette.Danger, onError = MareePalette.OnDanger,
-        inverseSurface = Color(0xFFDDE6F4), inverseOnSurface = Color(0xFF142237),
-        inversePrimary = Color(0xFF174D88), surfaceTint = MareePalette.Teal
+        inverseSurface = Color(0xFFEDE7F8), inverseOnSurface = Color(0xFF242035),
+        inversePrimary = Color(0xFF5143A8), surfaceTint = MareePalette.Teal
     ) else lightColorScheme(
         primary = MareePalette.Teal, onPrimary = MareePalette.OnPrimary,
         primaryContainer = MareePalette.Subtle, onPrimaryContainer = MareePalette.DeepTeal,
@@ -159,8 +160,8 @@ internal fun MareeTheme(content: @Composable () -> Unit) {
     MaterialTheme(colorScheme = scheme, typography = MareeTypography,
         shapes = Shapes(
             small = RoundedCornerShape(12.dp),
-            medium = RoundedCornerShape(16.dp),
-            large = RoundedCornerShape(20.dp),
-            extraLarge = RoundedCornerShape(24.dp)
+            medium = RoundedCornerShape(18.dp),
+            large = RoundedCornerShape(24.dp),
+            extraLarge = RoundedCornerShape(28.dp)
         ), content = content)
 }

@@ -17,3 +17,7 @@ Le seul fichier image inclus dans les ressources examinées est `app/src/main/re
 ## Complément 0.11.0
 
 57 coordonnées distinctes du classpath Android debug ont été inventoriées ; leurs POM déclarent Apache-2.0, directement ou via leur parent pour Guava ListenableFuture. L’inventaire et les empreintes des POM sont dans DEPENDANCES-0.11.0.json. Le texte Apache-2.0 est embarqué et consultable dans Confidentialité et données → Licences des bibliothèques. Source du texte : dépôt JetBrains/kotlin, tag v1.9.24, license/LICENSE.txt (HTTPS vérifié). Ce relevé du classpath debug n’est pas une liste certifiée des classes de l’APK release ; renouveler l’inventaire de distribution et vérifier les notices supplémentaires avant Play. Les droits du phoque et la disponibilité de la marque restent à confirmer.
+
+## Décors procéduraux 0.16.0
+
+Les lavis du fond et l’illustration anneau/billes/capsule sont dessinés par les fonctions de `SculptureDecoration.kt`, avec des dégradés, des ombres et des reflets. Aucun modèle 3D, texture, photographie, fichier de design ou autre actif des captures Dribbble fournies comme références n’est embarqué. Les captures ont guidé l’ambiance pastel, les volumes et la hiérarchie des cartes ; les illustrations ont été construites dans le code pour Selkie. Cette description de provenance ne vaut pas attestation de disponibilité de la marque ni garantie générale d’absence de droits antérieurs. Le fichier du phoque et l’icône Android restent inchangés.

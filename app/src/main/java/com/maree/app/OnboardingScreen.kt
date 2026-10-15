@@ -136,6 +136,7 @@ fun OnboardingScreen(
 
 @Composable
 private fun WelcomePurpose() {
+    SelkieSculpture(Modifier.fillMaxWidth().height(132.dp))
     WelcomeHeading(
         title = tr("Moins d’écran.\nPlus de place pour toi.", "Less screen time.\nMore room for you."),
         description = tr("Selkie t’aide à limiter les distractions et à construire de bonnes habitudes, à ton rythme.",

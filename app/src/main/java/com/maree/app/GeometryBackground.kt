@@ -9,6 +9,9 @@ import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.State
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,14 +31,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
-/** Decorative drawing only: no input, layout changes or per-frame app recomposition. */
+private val StillPhase: State<Float> = mutableFloatStateOf(0f)
+internal val LocalDecorationPhase = staticCompositionLocalOf { StillPhase }
+
+/** A single lifecycle-aware clock shared by the background and all decorative scenes. */
 @Composable
-internal fun SelkieGeometryBackground(modifier: Modifier = Modifier) {
+internal fun SelkieMotion(content: @Composable () -> Unit) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val phase = remember { mutableFloatStateOf(0f) }
-    val water = remember { SelkieWaterParticleField() }
-    val octagons = remember { SelkieOctagonField() }
     var motionAllowed by remember { mutableStateOf(ValueAnimator.areAnimatorsEnabled()) }
 
     DisposableEffect(context, lifecycle) {
@@ -77,14 +81,23 @@ internal fun SelkieGeometryBackground(modifier: Modifier = Modifier) {
             }
         }
     }
+    CompositionLocalProvider(LocalDecorationPhase provides phase, content = content)
+}
+
+/** Reading phase only inside draw avoids recomposing interactive screens on each frame. */
+@Composable
+internal fun SelkieGeometryBackground(modifier: Modifier = Modifier) {
+    val phase = LocalDecorationPhase.current
+    val water = remember { SelkieWaterParticleField() }
+    val ambient = remember { SelkieAmbientField() }
     Canvas(modifier.clipToBounds().clearAndSetSemantics { }) {
         // Reading phase here invalidates drawing, rather than the screens or their layout.
         if (AppAppearance.isNight) {
-            // Preserve the existing night water, including its colour and opacity.
+            // Keep the night water renderer; the shared palette supplies its accent.
             val waterColor = MareePalette.Teal.copy(alpha = 0.32f)
-            water.draw(this, phase.floatValue, waterColor)
+            water.draw(this, phase.value, waterColor)
         } else {
-            octagons.draw(this, phase.floatValue)
+            ambient.draw(this, phase.value)
         }
     }
 }
