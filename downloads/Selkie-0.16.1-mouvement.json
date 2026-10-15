@@ -1,0 +1,12 @@
+{
+  "background_crop": [
+    0,
+    145,
+    24,
+    680
+  ],
+  "changed_background_pixels": 12824,
+  "crop_pixels": 12840,
+  "max_channel_delta": 11,
+  "static_content_bbox": null
+}
