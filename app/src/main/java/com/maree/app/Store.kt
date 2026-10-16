@@ -264,6 +264,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
             put("customChallenges", customChallenges)
             put("dailyHistory", history.exportJson(now))
             put("calendarTasks", CalendarTaskStore(prefs).exportJson())
+            put("coloringPages", ColoringStore(prefs).exportJson())
             put("limitSchedules", schedules.exportJson())
             put("coachFavorites", CoachFavoritesStore(prefs).exportJson())
             put("guidedPrograms", GuidedProgramStore(prefs).exportJson())

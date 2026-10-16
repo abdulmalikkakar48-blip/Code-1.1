@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 
 /** Navigation only: opening the guide never changes tracking, points or the selected plan. */
 internal enum class GuideDestination {
-    HOME, DAILY, CALENDAR, REVIEW, READING, TOOLS, CHALLENGES, COACH,
+    HOME, DAILY, CALENDAR, REVIEW, READING, DICE, COLORING, TOOLS, CHALLENGES, COACH,
     ACCESS, SUBSCRIPTIONS, APPEARANCE, LANGUAGES, PRIVACY
 }
 
@@ -87,6 +87,14 @@ internal fun FeatureGuideSection(onOpen: (GuideDestination) -> Unit) {
                     "Free · Read and save selected excerpts to reflect and learn."),
                 { onOpen(GuideDestination.READING) }
             )
+            GuideLink(tr("Dé Selkie", "Selkie dice"),
+                tr("Gratuit · Tire une activité ou un objectif de pause, puis confirme son ajout au calendrier.",
+                    "Free · Draw an activity or a break goal, then confirm adding it to your calendar."),
+                { onOpen(GuideDestination.DICE) })
+            GuideLink(tr("Coloriage", "Coloring"),
+                tr("Gratuit · Huit grilles géométriques à colorier et à retrouver sur ce téléphone.",
+                    "Free · Eight geometric grids to color and return to on this phone."),
+                { onOpen(GuideDestination.COLORING) })
             GuideLink(
                 tr("Outils", "Tools"),
                 tr("Premium et Ultra : plages horaires et widget. Ultra : programmes guidés de 7, 14 ou 30 jours.",

@@ -18,6 +18,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -62,9 +63,11 @@ internal fun DailyTab(
     val personalValidationsToday = snapshot.customChallenges.count { it.validatedToday }
     var showAllApps by rememberSaveable { mutableStateOf(false) }
     var showCounterDetails by rememberSaveable { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
+    LaunchedEffect(section) { scrollState.scrollTo(0) }
 
     Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+        Modifier.fillMaxSize().verticalScroll(scrollState)
             .padding(horizontal = 20.dp, vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
@@ -77,11 +80,26 @@ internal fun DailyTab(
         Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf("today" to tr("Jour", "Day"), "calendar" to tr("Calendrier", "Calendar"),
-                "week" to tr("Bilan", "Review"), "reading" to tr("Lecture", "Reading"), "tools" to tr("Outils", "Tools")).forEach { (id, label) ->
+                "week" to tr("Bilan", "Review"), "reading" to tr("Lecture", "Reading"),
+                "dice" to tr("Dé", "Dice"), "coloring" to tr("Coloriage", "Coloring"),
+                "tools" to tr("Outils", "Tools")).forEach { (id, label) ->
                 FilterChip(selected = section == id, onClick = { onSectionChange(id) }, label = { Text(label) })
             }
         }
         if (section == "today") {
+        AppCardSurface(containerColor = MareePalette.Mint) {
+            SectionLabel(tr("Tes pauses créatives", "Your creative breaks"))
+            Text(tr("Une idée pour décrocher", "A little help to switch off"),
+                color = MareePalette.Ink, fontWeight = FontWeight.Bold, fontSize = 22.sp, lineHeight = 28.sp)
+            Text(tr("Laisse le dé proposer une pause ou prends quelques minutes pour colorier. Gratuit, sans points à gagner.",
+                "Let the dice suggest a break or take a few minutes to color. Free, with no points to earn."),
+                color = MareePalette.Muted)
+            PrimaryAction(tr("Lancer le dé Selkie", "Roll the Selkie dice"), onClick = { onSectionChange("dice") },
+                modifier = Modifier.fillMaxWidth())
+            TextButton(onClick = { onSectionChange("coloring") }, modifier = Modifier.fillMaxWidth()) {
+                Text(tr("Ouvrir mes coloriages", "Open my coloring pages"))
+            }
+        }
         AppCardSurface {
             SectionLabel(tr("Ta pause lecture", "Your reading break"))
             Text(tr("${readingResources.size} textes courts sur l’apprentissage, l’observation et les habitudes, à lire hors ligne.",
@@ -197,6 +215,9 @@ internal fun DailyTab(
         }
         }
         when (section) {
+            "dice" -> DiceSection(snapshot, getName,
+                onCalendar = { onSectionChange("calendar") }, onTasksChanged = onToolsChanged)
+            "coloring" -> ColoringSection()
             "reading" -> ReadingSection()
             "calendar" -> ProgressCalendarSection(history)
             "week" -> WeeklyReviewSection(history, snapshot.plan, getName, onOffers)

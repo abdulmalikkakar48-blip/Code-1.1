@@ -25,6 +25,25 @@ internal class CalendarTaskStore internal constructor(private val prefs: SharedP
         if (index >= 0) rows[index] = task else rows.add(task)
         write(rows)
     }
+    /** One confirmed dice goal becomes one atomic batch; a full calendar never saves only some days. */
+    fun saveBatch(tasks: List<Pair<LocalDate, String>>, operationId: String = UUID.randomUUID().toString()): Boolean = synchronized(LocalFeatureLock.lock) {
+        if (generation != LocalFeatureLock.erasureGeneration || tasks.size !in 1..3 ||
+            tasks.any { (date, title) -> date.year !in 1900..2200 || title.trim().isEmpty() || title.trim().length > 240 } ||
+            tasks.map { it.first }.distinct().size != tasks.size) return@synchronized false
+        if (runCatching { UUID.fromString(operationId).toString() != operationId }.getOrDefault(true)) return@synchronized false
+        val rows = read()
+        val stableIds = (0..2).map { UUID.nameUUIDFromBytes("$operationId:$it".toByteArray(Charsets.UTF_8)).toString() }
+        val intended = tasks.mapIndexed { index, (date, title) -> CalendarTask(stableIds[index], date, title.trim(), false) }
+        // A failed Android commit may still change memory. Retrying the same roll must commit
+        // those same rows, while preserving a completion made in the meantime.
+        val existingBatch = rows.filter { it.id in stableIds }
+        if (existingBatch.isNotEmpty() && (existingBatch.size != intended.size || existingBatch.any { existing -> intended.none {
+            it.id == existing.id && it.date == existing.date && it.title == existing.title
+        } })) return@synchronized false
+        val newRows = intended.filter { expected -> rows.none { it.id == expected.id } }
+        if (rows.size + newRows.size > 500) return@synchronized false
+        write(rows + newRows)
+    }
     fun setCompleted(id: String, completed: Boolean): Boolean = synchronized(LocalFeatureLock.lock) {
         if (generation != LocalFeatureLock.erasureGeneration) return@synchronized false
         val rows = read(); if (rows.none { it.id == id }) return@synchronized false

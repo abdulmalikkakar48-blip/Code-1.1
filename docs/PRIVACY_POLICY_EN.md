@@ -1,6 +1,6 @@
-# Selkie privacy policy — test version 0.12.0
+# Selkie privacy policy — test version 0.17.0
 
-Information updated on **13 October 2026**, for version **0.12.0 (versionCode 21)**. This policy describes local tracking, the Coach, calendar, summaries, favourites, limit time slots, widget and programmes. Accounts, payments and remote AI dialogue are not enabled.
+Information updated on **16 October 2026**, for version **0.17.0 (versionCode 30)**. This policy describes local tracking, the Coach, calendar, summaries, favourites, limit time slots, widget, programmes, Selkie Dice and colouring pages. Accounts, payments and remote AI dialogue are not enabled.
 
 Selkie helps you reduce your screen time. In this free test version, tracking data stays on your device and tracking does not require an account. The local Coach uses prepared advice, without an account or sending data over the Internet. You can read this information without granting tracking access.
 
@@ -44,9 +44,15 @@ The Premium widget, also available with Ultra, displays points and a suggested c
 
 Ultra offers programmes you choose: Sleep for 7 days, Studies for 14 days and Social media for 30 days. Check-ins are manual, at most once per local day across all programmes, with no extra points. Selkie stores the programme identifier and dates needed for its progress; it does not automatically verify the activity you report. A downgrade retains this progress but locks it until Ultra is selected again.
 
+## Free Selkie Dice and colouring
+
+Selkie Dice suggests an activity, a break from a selected app or break days within the next seven days. Unconfirmed choices and results stay temporarily in memory; no roll history is saved. Confirming only adds personal calendar tasks with their text, date and completion state. Check-ins are manual, with no extra points, automatic blocking or changes to existing limits. These tasks remain until you delete them, reset all data or uninstall the app; they are included in your chosen export.
+
+Colouring offers eight original geometric patterns with 12 × 12 cells, ten colours and an eraser. Local saving keeps only the pattern identifier and cell colour indices in the private **`maree`** preferences under **`coloringPages_v1`**. Undo and redo retain at most fifty gestures in memory, without a saved history. Each page remains until you reset that page, erase all data or uninstall the app. Drawings are not sent to a server; no access to photos or files is requested. Saved colours are included in your chosen JSON export; exported copies must be deleted separately.
+
 ## Why is data used, and on what basis?
 
-This data is used only to provide the service you request: setting limits and time slots, measuring usage, displaying alerts and blocking screens, presenting progress in the calendar, summaries and widget, finding favourite tips and following selected programmes. The legal basis for processing necessary to provide this service is performance of the service at your request, under Article 6(1)(b) of the GDPR.
+This data is used only to provide the service you request: setting limits and time slots, measuring usage, displaying alerts and blocking screens, presenting progress in the calendar, summaries and widget, finding favourite tips, following selected programmes, planning confirmed breaks and resuming colouring pages. The legal basis for processing necessary to provide this service is performance of the service at your request, under Article 6(1)(b) of the GDPR.
 
 Android permissions control technical access to phone features. They do not replace a legal basis under the GDPR and do not count as consent to advertising or data sharing. Reading this policy does not require you to accept it and does not start tracking.
 
@@ -76,7 +82,7 @@ The contact address uses Gmail. The controller must still check and specify emai
 
 Settings and progress remain on your device until you delete them from Selkie or uninstall it, subject to the limited history retention period. Removing an app from tracking deletes its entry, limit and lock; points and challenge totals remain until a full data reset. Observations already recorded for the calendar and summaries, including check-ins, remain after this removal. Only observations from the last 90 rolling local days appear in the history and its export. Cleaning older entries from storage resumes on the next app use, on a new day or during an observation; it depends on the app running and the write succeeding. Timer-based deletion while the app is not running is not guaranteed. Current-counter usage durations are recalculated from Android events; they are separate from this observed history.
 
-This data is kept in the same private app preferences store, named “maree”. Deleting data removes Selkie’s local data, including tracked apps, locks, points, the selected demonstration plan, personal challenges with their steps and dates, calendar and summary history and its last technical sample, time slots, favourites, programmes and their dates, and saved unrecognised Coach messages and their saving preference. The widget returns to a neutral display without previous progress. On your next use, progress starts again from the initial values. Selkie alerts are removed. If deletion cannot be confirmed, a message asks you to try again. This action does not delete Android statistics or automatically revoke permissions granted in the phone’s settings. It also clears your language preference: Selkie returns to English if the phone’s language is English, and to French otherwise. Appearance returns to Light.
+This data is kept in the same private app preferences store, named “maree”. Deleting data removes Selkie’s local data, including tracked apps, locks, points, the selected demonstration plan, personal challenges with their steps and dates, calendar and summary history and its last technical sample, personal calendar tasks including confirmed dice breaks, saved colouring pages, time slots, favourites, programmes and their dates, and saved unrecognised Coach messages and their saving preference. The widget returns to a neutral display without previous progress. On your next use, progress starts again from the initial values. Selkie alerts are removed. If deletion cannot be confirmed, a message asks you to try again. This action does not delete Android statistics or automatically revoke permissions granted in the phone’s settings. It also clears your language preference: Selkie returns to English if the phone’s language is English, and to French otherwise. Appearance returns to Light.
 
 Check-in dates used by Selkie’s built-in challenge cycle are deleted when it renews, every 21 days. Check-ins already recorded in the calendar history follow its rolling retention period of 90 local days. The total number of completed challenges and points remain until a full data reset. Personal challenges and their dates remain until you delete them individually or reset all data; they are not reset when the cycle changes. Favourites and time slots remain until you delete them or reset all data; a plan change does not grant access to paid features. A programme’s progress remains until you reset it, remove it or reset all data, with at most 7, 14 or 30 check-in dates depending on the programme. The last check-in date shared across programmes remains stored when switching, resetting or removing a programme to enforce the once-per-day limit; a full data reset removes it too.
 
@@ -92,7 +98,9 @@ The offline test version does not declare Internet permission. Links you choose 
 
 ## Export your settings and progress
 
-Export my data prepares a local JSON file containing stored settings and challenges, structured history still retained from the last 90 local days, time-slot rules, favourite references or tips and their metadata, and programme identifiers and dates. Only fields defined for this export are copied. You choose where to save it using Android. The last raw technical sample of Android usage durations, raw Coach messages including unrecognised messages, sign-in tokens and email addresses are excluded. No file is automatically sent to the publisher.
+Export my data prepares a local JSON file containing stored settings and challenges, structured history still retained from the last 90 local days, time-slot rules, personal calendar tasks including confirmed dice breaks, saved colouring pages, favourite references or tips and their metadata, and programme identifiers and dates. Only fields defined for this export are copied. You choose where to save it using Android. The last raw technical sample of Android usage durations, unconfirmed dice results, raw Coach messages including unrecognised messages, sign-in tokens and email addresses are excluded. No file is automatically sent to the publisher.
+
+The JSON format uses schema **4**. Validated colouring pages appear under **`storedData.coloringPages`**; personal tasks, including confirmed dice breaks, under **`storedData.calendarTasks`**. Unconfirmed rolls and colouring undo history are not included.
 
 The file may contain private information, including tracked apps and your challenge text. If you choose an online storage provider, it may synchronise the file under its own rules. An exported copy remains in your chosen location after resetting or uninstalling Selkie; delete it separately if you wish.
 
@@ -119,7 +127,7 @@ This policy and the control features are a working basis. They are not a compreh
 
 ## Official references to check before release
 
-The following references are provided for orientation; the official pages could not be accessed and their current content and URLs were not checked online for this text dated 13 October 2026. Applicable requirements must be reviewed before public release.
+The following references are provided for orientation; the official pages could not be accessed and their current content and URLs were not checked online for this text dated 16 October 2026. Applicable requirements must be reviewed before public release.
 
 - [RGPD / GDPR — règlement (UE) 2016/679](https://eur-lex.europa.eu/eli/reg/2016/679/oj)
 - [CNIL](https://www.cnil.fr/)
@@ -133,4 +141,4 @@ Calendar tasks are free: their text, date and completion state stay in private p
 
 ## Offline reading — 0.13.0
 
-Reading offers eight selected historical passages and translations prepared for Selkie, free and offline. No account or reading history is saved. Saving an excerpt creates a text copy through Android’s file picker; resetting Selkie does not delete it. Opening a source uses your browser and the external site’s privacy rules; it may see the request and network address, but the app does not attach points, tasks or statistics. Sources contain larger works than the reviewed passages.
+Reading offers sixteen selected historical texts and poems and translations prepared for Selkie, free and offline. No account or reading history is saved. Saving an excerpt creates a text copy through Android’s file picker; resetting Selkie does not delete it. Opening a source uses your browser and the external site’s privacy rules; it may see the request and network address, but the app does not attach points, tasks or statistics. Sources contain larger works than the reviewed passages.

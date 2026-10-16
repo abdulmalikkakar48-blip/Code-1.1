@@ -1,6 +1,18 @@
 # Selkie — application Android de réduction du temps d'écran
 
-## Version actuelle 0.16.2 — voiles légèrement plus visibles
+## Version actuelle 0.17.0 — dé Selkie et coloriage
+
+Quotidien ajoute deux pauses gratuites : le dé propose une activité, une application à laisser de côté ou un objectif sur les sept prochains jours ; tu confirmes chaque résultat avant son ajout au calendrier. Les objectifs restent volontaires et ne modifient ni les points, ni les limites, ni les verrouillages.
+
+Le coloriage propose huit motifs originaux de 12 × 12 cases, dix couleurs, une gomme et Annuler/Rétablir sur les 50 derniers gestes de la page ouverte. Toucher/glisser ou commandes ligne/colonne : les pages s’enregistrent sur le téléphone et peuvent être effacées séparément. L’export JSON schéma 4 et l’effacement global incluent les coloriages. Aucun plugin, compte, image téléchargée ni permission supplémentaire.
+
+[APK 0.17.0](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.17.0.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.17.0-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.17.0.md).
+
+VersionCode 30, Android 10+, même certificat de développement. Le style, les seize lectures, le coach local et les offres sont conservés : Premium 5 €/mois ou 60 €/an ; Ultra 10 €/mois ou 120 €/an, sans réduction ni paiement réel. Voir [les pauses créatives](docs/PAUSES_CREATIVES.md).
+
+## Archive 0.16.2
+
+## Version 0.16.2 — voiles légèrement plus visibles
 
 Seule l’intensité des voiles du fond Clair est renforcée : environ 20 % d’opacité relative supplémentaire, avec les mêmes couleurs, courbes et rythme. Les cartes, textes, sculptures, mise en page et mode Nuit sont conservés. Le contrôle de contraste continue de vérifier la superposition maximale.
 

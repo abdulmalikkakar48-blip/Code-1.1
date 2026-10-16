@@ -1,5 +1,6 @@
 package com.maree.app
 
+import android.content.SharedPreferences
 import org.junit.Assert.*
 import org.junit.Test
 import org.json.JSONArray
@@ -62,6 +63,93 @@ class CalendarTaskStoreTest {
         assertFalse(store.save(day, "Read")); assertTrue(store.entries().isEmpty())
         prefs.commitSucceeds = true; prefs.edit().putInt("calendarTasks_v1", 123).commit()
         assertTrue(store.entries().isEmpty()); assertEquals(0, store.exportJson().length())
+    }
+
+    @Test fun diceBatchWritesEveryDateTogetherWithoutChangingPointsLimitsOrLocks() {
+        val prefs = TestFeaturePreferences()
+        prefs.edit().putInt("pointUnits", 400).putString("apps", "keep-existing-limits-and-locks").commit()
+        val store = CalendarTaskStore(prefs)
+        assertTrue(store.saveBatch(listOf(day to "First", day.plusDays(2) to "Second", day.plusDays(6) to "Third")))
+        assertEquals(listOf(day, day.plusDays(2), day.plusDays(6)), store.entries().map { it.date })
+        assertTrue(store.entries().none { it.completed })
+        assertEquals(3, store.entries().map { it.id }.distinct().size)
+        assertEquals(400, prefs.getInt("pointUnits", 0))
+        assertEquals("keep-existing-limits-and-locks", prefs.getString("apps", null))
+    }
+
+    @Test fun diceBatchCapacityAndInvalidInputNeverSavePartialGoals() {
+        val prefs = TestFeaturePreferences(); val store = CalendarTaskStore(prefs)
+        assertFalse(store.saveBatch(emptyList()))
+        assertFalse(store.saveBatch(listOf(day to "Valid", day.plusDays(1) to " ")))
+        assertFalse(store.saveBatch(listOf(day to "First", day to "Duplicate day")))
+        assertFalse(store.saveBatch((0L..3L).map { day.plusDays(it) to "Too many" }))
+        assertTrue(store.entries().isEmpty())
+        val rows = JSONArray()
+        repeat(499) { rows.put(JSONObject().put("id", UUID.randomUUID().toString()).put("date", day.toString()).put("title", "Task $it").put("completed", false)) }
+        prefs.edit().putString("calendarTasks_v1", rows.toString()).commit()
+        val before = prefs.getString("calendarTasks_v1", null)
+        assertFalse(store.saveBatch(listOf(day to "First", day.plusDays(1) to "Second")))
+        assertEquals(before, prefs.getString("calendarTasks_v1", null))
+        val lastOperation = UUID.randomUUID().toString()
+        assertTrue(store.saveBatch(listOf(day to "Last slot"), lastOperation))
+        assertEquals(500, store.entries().size)
+        assertTrue(store.saveBatch(listOf(day to "Last slot"), lastOperation))
+        assertEquals(500, store.entries().size)
+    }
+
+    @Test fun diceBatchCommitFailureAndErasureInvalidateTheWholePendingBatch() {
+        val prefs = TestFeaturePreferences(); val core = Store(prefs); val pending = CalendarTaskStore(prefs)
+        prefs.commitSucceeds = false
+        assertFalse(pending.saveBatch(listOf(day to "First", day.plusDays(1) to "Second")))
+        assertTrue(pending.entries().isEmpty())
+        prefs.commitSucceeds = true
+        assertTrue(core.clearPersonalData())
+        assertFalse(pending.saveBatch(listOf(day to "Late batch")))
+        assertFalse(prefs.contains("calendarTasks_v1"))
+        assertTrue(CalendarTaskStore(prefs).saveBatch(listOf(day to "New session")))
+    }
+
+    @Test fun diceBatchRetryUsesStableIdsWhenFailedCommitAlreadyUpdatedMemory() {
+        val memory = TestFeaturePreferences()
+        var failNextCommit = true
+        val prefs = object : SharedPreferences by memory {
+            override fun edit(): SharedPreferences.Editor {
+                val editor = memory.edit()
+                return object : SharedPreferences.Editor by editor {
+                    override fun putString(key: String, value: String?): SharedPreferences.Editor = apply { editor.putString(key, value) }
+                    override fun commit(): Boolean {
+                        val persisted = editor.commit() // Android updates the memory map even if disk persistence fails.
+                        return if (failNextCommit) { failNextCommit = false; false } else persisted
+                    }
+                }
+            }
+        }
+        val store = CalendarTaskStore(prefs)
+        val tasks = listOf(day to "First", day.plusDays(1) to "Second")
+        val operation = DiceResult(DiceMode.WEEK, 3, day, "app.one").id
+        assertFalse(store.saveBatch(tasks, operation))
+        val pendingIds = store.entries().map { it.id }
+        assertEquals(2, pendingIds.size)
+        assertTrue(store.saveBatch(tasks, operation))
+        assertEquals(pendingIds, CalendarTaskStore(prefs).entries().map { it.id })
+        assertTrue(store.saveBatch(tasks, DiceResult(DiceMode.WEEK, 3, day, "app.one").id))
+        assertEquals(4, store.entries().map { it.id }.distinct().size)
+    }
+
+    @Test fun diceBatchRejectsChangedOperationContentAndPreservesCompletedRetry() {
+        val prefs = TestFeaturePreferences(); val store = CalendarTaskStore(prefs)
+        val operation = UUID.randomUUID().toString()
+        val tasks = listOf(day to "Read", day.plusDays(1) to "Read")
+        assertTrue(store.saveBatch(tasks, operation))
+        assertTrue(store.setCompleted(store.entries().first().id, true))
+        assertTrue(store.saveBatch(tasks, operation))
+        assertTrue(store.entries().first().completed)
+        val before = prefs.getString("calendarTasks_v1", null)
+        assertFalse(store.saveBatch(listOf(day to "Changed", day.plusDays(1) to "Read"), operation))
+        assertFalse(store.saveBatch(listOf(day to "Read"), operation))
+        assertFalse(store.saveBatch(tasks + (day.plusDays(2) to "Extra"), operation))
+        assertFalse(store.saveBatch(tasks, "invalid-operation"))
+        assertEquals(before, prefs.getString("calendarTasks_v1", null))
     }
 
 }
