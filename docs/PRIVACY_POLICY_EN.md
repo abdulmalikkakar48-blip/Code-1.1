@@ -48,7 +48,7 @@ Ultra offers programmes you choose: Sleep for 7 days, Studies for 14 days and So
 
 Selkie Dice suggests an activity, a break from a selected app or break days within the next seven days. Unconfirmed choices and results stay temporarily in memory; no roll history is saved. Confirming only adds personal calendar tasks with their text, date and completion state. Check-ins are manual, with no extra points, automatic blocking or changes to existing limits. These tasks remain until you delete them, reset all data or uninstall the app; they are included in your chosen export.
 
-Colouring offers eight original geometric patterns with 12 × 12 cells, ten colours and an eraser. Local saving keeps only the pattern identifier and cell colour indices in the private **`maree`** preferences under **`coloringPages_v1`**. Undo and redo retain at most fifty gestures in memory, without a saved history. Each page remains until you reset that page, erase all data or uninstall the app. Drawings are not sent to a server; no access to photos or files is requested. Saved colours are included in your chosen JSON export; exported copies must be deleted separately.
+Colouring offers eight original geometric patterns with 12 × 12 cells, ten colours and an eraser. Selkie keeps the selected pattern and its cell colours only in private storage on this phone. Undo and redo retain at most fifty gestures in memory, without a saved history. Each page remains until you reset that page, erase all data or uninstall the app. Drawings are not sent to a server; no access to photos or files is requested. Saved colours are included in your chosen JSON export; exported copies must be deleted separately.
 
 ## Why is data used, and on what basis?
 
