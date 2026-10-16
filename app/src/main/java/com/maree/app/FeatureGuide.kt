@@ -92,8 +92,8 @@ internal fun FeatureGuideSection(onOpen: (GuideDestination) -> Unit) {
                     "Free · Activity, app or week: confirm a calendar goal. The optional Points mode deducts 1 to 6 points after you confirm the roll."),
                 { onOpen(GuideDestination.DICE) })
             GuideLink(tr("Coloriage", "Coloring"),
-                tr("Gratuit · ${coloringTemplates.size} pages de dessins et motifs à carreaux, à colorier ici et à retrouver sur ce téléphone.",
-                    "Free · ${coloringTemplates.size} pages of grid drawings and patterns to color here and return to on this phone."),
+                tr("Gratuit · Illustrations : quatre dessins de fleurs et de feuilles à remplir par zones, avec zoom et repères numérotés facultatifs. À carreaux : les ${coloringTemplates.size} pages précédentes. Tes couleurs restent sur ce téléphone.",
+                    "Free · Illustrations: four flower and leaf drawings to fill by region, with zoom and optional numbered guides. Grid pages: the ${coloringTemplates.size} existing pages. Your colors stay on this phone."),
                 { onOpen(GuideDestination.COLORING) })
             GuideLink(
                 tr("Outils", "Tools"),

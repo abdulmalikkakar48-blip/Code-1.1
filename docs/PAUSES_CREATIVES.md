@@ -1,6 +1,6 @@
-# Dé Selkie, calendrier et coloriage — 0.19.0
+# Dé Selkie, calendrier et coloriage — 0.20.0
 
-Ces deux fonctions sont gratuites dans toutes les offres. Les trois modes de pause du dé et le coloriage ne changent pas les points. Un quatrième mode facultatif, Points, retire des points comme expliqué avant le lancement ; aucun achat, rappel automatique ou verrouillage supplémentaire n’est ajouté.
+Ces fonctions sont gratuites dans toutes les offres. Les trois modes de pause du dé et le coloriage ne changent pas les points. Un quatrième mode facultatif, Points, retire des points comme expliqué avant le lancement ; aucun achat, rappel automatique ou verrouillage supplémentaire n’est ajouté.
 
 Les points d’honneur sont plafonnés à 100. Un ancien solde supérieur à 100 est ramené à 100 ; les soldes inférieurs ne sont pas augmentés. Les récompenses habituelles continuent de fonctionner dans cette limite.
 
@@ -21,7 +21,17 @@ Le résultat et l’action de confirmation sont regroupés près du dé. Les act
 
 ## Coloriage
 
-Dans Quotidien → Coloriage, une galerie de miniatures permet de choisir parmi douze pages originales :
+Dans Quotidien → Coloriage, deux rubriques séparent les formats. Les deux sont gratuites, sans dépense ni gain de points.
+
+### Illustrations
+
+Quatre dessins originaux aux contours courbes sont intégrés dans l’application : Jardin de roses, Bouquet sauvage, Tulipes de printemps et Feuillages. Touche une zone fermée pour la remplir. Ce sont de vrais contours de pétales et de feuilles, distincts de la grille de cases des anciens dessins. Les seize couleurs et la gomme sont au-dessus du dessin ; le zoom aide à viser les petites zones. Les repères numérotés sont facultatifs : ils guident le choix d’une couleur, sans imposer de limite ou de validation à points.
+
+Annuler et Rétablir gardent jusqu’à cinquante gestes pendant l’ouverture de la page. Chaque changement de couleur terminé s’enregistre localement pour reprendre le dessin plus tard ; ouvrir une page ne la remplit pas. L’effacement d’une page demande confirmation et laisse les autres dessins intacts. Aucun téléchargement, photo, compte ni permission supplémentaire n’est nécessaire. Les dessins sont des créations originales intégrées, sans copie des images de référence.
+
+### À carreaux
+
+La galerie conserve les douze pages précédentes, avec leurs couleurs déjà sauvegardées :
 
 - Quatre dessins à carreaux : Arbre, Fleur, Livre ouvert et Paysage.
 - Les huit motifs existants : Mosaïque, Damier, Vagues, Rosace, Losanges, Montagne, Soleil et Quadrillage libre.
@@ -30,10 +40,10 @@ Chaque page contient 12 × 12 cases indépendantes. Choisis une couleur ou la go
 
 Pour éviter de viser une petite case, choisis sa ligne et sa colonne avec les commandes de 48 dp, puis Appliquer. La palette propose dix couleurs. Annuler et Rétablir conservent les cinquante derniers gestes pendant l’ouverture de la page. Chaque geste terminé s’enregistre sur le téléphone ; aucun enregistrement à l’ouverture. Une erreur propose de réessayer. Un changement de motif est bloqué pendant l’enregistrement ou après un échec non résolu.
 
-Effacer cette page demande confirmation, sans toucher aux autres pages. Les cellules non blanches sont conservées jusqu’à cet effacement, l’effacement global ou la désinstallation. Aucun fichier image, photo, compte ou synchronisation n’est créé. Les choix de couleurs sont privés dans `maree/coloringPages_v1`, bornés à douze identifiants fixes et 144 indices par page.
+Effacer cette page demande confirmation, sans toucher aux autres pages. Les cellules non blanches sont conservées jusqu’à cet effacement, l’effacement global ou la désinstallation. Aucun fichier image, photo, compte ou synchronisation n’est créé. Les choix de couleurs à carreaux sont privés dans `maree/coloringPages_v1`, bornés à douze identifiants fixes et 144 indices par page. Les illustrations sont conservées séparément dans `maree/illustrationPages_v1` : quatre identifiants fixes et un indice de couleur validé par zone. Aucun trait à main levée, historique de gestes ou fichier image n’y est enregistré.
 
-L’export volontaire JSON utilise le schéma 5 : `storedData.coloringPages` contient uniquement les identifiants de pages et indices de couleurs validés. Les objectifs des trois modes de pause sont des `calendarTasks` ordinaires. `storedData.points.maximumValue` indique 100 ; `storedData.honorDice` contient le dernier reçu valide du mode Points, ou `null` s’il n’y en a pas. Les anciens objets de stockage ne peuvent pas réenregistrer des données après l’effacement global. Les copies de documents déjà exportées se suppriment séparément.
+L’export volontaire JSON utilise le schéma 6 : `storedData.coloringPages` contient les identifiants et indices de couleurs validés des pages à carreaux ; `storedData.illustrations` contient les objets `{id, colors}` validés des illustrations. L’effacement global supprime les deux formats. Les objectifs des trois modes de pause sont des `calendarTasks` ordinaires. `storedData.points.maximumValue` indique 100 ; `storedData.honorDice` contient le dernier reçu valide du mode Points, ou `null` s’il n’y en a pas. Les anciens objets de stockage ne peuvent pas réenregistrer des données après l’effacement global. Les copies de documents déjà exportées se suppriment séparément.
 
 ## Périmètre
 
-Le dessin libre à main levée et l’export d’un coloriage en image ne sont pas inclus. Aucun plugin supplémentaire n’est nécessaire : Compose et Canvas Android dessinent les motifs. Aucun SDK, service réseau ou droit Android n’a été ajouté. Les permissions du suivi ne sont pas requises pour le mode Activité et le coloriage.
+Le dessin libre à main levée et l’export d’un coloriage en image ne sont pas inclus. Aucun plugin supplémentaire n’est nécessaire : Compose et Canvas Android dessinent les illustrations et les motifs. Aucun SDK, service réseau ou droit Android n’a été ajouté. Les permissions du suivi ne sont pas requises pour le mode Activité et le coloriage.

@@ -311,6 +311,7 @@ class Store internal constructor(
             put("dailyHistory", history.exportJson(now))
             put("calendarTasks", CalendarTaskStore(prefs).exportJson())
             put("coloringPages", ColoringStore(prefs).exportJson())
+            put("illustrations", IllustrationStore(prefs).pagesForExport())
             put("limitSchedules", schedules.exportJson())
             put("coachFavorites", CoachFavoritesStore(prefs).exportJson())
             put("guidedPrograms", GuidedProgramStore(prefs).exportJson())

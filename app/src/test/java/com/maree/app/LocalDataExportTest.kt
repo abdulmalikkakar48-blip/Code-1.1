@@ -22,7 +22,7 @@ class LocalDataExportTest {
 
         assertEquals(before, prefs.all)
         assertEquals("selkie-local-data", json.getString("format"))
-        assertEquals(5, json.getInt("schemaVersion"))
+        assertEquals(6, json.getInt("schemaVersion"))
         assertEquals(Instant.ofEpochMilli(NOW + DAY).toString(), json.getString("exportedAt"))
         val preferences = json.getJSONObject("preferences")
         assertEquals("fr", preferences.getString("language"))
@@ -85,13 +85,13 @@ class LocalDataExportTest {
             assertFalse(exported.contains(privateValue))
         }
         val data = JSONObject(exported).getJSONObject("storedData")
-        assertEquals(setOf("points", "honorDice", "membership", "tracking", "standardChallenges", "customChallenges", "calendarTasks", "coloringPages", "dailyHistory", "limitSchedules", "coachFavorites", "guidedPrograms"),
+        assertEquals(setOf("points", "honorDice", "membership", "tracking", "standardChallenges", "customChallenges", "calendarTasks", "coloringPages", "illustrations", "dailyHistory", "limitSchedules", "coachFavorites", "guidedPrograms"),
             data.keys().asSequence().toSet())
         assertEquals("Déconnecter 🐚", data.getJSONArray("customChallenges").getJSONObject(0).getString("title"))
     }
 
     @Test
-    fun confirmedHonorRollIsIncludedInSchemaFiveWithoutExportingInjectedMetadataOrAdvancingRewards() {
+    fun confirmedHonorRollRemainsIncludedInSchemaSixWithoutExportingInjectedMetadataOrAdvancingRewards() {
         val (_, prefs) = fixture()
         prefs.edit().putInt("pointUnits", 400).putLong("periodStart", NOW).apply()
         val store = Store(prefs) { 5 }
@@ -102,12 +102,34 @@ class LocalDataExportTest {
 
         val json = JSONObject(LocalDataExport.json(store, now = NOW + DAY))
 
-        assertEquals(5, json.getInt("schemaVersion"))
+        assertEquals(6, json.getInt("schemaVersion"))
         val stored = json.getJSONObject("storedData")
         assertEquals(95.0, stored.getJSONObject("points").getDouble("value"), 0.0)
         assertEquals(100, stored.getJSONObject("points").getInt("maximumValue"))
         assertEquals(result.toJson().toString(), stored.getJSONObject("honorDice").toString())
         assertFalse(json.toString().contains("synthetic-private-receipt-value"))
+        assertEquals(before, prefs.all)
+    }
+
+    @Test
+    fun illustrationExportKeepsOnlyKnownIntegerColorsAndNeverIncludesNestedPrivateMetadata() {
+        val (store, prefs) = fixture()
+        val template = illustrationPages.first()
+        val colors = List(template.regions.size) { if (it == 4) 16 else 0 }
+        val row = JSONObject().put("id", template.id).put("colors", JSONArray(colors))
+            .put("privateNote", "synthetic-private-botanical-note")
+        prefs.edit().putString(IllustrationStore.KEY, JSONArray().put(row).toString()).apply()
+        val before = prefs.all.toMap()
+
+        val json = JSONObject(LocalDataExport.json(store, now = NOW + DAY))
+
+        assertEquals(6, json.getInt("schemaVersion"))
+        val exported = json.getJSONObject("storedData").getJSONArray("illustrations")
+        assertEquals(1, exported.length())
+        assertEquals(setOf("id", "colors"), exported.getJSONObject(0).keys().asSequence().toSet())
+        assertEquals(template.id, exported.getJSONObject(0).getString("id"))
+        assertEquals(JSONArray(colors).toString(), exported.getJSONObject(0).getJSONArray("colors").toString())
+        assertFalse(json.toString().contains("synthetic-private-botanical-note"))
         assertEquals(before, prefs.all)
     }
 

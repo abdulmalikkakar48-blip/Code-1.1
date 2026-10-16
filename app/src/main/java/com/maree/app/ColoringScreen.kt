@@ -56,6 +56,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -73,7 +75,7 @@ private fun coloringColorName(index: Int): String = listOf(
 
 /** A small, offline creative pause. No account, photo access, points or sharing required. */
 @Composable
-internal fun ColoringSection() {
+internal fun GridColoringSection(onBusyChange: (Boolean) -> Unit = {}) {
     val context = LocalContext.current
     val store = remember(context) { ColoringStore(context) }
     val scope = rememberCoroutineScope()
@@ -91,8 +93,11 @@ internal fun ColoringSection() {
     var row by rememberSaveable { mutableIntStateOf(0) }
     var column by rememberSaveable { mutableIntStateOf(0) }
     val idle = !loading && !saving && preview == null
-    val editable = idle && !pendingReset
+    val editable = idle && !pendingReset && !saveFailed
     val illustrations = coloringTemplates.count { it.isIllustration }
+    LaunchedEffect(loading, saving, preview, saveFailed, pendingReset) {
+        onBusyChange(loading || saving || preview != null || saveFailed || pendingReset)
+    }
 
     LaunchedEffect(template.id, store) {
         val loaded = withContext(Dispatchers.IO) { store.loadPage(template.id) }
@@ -104,8 +109,8 @@ internal fun ColoringSection() {
         history = next
         saving = true
         saveFailed = false
-        scope.launch {
-            val succeeded = withContext(Dispatchers.IO) { store.savePage(template.id, next.cells) }
+        scope.launch(start = CoroutineStart.UNDISPATCHED) {
+            val succeeded = withContext(NonCancellable + Dispatchers.IO) { store.savePage(template.id, next.cells) }
             saveFailed = !succeeded
             hasSaved = succeeded
             saving = false
@@ -117,8 +122,8 @@ internal fun ColoringSection() {
         pendingReset = true
         saving = true
         saveFailed = false
-        scope.launch {
-            val succeeded = withContext(Dispatchers.IO) { store.resetPage(template.id) }
+        scope.launch(start = CoroutineStart.UNDISPATCHED) {
+            val succeeded = withContext(NonCancellable + Dispatchers.IO) { store.resetPage(template.id) }
             if (succeeded) {
                 history = ColoringHistory()
                 pendingReset = false

@@ -26,6 +26,7 @@ class LocalFeatureIntegrationTest {
     private lateinit var schedules: LimitScheduleStore
     private lateinit var favorites: CoachFavoritesStore
     private lateinit var programs: GuidedProgramStore
+    private lateinit var illustrations: IllustrationStore
 
     @Before
     fun setUp() {
@@ -36,6 +37,7 @@ class LocalFeatureIntegrationTest {
         store = Store(prefs) { 2 }
         history = DailyHistoryStore(prefs)
         schedules = LimitScheduleStore(prefs)
+        illustrations = IllustrationStore(prefs)
         favorites = CoachFavoritesStore(prefs)
         programs = GuidedProgramStore(prefs)
     }
@@ -200,11 +202,14 @@ class LocalFeatureIntegrationTest {
         dailyJson.getJSONObject(0).put("coachText", secret)
         val programJson = JSONObject(prefs.getString(GuidedProgramStore.KEY, null)!!).put("question", secret)
         val honorJson = JSONObject(prefs.getString(HONOR_DICE_KEY, null)!!).put("privateMetadata", secret)
+        val illustrationJson = JSONArray(prefs.getString(IllustrationStore.KEY, null)!!)
+        illustrationJson.getJSONObject(0).put("privateNote", secret)
         prefs.edit().putString(CoachFavoritesStore.KEY, favoriteJson.toString())
             .putString("limitSchedules", scheduleJson.toString())
             .putString(DailyHistoryStore.HISTORY_KEY, dailyJson.toString())
             .putString(GuidedProgramStore.KEY, programJson.toString())
-            .putString(HONOR_DICE_KEY, honorJson.toString()).commit()
+            .putString(HONOR_DICE_KEY, honorJson.toString())
+            .putString(IllustrationStore.KEY, illustrationJson.toString()).commit()
         val before = prefs.all.toMap()
 
         val exported = store.exportLocalState(NOW + 10_000L)
@@ -212,6 +217,9 @@ class LocalFeatureIntegrationTest {
         assertEquals(1, exported.getJSONArray("limitSchedules").length())
         assertEquals(1, exported.getJSONArray("coachFavorites").length())
         assertEquals(1, exported.getJSONArray("guidedPrograms").length())
+        assertEquals(1, exported.getJSONArray("illustrations").length())
+        assertEquals(16, exported.getJSONArray("illustrations").getJSONObject(0).getJSONArray("colors").getInt(3))
+        assertEquals(2, exported.getJSONArray("illustrations").getJSONObject(0).length())
         assertEquals(100, exported.getJSONObject("points").getInt("maximumValue"))
         val honorReceipt = exported.getJSONObject("honorDice")
         assertEquals(2, honorReceipt.getInt("face"))
@@ -238,6 +246,9 @@ class LocalFeatureIntegrationTest {
         assertFalse(favorites.entries().isEmpty())
         assertNotNull(programs.activeProgramId())
         assertNotNull(store.lastHonorDiceResult())
+        val illustration = illustrationPages.first()
+        val colors = illustrations.page(illustration.id)
+        assertTrue(colors.any { it != 0 })
         assertTrue(store.clearPersonalData())
         assertTrue(prefs.all.isEmpty())
 
@@ -248,10 +259,12 @@ class LocalFeatureIntegrationTest {
         assertTrue(programs.entries(DATE).all { it.progress == null })
         val exported = store.exportLocalState(NOW + 10_000L)
         assertTrue(exported.isNull("honorDice"))
-        listOf("dailyHistory", "limitSchedules", "coachFavorites", "guidedPrograms").forEach {
+        listOf("dailyHistory", "limitSchedules", "coachFavorites", "guidedPrograms", "illustrations").forEach {
             assertEquals(0, exported.getJSONArray(it).length())
         }
         assertTrue(prefs.all.isEmpty())
+        assertFalse(illustrations.savePage(illustration.id, colors))
+        assertFalse(illustrations.resetPage(illustration.id))
 
         // New use starts a fresh baseline even through an instance created before erasure.
         assertNull(store.addApp(APP, 20, 900_000L))
@@ -279,6 +292,8 @@ class LocalFeatureIntegrationTest {
         store.tick(reading(0L), NOW)
         store.tick(reading(1_000L), NOW + 10_000L)
         assertNotNull(store.rollHonorDie("55555555-5555-4555-8555-555555555555", NOW + 10_000L))
+        val illustration = illustrationPages.first()
+        assertTrue(illustrations.savePage(illustration.id, List(illustration.regions.size) { if (it == 3) 16 else 0 }))
     }
 
     private fun seedClock(now: Long) {

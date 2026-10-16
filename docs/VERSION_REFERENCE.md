@@ -1,6 +1,18 @@
 # Selkie : version de travail au 16 octobre 2026
 
-## Version actuelle 0.19.0 — 100 points maximum et dé Points
+## Version actuelle 0.20.0 — illustrations florales à colorier
+
+Quotidien → Coloriage → **Illustrations** ajoute quatre dessins originaux aux contours courbes : Jardin de roses, Bouquet sauvage, Tulipes de printemps et Feuillages. Touche une zone pour la remplir avec l’une des seize couleurs, efface avec la gomme, agrandis jusqu’à 300 % et déplace le dessin. Les repères numérotés sont facultatifs ; les couleurs restent libres. Chaque zone s’enregistre sur ce téléphone, avec Annuler/Rétablir sur les cinquante dernières actions de la page ouverte.
+
+Les douze pages existantes et leurs couleurs sont conservées sous **À carreaux**. Les quatre illustrations sont gratuites dans toutes les offres, sans téléchargement, permission ou réseau supplémentaire. Les aperçus colorés ne préremplissent jamais la feuille personnelle. Export JSON schéma 6 et effacement global incluent séparément les deux formats.
+
+[APK 0.20.0](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.20.0.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.20.0-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.20.0.md).
+
+VersionCode 33, Android 10+, même certificat de développement. Plafond 100 points, quatre modes du dé, calendrier, lectures et coach préparé FR/EN conservés. Prix prévus inchangés : Premium 5 €/mois ou 60 €/an, Ultra 10 €/mois ou 120 €/an, sans réduction ni paiement réel dans cet APK de test.
+
+## Archive 0.19.0
+
+## Version 0.19.0 — 100 points maximum et dé Points
 
 Les points d’honneur restent entre 0 et 100. Un ancien solde supérieur est ramené à 100 sans effacer la progression ; les récompenses sous le plafond et les pénalités habituelles sont conservées.
 
@@ -12,7 +24,7 @@ VersionCode 32, Android 10+, même certificat de développement. Export JSON sch
 
 ## Archive 0.18.0
 
-## Version actuelle 0.18.0 — dé plus clair, calendrier et dessins
+## Version 0.18.0 — dé plus clair, calendrier et dessins
 
 Le dé distingue le choix du mode, la proposition et la confirmation. L’idée tirée reste près du bouton et est amenée à l’écran après le lancer ; les détails des six activités sont repliables. Le calendrier reçoit un en-tête illustré, des repères de dates et des cartes de tâches. À taille de texte normale, les sept jours de la semaine sont visibles sans défilement horizontal ; une grande police garde une grille défilante et un sélecteur de date accessible.
 
