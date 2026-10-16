@@ -8,7 +8,7 @@ import org.json.JSONObject
 
 internal data class ColoringPageEntry(val id: String, val cells: List<Int>)
 
-/** Eight fixed grids, kept on the device. Old sessions cannot restore erased data. */
+/** Fixed original grids, kept on the device. Old sessions cannot restore erased data. */
 internal class ColoringStore internal constructor(private val prefs: SharedPreferences) {
     constructor(context: Context) : this(context.applicationContext.getSharedPreferences("maree", Context.MODE_PRIVATE))
     private val generation = synchronized(LocalFeatureLock.lock) { LocalFeatureLock.erasureGeneration }

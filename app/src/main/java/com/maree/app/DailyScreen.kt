@@ -2,8 +2,8 @@ package com.maree.app
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -33,6 +34,7 @@ import java.time.format.DateTimeFormatter
 
 /** Bilan des compteurs disponibles, sans historique ni temps gagné inventé. */
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 internal fun DailyTab(
     snapshot: MareeSnapshot,
     onCoach: () -> Unit,
@@ -71,34 +73,38 @@ internal fun DailyTab(
             .padding(horizontal = 20.dp, vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        ScreenHeading(
+        if (section !in setOf("dice", "calendar", "coloring")) ScreenHeading(
             eyebrow = today.format(DateTimeFormatter.ofPattern(tr("EEEE d MMMM", "EEEE, MMMM d"), AppLanguage.locale))
                 .replaceFirstChar { it.titlecase(AppLanguage.locale) },
             title = tr("Un peu plus de vie.", "A little more life."),
             description = tr("Une pause, un repère, un petit pas à la fois.", "A break, a fresh perspective, one small step at a time.")
         )
-        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(0.dp)) {
             listOf("today" to tr("Jour", "Day"), "calendar" to tr("Calendrier", "Calendar"),
-                "week" to tr("Bilan", "Review"), "reading" to tr("Lecture", "Reading"),
+                "reading" to tr("Lecture", "Reading"),
                 "dice" to tr("Dé", "Dice"), "coloring" to tr("Coloriage", "Coloring"),
+                "week" to tr("Bilan", "Review"),
                 "tools" to tr("Outils", "Tools")).forEach { (id, label) ->
                 FilterChip(selected = section == id, onClick = { onSectionChange(id) }, label = { Text(label) })
             }
         }
         if (section == "today") {
         AppCardSurface(containerColor = MareePalette.Mint) {
-            SectionLabel(tr("Tes pauses créatives", "Your creative breaks"))
-            Text(tr("Une idée pour décrocher", "A little help to switch off"),
+            SectionLabel(tr("Choisis ta pause", "Choose your break"))
+            Text(tr("Une idée ou un dessin ?", "An idea or a drawing?"),
                 color = MareePalette.Ink, fontWeight = FontWeight.Bold, fontSize = 22.sp, lineHeight = 28.sp)
             Text(tr("Laisse le dé proposer une pause ou prends quelques minutes pour colorier. Gratuit, sans points à gagner.",
                 "Let the dice suggest a break or take a few minutes to color. Free, with no points to earn."),
                 color = MareePalette.Muted)
             PrimaryAction(tr("Lancer le dé Selkie", "Roll the Selkie dice"), onClick = { onSectionChange("dice") },
                 modifier = Modifier.fillMaxWidth())
-            TextButton(onClick = { onSectionChange("coloring") }, modifier = Modifier.fillMaxWidth()) {
-                Text(tr("Ouvrir mes coloriages", "Open my coloring pages"))
+            OutlinedButton(onClick = { onSectionChange("coloring") }, modifier = Modifier.fillMaxWidth()) {
+                Text(tr("Coloriage · ouvrir les dessins", "Coloring · open the drawings"))
             }
+            Text(tr("${coloringTemplates.size} pages à colorier ici, avec sauvegarde sur ce téléphone.",
+                "${coloringTemplates.size} pages to color right here, saved on this phone."),
+                color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 19.sp)
         }
         AppCardSurface {
             SectionLabel(tr("Ta pause lecture", "Your reading break"))

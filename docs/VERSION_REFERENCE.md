@@ -1,6 +1,18 @@
 # Selkie : version de travail au 16 octobre 2026
 
-## Version actuelle 0.17.0 — dé Selkie et coloriage
+## Version actuelle 0.18.0 — dé plus clair, calendrier et dessins
+
+Le dé distingue le choix du mode, la proposition et la confirmation. L’idée tirée reste près du bouton et est amenée à l’écran après le lancer ; les détails des six activités sont repliables. Le calendrier reçoit un en-tête illustré, des repères de dates et des cartes de tâches. À taille de texte normale, les sept jours de la semaine sont visibles sans défilement horizontal ; une grande police garde une grille défilante et un sélecteur de date accessible.
+
+Coloriage passe à douze pages gratuites : les huit motifs existants et quatre petits dessins originaux à carreaux (arbre, fleur, livre ouvert, paysage). Une galerie montre les modèles et la palette précède la grille. Les cellules déjà coloriées sont conservées. Les rubriques de Quotidien reviennent à la ligne pour rester visibles, et un bouton explicite ouvre les dessins depuis Jour.
+
+[APK 0.18.0](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.18.0.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.18.0-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.18.0.md).
+
+VersionCode 31, Android 10+, même certificat de développement. Dé et coloriage gratuits dans toutes les offres ; limites, points, calendrier, seize lectures et coach conservés. Prix prévus inchangés : Premium 5 €/mois ou 60 €/an, Ultra 10 €/mois ou 120 €/an, sans réduction ni achat réel. Export JSON schéma 4. Voir [les pauses créatives](PAUSES_CREATIVES.md).
+
+## Archive 0.17.0
+
+## Version 0.17.0 — dé Selkie et coloriage
 
 Quotidien ajoute deux pauses gratuites : le dé propose une activité, une application à laisser de côté ou un objectif sur les sept prochains jours ; tu confirmes chaque résultat avant son ajout au calendrier. Les objectifs restent volontaires et ne modifient ni les points, ni les limites, ni les verrouillages.
 

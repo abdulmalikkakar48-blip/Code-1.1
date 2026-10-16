@@ -1,13 +1,18 @@
 package com.maree.app
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -15,6 +20,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CancellationException
@@ -57,29 +64,62 @@ internal fun CalendarTaskSection(date: LocalDate, onTasksChanged: () -> Unit) {
             } finally { busy = false }
         }
     }
-    SectionLabel(tr("À faire ce jour-là", "To do on this day"))
-    Text(tr("Tes tâches personnelles, sans points ni rappel automatique.", "Your personal tasks, without points or automatic reminders."), color = MareePalette.Muted)
+    val dayTasks = tasks.filter { it.date == date }
+    SectionLabel(tr("Tes tâches", "Your tasks"))
+    if (loaded && dayTasks.isNotEmpty()) Text(
+        tr("${dayTasks.count { it.completed }} sur ${dayTasks.size} terminées",
+            "${dayTasks.count { it.completed }} of ${dayTasks.size} completed"),
+        color = MareePalette.Teal, style = MaterialTheme.typography.labelLarge)
+    Text(tr("Coche une tâche après l’avoir faite. Sans points ni rappel automatique.",
+        "Check off a task when you have done it. No points or automatic reminders."),
+        color = MareePalette.Muted, style = MaterialTheme.typography.bodySmall)
     if (!loaded) Text(tr("Chargement…", "Loading…"), color = MareePalette.Muted)
-    else if (tasks.none { it.date == date }) Text(tr("Aucune tâche prévue. Ajoute ton premier petit objectif.", "Nothing planned. Add your first small goal."), color = MareePalette.Muted)
-    tasks.filter { it.date == date }.take(shown).forEach { task ->
-        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).toggleable(
-                value = task.completed, enabled = !busy, role = Role.Checkbox,
-                onValueChange = { checked -> change { store.setCompleted(task.id, checked) } }
-            ), verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(checked = task.completed, onCheckedChange = null, enabled = !busy)
-                Text(task.title, modifier = Modifier.weight(1f), color = MareePalette.Ink)
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                TextButton(enabled = !busy, onClick = { editId = task.id; title = task.title; editing = true }) { Text(tr("Modifier", "Edit")) }
-                TextButton(enabled = !busy, onClick = { deleting = task }) { Text(tr("Supprimer", "Delete")) }
+    else if (dayTasks.isEmpty()) Surface(color = MareePalette.Peach,
+        shape = RoundedCornerShape(18.dp), modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            Text(tr("Une journée à imaginer", "A day to make your own"),
+                color = MareePalette.Coral, style = MaterialTheme.typography.titleMedium)
+            Text(tr("Lecture, promenade, projet… Ajoute un petit objectif pour cette date.",
+                "Reading, a walk, a project… Add a small goal for this date."),
+                color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+    dayTasks.take(shown).forEach { task ->
+        Surface(color = if (task.completed) MareePalette.Mint else MareePalette.Subtle,
+            shape = RoundedCornerShape(18.dp), border = BorderStroke(1.dp, MareePalette.Outline),
+            modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).toggleable(
+                    value = task.completed, enabled = !busy, role = Role.Checkbox,
+                    onValueChange = { checked -> change { store.setCompleted(task.id, checked) } }
+                ), verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(checked = task.completed, onCheckedChange = null, enabled = !busy)
+                    Column(Modifier.weight(1f)) {
+                        Text(task.title, color = MareePalette.Ink,
+                            style = MaterialTheme.typography.bodyMedium,
+                            textDecoration = if (task.completed) TextDecoration.LineThrough else null)
+                        Text(if (task.completed) tr("Terminée", "Completed") else tr("À faire", "To do"),
+                            color = MareePalette.Muted, style = MaterialTheme.typography.labelSmall)
+                    }
+                }
+                if (LocalDensity.current.fontScale > 1.3f) Column {
+                    TextButton(enabled = !busy, modifier = Modifier.heightIn(min = 48.dp),
+                        onClick = { editId = task.id; title = task.title; editing = true }) { Text(tr("Modifier", "Edit")) }
+                    TextButton(enabled = !busy, modifier = Modifier.heightIn(min = 48.dp),
+                        onClick = { deleting = task }) { Text(tr("Supprimer", "Delete")) }
+                } else Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    TextButton(enabled = !busy, modifier = Modifier.heightIn(min = 48.dp),
+                        onClick = { editId = task.id; title = task.title; editing = true }) { Text(tr("Modifier", "Edit")) }
+                    TextButton(enabled = !busy, modifier = Modifier.heightIn(min = 48.dp),
+                        onClick = { deleting = task }) { Text(tr("Supprimer", "Delete")) }
+                }
             }
         }
     }
     if (tasks.count { it.date == date } > shown) TextButton(onClick = { shown += 20 }) {
         Text(tr("Afficher plus de tâches", "Show more tasks"))
     }
-    PrimaryAction(tr("Ajouter une tâche", "Add a task"), enabled = loaded && !busy && tasks.size < 500,
+    PrimaryAction(tr("+ Ajouter une tâche", "+ Add a task"), modifier = Modifier.fillMaxWidth(), enabled = loaded && !busy && tasks.size < 500,
         onClick = { editId = null; title = ""; editing = true })
     if (tasks.size >= 500) Text(tr("500 tâches enregistrées. Supprime les anciennes pour en ajouter.", "500 tasks saved. Delete older ones to add more."), color = MareePalette.Muted)
     if (issue) Text(tr("Le changement n’a pas pu être enregistré. Réessaie.", "The change could not be saved. Try again."), color = MareePalette.Danger)

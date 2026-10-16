@@ -56,7 +56,7 @@ class ColoringTest {
         val prefs = TestFeaturePreferences()
         prefs.edit().putInt(ColoringStore.KEY, 3).commit()
         assertTrue(ColoringStore(prefs).entries().isEmpty())
-        listOf("bad JSON", "x".repeat(20_001), JSONArray(List(9) { row("mosaic", painted(0, 1)) }).toString()).forEach { raw ->
+        listOf("bad JSON", "x".repeat(20_001), JSONArray(List(coloringTemplates.size + 1) { row("mosaic", painted(0, 1)) }).toString()).forEach { raw ->
             prefs.edit().putString(ColoringStore.KEY, raw).commit()
             assertEquals(0, ColoringStore(prefs).exportJson().length())
         }
@@ -153,5 +153,50 @@ class ColoringTest {
         assertEquals(COLORING_HISTORY_LIMIT, history.following.size)
         repeat(70) { history = history.redo() }
         assertEquals(painted(69, 10), history.cells)
+    }
+
+    @Test fun addingIllustrationsPreservesEveryPreviouslySavedGeometricPage() {
+        val previousIds = listOf("mosaic", "checker", "waves", "rosette", "diamond", "mountain", "sun", "blank")
+        val prefs = TestFeaturePreferences()
+        val originalPages = previousIds.mapIndexed { index, id -> row(id, painted(index * 13, index + 1)) }
+        prefs.edit().putString(ColoringStore.KEY, JSONArray(originalPages).toString()).commit()
+        val store = ColoringStore(prefs)
+        val newIds = listOf("tree", "flower", "open_book", "landscape")
+        newIds.forEachIndexed { index, id -> assertTrue(store.savePage(id, painted(100 + index, 10))) }
+        val reopened = ColoringStore(prefs)
+        previousIds.forEachIndexed { index, id -> assertEquals(painted(index * 13, index + 1), reopened.loadPage(id)) }
+        newIds.forEachIndexed { index, id -> assertEquals(painted(100 + index, 10), reopened.loadPage(id)) }
+        val exported = reopened.exportJson()
+        assertEquals(previousIds + newIds, (0 until exported.length()).map { exported.getJSONObject(it).getString("id") })
+        assertEquals(12, reopened.entries().size)
+    }
+
+    @Test fun illustratedPreviewsNeverPrecolorTheUsersBlankPages() {
+        val prefs = TestFeaturePreferences()
+        val illustrations = coloringTemplates.filter { it.isIllustration }
+        assertEquals(setOf("tree", "flower", "open_book", "landscape"), illustrations.map { it.id }.toSet())
+        val regionMaps = illustrations.map { template ->
+            val regions = List(COLORING_CELLS) { template.region(it / COLORING_SIDE, it % COLORING_SIDE) }
+            assertTrue(regions.contains(0))
+            assertTrue(regions.toSet().size >= 4)
+            val example = List(COLORING_CELLS) { template.previewColor(it / COLORING_SIDE, it % COLORING_SIDE) }
+            assertTrue(validColoringCells(example))
+            assertTrue(example.any { it != 0 })
+            assertEquals(List(COLORING_CELLS) { 0 }, ColoringStore(prefs).loadPage(template.id))
+            regions
+        }
+        assertEquals(illustrations.size, regionMaps.toSet().size)
+        assertFalse(prefs.contains(ColoringStore.KEY))
+    }
+
+    @Test fun fullPaletteAcrossAllPagesFitsTheBoundedStoreAndExportsOnlyWhitelistedIds() {
+        val prefs = TestFeaturePreferences()
+        val store = ColoringStore(prefs)
+        coloringTemplates.forEach { template -> assertTrue(store.savePage(template.id, List(COLORING_CELLS) { 10 })) }
+        assertTrue(prefs.getString(ColoringStore.KEY, "")!!.length < 20_000)
+        assertEquals(coloringTemplates.size, ColoringStore(prefs).exportJson().length())
+        val before = prefs.getString(ColoringStore.KEY, null)
+        assertFalse(store.savePage("another_drawing", List(COLORING_CELLS) { 1 }))
+        assertEquals(before, prefs.getString(ColoringStore.KEY, null))
     }
 }

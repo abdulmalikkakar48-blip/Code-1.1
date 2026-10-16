@@ -5,6 +5,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -30,6 +32,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -76,18 +83,24 @@ internal fun ProgressCalendarSection(entries: List<DailyHistoryEntry>) {
     }
 
     AppCardSurface {
-        SectionLabel(tr("Ton calendrier", "Your calendar"))
-        Text(
-            tr("Prévois tes tâches pour la date de ton choix. Ton historique de suivi couvre les 90 derniers jours.",
-                "Plan tasks for any date you choose. Your tracking history covers the last 90 days."),
-            color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium
-        )
+        Surface(color = MareePalette.Lilac, shape = RoundedCornerShape(22.dp)) {
+            Row(Modifier.fillMaxWidth().padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                    SectionLabel(tr("Ton calendrier", "Your calendar"))
+                    Text(tr("Une place pour tes projets.", "Make room for your plans."),
+                        color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium)
+                }
+                if (LocalDensity.current.fontScale <= 1.3f) CalendarArtwork(Modifier.size(62.dp))
+            }
+        }
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             TextButton(
                 onClick = { showMonth(month.minusMonths(1)) },
                 enabled = month > firstMonth,
-                modifier = Modifier.semantics {
+                modifier = Modifier.width(48.dp).heightIn(min = 48.dp).semantics {
                     contentDescription = tr("Mois précédent", "Previous month")
                 }
             ) { Text("‹", modifier = Modifier.clearAndSetSemantics {}) }
@@ -97,12 +110,12 @@ internal fun ProgressCalendarSection(entries: List<DailyHistoryEntry>) {
             TextButton(
                 onClick = { showMonth(month.plusMonths(1)) },
                 enabled = month < lastMonth,
-                modifier = Modifier.semantics {
+                modifier = Modifier.width(48.dp).heightIn(min = 48.dp).semantics {
                     contentDescription = tr("Mois suivant", "Next month")
                 }
             ) { Text("›", modifier = Modifier.clearAndSetSemantics {}) }
         }
-        TextButton(onClick = {
+        CalendarDateActions(onChoose = {
             DatePickerDialog(context, { _, year, monthIndex, day ->
                 val chosen = LocalDate.of(year, monthIndex + 1, day)
                 if (chosen.year in 1900..2200) {
@@ -114,10 +127,16 @@ internal fun ProgressCalendarSection(entries: List<DailyHistoryEntry>) {
                 datePicker.maxDate = LocalDate.of(2200, 12, 31).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
                 show()
             }
-        }) { Text(tr("Choisir une date", "Choose a date")) }
-        // Keep date targets at least 48 dp wide, including on a narrow phone or large text.
+        }, onToday = {
+            monthKey = YearMonth.from(today).toString()
+            selectedKey = today.toString()
+        })
+        // Seven columns fit normal text on narrow phones. The date picker above provides
+        // a full-size alternative; enlarged system text can scroll the grid horizontally.
         BoxWithConstraints(Modifier.fillMaxWidth()) {
-            val cellWidth = (maxWidth / 7).coerceAtLeast(52.dp)
+            val fontScale = LocalDensity.current.fontScale
+            val cellWidth = if (fontScale > 1.3f) (maxWidth / 7).coerceAtLeast(44.dp * fontScale)
+                else maxWidth / 7
             Column(Modifier.horizontalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Row {
@@ -138,7 +157,7 @@ internal fun ProgressCalendarSection(entries: List<DailyHistoryEntry>) {
                         repeat(7) { column ->
                             val day = week * 7 + column - leading + 1
                             if (day !in 1..month.lengthOfMonth()) {
-                                Box(Modifier.width(cellWidth).heightIn(min = 60.dp))
+                                Box(Modifier.width(cellWidth).heightIn(min = 54.dp))
                             } else {
                                 val date = month.atDay(day)
                                 key(date.toString()) {
@@ -148,6 +167,7 @@ internal fun ProgressCalendarSection(entries: List<DailyHistoryEntry>) {
                                         enabled = date.year in 1900..2200,
                                         hasTask = date in taskDates,
                                         isSelected = date == selectedDate,
+                                        isToday = date == today,
                                         modifier = Modifier.width(cellWidth),
                                         onClick = { selectedKey = date.toString() }
                                     )
@@ -158,13 +178,29 @@ internal fun ProgressCalendarSection(entries: List<DailyHistoryEntry>) {
                 }
             }
         }
-        Text(tr("○ tâche · • validation · ! limite atteinte · — usage mesuré · ? aucune mesure",
-            "○ task · • check-in · ! limit reached · — measured usage · ? no measurement"),
+        Text(tr("○ tâche · • validation · ! limite atteinte · — usage mesuré\nContour violet : aujourd’hui.",
+            "○ task · • check-in · ! limit reached · — measured usage\nPurple outline: today."),
+            color = MareePalette.Muted, style = MaterialTheme.typography.bodySmall)
+        Text(tr("Une case sans marque ne prouve pas une journée sans écran. Choisis une date pour préparer ta journée.",
+            "An unmarked day does not prove a screen-free day. Choose a date to plan your day."),
             color = MareePalette.Muted, style = MaterialTheme.typography.bodySmall)
         HorizontalDivider(color = MareePalette.Outline)
-        Text(calendarDateLabel(selectedDate).replaceFirstChar { it.titlecase(AppLanguage.locale) },
-            color = MareePalette.Ink, fontWeight = FontWeight.SemiBold,
-            style = MaterialTheme.typography.titleMedium)
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically) {
+            Surface(color = MareePalette.Peach, shape = RoundedCornerShape(16.dp)) {
+                Text(selectedDate.dayOfMonth.toString(), color = MareePalette.Coral,
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
+                        .clearAndSetSemantics {})
+            }
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Text(tr("JOURNÉE SÉLECTIONNÉE", "SELECTED DAY"), color = MareePalette.Lavender,
+                    style = MaterialTheme.typography.labelSmall)
+                Text(calendarDateLabel(selectedDate).replaceFirstChar { it.titlecase(AppLanguage.locale) },
+                    color = MareePalette.Ink, fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.titleMedium)
+            }
+        }
         CalendarTaskSection(selectedDate, onTasksChanged = { taskRevision++ })
         HorizontalDivider(color = MareePalette.Outline)
         SectionLabel(tr("Historique du suivi", "Tracking history"))
@@ -214,26 +250,20 @@ private fun CalendarDateButton(
     enabled: Boolean,
     hasTask: Boolean,
     isSelected: Boolean,
+    isToday: Boolean,
     modifier: Modifier,
     onClick: () -> Unit
 ) {
     val hasValidation = entry?.validationIds?.isNotEmpty() == true
     val hasBreach = entry?.breachedPackages?.isNotEmpty() == true
-    val marker = (if (hasTask) "○ " else "") + when {
-        !enabled -> ""
-        hasValidation && hasBreach -> "• !"
-        hasBreach -> "!"
-        hasValidation -> "•"
-        entry?.hasMeasuredUsage == true -> "—"
-        else -> "?"
-    }
-    val label = calendarDateLabel(date) + ". " + if (!enabled)
+    val label = calendarDateLabel(date) + ". " +
+        (if (isToday) tr("Aujourd’hui. ", "Today. ") else "") + if (!enabled)
         tr("Hors de l’historique disponible", "Outside the available history")
     else (if (hasTask) tr("Tâches prévues. ", "Planned tasks. ") else "") + calendarEntryStatus(entry)
     Surface(
         onClick = onClick,
         enabled = enabled,
-        modifier = modifier.padding(2.dp).heightIn(min = 56.dp).semantics {
+        modifier = modifier.padding(1.dp).heightIn(min = 52.dp).semantics {
             contentDescription = label
             selected = isSelected
             role = Role.Button
@@ -244,7 +274,11 @@ private fun CalendarDateButton(
             hasValidation && enabled -> MareePalette.Mint
             else -> MareePalette.Surface
         },
-        border = if (isSelected) BorderStroke(1.dp, MareePalette.Teal) else null
+        border = when {
+            isSelected -> BorderStroke(1.dp, MareePalette.Teal)
+            isToday -> BorderStroke(1.5.dp, MareePalette.Lavender)
+            else -> null
+        }
     ) {
         Column(Modifier.padding(vertical = 7.dp).clearAndSetSemantics {},
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -256,9 +290,66 @@ private fun CalendarDateButton(
             }
             Text(date.dayOfMonth.toString(), color = color,
                 style = MaterialTheme.typography.labelLarge)
-            Text(marker, color = if (hasBreach && !isSelected && enabled) MareePalette.Danger else color,
-                style = MaterialTheme.typography.labelSmall)
+            Row(Modifier.heightIn(min = 14.dp), horizontalArrangement = Arrangement.spacedBy(3.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                if (hasTask) Canvas(Modifier.size(6.dp)) {
+                    drawCircle(color, style = Stroke(width = 1.2.dp.toPx()))
+                }
+                if (hasValidation) Canvas(Modifier.size(5.dp)) { drawCircle(color) }
+                if (hasBreach) Text("!", color = if (isSelected) color else MareePalette.Danger,
+                    style = MaterialTheme.typography.labelSmall)
+                if (!hasTask && !hasValidation && !hasBreach && entry?.hasMeasuredUsage == true)
+                    Text("—", color = color, style = MaterialTheme.typography.labelSmall)
+            }
         }
+    }
+}
+
+@Composable
+private fun CalendarDateActions(onChoose: () -> Unit, onToday: () -> Unit) {
+    if (LocalDensity.current.fontScale > 1.3f) {
+        Column(Modifier.fillMaxWidth()) {
+            TextButton(onClick = onChoose, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+                Text(tr("Choisir une date", "Choose a date"))
+            }
+            TextButton(onClick = onToday, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+                Text(tr("Aujourd’hui", "Today"))
+            }
+        }
+    } else Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically) {
+        TextButton(onClick = onChoose, modifier = Modifier.heightIn(min = 48.dp)) {
+            Text(tr("Choisir une date", "Choose a date"))
+        }
+        TextButton(onClick = onToday, modifier = Modifier.heightIn(min = 48.dp)) {
+            Text(tr("Aujourd’hui", "Today"))
+        }
+    }
+}
+
+/** Small original paper-calendar illustration; purely decorative. */
+@Composable
+private fun CalendarArtwork(modifier: Modifier = Modifier) {
+    val lilac = MareePalette.Lavender
+    val surface = MareePalette.Surface
+    val peach = MareePalette.Coral
+    val mint = MareePalette.Mint
+    Canvas(modifier.clearAndSetSemantics {}) {
+        val unit = size.minDimension / 62f
+        drawCircle(mint, 24f * unit, Offset(33f * unit, 33f * unit))
+        drawRoundRect(lilac.copy(alpha = .16f), Offset(10f * unit, 14f * unit),
+            Size(44f * unit, 45f * unit), CornerRadius(9f * unit))
+        drawRoundRect(surface, Offset(6f * unit, 8f * unit), Size(44f * unit, 45f * unit), CornerRadius(9f * unit))
+        drawRoundRect(lilac, Offset(6f * unit, 8f * unit), Size(44f * unit, 13f * unit), CornerRadius(7f * unit))
+        listOf(17f, 39f).forEach { x ->
+            drawLine(peach, Offset(x * unit, 4f * unit), Offset(x * unit, 13f * unit), 3f * unit,
+                cap = androidx.compose.ui.graphics.StrokeCap.Round)
+        }
+        repeat(3) { row -> repeat(3) { column ->
+            val point = Offset((17f + 11f * column) * unit, (29f + 8f * row) * unit)
+            drawCircle(if (row == 1 && column == 1) peach else lilac.copy(alpha = .42f),
+                if (row == 1 && column == 1) 3.7f * unit else 2f * unit, point)
+        } }
     }
 }
 

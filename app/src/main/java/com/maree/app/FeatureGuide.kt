@@ -92,8 +92,8 @@ internal fun FeatureGuideSection(onOpen: (GuideDestination) -> Unit) {
                     "Free · Draw an activity or a break goal, then confirm adding it to your calendar."),
                 { onOpen(GuideDestination.DICE) })
             GuideLink(tr("Coloriage", "Coloring"),
-                tr("Gratuit · Huit grilles géométriques à colorier et à retrouver sur ce téléphone.",
-                    "Free · Eight geometric grids to color and return to on this phone."),
+                tr("Gratuit · ${coloringTemplates.size} pages de dessins et motifs à carreaux, à colorier ici et à retrouver sur ce téléphone.",
+                    "Free · ${coloringTemplates.size} pages of grid drawings and patterns to color here and return to on this phone."),
                 { onOpen(GuideDestination.COLORING) })
             GuideLink(
                 tr("Outils", "Tools"),

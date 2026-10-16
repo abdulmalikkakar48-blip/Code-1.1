@@ -149,9 +149,9 @@ private fun MembershipPlanCard(option: PlanType, selected: Boolean, period: Bill
             OfferFeature(tr("Dé Selkie · trois modes", "Selkie dice · three modes"),
                 tr("Activité, application ou semaine : des objectifs volontaires à confirmer dans le calendrier, sans points supplémentaires.",
                     "Activity, app or week: voluntary goals to confirm in your calendar, with no extra points."))
-            OfferFeature(tr("Huit pages de coloriage", "Eight coloring pages"),
-                tr("Motifs géométriques, dix couleurs et gomme, annuler et rétablir. Sauvegarde sur ce téléphone, sans compte.",
-                    "Geometric patterns, ten colors and an eraser, undo and redo. Saved on this phone, with no account."))
+            OfferFeature(tr("${coloringTemplates.size} pages de coloriage", "${coloringTemplates.size} coloring pages"),
+                tr("Petits dessins et motifs géométriques à carreaux, dix couleurs et gomme, annuler et rétablir. Sauvegarde sur ce téléphone, sans compte.",
+                    "Small grid drawings and geometric patterns, ten colors and an eraser, undo and redo. Saved on this phone, with no account."))
             OfferFeature(tr("50 conseils favoris", "50 favorite tips"),
                 tr("Enregistre uniquement des conseils et réponses préparés, dans leur langue d’origine. Après un retour à une offre inférieure, les contenus payants restent verrouillés.",
                     "Save authored tips and prepared answers in their original language. Paid content stays locked after switching to a lower plan."))

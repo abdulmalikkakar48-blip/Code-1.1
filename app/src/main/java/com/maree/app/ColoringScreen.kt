@@ -1,6 +1,8 @@
 package com.maree.app
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -13,11 +15,14 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilterChip
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -32,13 +37,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
@@ -61,13 +71,13 @@ private fun coloringColorName(index: Int): String = listOf(
     tr("Rose", "Rose"), tr("Charbon", "Charcoal")
 )[index]
 
-/** A small, offline creative pause. No account, images, points or sharing required. */
+/** A small, offline creative pause. No account, photo access, points or sharing required. */
 @Composable
 internal fun ColoringSection() {
     val context = LocalContext.current
     val store = remember(context) { ColoringStore(context) }
     val scope = rememberCoroutineScope()
-    var pageId by rememberSaveable { mutableStateOf(coloringTemplates.first().id) }
+    var pageId by rememberSaveable { mutableStateOf(coloringTemplates.first { it.isIllustration }.id) }
     val template = coloringTemplates.firstOrNull { it.id == pageId } ?: coloringTemplates.first()
     var color by rememberSaveable { mutableIntStateOf(2) }
     var history by remember(template.id) { mutableStateOf(ColoringHistory()) }
@@ -82,6 +92,7 @@ internal fun ColoringSection() {
     var column by rememberSaveable { mutableIntStateOf(0) }
     val idle = !loading && !saving && preview == null
     val editable = idle && !pendingReset
+    val illustrations = coloringTemplates.count { it.isIllustration }
 
     LaunchedEffect(template.id, store) {
         val loaded = withContext(Dispatchers.IO) { store.loadPage(template.id) }
@@ -119,18 +130,32 @@ internal fun ColoringSection() {
     }
 
     AppCardSurface {
-        SectionLabel(tr("Pause créative", "Creative pause"))
-        Text(tr("Choisis un motif et une couleur, puis touche ou parcours les carreaux. Chaque page se conserve sur ce téléphone.",
-            "Choose a pattern and color, then tap or move across the squares. Each page stays on this phone."), color = MareePalette.Muted)
-        Text(tr("Une pause libre, sans points ni objectif à terminer.", "An open-ended break, with no points or completion target."), color = MareePalette.Muted)
-        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            coloringTemplates.forEach { item ->
-                FilterChip(selected = item.id == template.id, onClick = {
-                    if (!loading && !saving && preview == null && !saveFailed && !pendingReset) pageId = item.id
-                }, enabled = editable && !saveFailed, label = { Text(item.name()) })
+        SectionLabel(tr("Atelier coloriage", "Coloring studio"))
+        Text(tr("${coloringTemplates.size} pages : $illustrations dessins à carreaux et ${coloringTemplates.size - illustrations} motifs géométriques. Tout se colorie ici, sans téléchargement.",
+            "${coloringTemplates.size} pages: $illustrations grid drawings and ${coloringTemplates.size - illustrations} geometric patterns. Color them here, with no download."), color = MareePalette.Muted)
+        Text(tr("1 · Choisis ta page", "1 · Choose your page"), color = MareePalette.Ink, fontWeight = FontWeight.SemiBold)
+        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            coloringTemplates.sortedByDescending { it.isIllustration }.forEach { item ->
+                ColoringThumbnail(item, item.id == template.id, editable && !saveFailed) { pageId = item.id }
             }
         }
-        Text(template.name(), color = MareePalette.Ink, fontWeight = FontWeight.SemiBold)
+        Text(tr("Fais glisser les miniatures pour voir toutes les pages. Les aperçus sont des exemples : ta page commence blanche.",
+            "Swipe the thumbnails to see every page. The previews are examples: your page starts blank."),
+            color = MareePalette.Muted, style = MaterialTheme.typography.bodySmall)
+    }
+    AppCardSurface {
+        SectionLabel(template.name())
+        Text(tr("2 · Choisis une couleur", "2 · Choose a color"), color = MareePalette.Ink, fontWeight = FontWeight.SemiBold)
+        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            coloringPalette.forEachIndexed { index, shade ->
+                ColoringSwatch(index, shade, color == index, editable) { color = index }
+            }
+        }
+        Text(tr("Couleur : ${coloringColorName(color)} · fais glisser la palette pour toutes les voir.",
+            "Color: ${coloringColorName(color)} · swipe the palette to see them all."),
+            color = MareePalette.Muted, style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
+        Text(tr("3 · Touche ou parcours les carreaux", "3 · Tap or move across the squares"), color = MareePalette.Ink, fontWeight = FontWeight.SemiBold)
         if (loading) CircularProgressIndicator(Modifier.size(28.dp))
         ColoringGrid(template, preview ?: history.cells, color, !loading && !saving && !pendingReset,
             row, column, onPreview = { preview = it }, onFinished = { cells, cell ->
@@ -140,13 +165,6 @@ internal fun ColoringSection() {
                 val next = history.paint(cells)
                 if (next != history) save(next)
             })
-        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            coloringPalette.forEachIndexed { index, shade ->
-                FilterChip(selected = color == index, onClick = { color = index }, enabled = editable,
-                    label = { Text(coloringColorName(index)) },
-                    leadingIcon = { Box(Modifier.size(18.dp).background(shade, CircleShape)) })
-            }
-        }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TextButton(onClick = { save(history.undo()) }, enabled = editable && history.previous.isNotEmpty(), modifier = Modifier.heightIn(min = 48.dp)) {
                 Text(tr("Annuler", "Undo"))
@@ -155,16 +173,6 @@ internal fun ColoringSection() {
                 Text(tr("Rétablir", "Redo"))
             }
         }
-        Text(tr("Pour colorier sans viser un petit carreau", "To color without targeting a small square"), color = MareePalette.Ink, fontWeight = FontWeight.SemiBold)
-        ColoringCoordinateSelector(tr("Ligne", "Row"), row, editable, onChange = { row = it })
-        ColoringCoordinateSelector(tr("Colonne", "Column"), column, editable, onChange = { column = it })
-        Text(tr("Carreau : ligne ${row + 1}, colonne ${column + 1} · ${coloringColorName(history.cells[row * COLORING_SIDE + column])}",
-            "Square: row ${row + 1}, column ${column + 1} · ${coloringColorName(history.cells[row * COLORING_SIDE + column])}"),
-            color = MareePalette.Muted, modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
-        PrimaryAction(tr("Appliquer : ${coloringColorName(color)}", "Apply: ${coloringColorName(color)}"), enabled = editable, onClick = {
-            val next = history.paint(history.cells.toMutableList().also { it[row * COLORING_SIDE + column] = color })
-            if (next != history) save(next)
-        })
         Text(when {
             saving && pendingReset -> tr("Effacement…", "Clearing…")
             saving -> tr("Enregistrement…", "Saving…")
@@ -182,6 +190,22 @@ internal fun ColoringSection() {
         TextButton(onClick = { showReset = true }, enabled = editable, modifier = Modifier.heightIn(min = 48.dp)) {
             Text(tr("Effacer cette page", "Clear this page"), color = MareePalette.Danger)
         }
+    }
+    AppCardSurface {
+        SectionLabel(tr("Colorier avec les commandes", "Color with controls"))
+        Text(tr("Tu peux aussi choisir une ligne et une colonne, puis appliquer la couleur sans viser un petit carreau.",
+            "You can also choose a row and column, then apply the color without targeting a small square."), color = MareePalette.Muted)
+        ColoringCoordinateSelector(tr("Ligne", "Row"), row, editable, onChange = { row = it })
+        ColoringCoordinateSelector(tr("Colonne", "Column"), column, editable, onChange = { column = it })
+        Text(tr("Carreau : ligne ${row + 1}, colonne ${column + 1} · ${coloringColorName(history.cells[row * COLORING_SIDE + column])}",
+            "Square: row ${row + 1}, column ${column + 1} · ${coloringColorName(history.cells[row * COLORING_SIDE + column])}"),
+            color = MareePalette.Muted, modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
+        PrimaryAction(tr("Appliquer : ${coloringColorName(color)}", "Apply: ${coloringColorName(color)}"), enabled = editable, onClick = {
+            val next = history.paint(history.cells.toMutableList().also { it[row * COLORING_SIDE + column] = color })
+            if (next != history) save(next)
+        })
+        Text(tr("Une pause libre, sans points ni objectif à terminer. Chaque page se conserve uniquement sur ce téléphone.",
+            "An open-ended break, with no points or completion target. Each page stays only on this phone."), color = MareePalette.Muted)
     }
     if (showReset) AlertDialog(onDismissRequest = { showReset = false },
         title = { Text(tr("Effacer ${template.name()} ?", "Clear ${template.name()}?")) },
@@ -213,8 +237,8 @@ private fun ColoringGrid(template: ColoringTemplate, cells: List<Int>, color: In
     val currentCells by rememberUpdatedState(cells)
     val previewCallback by rememberUpdatedState(onPreview)
     val finishedCallback by rememberUpdatedState(onFinished)
-    val description = tr("Grille de coloriage de 12 lignes et 12 colonnes. Les commandes de ligne et de colonne sous la palette permettent aussi de colorier.",
-        "Coloring grid with 12 rows and 12 columns. Row and column controls below the palette also let you color.")
+    val description = tr("Grille de coloriage de 12 lignes et 12 colonnes. Les commandes de ligne et de colonne après la grille permettent aussi de colorier.",
+        "Coloring grid with 12 rows and 12 columns. Row and column controls after the grid also let you color.")
     Canvas(Modifier.fillMaxWidth().aspectRatio(1f).background(Color.White)
         .semantics { contentDescription = description }
         .pointerInput(template.id, color, enabled) {
@@ -247,20 +271,69 @@ private fun ColoringGrid(template: ColoringTemplate, cells: List<Int>, color: In
         }) {
         val cell = size.width / COLORING_SIDE
         val ink = Color(0xFF34323E)
-        for (row in 0 until COLORING_SIDE) for (column in 0 until COLORING_SIDE) {
-            val position = Offset(column * cell, row * cell)
-            drawRect(coloringPalette[cells[row * COLORING_SIDE + column]], position, Size(cell, cell))
-            drawRect(ink.copy(alpha = 0.23f), position, Size(cell, cell), style = Stroke(0.65.dp.toPx()))
-            val region = template.region(row, column)
-            if (row == 0 || template.region(row - 1, column) != region)
-                drawLine(ink, position, position + Offset(cell, 0f), 1.5.dp.toPx())
-            if (column == 0 || template.region(row, column - 1) != region)
-                drawLine(ink, position, position + Offset(0f, cell), 1.5.dp.toPx())
-        }
-        drawRect(ink, style = Stroke(2.dp.toPx()))
+        drawColoringArtwork(template, cells, 0.65.dp.toPx(), 1.5.dp.toPx())
         val selection = Offset(selectedColumn * cell + 2.dp.toPx(), selectedRow * cell + 2.dp.toPx())
         val selectionSize = Size(cell - 4.dp.toPx(), cell - 4.dp.toPx())
         drawRect(Color.White, selection, selectionSize, style = Stroke(3.dp.toPx()))
         drawRect(ink, selection, selectionSize, style = Stroke(1.5.dp.toPx()))
     }
+}
+
+
+@Composable
+private fun ColoringThumbnail(template: ColoringTemplate, isSelected: Boolean, enabled: Boolean, onClick: () -> Unit) {
+    val shape = RoundedCornerShape(16.dp)
+    Column(Modifier.width(110.dp).clip(shape)
+        .background(if (isSelected) MareePalette.Lilac else MareePalette.Subtle)
+        .border(if (isSelected) 2.dp else 1.dp, if (isSelected) MareePalette.Lavender else MareePalette.Outline, shape)
+        .clickable(enabled = enabled, role = Role.RadioButton, onClick = onClick)
+        .semantics(mergeDescendants = true) {
+            selected = isSelected
+            contentDescription = template.name() + tr(if (template.isIllustration) ", dessin à carreaux" else ", motif géométrique",
+                if (template.isIllustration) ", grid drawing" else ", geometric pattern")
+        }.padding(10.dp), horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        val example = remember(template.id) { List(COLORING_CELLS) { template.previewColor(it / COLORING_SIDE, it % COLORING_SIDE) } }
+        Canvas(Modifier.size(88.dp).clip(RoundedCornerShape(8.dp)).background(Color.White).clearAndSetSemantics { }) {
+            drawColoringArtwork(template, example, 0.2.dp.toPx(), 0.8.dp.toPx())
+        }
+        Text(template.name(), color = MareePalette.Ink, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+            style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center, minLines = 2)
+        Text(if (template.isIllustration) tr("Dessin", "Drawing") else tr("Motif", "Pattern"),
+            color = MareePalette.Muted, style = MaterialTheme.typography.labelSmall)
+    }
+}
+
+@Composable
+private fun ColoringSwatch(index: Int, shade: Color, isSelected: Boolean, enabled: Boolean, onClick: () -> Unit) {
+    Box(Modifier.size(52.dp).clip(CircleShape)
+        .clickable(enabled = enabled, role = Role.RadioButton, onClick = onClick)
+        .semantics {
+            contentDescription = coloringColorName(index)
+            selected = isSelected
+        }.border(if (isSelected) 3.dp else 1.dp, if (isSelected) MareePalette.Ink else MareePalette.Outline, CircleShape),
+        contentAlignment = Alignment.Center) {
+        Box(Modifier.size(40.dp).background(shade, CircleShape).border(1.dp, Color(0xFF454253).copy(alpha = 0.3f), CircleShape),
+            contentAlignment = Alignment.Center) {
+            if (index == 0) Text("×", color = Color(0xFF454253), fontWeight = FontWeight.Bold)
+            else if (isSelected) Text("✓", color = if (index in listOf(1, 4, 6, 10)) Color.White else Color(0xFF242431),
+                fontWeight = FontWeight.Bold)
+        }
+    }
+}
+
+private fun DrawScope.drawColoringArtwork(template: ColoringTemplate, cells: List<Int>, gridWidth: Float, contourWidth: Float) {
+    val cell = size.width / COLORING_SIDE
+    val ink = Color(0xFF34323E)
+    for (row in 0 until COLORING_SIDE) for (column in 0 until COLORING_SIDE) {
+        val position = Offset(column * cell, row * cell)
+        drawRect(coloringPalette[cells[row * COLORING_SIDE + column]], position, Size(cell, cell))
+        drawRect(ink.copy(alpha = 0.23f), position, Size(cell, cell), style = Stroke(gridWidth))
+        val region = template.region(row, column)
+        if (row == 0 || template.region(row - 1, column) != region)
+            drawLine(ink, position, position + Offset(cell, 0f), contourWidth)
+        if (column == 0 || template.region(row, column - 1) != region)
+            drawLine(ink, position, position + Offset(0f, cell), contourWidth)
+    }
+    drawRect(ink, style = Stroke(contourWidth))
 }
