@@ -51,7 +51,9 @@ internal fun DailyTab(
     onToolsChanged: () -> Unit = {},
     onProgramValidated: (String) -> Unit = {},
     section: String = "today",
-    onSectionChange: (String) -> Unit = {}
+    onSectionChange: (String) -> Unit = {},
+    honorPendingId: String? = null,
+    onHonorPendingIdChange: (String?) -> Unit = {}
 ) {
     val today = LocalDate.now()
     val tips = dailyTips
@@ -232,7 +234,8 @@ internal fun DailyTab(
         }
         when (section) {
             "dice" -> DiceSection(snapshot, getName,
-                onCalendar = { onSectionChange("calendar") }, onTasksChanged = onToolsChanged)
+                onCalendar = { onSectionChange("calendar") }, onTasksChanged = onToolsChanged,
+                honorPendingId = honorPendingId, onHonorPendingIdChange = onHonorPendingIdChange)
             "coloring" -> ColoringSection()
             "reading" -> ReadingSection()
             "calendar" -> ProgressCalendarSection(history)

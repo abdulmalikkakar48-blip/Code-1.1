@@ -51,7 +51,7 @@ class RuleCoach(
         if (language == AppLocale.ENGLISH) english else french
 
     private fun pointBalance(pointUnits: Int): String {
-        val safeUnits = pointUnits.coerceAtLeast(0)
+        val safeUnits = pointUnits.coerceIn(0, MAX_POINT_UNITS)
         val whole = (safeUnits / POINT_UNITS_PER_POINT).toString()
         val fraction = when (safeUnits % POINT_UNITS_PER_POINT) {
             1 -> "25"; 2 -> "5"; 3 -> "75"; else -> ""

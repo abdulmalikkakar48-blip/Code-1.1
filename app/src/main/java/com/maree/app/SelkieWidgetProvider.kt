@@ -28,7 +28,7 @@ internal fun widgetData(state: JSONObject, plan: PlanType, pointUnits: Int): Sel
             break
         }
     }
-    return SelkieWidgetData(true, pointUnits.coerceAtLeast(0), selected)
+    return SelkieWidgetData(true, pointUnits.coerceIn(0, MAX_POINT_UNITS), selected)
 }
 
 class SelkieWidgetProvider : AppWidgetProvider() {

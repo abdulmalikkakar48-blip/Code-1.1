@@ -3,6 +3,8 @@ package com.maree.app
 import java.math.BigDecimal
 
 const val POINT_UNITS_PER_POINT = 4
+const val MAX_HONOR_POINTS = 100
+const val MAX_POINT_UNITS = MAX_HONOR_POINTS * POINT_UNITS_PER_POINT
 const val CUSTOM_MIN_DAYS = 2
 const val CUSTOM_MAX_DAYS = 365
 const val MAX_ACTIVE_CUSTOM_CHALLENGES = 10

@@ -1,5 +1,17 @@
 # Selkie : version de travail au 16 octobre 2026
 
+## Version actuelle 0.19.0 — 100 points maximum et dé Points
+
+Les points d’honneur restent entre 0 et 100. Un ancien solde supérieur est ramené à 100 sans effacer la progression ; les récompenses sous le plafond et les pénalités habituelles sont conservées.
+
+Quotidien → Dé ajoute le mode facultatif **Points**, gratuit : face 1 retire 1 point, jusqu’à la face 6 qui retire 6 points, sans passer sous zéro. La perte est annoncée avant le bouton ; une tentative interrompue reprend le même reçu sans second retrait. Les modes Activité, Appli et Semaine restent sans perte de points. Les douze coloriages, le calendrier et le coach local FR/EN sont conservés.
+
+[APK 0.19.0](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.19.0.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.19.0-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.19.0.md).
+
+VersionCode 32, Android 10+, même certificat de développement. Export JSON schéma 5 avec le dernier reçu du dé Points. Premium reste à 5 €/mois ou 60 €/an ; Ultra à 10 €/mois ou 120 €/an, sans réduction ni achat réel dans cet APK de test.
+
+## Archive 0.18.0
+
 ## Version actuelle 0.18.0 — dé plus clair, calendrier et dessins
 
 Le dé distingue le choix du mode, la proposition et la confirmation. L’idée tirée reste près du bouton et est amenée à l’écran après le lancer ; les détails des six activités sont repliables. Le calendrier reçoit un en-tête illustré, des repères de dates et des cartes de tâches. À taille de texte normale, les sept jours de la semaine sont visibles sans défilement horizontal ; une grande police garde une grille défilante et un sélecteur de date accessible.

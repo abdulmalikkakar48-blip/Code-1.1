@@ -34,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -65,7 +66,9 @@ internal fun DiceSection(
     snapshot: MareeSnapshot,
     getName: (String) -> String,
     onCalendar: () -> Unit,
-    onTasksChanged: () -> Unit
+    onTasksChanged: () -> Unit,
+    honorPendingId: String? = null,
+    onHonorPendingIdChange: (String?) -> Unit = {}
 ) {
     val context = LocalContext.current
     val store = remember(context) { CalendarTaskStore(context) }
@@ -73,6 +76,8 @@ internal fun DiceSection(
     val packages = snapshot.apps.map { it.packageName }.distinct()
     val currentPackages by rememberUpdatedState(packages)
     var mode by remember { mutableStateOf(DiceMode.ACTIVITY) }
+    var honorMode by rememberSaveable { mutableStateOf(honorPendingId != null) }
+    LaunchedEffect(honorPendingId) { if (honorPendingId != null) honorMode = true }
     var selectedApps by remember { mutableStateOf<List<String>>(emptyList()) }
     var weekApp by remember { mutableStateOf<String?>(null) }
     var visibleApps by remember { mutableIntStateOf(8) }
@@ -165,18 +170,22 @@ internal fun DiceSection(
 
     AppCardSurface {
         SectionLabel(tr("Dé Selkie", "Selkie Dice"), tr("Gratuit", "Free"))
-        Text(tr("Une idée de pause, puis tu choisis de la garder ou non.",
+        Text(if (honorMode) tr("Un lancer volontaire pour retirer des points d’honneur.",
+            "An optional roll to deduct honor points.") else tr("Une idée de pause, puis tu choisis de la garder ou non.",
             "Get a break idea, then choose whether to keep it."),
             color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium)
         FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             listOf(DiceMode.ACTIVITY to tr("Activité", "Activity"), DiceMode.APPLICATION to tr("Appli", "App"),
                 DiceMode.WEEK to tr("Semaine", "Week")).forEach { (choice, title) ->
-                FilterChip(selected = mode == choice, enabled = !rolling && !busy, onClick = {
-                    mode = choice; invalidate(); showFaces = false; choosingApps = true
+                FilterChip(selected = !honorMode && mode == choice, enabled = !rolling && !busy && honorPendingId == null, onClick = {
+                    honorMode = false; mode = choice; invalidate(); showFaces = false; choosingApps = true
                 }, modifier = Modifier.heightIn(min = 48.dp), label = { Text(title) })
             }
+            FilterChip(selected = honorMode, enabled = !rolling && !busy && honorPendingId == null,
+                onClick = { honorMode = true; invalidate() },
+                modifier = Modifier.heightIn(min = 48.dp), label = { Text(tr("Points", "Points")) })
         }
-        Text(when (mode) {
+        if (!honorMode) Text(when (mode) {
             DiceMode.ACTIVITY -> tr("Une petite activité sans écran, à faire aujourd’hui.",
                 "A small screen-free activity to do today.")
             DiceMode.APPLICATION -> tr("Une pause de 20 minutes sans l’une des applications choisies.",
@@ -184,7 +193,7 @@ internal fun DiceSection(
             DiceMode.WEEK -> tr("De 1 à 3 journées sans une application. Tu choisiras les dates après le lancer.",
                 "From 1 to 3 days without one app. Choose the dates after rolling.")
         }, color = MareePalette.Ink, style = MaterialTheme.typography.bodyMedium)
-        if (mode != DiceMode.ACTIVITY) {
+        if (!honorMode && mode != DiceMode.ACTIVITY) {
             if (packages.isEmpty()) {
                 Text(tr("Ajoute une application suivie depuis l’accueil, ou choisis le mode Activité.",
                     "Add a tracked app from Home, or choose Activity mode."), color = MareePalette.Muted)
@@ -221,6 +230,11 @@ internal fun DiceSection(
                 }
             }
         }
+    }
+
+    if (honorMode) {
+        HonorDiceSection(snapshot, honorPendingId, onHonorPendingIdChange, onTasksChanged)
+        return
     }
 
     AppCardSurface(containerColor = if (saved) MareePalette.Mint else MareePalette.Lilac) {
@@ -336,7 +350,7 @@ internal fun DiceSection(
 
 /** Native dots and a soft raised face: one short animation, with no image or network dependency. */
 @Composable
-private fun DiceFace(face: Int, rolling: Boolean, rotation: Float, modifier: Modifier = Modifier) {
+internal fun DiceFace(face: Int, rolling: Boolean, rotation: Float, modifier: Modifier = Modifier) {
     val description = if (rolling) tr("Dé en mouvement", "Dice rolling") else tr("Dé : face $face", "Dice: face $face")
     val ink = MareePalette.Ink
     val surface = MareePalette.Surface

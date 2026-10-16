@@ -12,6 +12,7 @@ import java.util.Date
 import java.util.Locale
 import java.util.UUID
 import kotlin.math.ceil
+import kotlin.random.Random
 
 private const val DAY = 24L * 60 * 60 * 1000
 private const val CHALLENGE_CYCLE = 21L * DAY
@@ -106,18 +107,26 @@ data class TickResult(
     val foregroundPackage: String?
 )
 
-class Store internal constructor(private val prefs: SharedPreferences) {
+class Store internal constructor(
+    private val prefs: SharedPreferences,
+    private val honorDieFace: () -> Int = { Random.nextInt(1, 7) }
+) {
     constructor(context: Context) : this(
         context.applicationContext.getSharedPreferences("maree", Context.MODE_PRIVATE)
     )
     companion object { private val lock = LocalFeatureLock.lock }
+    private val erasureGeneration = synchronized(lock) { LocalFeatureLock.erasureGeneration }
 
     init {
         synchronized(lock) {
             if (!prefs.contains("pointUnits")) {
                 val legacyPoints = prefs.getInt("points", 100).coerceAtLeast(0)
                 prefs.edit().putInt("pointUnits", (legacyPoints.toLong() * POINT_UNITS_PER_POINT)
-                    .coerceAtMost(Int.MAX_VALUE.toLong()).toInt()).remove("points").apply()
+                    .coerceAtMost(MAX_POINT_UNITS.toLong()).toInt()).remove("points").apply()
+            } else {
+                val previous = prefs.getInt("pointUnits", MAX_POINT_UNITS)
+                val capped = previous.coerceIn(0, MAX_POINT_UNITS)
+                if (previous != capped) prefs.edit().putInt("pointUnits", capped).apply()
             }
             if (!prefs.contains("plan")) {
                 val plan = if (prefs.getBoolean("premium", false)) PlanType.PREMIUM else PlanType.FREE
@@ -169,8 +178,42 @@ class Store internal constructor(private val prefs: SharedPreferences) {
     }
 
     fun packages(): Set<String> = synchronized(lock) { readApps().map { it.packageName }.toSet() }
-    fun pointUnits(): Int = synchronized(lock) { prefs.getInt("pointUnits", 100 * POINT_UNITS_PER_POINT).coerceAtLeast(0) }
+    fun pointUnits(): Int = synchronized(lock) { prefs.getInt("pointUnits", MAX_POINT_UNITS).coerceIn(0, MAX_POINT_UNITS) }
     fun points(): Double = pointUnits() / POINT_UNITS_PER_POINT.toDouble()
+
+    /**
+     * The explicit roll and its deduction form one local transaction. Retrying the last
+     * operation recommits its receipt and the CURRENT balance, never its historic balance.
+     * Android may update preferences in memory even when commit() returns false: the stored
+     * receipt therefore also guards retries after an Activity/Store recreation.
+     */
+    internal fun rollHonorDie(
+        operationId: String, now: Long = System.currentTimeMillis()
+    ): HonorDiceResult? = synchronized(lock) {
+        if (erasureGeneration != LocalFeatureLock.erasureGeneration || !isHonorDiceOperationId(operationId))
+            return@synchronized null
+        val previous = readHonorDiceResult(prefs.getString(HONOR_DICE_KEY, null))
+        if (previous?.operationId == operationId) {
+            return@synchronized if (prefs.edit().putInt("pointUnits", pointUnits())
+                    .putString(HONOR_DICE_KEY, previous.toJson().toString()).commit()) previous else null
+        }
+        // Settle any due discipline reward first so a later refresh cannot mask this loss.
+        advancePeriods(now)
+        val unitsBefore = pointUnits()
+        if (unitsBefore <= 0) return@synchronized null
+        val face = honorDieFace()
+        if (face !in 1..6) return@synchronized null
+        val spent = minOf(unitsBefore, face * POINT_UNITS_PER_POINT)
+        val result = HonorDiceResult(operationId, face, spent, unitsBefore - spent)
+        if (!prefs.edit().putInt("pointUnits", result.balanceAfterUnits)
+                .putString(HONOR_DICE_KEY, result.toJson().toString()).commit()) return@synchronized null
+        result
+    }
+
+    internal fun lastHonorDiceResult(): HonorDiceResult? = synchronized(lock) {
+        if (erasureGeneration != LocalFeatureLock.erasureGeneration) null
+        else readHonorDiceResult(prefs.getString(HONOR_DICE_KEY, null))
+    }
     fun planType(): PlanType = synchronized(lock) {
         PlanType.entries.firstOrNull { it.name == prefs.getString("plan", PlanType.FREE.name) } ?: PlanType.FREE
     }
@@ -243,7 +286,10 @@ class Store internal constructor(private val prefs: SharedPreferences) {
                 put("value", points())
                 put("quarterUnits", pointUnits())
                 put("unitsPerPoint", POINT_UNITS_PER_POINT)
+                put("maximumValue", MAX_HONOR_POINTS)
             })
+            put("honorDice", readHonorDiceResult(prefs.getString(HONOR_DICE_KEY, null))?.toJson()
+                ?: JSONObject.NULL)
             put("membership", JSONObject().apply {
                 put("plan", planType().name)
                 put("selectionMode", "local_demo")
@@ -290,7 +336,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
     private fun canEdit(): Boolean = pointUnits() > 0
 
     private fun shiftedPointUnits(delta: Int): Int =
-        (pointUnits().toLong() + delta).coerceIn(0, Int.MAX_VALUE.toLong()).toInt()
+        (pointUnits().toLong() + delta).coerceIn(0, MAX_POINT_UNITS.toLong()).toInt()
 
     fun addApp(packageName: String, limitMinutes: Int, rawTodayMillis: Long): String? = synchronized(lock) {
         if (!canEdit()) return@synchronized tr("Tu n'as plus de points. Fais un défi ou attends le prochain bonus.", "You have no points left. Complete a challenge or wait for the next bonus.")
@@ -661,7 +707,7 @@ class Store internal constructor(private val prefs: SharedPreferences) {
             periodStart = now // limite de rattrapage ; ne pas créditer une durée non vérifiée
             breach = false
         }
-        prefs.edit().putInt("pointUnits", p.coerceAtMost(Int.MAX_VALUE.toLong()).toInt()).putLong("periodStart", periodStart)
+        prefs.edit().putInt("pointUnits", p.coerceIn(0, MAX_POINT_UNITS.toLong()).toInt()).putLong("periodStart", periodStart)
             .putBoolean("periodBreach", breach).apply()
 
     }

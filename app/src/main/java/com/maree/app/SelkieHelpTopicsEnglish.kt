@@ -105,20 +105,20 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
     englishHelp(
         SelkieHelpSection.POINTS, "points", "What are my points for?",
         listOf("points", "balance", "discipline points", "honor points", "honour points", "how many points", "point rules"),
-        "Open the ☰ menu → Selkie rules to review the rules. You start with 100 points. They reflect your progress and Selkie’s rules: resetting costs 10 points; a detected reopening of a locked app costs 5 points. " +
-            "You can earn points through the discipline bonus and challenges. The balance cannot fall below zero; at 0 points, adding an app or changing a limit is blocked on every plan. Points are not money."
+        "Open the ☰ menu → Selkie rules to review the rules. You start with 100 points and your balance stays between 0 and 100. Resetting costs 10 points; a detected reopening of a locked app costs 5 points. " +
+            "You can earn points back through the discipline bonus and challenges, up to the cap of 100. Selkie dice has an optional Points mode: it deducts the rolled number, from 1 to 6 points, after you confirm the roll, without going below zero. At 0 points, adding an app or changing a limit is blocked on every plan. Points are not money."
     ),
     englishHelp(
         SelkieHelpSection.POINTS, "earn_points", "How can I earn points?",
         listOf("earn points", "earn back points", "get points back", "get points", "increase my points", "rewards", "point bonus"),
         "There are three ways: +10 points per 24-hour period without a recorded overrun; +5 points for every group of five fully completed standard challenges; " +
-            "+0.25 points once at the end of a custom challenge on Premium or Ultra. Intermediate days do not award points, and writing to the Coach does not add any. Ultra guided programmes award no extra points."
+            "+0.25 points once at the end of a custom challenge on Premium or Ultra. All these awards top up your balance to at most 100 points; completions are still saved at the cap. Intermediate days do not award points, and writing to the Coach does not add any. Ultra guided programmes award no extra points."
     ),
     englishHelp(
         SelkieHelpSection.POINTS, "lose_points", "Why did I lose points?",
-        listOf("lose points", "lost points", "point loss", "fewer points", "points deducted", "penalty", "reopen an app", "open a locked app again"),
+        listOf("lose points", "lost points", "point loss", "fewer points", "points deducted", "penalty", "reopen an app", "open a locked app again", "points dice", "dice points", "dice points mode", "honor dice", "honour dice"),
         "Resetting a limit deducts 10 points after confirmation. A detected reopening of an app that is still locked can deduct 5 points; " +
-            "these penalties are at least 30 seconds apart for the same app. Reaching the limit alone does not deduct 5 points, but records an overrun that prevents the discipline bonus for that period."
+            "these penalties are at least 30 seconds apart for the same app. Reaching the limit alone does not deduct 5 points, but records an overrun that prevents the discipline bonus for that period. In Daily → Dice → Points, you can also choose to roll the dice: after you confirm the roll, the rolled number deducts 1 to 6 points, without going below zero. This mode is free and optional, with no winnings or payment. The three modes Activity, App and Week do not change your points."
     ),
     englishHelp(
         SelkieHelpSection.POINTS, "zero_points", "What can I do at 0 points?",
@@ -130,13 +130,13 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.POINTS, "discipline_bonus", "When do I get the discipline bonus?",
         listOf("discipline bonus", "daily bonus", "10 points", "ten points", "24 hour bonus", "discipline period", "bonus without overrun"),
         "The bonus is 10 points at the end of a 24-hour period started by Selkie, if no overrun or penalized reopening was recorded during that period. " +
-            "It is not necessarily at midnight. The calculation updates during tracking or when you open the app, catching up on at most seven periods. Removing an app or resetting it does not erase an already recorded overrun."
+            "It is not necessarily at midnight. Your balance stays capped at 100 points. The calculation updates during tracking or when you open the app, catching up on at most seven periods. Removing an app or resetting it does not erase an already recorded overrun."
     ),
     englishHelp(
         SelkieHelpSection.CHALLENGES, "challenges", "How do I complete a suggested challenge?",
         listOf("challenges", "challenge", "complete a challenge", "read 10 pages", "five days", "5 days", "suggested challenges", "challenge bonus"),
         "In Challenges → Suggested challenges, do the activity and then confirm that day. A challenge requires five different dates, with at most one confirmation per day; the days can be spaced apart. " +
-            "Intermediate days do not award points. For every group of five fully completed challenges, you earn 5 points; your completed-challenge total continues between sets."
+            "Intermediate days do not award points. For every group of five fully completed challenges, you earn 5 points up to the cap of 100; your completed-challenge total continues between sets, even at the cap."
     ),
     englishHelp(
         SelkieHelpSection.CHALLENGES, "challenge_cycle", "When do suggested challenges change?",
@@ -148,7 +148,7 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.CHALLENGES, "custom_challenges", "Create and finish my own challenge",
         listOf("custom challenge", "custom challenges", "create a challenge", "create my challenge", "my own challenges", "my challenges", "three steps", "3 steps", "0 25 points"),
         "With Premium or Ultra, open Challenges → My challenges: choose a title, exactly three steps and a duration of 2 to 365 days. You can have ten active custom challenges. " +
-            "Each day, check all three steps and then confirm; there is one confirmation per date, and days can be spaced apart. The challenge awards 0.25 points in total, once at the end. On Free, continuing it requires switching back to a plan that allows custom challenges."
+            "Each day, check all three steps and then confirm; there is one confirmation per date, and days can be spaced apart. The challenge awards 0.25 points in total, once at the end, up to a maximum balance of 100 points. On Free, continuing it requires switching back to a plan that allows custom challenges."
     ),
     englishHelp(
         SelkieHelpSection.CHALLENGES, "challenge_photos", "Do I need a photo to confirm a challenge?",

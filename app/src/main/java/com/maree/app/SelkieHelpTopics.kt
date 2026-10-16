@@ -124,20 +124,20 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
     help(
         SelkieHelpSection.POINTS, "points", "À quoi servent mes points ?",
         listOf("points", "solde", "capital discipline", "points d honneur", "combien de points", "regles des points"),
-        "Consulte le menu ☰ → Règles de Selkie pour retrouver les règles. Tu commences avec 100 points. Ils suivent ta progression et les règles de Selkie : une réinitialisation coûte 10 points ; une réouverture détectée d’une application verrouillée coûte 5 points. " +
-            "Tu peux en gagner avec le bonus de discipline et les défis. Le solde ne descend pas sous zéro ; à 0 point, ajouter une application ou modifier une limite est bloqué pour toutes les offres. Les points ne sont pas de l’argent."
+        "Consulte le menu ☰ → Règles de Selkie pour retrouver les règles. Tu commences avec 100 points et ton solde reste entre 0 et 100. Une réinitialisation coûte 10 points ; une réouverture détectée d’une application verrouillée coûte 5 points. " +
+            "Tu peux regagner des points avec le bonus de discipline et les défis, jusqu’au plafond de 100. Le mode Points du Dé Selkie est facultatif : il retire le chiffre obtenu, de 1 à 6 points, après confirmation du lancer, sans passer sous zéro. À 0 point, ajouter une application ou modifier une limite est bloqué pour toutes les offres. Les points ne sont pas de l’argent."
     ),
     help(
         SelkieHelpSection.POINTS, "earn_points", "Comment gagner des points ?",
         listOf("gagner des points", "regagner des points", "recuperer des points", "obtenir des points", "augmenter mes points", "recompenses", "bonus de points"),
         "Trois gains existent : +10 points par période de 24 heures sans dépassement enregistré ; +5 points à chaque groupe de cinq défis standard entièrement terminés ; " +
-            "+0,25 point une seule fois à la fin d’un défi personnalisé en Premium ou Ultra. Les journées intermédiaires ne donnent pas de points, et écrire au Coach n’en ajoute pas. Les programmes guidés Ultra ne donnent aucun point supplémentaire."
+            "+0,25 point une seule fois à la fin d’un défi personnalisé en Premium ou Ultra. Tous ces gains complètent ton solde jusqu’à 100 points maximum ; les validations restent enregistrées même au plafond. Les journées intermédiaires ne donnent pas de points, et écrire au Coach n’en ajoute pas. Les programmes guidés Ultra ne donnent aucun point supplémentaire."
     ),
     help(
         SelkieHelpSection.POINTS, "lose_points", "Pourquoi ai-je perdu des points ?",
-        listOf("perdre des points", "perdu des points", "perte de points", "moins de points", "points retires", "penalite", "reouvrir une application", "rouvrir une application"),
+        listOf("perdre des points", "perdu des points", "perte de points", "moins de points", "points retires", "penalite", "reouvrir une application", "rouvrir une application", "de points", "mode points du de", "de d honneur"),
         "Réinitialiser une limite retire 10 points après confirmation. Une réouverture détectée d’une application encore verrouillée peut retirer 5 points ; " +
-            "ces pénalités sont espacées d’au moins 30 secondes pour la même application. Atteindre la limite n’enlève pas à lui seul 5 points, mais enregistre un dépassement qui empêche le bonus de discipline de cette période."
+            "ces pénalités sont espacées d’au moins 30 secondes pour la même application. Atteindre la limite n’enlève pas à lui seul 5 points, mais enregistre un dépassement qui empêche le bonus de discipline de cette période. Dans Quotidien → Dé → Points, tu peux aussi choisir de lancer le dé : après confirmation du lancer, le chiffre obtenu retire de 1 à 6 points, sans passer sous zéro. Ce mode est gratuit et facultatif, sans gain ni paiement. Les trois modes Activité, Application et Semaine ne changent pas tes points."
     ),
     help(
         SelkieHelpSection.POINTS, "zero_points", "Que faire à 0 point ?",
@@ -149,13 +149,13 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.POINTS, "discipline_bonus", "Quand arrive le bonus de discipline ?",
         listOf("bonus de discipline", "bonus quotidien", "10 points", "dix points", "bonus 24 heures", "periode de discipline", "bonus sans depassement"),
         "Le bonus est de 10 points à la fin d’une période de 24 heures commencée par Selkie, si aucun dépassement ou réouverture pénalisée n’a été enregistré dans cette période. " +
-            "Ce n’est pas forcément à minuit. Le calcul est actualisé lors du suivi ou de l’ouverture de l’application, avec au plus sept périodes rattrapées. Retirer une application ou la réinitialiser n’efface pas un dépassement déjà enregistré."
+            "Ce n’est pas forcément à minuit. Le solde reste plafonné à 100 points. Le calcul est actualisé lors du suivi ou de l’ouverture de l’application, avec au plus sept périodes rattrapées. Retirer une application ou la réinitialiser n’efface pas un dépassement déjà enregistré."
     ),
     help(
         SelkieHelpSection.CHALLENGES, "challenges", "Comment valider un défi proposé ?",
         listOf("defis", "defi", "valider un defi", "lire 10 pages", "cinq jours", "5 jours", "defis proposes", "bonus des defis"),
         "Dans Défis → Défis proposés, réalise l’activité puis valide la journée. Un défi demande cinq dates différentes, une validation maximum par jour ; les jours peuvent être espacés. " +
-            "Les journées intermédiaires ne donnent pas de points. À chaque groupe de cinq défis entièrement terminés, tu gagnes 5 points ; le total des défis terminés continue entre les séries."
+            "Les journées intermédiaires ne donnent pas de points. À chaque groupe de cinq défis entièrement terminés, tu gagnes 5 points dans la limite du plafond de 100 ; le total des défis terminés continue entre les séries, même au plafond."
     ),
     help(
         SelkieHelpSection.CHALLENGES, "challenge_cycle", "Quand les défis proposés changent-ils ?",
@@ -167,7 +167,7 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.CHALLENGES, "custom_challenges", "Créer et terminer mon propre défi",
         listOf("defi personnalise", "defis personnalises", "creer un defi", "creer mon defi", "mes propres defis", "mes defis", "trois etapes", "3 etapes", "0 25 point"),
         "Avec Premium ou Ultra, ouvre Défis → Mes défis : choisis un titre, exactement trois étapes et une durée de 2 à 365 jours. Tu peux avoir dix défis personnalisés actifs. " +
-            "Chaque journée, coche les trois étapes puis valide ; une seule validation par date, avec des jours espacés possibles. Le défi rapporte 0,25 point au total, une seule fois à la fin. En Gratuit, sa poursuite nécessite de revenir à une offre qui les permet."
+            "Chaque journée, coche les trois étapes puis valide ; une seule validation par date, avec des jours espacés possibles. Le défi rapporte 0,25 point au total, une seule fois à la fin, dans la limite d’un solde de 100 points. En Gratuit, sa poursuite nécessite de revenir à une offre qui les permet."
     ),
     help(
         SelkieHelpSection.CHALLENGES, "challenge_photos", "Faut-il une photo pour valider ?",

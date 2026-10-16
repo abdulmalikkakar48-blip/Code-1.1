@@ -53,33 +53,33 @@ class StoreTest {
 
     @Test
     fun currentBreachDoesNotCancelACleanPreviousPeriodOrDisappear() {
-        prefs.edit().putLong("periodStart", NOW - DAY).apply()
+        prefs.edit().putLong("periodStart", NOW - DAY).putInt("pointUnits", 320).apply()
 
         val initialLock = store.tick(reading(5 * MINUTE), NOW)
-        assertEquals(110.0, initialLock.snapshot.points, 0.0)
+        assertEquals(90.0, initialLock.snapshot.points, 0.0)
         assertTrue(prefs.getBoolean("periodBreach", false))
 
         val nextPeriod = store.tick(reading(0), NOW + DAY)
-        assertEquals(110.0, nextPeriod.snapshot.points, 0.0)
+        assertEquals(90.0, nextPeriod.snapshot.points, 0.0)
         assertFalse(prefs.getBoolean("periodBreach", true))
     }
 
     @Test
     fun aPreviousBreachDoesNotCancelTheFollowingCleanPeriod() {
         prefs.edit().putLong("periodStart", NOW - DAY)
-            .putBoolean("periodBreach", true).apply()
+            .putBoolean("periodBreach", true).putInt("pointUnits", 320).apply()
 
-        assertEquals(100.0, store.tick(reading(0), NOW).snapshot.points, 0.0)
-        assertEquals(110.0, store.tick(reading(0), NOW + DAY).snapshot.points, 0.0)
+        assertEquals(80.0, store.tick(reading(0), NOW).snapshot.points, 0.0)
+        assertEquals(90.0, store.tick(reading(0), NOW + DAY).snapshot.points, 0.0)
     }
 
     @Test
     fun snapshotCanAdvanceRewardsWithoutRepeatingThem() {
-        prefs.edit().putLong("periodStart", NOW - DAY).apply()
+        prefs.edit().putLong("periodStart", NOW - DAY).putInt("pointUnits", 320).apply()
 
-        assertEquals(110.0, store.readSnapshot(reading(0), NOW).points, 0.0)
-        assertEquals(110.0, store.tick(reading(0), NOW).snapshot.points, 0.0)
-        assertEquals(110.0, Store(prefs).readSnapshot(reading(0), NOW).points, 0.0)
+        assertEquals(90.0, store.readSnapshot(reading(0), NOW).points, 0.0)
+        assertEquals(90.0, store.tick(reading(0), NOW).snapshot.points, 0.0)
+        assertEquals(90.0, Store(prefs).readSnapshot(reading(0), NOW).points, 0.0)
     }
 
     @Test
@@ -112,17 +112,18 @@ class StoreTest {
 
     @Test
     fun challengesRewardOnlyAfterFiveWholeChallengesAndAlternateAfterTwentyOneDays() {
+        prefs.edit().putInt("pointUnits", 360).apply()
         repeat(CHALLENGE_REQUIRED_DAYS - 1) { day ->
             repeat(5) { index -> assertTrue(store.completeChallenge(index, NOW + day * DAY)) }
-            assertEquals(100.0, store.points(), 0.0)
+            assertEquals(90.0, store.points(), 0.0)
             assertEquals(0, prefs.getInt("completedCount", 0))
         }
         repeat(5) { index ->
             assertTrue(store.completeChallenge(index, NOW + (CHALLENGE_REQUIRED_DAYS - 1) * DAY))
-            assertEquals(if (index == 4) 105.0 else 100.0, store.points(), 0.0)
+            assertEquals(if (index == 4) 95.0 else 90.0, store.points(), 0.0)
             assertEquals(index + 1, prefs.getInt("completedCount", 0))
         }
-        assertEquals(105.0, store.points(), 0.0)
+        assertEquals(95.0, store.points(), 0.0)
         assertEquals(5, prefs.getInt("completedCount", 0))
         assertFalse(store.completeChallenge(0, NOW + (CHALLENGE_REQUIRED_DAYS - 1) * DAY))
         assertFalse(store.completeChallenge(10, NOW))
@@ -202,7 +203,7 @@ class StoreTest {
 
         repeat(CHALLENGE_REQUIRED_DAYS) { day ->
             assertTrue(store.completeChallenge(10, NOW + (21 + day) * DAY))
-            assertEquals(pointsAfterDisciplineRewards + if (day == 4) 5 else 0, store.points(), 0.0)
+            assertEquals(minOf(100.0, pointsAfterDisciplineRewards + if (day == 4) 5 else 0), store.points(), 0.0)
         }
         assertEquals(5, prefs.getInt("completedCount", 0))
     }
@@ -218,11 +219,11 @@ class StoreTest {
         assertEquals(CHALLENGE_REQUIRED_DAYS, migrated.challengeProgress.getValue(0).completedDays)
         assertFalse(migrated.challengeProgress.getValue(0).canValidateToday)
         assertEquals(12, migrated.totalCompletedChallenges)
-        assertEquals(137.0, migrated.points, 0.0)
+        assertEquals(100.0, migrated.points, 0.0)
         assertFalse(upgraded.completeChallenge(0, NOW))
         repeat(CHALLENGE_REQUIRED_DAYS) { day ->
             assertTrue(upgraded.completeChallenge(2, NOW + day * DAY))
-            assertEquals(137.0, upgraded.points(), 0.0)
+            assertEquals(100.0, upgraded.points(), 0.0)
         }
         assertEquals(13, prefs.getInt("completedCount", 0))
         assertEquals(setOf(0, 1, 2), upgraded.readSnapshot(reading(0), NOW).checkedChallenges)
@@ -257,14 +258,14 @@ class StoreTest {
         legacy.edit().putInt("points", 137).putBoolean("premium", true).apply()
 
         val migrated = Store(legacy)
-        assertEquals(548, migrated.pointUnits())
-        assertEquals(137.0, migrated.points(), 0.0)
+        assertEquals(400, migrated.pointUnits())
+        assertEquals(100.0, migrated.points(), 0.0)
         assertEquals(PlanType.PREMIUM, migrated.planType())
         assertFalse(legacy.contains("points"))
         assertFalse(legacy.contains("premium"))
         legacy.edit().putInt("points", 999).apply()
         repeat(3) {
-            assertEquals(548, Store(legacy).pointUnits())
+            assertEquals(400, Store(legacy).pointUnits())
             assertEquals(PlanType.PREMIUM, Store(legacy).planType())
         }
     }
@@ -276,15 +277,15 @@ class StoreTest {
         assertEquals("9,75", formatPointUnits(39))
         assertEquals("100", formatPointUnits(400))
         assertEquals("100,75", formatPoints(100.75))
-        prefs.edit().putInt("pointUnits", 401).apply()
-        assertEquals(100.25, Store(prefs).points(), 0.0)
+        prefs.edit().putInt("pointUnits", 359).apply()
+        assertEquals(89.75, Store(prefs).points(), 0.0)
         prefs.edit().putLong("periodStart", NOW - DAY).apply()
-        assertEquals(441, store.tick(reading(0), NOW).snapshot.pointUnits)
+        assertEquals(399, store.tick(reading(0), NOW).snapshot.pointUnits)
         store.tick(reading(5 * MINUTE), NOW)
         assertTrue(store.penalizeReopening(PACKAGE, NOW + 1))
-        assertEquals(421, store.pointUnits())
+        assertEquals(379, store.pointUnits())
         assertNull(store.resetApp(PACKAGE, 5 * MINUTE))
-        assertEquals(381, store.pointUnits())
+        assertEquals(339, store.pointUnits())
     }
 
     @Test
@@ -410,14 +411,15 @@ class StoreTest {
     fun customCompletionAwardsExactlyOneQuarterOnceAndNeverChangesTheStandardCounter() {
         store.setDemoPlan(PlanType.PREMIUM)
         val id = createCustom("Bouger", 2)
+        prefs.edit().putInt("pointUnits", 360).apply()
         finishCustomDay(id, NOW)
-        assertEquals(400, store.pointUnits())
+        assertEquals(360, store.pointUnits())
         finishCustomDay(id, NOW + 3 * DAY)
-        assertEquals(401, store.pointUnits())
-        assertEquals(100.25, Store(prefs).points(), 0.0)
+        assertEquals(361, store.pointUnits())
+        assertEquals(90.25, Store(prefs).points(), 0.0)
         assertEquals(0, prefs.getInt("completedCount", 0))
         assertTrue(Store(prefs).validateCustomChallengeToday(id, NOW + 4 * DAY) != null)
-        assertEquals(401, store.pointUnits())
+        assertEquals(361, store.pointUnits())
         val completed = customAt(id, NOW + 3 * DAY)
         assertTrue(completed.completed)
         assertTrue(completed.rewardClaimed)
@@ -437,7 +439,7 @@ class StoreTest {
         assertFalse(partial.completed)
         val beforeReward = store.pointUnits()
         finishCustomDay(id, NOW + 32 * DAY)
-        assertEquals(beforeReward + 1, store.pointUnits())
+        assertEquals(minOf(MAX_POINT_UNITS, beforeReward + 1), store.pointUnits())
         val afterAnotherRotation = customAt(id, NOW + 42 * DAY)
         assertEquals(7, afterAnotherRotation.requiredDays)
         assertEquals(7, afterAnotherRotation.completedDays)
@@ -468,7 +470,7 @@ class StoreTest {
         finishCustomDay(recreated.id, createdAt)
         val beforeFinalDay = store.pointUnits()
         finishCustomDay(recreated.id, createdAt + DAY)
-        assertEquals(beforeFinalDay + 1, store.pointUnits())
+        assertEquals(minOf(MAX_POINT_UNITS, beforeFinalDay + 1), store.pointUnits())
     }
 
     @Test

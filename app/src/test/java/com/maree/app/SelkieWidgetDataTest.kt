@@ -108,9 +108,9 @@ class SelkieWidgetDataTest {
         val before = prefs.all
         val exported = store.exportLocalState()
 
-        for (units in listOf(-9, 0, 1, 2, 3, 13, Int.MAX_VALUE)) {
+        for (units in listOf(-9, 0, 1, 2, 3, 13, 399, 400, 640, Int.MAX_VALUE)) {
             val data = widgetData(exported, PlanType.PREMIUM, units)
-            assertEquals(units.coerceAtLeast(0), data.pointUnits)
+            assertEquals(units.coerceIn(0, MAX_POINT_UNITS), data.pointUnits)
             assertEquals(11, data.challengeIndex)
         }
         assertEquals(before, prefs.all)

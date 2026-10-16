@@ -11,6 +11,7 @@ import org.junit.Test
 import java.io.ByteArrayOutputStream
 import java.time.Instant
 import java.time.ZoneId
+import java.util.UUID
 
 class LocalDataExportTest {
     @Test
@@ -21,7 +22,7 @@ class LocalDataExportTest {
 
         assertEquals(before, prefs.all)
         assertEquals("selkie-local-data", json.getString("format"))
-        assertEquals(4, json.getInt("schemaVersion"))
+        assertEquals(5, json.getInt("schemaVersion"))
         assertEquals(Instant.ofEpochMilli(NOW + DAY).toString(), json.getString("exportedAt"))
         val preferences = json.getJSONObject("preferences")
         assertEquals("fr", preferences.getString("language"))
@@ -32,6 +33,8 @@ class LocalDataExportTest {
         assertEquals(0.25, stored.getJSONObject("points").getDouble("value"), 0.0)
         assertEquals(1, stored.getJSONObject("points").getInt("quarterUnits"))
         assertEquals(4, stored.getJSONObject("points").getInt("unitsPerPoint"))
+        assertEquals(100, stored.getJSONObject("points").getInt("maximumValue"))
+        assertTrue(stored.isNull("honorDice"))
         assertEquals("PREMIUM", stored.getJSONObject("membership").getString("plan"))
         assertEquals("local_demo", stored.getJSONObject("membership").getString("selectionMode"))
 
@@ -82,9 +85,30 @@ class LocalDataExportTest {
             assertFalse(exported.contains(privateValue))
         }
         val data = JSONObject(exported).getJSONObject("storedData")
-        assertEquals(setOf("points", "membership", "tracking", "standardChallenges", "customChallenges", "calendarTasks", "coloringPages", "dailyHistory", "limitSchedules", "coachFavorites", "guidedPrograms"),
+        assertEquals(setOf("points", "honorDice", "membership", "tracking", "standardChallenges", "customChallenges", "calendarTasks", "coloringPages", "dailyHistory", "limitSchedules", "coachFavorites", "guidedPrograms"),
             data.keys().asSequence().toSet())
         assertEquals("Déconnecter 🐚", data.getJSONArray("customChallenges").getJSONObject(0).getString("title"))
+    }
+
+    @Test
+    fun confirmedHonorRollIsIncludedInSchemaFiveWithoutExportingInjectedMetadataOrAdvancingRewards() {
+        val (_, prefs) = fixture()
+        prefs.edit().putInt("pointUnits", 400).putLong("periodStart", NOW).apply()
+        val store = Store(prefs) { 5 }
+        val result = store.rollHonorDie(UUID.randomUUID().toString(), NOW)!!
+        val receipt = result.toJson().put("privateMetadata", "synthetic-private-receipt-value")
+        prefs.edit().putString(HONOR_DICE_KEY, receipt.toString()).apply()
+        val before = prefs.all
+
+        val json = JSONObject(LocalDataExport.json(store, now = NOW + DAY))
+
+        assertEquals(5, json.getInt("schemaVersion"))
+        val stored = json.getJSONObject("storedData")
+        assertEquals(95.0, stored.getJSONObject("points").getDouble("value"), 0.0)
+        assertEquals(100, stored.getJSONObject("points").getInt("maximumValue"))
+        assertEquals(result.toJson().toString(), stored.getJSONObject("honorDice").toString())
+        assertFalse(json.toString().contains("synthetic-private-receipt-value"))
+        assertEquals(before, prefs.all)
     }
 
     @Test

@@ -172,6 +172,7 @@ private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> U
     var showPrivacy by rememberSaveable { mutableStateOf(false) }
     var tab by rememberSaveable { mutableIntStateOf(0) }
     var dailySection by rememberSaveable { mutableStateOf("today") }
+    var honorDicePendingId by rememberSaveable { mutableStateOf<String?>(null) }
     var settingsPage by rememberSaveable { mutableStateOf<SettingsPage?>(null) }
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     var notificationAsked by rememberSaveable { mutableStateOf(false) }
@@ -520,6 +521,7 @@ private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> U
                                 monitoringActive = monitoringEnabled && permissions.readyForMonitoring,
                                 onActivateTracking = { openSetup() }, history = dailyHistory,
                                 section = dailySection, onSectionChange = { dailySection = it },
+                                honorPendingId = honorDicePendingId, onHonorPendingIdChange = { honorDicePendingId = it },
                                 onOffers = { openMenuPage(SettingsPage.SUBSCRIPTIONS) }, onToolsChanged = ::refresh,
                                 onProgramValidated = { id ->
                                     if (!store.recordProgramValidation(id)) display(tr(
@@ -642,10 +644,11 @@ private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> U
     if (deleteConfirmation) {
         AlertDialog(onDismissRequest = { if (!deleting) deleteConfirmation = false },
             title = { Text(tr("Effacer les données de Selkie ?", "Delete Selkie data?")) },
-            text = { Text(tr("Tes applications suivies, limites, verrous, points, défis, choix de démonstration, d’accueil, de langue et d’apparence, ainsi que l’historique du calendrier, les tâches personnelles, les créneaux, les favoris, les programmes guidés et les questions du coach enregistrées sur ce téléphone seront effacés. Le suivi sera arrêté. Cette action est irréversible et ne supprime pas les statistiques Android.", "Your tracked apps, limits, locks, points, challenges, demo, onboarding, language and appearance choices, calendar history, calendar tasks, time slots, favorites, guided programs and coach questions saved on this phone will be deleted. Tracking will stop. This cannot be undone and does not delete Android usage statistics.")) },
+            text = { Text(tr("Tes applications suivies, limites, verrous, points, défis, choix de démonstration, d’accueil, de langue et d’apparence, ainsi que l’historique du calendrier, les tâches personnelles, les créneaux, les favoris, les programmes guidés, les coloriages, le dernier reçu du dé Points et les questions du coach enregistrées sur ce téléphone seront effacés. Le suivi sera arrêté. Cette action est irréversible et ne supprime pas les statistiques Android.", "Your tracked apps, limits, locks, points, challenges, demo, onboarding, language and appearance choices, calendar history, calendar tasks, time slots, favorites, guided programs, colouring pages, the last Points dice receipt and coach questions saved on this phone will be deleted. Tracking will stop. This cannot be undone and does not delete Android usage statistics.")) },
             confirmButton = { Button(enabled = !deleting, onClick = {
                 scope.launch {
                     deleting = true
+                    honorDicePendingId = null
                     setup.setMonitoringEnabled(false)
                     monitoringEnabled = false
                     MonitorService.stop(context)
@@ -663,6 +666,7 @@ private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> U
                     deleteConfirmation = false
                     if (cleared) {
                         storeGeneration++
+                        honorDicePendingId = null
                         setupComplete = false
                         showPrivacy = false
                         settingsPage = null

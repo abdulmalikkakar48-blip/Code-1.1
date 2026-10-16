@@ -33,7 +33,7 @@ class LocalFeatureIntegrationTest {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
         prefs = TestFeaturePreferences()
         seedClock(NOW)
-        store = Store(prefs)
+        store = Store(prefs) { 2 }
         history = DailyHistoryStore(prefs)
         schedules = LimitScheduleStore(prefs)
         favorites = CoachFavoritesStore(prefs)
@@ -199,10 +199,12 @@ class LocalFeatureIntegrationTest {
         val dailyJson = JSONArray(prefs.getString(DailyHistoryStore.HISTORY_KEY, null)!!)
         dailyJson.getJSONObject(0).put("coachText", secret)
         val programJson = JSONObject(prefs.getString(GuidedProgramStore.KEY, null)!!).put("question", secret)
+        val honorJson = JSONObject(prefs.getString(HONOR_DICE_KEY, null)!!).put("privateMetadata", secret)
         prefs.edit().putString(CoachFavoritesStore.KEY, favoriteJson.toString())
             .putString("limitSchedules", scheduleJson.toString())
             .putString(DailyHistoryStore.HISTORY_KEY, dailyJson.toString())
-            .putString(GuidedProgramStore.KEY, programJson.toString()).commit()
+            .putString(GuidedProgramStore.KEY, programJson.toString())
+            .putString(HONOR_DICE_KEY, honorJson.toString()).commit()
         val before = prefs.all.toMap()
 
         val exported = store.exportLocalState(NOW + 10_000L)
@@ -210,6 +212,12 @@ class LocalFeatureIntegrationTest {
         assertEquals(1, exported.getJSONArray("limitSchedules").length())
         assertEquals(1, exported.getJSONArray("coachFavorites").length())
         assertEquals(1, exported.getJSONArray("guidedPrograms").length())
+        assertEquals(100, exported.getJSONObject("points").getInt("maximumValue"))
+        val honorReceipt = exported.getJSONObject("honorDice")
+        assertEquals(2, honorReceipt.getInt("face"))
+        assertEquals(8, honorReceipt.getInt("spentQuarterUnits"))
+        assertEquals(392, honorReceipt.getInt("balanceAfterQuarterUnits"))
+        assertEquals(4, honorReceipt.length())
         assertEquals(1_000L, exported.getJSONArray("dailyHistory").getJSONObject(0)
             .getJSONObject("usageMillis").getLong(APP))
         assertEquals(20, exported.getJSONObject("tracking").getJSONArray("trackedApps")
@@ -229,6 +237,7 @@ class LocalFeatureIntegrationTest {
         assertFalse(schedules.entries().isEmpty())
         assertFalse(favorites.entries().isEmpty())
         assertNotNull(programs.activeProgramId())
+        assertNotNull(store.lastHonorDiceResult())
         assertTrue(store.clearPersonalData())
         assertTrue(prefs.all.isEmpty())
 
@@ -238,6 +247,7 @@ class LocalFeatureIntegrationTest {
         assertNull(programs.activeProgramId())
         assertTrue(programs.entries(DATE).all { it.progress == null })
         val exported = store.exportLocalState(NOW + 10_000L)
+        assertTrue(exported.isNull("honorDice"))
         listOf("dailyHistory", "limitSchedules", "coachFavorites", "guidedPrograms").forEach {
             assertEquals(0, exported.getJSONArray(it).length())
         }
@@ -268,6 +278,7 @@ class LocalFeatureIntegrationTest {
         assertTrue(store.completeChallenge(0, NOW))
         store.tick(reading(0L), NOW)
         store.tick(reading(1_000L), NOW + 10_000L)
+        assertNotNull(store.rollHonorDie("55555555-5555-4555-8555-555555555555", NOW + 10_000L))
     }
 
     private fun seedClock(now: Long) {

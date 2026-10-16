@@ -299,6 +299,38 @@ class RuleCoachTest {
         assertTrue(french.replyForTopic("points", context).text.contains("35,25 points"))
     }
 
+    @Test fun coachShowsAtMostOneHundredPointsWithoutChangingItsContext() {
+        val legacyBalance = context.copy(pointUnits = 160 * POINT_UNITS_PER_POINT)
+        for (language in AppLocale.entries) {
+            val coach = RuleCoach(language = language)
+            val reply = coach.replyForTopic("points", legacyBalance).text
+            assertTrue(reply, reply.contains("100 points"))
+            assertFalse(reply, reply.contains("160 points"))
+            assertTrue(coach.replyForTopic("points", context.copy(pointUnits = 0)).text.contains("0 points"))
+            assertTrue(coach.replyForTopic("points", context).text.contains(
+                if (language == AppLocale.ENGLISH) "35.25 points" else "35,25 points"))
+        }
+        assertEquals(160 * POINT_UNITS_PER_POINT, legacyBalance.pointUnits)
+    }
+
+    @Test fun explainsOptionalPointsDiceWithoutConfusingItWithTheCalendarModes() {
+        val french = RuleCoach(language = AppLocale.FRENCH)
+            .reply("Comment marche le mode Points du dé ?", context)
+        val english = RuleCoach(language = AppLocale.ENGLISH)
+            .reply("How does dice points mode work?", context)
+        for (reply in listOf(french, english)) {
+            assertEquals("lose_points", reply.topicId)
+            assertFalse(reply.unrecognized)
+        }
+        assertTrue(french.text, french.text.contains("1 à 6 points"))
+        assertTrue(french.text, french.text.contains("gratuit et facultatif"))
+        assertTrue(french.text, french.text.contains("ne changent pas tes points"))
+        assertTrue(english.text, english.text.contains("1 to 6 points"))
+        assertTrue(english.text, english.text.contains("free and optional"))
+        assertTrue(english.text, english.text.contains("do not change your points"))
+        assertEquals(141, context.pointUnits)
+    }
+
     @Test fun englishUnknownQuestionsHaveHonestFallbackAndTranslatedSuggestions() {
         val coach = RuleCoach(language = AppLocale.ENGLISH)
         val unknown = coach.reply("Which dinosaur has the longest tail?", context)

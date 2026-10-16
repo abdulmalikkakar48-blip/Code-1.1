@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -98,7 +99,10 @@ private fun PointsShortcut(points: Double, onClick: () -> Unit) {
     TextButton(onClick = onClick, modifier = Modifier.heightIn(min = 48.dp)) {
         Icon(painterResource(R.drawable.ic_nav_challenges), null,
             tint = MareePalette.Amber, modifier = Modifier.size(18.dp))
-        Text("${formatPoints(points)} points", modifier = Modifier.padding(start = 7.dp),
+        Text("${formatPoints(points)} / $MAX_HONOR_POINTS", modifier = Modifier.padding(start = 7.dp).semantics {
+            contentDescription = tr("${formatPoints(points)} points sur $MAX_HONOR_POINTS",
+                "${formatPoints(points)} out of $MAX_HONOR_POINTS points")
+        },
             color = MareePalette.Ink, fontWeight = FontWeight.SemiBold)
     }
 }

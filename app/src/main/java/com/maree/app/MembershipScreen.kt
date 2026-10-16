@@ -99,7 +99,7 @@ internal fun MembershipSection(plan: PlanType, onDemoPlan: (PlanType) -> Unit) {
         AppCardSurface {
             Text(tr("Les mêmes règles pour tout le monde", "The same rules for everyone"), color = MareePalette.Ink,
                 fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
-            Text(tr("À 0 point, ajouter une application ou modifier une limite reste bloqué, quelle que soit l’offre. Réinitialiser une limite demande 10 points.", "At 0 points, adding an app or changing a limit stays blocked on every plan. Resetting a limit requires 10 points."),
+            Text(tr("Ton solde reste entre 0 et 100 points dans toutes les offres. À 0 point, ajouter une application ou modifier une limite reste bloqué. Réinitialiser une limite demande 10 points.", "Your balance stays between 0 and 100 points on every plan. At 0 points, adding an app or changing a limit stays blocked. Resetting a limit requires 10 points."),
                 color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 20.sp)
         }
     }
@@ -146,9 +146,9 @@ private fun MembershipPlanCard(option: PlanType, selected: Boolean, period: Bill
             OfferFeature(tr("Calendrier et bilan hebdomadaire", "Calendar and weekly summary"),
                 tr("90 jours glissants sur ton téléphone : usage observé des applications choisies et validations. Les pauses ne comptent pas ; les jours sans observation restent inconnus.",
                     "90 rolling days on your phone: observed usage of selected apps and validations. Pauses do not count; days without observations stay unknown."))
-            OfferFeature(tr("Dé Selkie · trois modes", "Selkie dice · three modes"),
-                tr("Activité, application ou semaine : des objectifs volontaires à confirmer dans le calendrier, sans points supplémentaires.",
-                    "Activity, app or week: voluntary goals to confirm in your calendar, with no extra points."))
+            OfferFeature(tr("Dé Selkie · quatre modes gratuits", "Selkie dice · four free modes"),
+                tr("Activité, application ou semaine : objectifs au calendrier, sans changer tes points. Le mode Points facultatif retire le chiffre obtenu, de 1 à 6 points, après confirmation du lancer, sans passer sous zéro. Aucun gain ni paiement.",
+                    "Activity, app or week: calendar goals, with no change to your points. The optional Points mode deducts the rolled number, from 1 to 6 points, after you confirm the roll, without going below zero. No winnings or payment."))
             OfferFeature(tr("${coloringTemplates.size} pages de coloriage", "${coloringTemplates.size} coloring pages"),
                 tr("Petits dessins et motifs géométriques à carreaux, dix couleurs et gomme, annuler et rétablir. Sauvegarde sur ce téléphone, sans compte.",
                     "Small grid drawings and geometric patterns, ten colors and an eraser, undo and redo. Saved on this phone, with no account."))

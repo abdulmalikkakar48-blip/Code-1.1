@@ -88,8 +88,8 @@ internal fun FeatureGuideSection(onOpen: (GuideDestination) -> Unit) {
                 { onOpen(GuideDestination.READING) }
             )
             GuideLink(tr("Dé Selkie", "Selkie dice"),
-                tr("Gratuit · Tire une activité ou un objectif de pause, puis confirme son ajout au calendrier.",
-                    "Free · Draw an activity or a break goal, then confirm adding it to your calendar."),
+                tr("Gratuit · Activité, application ou semaine : confirme un objectif au calendrier. Le mode Points, facultatif, retire de 1 à 6 points après confirmation du lancer.",
+                    "Free · Activity, app or week: confirm a calendar goal. The optional Points mode deducts 1 to 6 points after you confirm the roll."),
                 { onOpen(GuideDestination.DICE) })
             GuideLink(tr("Coloriage", "Coloring"),
                 tr("Gratuit · ${coloringTemplates.size} pages de dessins et motifs à carreaux, à colorier ici et à retrouver sur ce téléphone.",
@@ -133,8 +133,8 @@ internal fun FeatureGuideSection(onOpen: (GuideDestination) -> Unit) {
 
         AppCardSurface(containerColor = MareePalette.Subtle) {
             SectionLabel(tr("Les points, simplement", "Points, simply explained"))
-            GuideBody(tr("Tu commences avec 100 points. Ils suivent les règles de ta progression ; tu peux en regagner avec les défis. Ce n’est pas de l’argent.",
-                "You start with 100 points. They follow the rules of your progress; you can earn more through challenges. They are not money."))
+            GuideBody(tr("Tu commences avec 100 points et ton solde reste entre 0 et 100. Les bonus et les défis permettent d’en regagner jusqu’à ce plafond. Ce n’est pas de l’argent.",
+                "You start with 100 points and your balance stays between 0 and 100. Bonuses and challenges let you earn points back up to that cap. They are not money."))
             GuideBody(tr("À 0 point, ajouter une application ou modifier une limite reste bloqué dans toutes les offres. Premium et Ultra ne contournent pas cette règle.",
                 "At 0 points, adding an app or changing a limit is blocked on every plan. Premium and Ultra follow the same rule."))
         }
