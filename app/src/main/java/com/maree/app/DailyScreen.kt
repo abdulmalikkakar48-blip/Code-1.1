@@ -2,8 +2,11 @@ package com.maree.app
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -34,7 +38,7 @@ import java.time.format.DateTimeFormatter
 
 /** Bilan des compteurs disponibles, sans historique ni temps gagné inventé. */
 @Composable
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 internal fun DailyTab(
     snapshot: MareeSnapshot,
     onCoach: () -> Unit,
@@ -66,7 +70,11 @@ internal fun DailyTab(
     var showAllApps by rememberSaveable { mutableStateOf(false) }
     var showCounterDetails by rememberSaveable { mutableStateOf(false) }
     val scrollState = rememberScrollState()
-    LaunchedEffect(section) { scrollState.scrollTo(0) }
+    val selectedSection = remember { BringIntoViewRequester() }
+    LaunchedEffect(section) {
+        scrollState.scrollTo(0)
+        selectedSection.bringIntoView()
+    }
 
     Column(
         Modifier.fillMaxSize().verticalScroll(scrollState)
@@ -79,14 +87,16 @@ internal fun DailyTab(
             title = tr("Un peu plus de vie.", "A little more life."),
             description = tr("Une pause, un repère, un petit pas à la fois.", "A break, a fresh perspective, one small step at a time.")
         )
-        FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(0.dp)) {
+        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf("today" to tr("Jour", "Day"), "calendar" to tr("Calendrier", "Calendar"),
-                "reading" to tr("Lecture", "Reading"),
                 "dice" to tr("Dé", "Dice"), "coloring" to tr("Coloriage", "Coloring"),
+                "reading" to tr("Lecture", "Reading"),
                 "week" to tr("Bilan", "Review"),
                 "tools" to tr("Outils", "Tools")).forEach { (id, label) ->
-                FilterChip(selected = section == id, onClick = { onSectionChange(id) }, label = { Text(label) })
+                FilterChip(selected = section == id, onClick = { onSectionChange(id) },
+                    modifier = if (section == id) Modifier.bringIntoViewRequester(selectedSection) else Modifier,
+                    label = { Text(label) })
             }
         }
         if (section == "today") {

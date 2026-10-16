@@ -9,6 +9,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -57,7 +59,7 @@ import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
 /** A free, optional offline prompt. It writes ordinary personal calendar tasks only after confirmation. */
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
 internal fun DiceSection(
     snapshot: MareeSnapshot,
@@ -166,12 +168,12 @@ internal fun DiceSection(
         Text(tr("Une idée de pause, puis tu choisis de la garder ou non.",
             "Get a break idea, then choose whether to keep it."),
             color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium)
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             listOf(DiceMode.ACTIVITY to tr("Activité", "Activity"), DiceMode.APPLICATION to tr("Appli", "App"),
                 DiceMode.WEEK to tr("Semaine", "Week")).forEach { (choice, title) ->
                 FilterChip(selected = mode == choice, enabled = !rolling && !busy, onClick = {
                     mode = choice; invalidate(); showFaces = false; choosingApps = true
-                }, modifier = Modifier.weight(1f).heightIn(min = 48.dp), label = { Text(title) })
+                }, modifier = Modifier.heightIn(min = 48.dp), label = { Text(title) })
             }
         }
         Text(when (mode) {

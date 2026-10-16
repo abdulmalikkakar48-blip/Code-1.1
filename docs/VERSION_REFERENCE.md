@@ -4,7 +4,7 @@
 
 Le dé distingue le choix du mode, la proposition et la confirmation. L’idée tirée reste près du bouton et est amenée à l’écran après le lancer ; les détails des six activités sont repliables. Le calendrier reçoit un en-tête illustré, des repères de dates et des cartes de tâches. À taille de texte normale, les sept jours de la semaine sont visibles sans défilement horizontal ; une grande police garde une grille défilante et un sélecteur de date accessible.
 
-Coloriage passe à douze pages gratuites : les huit motifs existants et quatre petits dessins originaux à carreaux (arbre, fleur, livre ouvert, paysage). Une galerie montre les modèles et la palette précède la grille. Les cellules déjà coloriées sont conservées. Les rubriques de Quotidien reviennent à la ligne pour rester visibles, et un bouton explicite ouvre les dessins depuis Jour.
+Coloriage passe à douze pages gratuites : les huit motifs existants et quatre petits dessins originaux à carreaux (arbre, fleur, livre ouvert, paysage). Une galerie montre les modèles et la palette précède la grille. Les cellules déjà coloriées sont conservées. La navigation de Quotidien reste compacte et amène la rubrique choisie dans la zone visible ; un bouton explicite ouvre les dessins depuis Jour.
 
 [APK 0.18.0](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.18.0.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.18.0-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.18.0.md).
 
