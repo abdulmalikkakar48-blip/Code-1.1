@@ -21,6 +21,7 @@ class RecipeCatalogTest {
     }
     @Test fun searchSupportsAccentsIngredientsAndCategoryWithoutChangingTheCatalog() {
         assertTrue(searchRecipes("creme", null).any { it.id == "potato_gratin" })
+        assertTrue(searchRecipes("oeufs", null).any { it.id == "shakshuka" })
         assertTrue(searchRecipes("chickpea", RecipeCategory.MAINS).any { it.id == "chickpea_curry" })
         assertTrue(searchRecipes("chickpea", RecipeCategory.DRINKS).isEmpty())
         assertTrue(searchRecipes("zzzz-no-ingredient", null).isEmpty())

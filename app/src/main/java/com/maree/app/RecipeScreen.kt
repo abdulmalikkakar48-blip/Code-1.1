@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import java.text.Normalizer
 
 internal fun searchRecipes(query: String, category: RecipeCategory?): List<Recipe> {
-    fun normalized(value: String) = Normalizer.normalize(value.lowercase(), Normalizer.Form.NFD).replace(Regex("\\p{M}+"), "")
+    fun normalized(value: String) = Normalizer.normalize(value.lowercase(), Normalizer.Form.NFD).replace(Regex("\\p{M}+"), "").replace("œ", "oe").replace("æ", "ae")
     val words = normalized(query.trim()).split(Regex("\\s+")).filter { it.isNotEmpty() }
     return recipes.filter { recipe ->
         (category == null || recipe.category == category) && words.all { word ->
@@ -28,7 +28,7 @@ internal fun searchRecipes(query: String, category: RecipeCategory?): List<Recip
 @OptIn(ExperimentalFoundationApi::class)
 internal fun RecipeSection() {
     var category by rememberSaveable { mutableStateOf<RecipeCategory?>(null) }
-    var query by rememberSaveable { mutableStateOf("") }
+    var query by remember { mutableStateOf("") }
     var offset by rememberSaveable { mutableIntStateOf(0) }
     var selectedId by rememberSaveable { mutableStateOf(recipes.first().id) }
     var detailRequest by remember { mutableIntStateOf(0) }
