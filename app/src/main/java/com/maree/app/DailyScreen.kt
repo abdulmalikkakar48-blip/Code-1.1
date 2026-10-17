@@ -114,8 +114,8 @@ internal fun DailyTab(
             OutlinedButton(onClick = { onSectionChange("coloring") }, modifier = Modifier.fillMaxWidth()) {
                 Text(tr("Coloriage · ouvrir les dessins", "Coloring · open the drawings"))
             }
-            Text(tr("Des fleurs, paysages et motifs, avec ${coloringTemplates.size} pages à carreaux, à colorier ici avec sauvegarde sur ce téléphone.",
-                "Flowers, landscapes and patterns, plus ${coloringTemplates.size} grid pages to color right here, saved on this phone."),
+            Text(tr("${illustrationPages.size} illustrations de fleurs, paysages et motifs, plus ${coloringTemplates.size} pages à carreaux, à colorier ici avec sauvegarde sur ce téléphone.",
+                "${illustrationPages.size} flower, landscape and pattern illustrations, plus ${coloringTemplates.size} grid pages to color right here, saved on this phone."),
                 color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 19.sp)
         }
         AppCardSurface {

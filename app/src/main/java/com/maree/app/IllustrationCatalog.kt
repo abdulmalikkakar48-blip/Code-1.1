@@ -1424,4 +1424,5 @@ internal val illustrationPages: List<IllustrationPage> = listOf(
             "M 431.4,273 Q 442.8,258.4 442.9,237.1"
         )
     )
-) + landscapeIllustrationPages + decorativeIllustrationPages
+) + landscapeIllustrationPages + decorativeIllustrationPages +
+    additionalFlowerIllustrationPages + additionalLandscapeIllustrationPages + additionalPatternIllustrationPages

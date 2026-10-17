@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -189,10 +192,10 @@ private fun IllustrationSection(onBusyChange: (Boolean) -> Unit) {
                     label = { Text(item.label()) })
             }
         }
-        val galleryScrollState = key(category) { rememberScrollState() }
-        Row(Modifier.fillMaxWidth().horizontalScroll(galleryScrollState),
+        val galleryScrollState = key(category) { rememberLazyListState() }
+        LazyRow(Modifier.fillMaxWidth(), state = galleryScrollState,
             horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            visiblePages.forEach { item ->
+            items(visiblePages, key = { it.id }) { item ->
                 val selectedPage = page.id == item.id
                 Column(Modifier.width(136.dp).clip(RoundedCornerShape(16.dp))
                     .border(if (selectedPage) 2.dp else 1.dp,

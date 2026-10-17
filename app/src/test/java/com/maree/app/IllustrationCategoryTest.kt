@@ -6,14 +6,17 @@ import org.junit.Test
 class IllustrationCategoryTest {
     @Test fun categoriesKeepAllExistingDrawingsAndPartitionTheExpandedGallery() {
         val flowers = illustrationPagesForCategory(IllustrationCategory.FLOWERS)
-        assertEquals(listOf("rose_garden", "wild_bouquet", "spring_tulips", "botanical_leaves"),
+        assertEquals(listOf("rose_garden", "wild_bouquet", "spring_tulips", "botanical_leaves",
+            "sunflower_bouquet", "water_lilies", "iris_garden", "magnolia_branch"),
             flowers.map { it.id })
-        assertEquals(listOf("waterfall_valley", "alpine_lake", "coastal_garden"),
+        assertEquals(listOf("waterfall_valley", "alpine_lake", "coastal_garden",
+            "forest_path", "desert_dunes", "terraced_garden", "night_lake"),
             illustrationPagesForCategory(IllustrationCategory.LANDSCAPES).map { it.id })
-        assertEquals(listOf("patterned_tree"),
+        assertEquals(listOf("patterned_tree", "garden_mandala", "woven_leaves", "seashell_spiral", "patterned_mountains"),
             illustrationPagesForCategory(IllustrationCategory.PATTERNS).map { it.id })
         val categorized = IllustrationCategory.entries.flatMap { illustrationPagesForCategory(it) }
-        assertEquals(illustrationPages, categorized)
+        assertEquals(20, categorized.size)
+        assertEquals(illustrationPages.toSet(), categorized.toSet())
         assertEquals(illustrationPages, illustrationPagesForCategory(null))
     }
 

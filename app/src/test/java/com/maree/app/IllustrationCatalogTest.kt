@@ -6,10 +6,13 @@ import org.junit.Test
 class IllustrationCatalogTest {
     @Test fun stableUniquePageIdsPreserveSavedDrawingIdentityAndHaveDistinctCurvedArtwork() {
         assertEquals(listOf("rose_garden", "wild_bouquet", "spring_tulips", "botanical_leaves",
-            "waterfall_valley", "alpine_lake", "coastal_garden", "patterned_tree"),
+            "waterfall_valley", "alpine_lake", "coastal_garden", "patterned_tree",
+            "sunflower_bouquet", "water_lilies", "iris_garden", "magnolia_branch",
+            "forest_path", "desert_dunes", "terraced_garden", "night_lake",
+            "garden_mandala", "woven_leaves", "seashell_spiral", "patterned_mountains"),
             illustrationPages.map { it.id })
         // Saved colors use region positions: keep all existing page sizes and order.
-        assertEquals(listOf(48, 71, 47, 55), illustrationPages.take(4).map { it.regions.size })
+        assertEquals(listOf(48, 71, 47, 55, 67, 77, 67, 193), illustrationPages.take(8).map { it.regions.size })
         assertEquals(illustrationPages.size, illustrationPages.map { it.id }.toSet().size)
         assertEquals(illustrationPages.size, illustrationPages.map { page -> page.regions.map { it.pathData } }.toSet().size)
         illustrationPages.forEach { page ->

@@ -61,6 +61,33 @@ class IllustrationStoreTest {
         assertEquals(pixels, ColoringStore(prefs).loadPage("landscape"))
     }
 
+    @Test fun twentyPageCatalogReadsAllEightReleasedDrawingsWithoutRewritingTheirColors() {
+        val prefs = TestFeaturePreferences()
+        val released = listOf("rose_garden" to 48, "wild_bouquet" to 71,
+            "spring_tulips" to 47, "botanical_leaves" to 55, "waterfall_valley" to 67,
+            "alpine_lake" to 77, "coastal_garden" to 67, "patterned_tree" to 193)
+        val legacy = JSONArray()
+        released.forEachIndexed { index, (id, count) ->
+            legacy.put(row(id, List(count) { if (it % 5 == 0) index + 1 else 0 }))
+        }
+        prefs.edit().putString(IllustrationStore.KEY, legacy.toString()).putInt("pointUnits", 400).commit()
+        val before = prefs.all.toMap()
+        val store = IllustrationStore(prefs)
+        released.forEachIndexed { index, (id, count) ->
+            assertEquals(List(count) { if (it % 5 == 0) index + 1 else 0 }, store.page(id))
+        }
+        assertEquals(before, prefs.all)
+        val added = illustrationPages.first { it.id == "patterned_mountains" }
+        assertEquals(List(added.regions.size) { 0 }, store.page(added.id))
+        assertTrue(store.savePage(added.id, List(added.regions.size) { 14 }))
+        val reopened = IllustrationStore(prefs)
+        assertEquals(9, reopened.pagesForExport().length())
+        assertEquals(List(added.regions.size) { 14 }, reopened.page(added.id))
+        assertTrue(reopened.resetPage(added.id))
+        assertEquals(legacy.toString(), reopened.pagesForExport().toString())
+        assertEquals(before, prefs.all)
+    }
+
     @Test fun previewsAndUnknownPagesNeverCreateStoredUserColors() {
         val prefs = TestFeaturePreferences()
         val store = IllustrationStore(prefs)

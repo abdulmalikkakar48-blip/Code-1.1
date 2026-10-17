@@ -1,6 +1,18 @@
 # Selkie — application Android de réduction du temps d'écran
 
-## Version actuelle 0.21.0 — paysages et coloriages à motifs
+## Version actuelle 0.22.0 — vingt illustrations à colorier
+
+Quotidien → Coloriage → **Illustrations** propose **20 dessins originaux gratuits** : 8 dans Fleurs, 7 dans Paysages et 5 dans Motifs. Les huit modèles précédents sont conservés ; douze s’ajoutent : tournesols, nénuphars, iris, magnolia, forêt, dunes, jardin en terrasses, lac étoilé, rosace botanique, feuilles entrelacées, spirales marines et montagnes à motifs. La galerie prépare les miniatures à mesure qu’elles deviennent visibles.
+
+Les douze pages **À carreaux** restent disponibles séparément. Les anciennes couleurs sont conservées. Seize couleurs, gomme, remplissage par zone, zoom, numéros facultatifs et sauvegarde locale restent disponibles, sans nouvelle permission ni accès réseau. Export JSON schéma 6 inchangé.
+
+[APK 0.22.0](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.22.0.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.22.0-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.22.0.md).
+
+VersionCode 35, Android 10+, même certificat de développement. Plafond de 100 points, dé, calendrier, lectures et coach préparé FR/EN conservés. Prix prévus : Premium 5 €/mois ou 60 €/an, Ultra 10 €/mois ou 120 €/an, sans réduction ni paiement réel dans cet APK de test.
+
+## Archive 0.21.0
+
+## Version 0.21.0 — paysages et coloriages à motifs
 
 Quotidien → Coloriage → **Illustrations** propose maintenant huit dessins originaux, regroupés dans **Fleurs**, **Paysages** et **Motifs**. Aux quatre modèles floraux s’ajoutent une cascade, un lac alpin, un jardin côtier et un arbre aux motifs décoratifs. La catégorie **Toutes** permet de parcourir l’ensemble. Les aperçus colorés servent d’exemples ; chaque nouvelle feuille personnelle commence blanche.
 
