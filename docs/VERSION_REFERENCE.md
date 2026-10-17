@@ -1,6 +1,18 @@
 # Selkie : version de travail au 17 octobre 2026
 
-## Version actuelle 0.20.0 — illustrations florales à colorier
+## Version actuelle 0.21.0 — paysages et coloriages à motifs
+
+Quotidien → Coloriage → **Illustrations** propose maintenant huit dessins originaux, regroupés dans **Fleurs**, **Paysages** et **Motifs**. Aux quatre modèles floraux s’ajoutent une cascade, un lac alpin, un jardin côtier et un arbre aux motifs décoratifs. La catégorie **Toutes** permet de parcourir l’ensemble. Les aperçus colorés servent d’exemples ; chaque nouvelle feuille personnelle commence blanche.
+
+Les seize couleurs, la gomme, le remplissage au toucher, les numéros facultatifs, le zoom à 300 % et Annuler/Rétablir restent disponibles. Les couleurs s’enregistrent sur le téléphone. Les quatre anciens dessins et les douze pages **À carreaux** conservent leurs couleurs ; l’export JSON reste au schéma 6. Tous les coloriages sont gratuits, sans téléchargement d’images, nouvelle permission ni accès réseau.
+
+[APK 0.21.0](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.21.0.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.21.0-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.21.0.md).
+
+VersionCode 34, Android 10+, même certificat de développement. Le plafond de 100 points, les quatre modes du dé, le calendrier, les lectures et le coach préparé FR/EN sont conservés. Prix prévus inchangés : Premium 5 €/mois ou 60 €/an, Ultra 10 €/mois ou 120 €/an, sans réduction ni paiement réel dans cet APK de test.
+
+## Archive 0.20.0
+
+## Version 0.20.0 — illustrations florales à colorier
 
 Quotidien → Coloriage → **Illustrations** ajoute quatre dessins originaux aux contours courbes : Jardin de roses, Bouquet sauvage, Tulipes de printemps et Feuillages. Touche une zone pour la remplir avec l’une des seize couleurs, efface avec la gomme, agrandis jusqu’à 300 % et déplace le dessin. Les repères numérotés sont facultatifs ; les couleurs restent libres. Chaque zone s’enregistre sur ce téléphone, avec Annuler/Rétablir sur les cinquante dernières actions de la page ouverte.
 

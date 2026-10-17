@@ -9,15 +9,33 @@ internal data class IllustrationRegion(
     val labelY: Float
 )
 
+internal enum class IllustrationCategory {
+    FLOWERS, LANDSCAPES, PATTERNS;
+
+    fun label(): String = when (this) {
+        FLOWERS -> tr("Fleurs", "Flowers")
+        LANDSCAPES -> tr("Paysages", "Landscapes")
+        PATTERNS -> tr("Motifs", "Patterns")
+    }
+}
+
 internal data class IllustrationPage(
     val id: String,
     val french: String,
     val english: String,
     val regions: List<IllustrationRegion>,
-    val detailPaths: List<String> = emptyList()
+    val detailPaths: List<String> = emptyList(),
+    val category: IllustrationCategory = IllustrationCategory.FLOWERS
 ) {
     fun name(): String = tr(french, english)
 }
+
+internal fun illustrationPagesForCategory(category: IllustrationCategory?): List<IllustrationPage> =
+    if (category == null) illustrationPages else illustrationPages.filter { it.category == category }
+
+/** A restored or filtered selection always resolves to a page that is visible. */
+internal fun selectedIllustrationPage(pages: List<IllustrationPage>, pageId: String): IllustrationPage =
+    pages.firstOrNull { it.id == pageId } ?: pages.first()
 
 /**
  * These paths are drawn for Selkie, without downloaded assets. Region IDs and list
@@ -1406,4 +1424,4 @@ internal val illustrationPages: List<IllustrationPage> = listOf(
             "M 431.4,273 Q 442.8,258.4 442.9,237.1"
         )
     )
-)
+) + landscapeIllustrationPages + decorativeIllustrationPages

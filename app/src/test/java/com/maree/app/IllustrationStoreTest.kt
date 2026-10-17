@@ -20,17 +20,45 @@ class IllustrationStoreTest {
         assertTrue(ColoringStore(prefs).savePage("flower", pixels))
         val before = prefs.all.toMap()
         val store = IllustrationStore(prefs)
-        illustrationPages.forEachIndexed { index, template ->
+        illustrationPages.take(4).forEachIndexed { index, template ->
             assertTrue(store.savePage(template.id, colors(template.id, 13 + index, template.regions.lastIndex)))
         }
 
         val reopened = IllustrationStore(prefs)
-        illustrationPages.forEachIndexed { index, template ->
+        illustrationPages.take(4).forEachIndexed { index, template ->
             assertEquals(colors(template.id, 13 + index, template.regions.lastIndex), reopened.page(template.id))
         }
         assertEquals(before, prefs.all.filterKeys { it != IllustrationStore.KEY })
         assertEquals(pixels, ColoringStore(prefs).loadPage("flower"))
         assertEquals(4, reopened.pagesForExport().length())
+    }
+
+    @Test fun addingLandscapesPreservesLegacyFlowerRowsAndGridColors() {
+        val prefs = TestFeaturePreferences()
+        // The original four pages have fixed lengths in the released 0.20.0 format.
+        val legacy = listOf("rose_garden" to 48, "wild_bouquet" to 71,
+            "spring_tulips" to 47, "botanical_leaves" to 55)
+        val rows = JSONArray()
+        legacy.forEachIndexed { index, (id, length) ->
+            rows.put(row(id, List(length) { if (it % 3 == 0) index + 1 else 16 }))
+        }
+        val pixels = List(COLORING_CELLS) { if (it % 5 == 0) 4 else 0 }
+        assertTrue(ColoringStore(prefs).savePage("landscape", pixels))
+        prefs.edit().putString(IllustrationStore.KEY, rows.toString()).putInt("pointUnits", 400).commit()
+        val before = prefs.all.toMap()
+        val store = IllustrationStore(prefs)
+        legacy.forEachIndexed { index, (id, length) ->
+            assertEquals(List(length) { if (it % 3 == 0) index + 1 else 16 }, store.page(id))
+        }
+        assertEquals(before, prefs.all) // Reading the expanded catalog needs no migration write.
+        val landscape = illustrationPages.first { it.id == "waterfall_valley" }
+        assertEquals(List(landscape.regions.size) { 0 }, store.page(landscape.id))
+        assertTrue(store.savePage(landscape.id, colors(landscape.id, 10, landscape.regions.lastIndex)))
+        assertEquals(5, store.pagesForExport().length())
+        assertTrue(store.resetPage(landscape.id))
+        assertEquals(rows.toString(), store.pagesForExport().toString())
+        assertEquals(before, prefs.all)
+        assertEquals(pixels, ColoringStore(prefs).loadPage("landscape"))
     }
 
     @Test fun previewsAndUnknownPagesNeverCreateStoredUserColors() {

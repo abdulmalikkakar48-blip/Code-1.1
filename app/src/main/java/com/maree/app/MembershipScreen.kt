@@ -149,9 +149,9 @@ private fun MembershipPlanCard(option: PlanType, selected: Boolean, period: Bill
             OfferFeature(tr("Dé Selkie · quatre modes gratuits", "Selkie dice · four free modes"),
                 tr("Activité, application ou semaine : objectifs au calendrier, sans changer tes points. Le mode Points facultatif retire le chiffre obtenu, de 1 à 6 points, après confirmation du lancer, sans passer sous zéro. Aucun gain ni paiement.",
                     "Activity, app or week: calendar goals, with no change to your points. The optional Points mode deducts the rolled number, from 1 to 6 points, after you confirm the roll, without going below zero. No winnings or payment."))
-            OfferFeature(tr("4 illustrations + ${coloringTemplates.size} pages à carreaux", "4 illustrations + ${coloringTemplates.size} grid pages"),
-                tr("Fleurs et feuillages à remplir par zones : seize couleurs, gomme, zoom et repères numérotés facultatifs. Les pages à carreaux restent disponibles avec leur palette. Annuler, rétablir et sauvegarde locale, sans compte ni points à dépenser.",
-                    "Fill flower and leaf regions with sixteen colors, an eraser, zoom and optional numbered guides. Grid pages remain available with their own palette. Undo, redo and local saving, with no account or points to spend."))
+            OfferFeature(tr("${illustrationPages.size} illustrations + ${coloringTemplates.size} pages à carreaux", "${illustrationPages.size} illustrations + ${coloringTemplates.size} grid pages"),
+                tr("Fleurs, paysages et motifs à remplir par zones : seize couleurs, gomme, zoom et repères numérotés facultatifs. Les pages à carreaux restent disponibles avec leur palette. Annuler, rétablir et sauvegarde locale, sans compte ni points à dépenser.",
+                    "Fill flower, landscape and pattern regions with sixteen colors, an eraser, zoom and optional numbered guides. Grid pages remain available with their own palette. Undo, redo and local saving, with no account or points to spend."))
             OfferFeature(tr("50 conseils favoris", "50 favorite tips"),
                 tr("Enregistre uniquement des conseils et réponses préparés, dans leur langue d’origine. Après un retour à une offre inférieure, les contenus payants restent verrouillés.",
                     "Save authored tips and prepared answers in their original language. Paid content stays locked after switching to a lower plan."))

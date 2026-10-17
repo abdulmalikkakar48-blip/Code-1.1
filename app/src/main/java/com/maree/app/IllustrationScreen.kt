@@ -26,6 +26,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -87,8 +88,8 @@ internal fun ColoringSection() {
                 onClick = { illustrations = false }, modifier = Modifier.heightIn(min = 48.dp),
                 label = { Text(tr("À carreaux", "Grid pages")) })
         }
-        Text(if (illustrations) tr("Des fleurs et des feuillages à remplir, une zone à la fois.",
-            "Flowers and foliage to fill, one area at a time.") else tr(
+        Text(if (illustrations) tr("Fleurs, paysages et motifs à remplir, une zone à la fois.",
+            "Flowers, landscapes and patterns to fill, one area at a time.") else tr(
             "Tes 12 pages à carreaux et leurs couleurs sont conservées ici.",
             "Your 12 grid pages and their saved colors are kept here."), color = MareePalette.Muted)
     }
@@ -102,7 +103,9 @@ private fun IllustrationSection(onBusyChange: (Boolean) -> Unit) {
     val store = remember(context) { IllustrationStore(context) }
     val scope = rememberCoroutineScope()
     var pageId by rememberSaveable { mutableStateOf(illustrationPages.first().id) }
-    val page = illustrationPages.firstOrNull { it.id == pageId } ?: illustrationPages.first()
+    var category by rememberSaveable { mutableStateOf<IllustrationCategory?>(null) }
+    val visiblePages = illustrationPagesForCategory(category)
+    val page = selectedIllustrationPage(visiblePages, pageId)
     var color by rememberSaveable { mutableIntStateOf(2) }
     var numbers by rememberSaveable { mutableStateOf(false) }
     var zoom by rememberSaveable(page.id) { mutableFloatStateOf(1f) }
@@ -165,13 +168,31 @@ private fun IllustrationSection(onBusyChange: (Boolean) -> Unit) {
         val next = history.paint(history.cells.toMutableList().also { it[index] = color })
         if (next != history) save(next)
     }
+    fun chooseCategory(next: IllustrationCategory?) {
+        if (loading || saving || failed || pendingReset || showReset) return
+        val nextPage = selectedIllustrationPage(illustrationPagesForCategory(next), page.id)
+        pageId = nextPage.id
+        category = next
+    }
 
     AppCardSurface {
         Text(tr("1 · Choisis ton illustration", "1 · Choose your illustration"),
             color = MareePalette.Ink, fontWeight = FontWeight.SemiBold)
         Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            FilterChip(selected = category == null, enabled = editable,
+                onClick = { chooseCategory(null) }, modifier = Modifier.heightIn(min = 48.dp),
+                label = { Text(tr("Toutes", "All")) })
+            IllustrationCategory.entries.forEach { item ->
+                FilterChip(selected = category == item, enabled = editable,
+                    onClick = { chooseCategory(item) }, modifier = Modifier.heightIn(min = 48.dp),
+                    label = { Text(item.label()) })
+            }
+        }
+        val galleryScrollState = key(category) { rememberScrollState() }
+        Row(Modifier.fillMaxWidth().horizontalScroll(galleryScrollState),
             horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            illustrationPages.forEach { item ->
+            visiblePages.forEach { item ->
                 val selectedPage = page.id == item.id
                 Column(Modifier.width(136.dp).clip(RoundedCornerShape(16.dp))
                     .border(if (selectedPage) 2.dp else 1.dp,
@@ -189,8 +210,10 @@ private fun IllustrationSection(onBusyChange: (Boolean) -> Unit) {
                 }
             }
         }
-        Text(tr("Glisse les miniatures pour voir les quatre dessins. Les aperçus colorés sont des exemples : ta feuille commence blanche.",
-            "Swipe the thumbnails to see all four drawings. Colored previews are examples: your own page starts blank."),
+        val drawingCount = if (visiblePages.size == 1) tr("1 dessin", "1 drawing")
+            else tr("${visiblePages.size} dessins", "${visiblePages.size} drawings")
+        Text(tr("$drawingCount · glisse les miniatures pour choisir. Les aperçus colorés sont des exemples : ta feuille commence blanche.",
+            "$drawingCount · swipe the thumbnails to choose. Colored previews are examples: your own page starts blank."),
             color = MareePalette.Muted, style = MaterialTheme.typography.bodySmall)
     }
     AppCardSurface {
