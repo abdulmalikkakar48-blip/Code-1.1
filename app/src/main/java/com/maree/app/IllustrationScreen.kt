@@ -158,7 +158,9 @@ private fun IllustrationSection(onBusyChange: (Boolean) -> Unit) {
         }
     }
     fun paint(index: Int) {
-        if (!editable || index !in page.regions.indices) return
+        // Read the state delegates here: a remembered gesture callback must not capture
+        // the initial derived editable=false value from the loading composition.
+        if (loading || saving || failed || pendingReset || index !in page.regions.indices) return
         regionIndex = index
         val next = history.paint(history.cells.toMutableList().also { it[index] = color })
         if (next != history) save(next)
@@ -225,10 +227,10 @@ private fun IllustrationSection(onBusyChange: (Boolean) -> Unit) {
             Text("${(zoom * 100).toInt()} %", color = MareePalette.Ink)
             TextButton(onClick = { zoom = (zoom + 0.5f).coerceAtMost(3f) }, enabled = zoom < 3f,
                 modifier = Modifier.heightIn(min = 48.dp).semantics { contentDescription = tr("Agrandir le dessin", "Zoom in") }) { Text("+") }
-            TextButton(onClick = { zoom = 1f }, modifier = Modifier.heightIn(min = 48.dp)) { Text(tr("Recentrer", "Reset view")) }
+            TextButton(onClick = { zoom = 1f }, modifier = Modifier.heightIn(min = 48.dp)) { Text(tr("Centrer", "Reset")) }
         }
         if (loading) CircularProgressIndicator(Modifier.size(28.dp))
-        IllustrationCanvas(page, history.cells, editable, numbers, zoom, ::paint,
+        IllustrationCanvas(page, history.cells, editable, numbers, zoom, { index -> paint(index) },
             Modifier.clip(RoundedCornerShape(12.dp)).border(1.dp, MareePalette.Outline, RoundedCornerShape(12.dp)))
         Text(tr("Au zoom normal, glisse sur la feuille pour faire défiler l’écran. Après agrandissement, glisse pour déplacer le dessin.",
             "At normal zoom, swipe the page to scroll the screen. When zoomed in, drag to move around the drawing."),

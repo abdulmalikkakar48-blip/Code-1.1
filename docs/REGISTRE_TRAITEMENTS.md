@@ -1,6 +1,6 @@
 # Selkie — registre de travail des traitements et procédure de droits
 
-Base de travail du 16 octobre 2026 pour la version locale de test **0.20.0 (`versionCode` 33)**. Responsable actuellement déclaré : Abdul Malik Kakar ; contact 1kabdm@gmail.com. Responsable de la diffusion publique et public cible : non choisis. Le registre doit être confirmé et tenu à jour par le véritable responsable ; il n’atteste pas de sa conformité ou de démarches déjà exécutées dans Gmail.
+Base de travail du 17 octobre 2026 pour la version locale de test **0.20.0 (`versionCode` 33)**. Responsable actuellement déclaré : Abdul Malik Kakar ; contact 1kabdm@gmail.com. Responsable de la diffusion publique et public cible : non choisis. Le registre doit être confirmé et tenu à jour par le véritable responsable ; il n’atteste pas de sa conformité ou de démarches déjà exécutées dans Gmail.
 
 | Traitement | Données et finalité | Base de travail retenue | Destinataires et conservation | Mesures identifiées |
 | --- | --- | --- | --- | --- |

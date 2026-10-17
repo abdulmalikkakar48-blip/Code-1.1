@@ -11,7 +11,7 @@ data class PrivacySection(val title: String, val paragraphs: List<String>)
 /** Texte embarqué : sa consultation ne dépend d'aucun serveur ni compte. */
 object PrivacyContent {
     val updatedOn: String
-        get() = tr("16 octobre 2026", "16 October 2026")
+        get() = tr("17 octobre 2026", "17 October 2026")
     val introduction: String
         get() = tr("Selkie 0.20.0 t’aide à réduire ton temps d’écran. Dans cette version de test gratuite, le suivi, le calendrier, les bilans, les plages horaires, les favoris, les programmes et les coloriages restent sur ton appareil, sans compte ni envoi sur Internet. Le Dé Selkie suggère des pauses que tu choisis de confirmer et propose un mode Points facultatif avec une perte annoncée. Le Coach local utilise des conseils préparés, sans modèle d’IA. Tu peux lire cette information sans autoriser le suivi.", "Selkie 0.20.0 helps you reduce your screen time. In this free test version, tracking, the calendar, summaries, time slots, favourites, programmes and colouring pages stay on your device, without an account or sending data over the Internet. Selkie Dice suggests breaks that you choose whether to confirm and offers an optional Points mode with a disclosed deduction. The local Coach uses prepared advice, without an AI model. You can read this information without granting tracking access.")
 

@@ -1,6 +1,6 @@
 # Confidentialité de Selkie — version de test 0.20.0
 
-Information mise à jour le **16 octobre 2026**, pour la version **0.20.0 (versionCode 33)**. Elle décrit le suivi, le Coach, le calendrier, les bilans, les favoris, les créneaux de limites, le widget, les programmes locaux, le Dé Selkie et les coloriages. Les comptes, les paiements et le dialogue IA distant ne sont pas activés.
+Information mise à jour le **17 octobre 2026**, pour la version **0.20.0 (versionCode 33)**. Elle décrit le suivi, le Coach, le calendrier, les bilans, les favoris, les créneaux de limites, le widget, les programmes locaux, le Dé Selkie et les coloriages. Les comptes, les paiements et le dialogue IA distant ne sont pas activés.
 
 Selkie t’aide à réduire ton temps d’écran. Dans cette version de test gratuite, tes données de suivi restent sur ton appareil et le suivi ne demande pas de compte. Le Coach local utilise des conseils préparés, sans compte ni envoi sur Internet. Tu peux lire cette information sans autoriser le suivi.
 
@@ -131,7 +131,7 @@ Cette politique et les fonctions de contrôle constituent une base de travail. E
 
 ## Repères officiels à vérifier avant diffusion
 
-Les références ci-dessous sont fournies comme repères ; les pages officielles n’ont pas pu être consultées et leur contenu actuel et leurs URL n’ont pas été vérifiés en ligne pour cette rédaction du 16 octobre 2026. Leurs conditions applicables doivent être actualisées avant diffusion publique.
+Les références ci-dessous sont fournies comme repères ; les pages officielles n’ont pas pu être consultées et leur contenu actuel et leurs URL n’ont pas été vérifiés en ligne pour cette rédaction du 17 octobre 2026. Leurs conditions applicables doivent être actualisées avant diffusion publique.
 
 - [RGPD / GDPR — règlement (UE) 2016/679](https://eur-lex.europa.eu/eli/reg/2016/679/oj)
 - [CNIL](https://www.cnil.fr/)

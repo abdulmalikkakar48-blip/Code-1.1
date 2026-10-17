@@ -1,6 +1,6 @@
 # Selkie privacy policy — test version 0.20.0
 
-Information updated on **16 October 2026**, for version **0.20.0 (versionCode 33)**. This policy describes local tracking, the Coach, calendar, summaries, favourites, limit time slots, widget, programmes, Selkie Dice and colouring pages. Accounts, payments and remote AI dialogue are not enabled.
+Information updated on **17 October 2026**, for version **0.20.0 (versionCode 33)**. This policy describes local tracking, the Coach, calendar, summaries, favourites, limit time slots, widget, programmes, Selkie Dice and colouring pages. Accounts, payments and remote AI dialogue are not enabled.
 
 Selkie helps you reduce your screen time. In this free test version, tracking data stays on your device and tracking does not require an account. The local Coach uses prepared advice, without an account or sending data over the Internet. You can read this information without granting tracking access.
 
@@ -131,7 +131,7 @@ This policy and the control features are a working basis. They are not a compreh
 
 ## Official references to check before release
 
-The following references are provided for orientation; the official pages could not be accessed and their current content and URLs were not checked online for this text dated 16 October 2026. Applicable requirements must be reviewed before public release.
+The following references are provided for orientation; the official pages could not be accessed and their current content and URLs were not checked online for this text dated 17 October 2026. Applicable requirements must be reviewed before public release.
 
 - [RGPD / GDPR — règlement (UE) 2016/679](https://eur-lex.europa.eu/eli/reg/2016/679/oj)
 - [CNIL](https://www.cnil.fr/)

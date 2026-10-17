@@ -1,4 +1,4 @@
-# Selkie : version de travail au 16 octobre 2026
+# Selkie : version de travail au 17 octobre 2026
 
 ## Version actuelle 0.20.0 — illustrations florales à colorier
 
