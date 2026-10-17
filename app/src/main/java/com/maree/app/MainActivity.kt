@@ -210,13 +210,14 @@ private fun MareeApp(widgetDestination: String? = null, onWidgetHandled: () -> U
         when (destination) {
             GuideDestination.HOME -> { settingsPage = null; tab = 0 }
             GuideDestination.DAILY, GuideDestination.CALENDAR, GuideDestination.REVIEW,
-            GuideDestination.READING, GuideDestination.DICE, GuideDestination.COLORING, GuideDestination.TOOLS -> {
+            GuideDestination.READING, GuideDestination.DICE, GuideDestination.COLORING, GuideDestination.RECIPES, GuideDestination.TOOLS -> {
                 dailySection = when (destination) {
                     GuideDestination.CALENDAR -> "calendar"
                     GuideDestination.REVIEW -> "week"
                     GuideDestination.READING -> "reading"
                     GuideDestination.DICE -> "dice"
                     GuideDestination.COLORING -> "coloring"
+                    GuideDestination.RECIPES -> "recipes"
                     GuideDestination.TOOLS -> "tools"
                     else -> "today"
                 }

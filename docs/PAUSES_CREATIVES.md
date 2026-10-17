@@ -1,4 +1,4 @@
-# Dé Selkie, calendrier et coloriage — 0.22.0
+# Dé Selkie, calendrier et coloriage — 0.23.0
 
 Ces fonctions sont gratuites dans toutes les offres. Les trois modes de pause du dé et le coloriage ne changent pas les points. Un quatrième mode facultatif, Points, retire des points comme expliqué avant le lancement ; aucun achat, rappel automatique ou verrouillage supplémentaire n’est ajouté.
 
@@ -11,7 +11,7 @@ Dans Quotidien → Dé, choisis un mode :
 - Activité : six idées hors défilement, comme lire cinq pages, marcher dix minutes ou ranger un petit coin. La confirmation crée une tâche aujourd’hui.
 - Application : sélectionne de une à six applications déjà suivies. Le tirage choisit chacune avec la même probabilité et propose vingt minutes sans elle aujourd’hui. Le numéro du dé est décoratif dans ce mode.
 - Semaine : choisis une application. Les faces 1–2 proposent un jour, 3–4 deux jours, 5–6 trois jours. Choisis exactement ce nombre de dates parmi les sept prochains jours, aujourd’hui compris, puis confirme.
-- Points : le lancement volontaire retire autant de points d’honneur que la face obtenue, de 1 à 6. Le retrait est limité au solde disponible : avec 0,25 point restant, il retire 0,25 point, jamais plus. Aucun nouveau lancer de ce mode n’est proposé à zéro point. Le coût est annoncé avant de lancer ; ce mode n’ajoute aucune tâche au calendrier.
+- Points : le lancement volontaire retire dix fois la face obtenue, de 10 à 60 points. Le retrait est limité au solde disponible : avec 0,25 point restant, il retire 0,25 point, jamais plus. Aucun nouveau lancer de ce mode n’est proposé à zéro point. Le coût est annoncé avant de lancer ; ce mode n’ajoute aucune tâche au calendrier.
 
 Dans Activité, Application et Semaine, une confirmation enregistre les tâches en une seule opération ; un calendrier plein refuse tout le groupe. Tu coches les tâches toi-même dans Calendrier. Un résultat non confirmé de ces trois modes n’est pas conservé. Les limites et verrous habituels restent actifs ; ces tirages ne les changent pas et ne vérifient pas automatiquement les pauses.
 
@@ -21,7 +21,7 @@ Le résultat et l’action de confirmation sont regroupés près du dé. Les act
 
 ## Coloriage
 
-Dans Quotidien → Coloriage, deux rubriques séparent les formats. Les deux sont gratuites, sans dépense ni gain de points.
+Dans Quotidien → Coloriage, trois rubriques séparent les formats. Elles sont gratuites, sans dépense ni gain de points.
 
 ### Illustrations
 
@@ -42,8 +42,13 @@ Pour éviter de viser une petite case, choisis sa ligne et sa colonne avec les c
 
 Effacer cette page demande confirmation, sans toucher aux autres pages. Les cellules non blanches sont conservées jusqu’à cet effacement, l’effacement global ou la désinstallation. Aucun fichier image, photo, compte ou synchronisation n’est créé. Les choix de couleurs à carreaux sont privés dans `maree/coloringPages_v1`, bornés à douze identifiants fixes et 144 indices par page. Les illustrations sont conservées séparément dans `maree/illustrationPages_v1` : vingt identifiants fixes et un indice de couleur validé par zone. Aucun trait à main levée, historique de gestes ou fichier image n’y est enregistré.
 
-L’export volontaire JSON utilise le schéma 6 : `storedData.coloringPages` contient les identifiants et indices de couleurs validés des pages à carreaux ; `storedData.illustrations` contient les objets `{id, colors}` validés des illustrations. L’effacement global supprime les deux formats. Les objectifs des trois modes de pause sont des `calendarTasks` ordinaires. `storedData.points.maximumValue` indique 100 ; `storedData.honorDice` contient le dernier reçu valide du mode Points, ou `null` s’il n’y en a pas. Les anciens objets de stockage ne peuvent pas réenregistrer des données après l’effacement global. Les copies de documents déjà exportées se suppriment séparément.
+L’export volontaire JSON utilise le schéma 7 : `storedData.coloringPages` contient les identifiants et indices de couleurs validés des pages à carreaux ; `storedData.illustrations` contient les objets `{id, colors}` validés des illustrations. L’effacement global supprime les deux formats. Les objectifs des trois modes de pause sont des `calendarTasks` ordinaires. `storedData.points.maximumValue` indique 100 ; `storedData.honorDice` contient le dernier reçu valide du mode Points, ou `null` s’il n’y en a pas. Les anciens objets de stockage ne peuvent pas réenregistrer des données après l’effacement global. Les copies de documents déjà exportées se suppriment séparément.
 
 ## Périmètre
 
 Le dessin libre à main levée et l’export d’un coloriage en image ne sont pas inclus. Aucun plugin supplémentaire n’est nécessaire : Compose et Canvas Android dessinent les illustrations et les motifs. Aucun SDK, service réseau ou droit Android n’a été ajouté. Les permissions du suivi ne sont pas requises pour le mode Activité et le coloriage.
+
+
+## Collection et cuisine — 0.23.0
+
+La Collection ajoute 45 dessins fournis par l’éditeur et intégrés hors ligne. Seuls les identifiants et indices de couleurs sont enregistrés dans maree/importedColoring_v1, séparément des anciens dessins ; l’export volontaire de schéma 7 les inclut dans storedData.importedColoring. Effacer une page, effacer toutes les données ou désinstaller supprime ces couleurs, pas les images intégrées. Aucun accès aux photos ni import depuis le téléphone. Cuisine contient 50 recettes, sans historique ni recherche enregistrée. Les nouveaux lancers Points retirent 10 fois la face, au maximum le solde disponible ; pointsPerFace=10 est ajouté au reçu. Les anciens reçus conservent leur perte réelle, sans nouveau débit lors d’une reprise.

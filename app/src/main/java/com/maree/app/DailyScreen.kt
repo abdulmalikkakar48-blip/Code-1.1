@@ -83,7 +83,7 @@ internal fun DailyTab(
             .padding(horizontal = 20.dp, vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        if (section !in setOf("dice", "calendar", "coloring")) ScreenHeading(
+        if (section !in setOf("dice", "calendar", "coloring", "recipes")) ScreenHeading(
             eyebrow = today.format(DateTimeFormatter.ofPattern(tr("EEEE d MMMM", "EEEE, MMMM d"), AppLanguage.locale))
                 .replaceFirstChar { it.titlecase(AppLanguage.locale) },
             title = tr("Un peu plus de vie.", "A little more life."),
@@ -93,7 +93,7 @@ internal fun DailyTab(
             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf("today" to tr("Jour", "Day"), "calendar" to tr("Calendrier", "Calendar"),
                 "dice" to tr("Dé", "Dice"), "coloring" to tr("Coloriage", "Coloring"),
-                "reading" to tr("Lecture", "Reading"),
+                "recipes" to tr("Cuisine", "Cooking"), "reading" to tr("Lecture", "Reading"),
                 "week" to tr("Bilan", "Review"),
                 "tools" to tr("Outils", "Tools")).forEach { (id, label) ->
                 FilterChip(selected = section == id, onClick = { onSectionChange(id) },
@@ -114,9 +114,14 @@ internal fun DailyTab(
             OutlinedButton(onClick = { onSectionChange("coloring") }, modifier = Modifier.fillMaxWidth()) {
                 Text(tr("Coloriage · ouvrir les dessins", "Coloring · open the drawings"))
             }
-            Text(tr("${illustrationPages.size} illustrations de fleurs, paysages et motifs, plus ${coloringTemplates.size} pages à carreaux, à colorier ici avec sauvegarde sur ce téléphone.",
-                "${illustrationPages.size} flower, landscape and pattern illustrations, plus ${coloringTemplates.size} grid pages to color right here, saved on this phone."),
+            Text(tr("${importedColoringPages.size} dessins de la collection, ${illustrationPages.size} illustrations, plus ${coloringTemplates.size} pages à carreaux, à colorier ici avec sauvegarde sur ce téléphone.",
+                "${importedColoringPages.size} collection drawings, ${illustrationPages.size} illustrations, plus ${coloringTemplates.size} grid pages to color right here, saved on this phone."),
                 color = MareePalette.Muted, fontSize = 13.sp, lineHeight = 19.sp)
+        }
+        AppCardSurface(containerColor = MareePalette.Surface) {
+            SectionLabel(tr("Une pause en cuisine", "A cooking break"), tr("Gratuit", "Free"))
+            Text(tr("50 recettes à découvrir : entrées, plats, desserts et boissons, avec les quantités et les étapes.", "50 recipes to explore: starters, mains, desserts and drinks, with quantities and steps."), color = MareePalette.Ink)
+            PrimaryAction(tr("Découvrir les recettes", "Explore recipes"), onClick = { onSectionChange("recipes") })
         }
         AppCardSurface {
             SectionLabel(tr("Ta pause lecture", "Your reading break"))
@@ -237,6 +242,7 @@ internal fun DailyTab(
                 onCalendar = { onSectionChange("calendar") }, onTasksChanged = onToolsChanged,
                 honorPendingId = honorPendingId, onHonorPendingIdChange = onHonorPendingIdChange)
             "coloring" -> ColoringSection()
+            "recipes" -> RecipeSection()
             "reading" -> ReadingSection()
             "calendar" -> ProgressCalendarSection(history)
             "week" -> WeeklyReviewSection(history, snapshot.plan, getName, onOffers)

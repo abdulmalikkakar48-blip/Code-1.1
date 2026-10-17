@@ -322,10 +322,10 @@ class RuleCoachTest {
             assertEquals("lose_points", reply.topicId)
             assertFalse(reply.unrecognized)
         }
-        assertTrue(french.text, french.text.contains("1 à 6 points"))
+        assertTrue(french.text, french.text.contains("10 à 60 points"))
         assertTrue(french.text, french.text.contains("gratuit et facultatif"))
         assertTrue(french.text, french.text.contains("ne changent pas tes points"))
-        assertTrue(english.text, english.text.contains("1 to 6 points"))
+        assertTrue(english.text, english.text.contains("10 to 60 points"))
         assertTrue(english.text, english.text.contains("free and optional"))
         assertTrue(english.text, english.text.contains("do not change your points"))
         assertEquals(141, context.pointUnits)

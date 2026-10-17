@@ -70,7 +70,7 @@ class HonorDiceTest {
     }
 
     @Test
-    fun everyFaceDeductsItsNumberOfPointsForEveryPlanWithoutChangingLocksOrLimits() {
+    fun everyFaceDeductsTenPointsPerPipForEveryPlanWithoutChangingLocksOrLimits() {
         for (plan in PlanType.entries) for (face in 1..6) {
             val prefs = preferences()
             val store = Store(prefs) { face }
@@ -80,8 +80,9 @@ class HonorDiceTest {
             val apps = prefs.getString("apps", null)
             val result = store.rollHonorDie(token(), NOW)!!
             assertEquals(face, result.face)
-            assertEquals(face * 4, result.spentUnits)
-            assertEquals(400 - face * 4, result.balanceAfterUnits)
+            assertEquals(face * 40, result.spentUnits)
+            assertEquals(400 - face * 40, result.balanceAfterUnits)
+            assertEquals(10, result.pointsPerFace)
             assertEquals(result.balanceAfterUnits, store.pointUnits())
             assertEquals(apps, prefs.getString("apps", null))
             assertEquals(plan, store.planType())
@@ -91,15 +92,18 @@ class HonorDiceTest {
 
     @Test
     fun lowFractionalBalancesStopAtZeroAndZeroBalanceNeverRolls() {
-        val prefs = preferences(1)
-        var calls = 0
-        val store = Store(prefs) { calls++; 6 }
-        val result = store.rollHonorDie(token(), NOW)!!
-        assertEquals(1, result.spentUnits)
-        assertEquals(0, result.balanceAfterUnits)
-        assertNull(store.rollHonorDie(token(), NOW))
-        assertEquals(1, calls)
-        assertEquals(0, store.pointUnits())
+        for (face in 1..6) for (units in listOf(1, face * 40 - 1, face * 40)) {
+            val prefs = preferences(units)
+            var calls = 0
+            val store = Store(prefs) { calls++; face }
+            val result = store.rollHonorDie(token(), NOW)!!
+            assertEquals(units, result.spentUnits)
+            assertEquals(0, result.balanceAfterUnits)
+            assertEquals(result, readHonorDiceResult(result.toJson().toString()))
+            assertNull(store.rollHonorDie(token(), NOW))
+            assertEquals(1, calls)
+            assertEquals(0, store.pointUnits())
+        }
     }
 
     @Test
@@ -120,6 +124,56 @@ class HonorDiceTest {
     }
 
     @Test
+    fun legacyReceiptsKeepTheirOriginalPolicyAndRetryWithoutAnotherLossOrDailyReward() {
+        for (face in 1..6) {
+            val operation = token()
+            val raw = JSONObject().put("operationId", operation).put("face", face)
+                .put("spentQuarterUnits", face * 4)
+                .put("balanceAfterQuarterUnits", 400 - face * 4)
+            val prefs = preferences(350)
+            prefs.edit().putString(HONOR_DICE_KEY, raw.toString()).apply()
+            val store = Store(prefs) { error("An old receipt retry must not draw another face") }
+            val legacy = store.lastHonorDiceResult()!!
+            assertEquals(1, legacy.pointsPerFace)
+            assertEquals(face * 4, legacy.spentUnits)
+
+            assertEquals(legacy, store.rollHonorDie(operation, NOW + DAY))
+
+            assertEquals(350, store.pointUnits())
+            assertEquals(NOW, prefs.getLong("periodStart", -1))
+            assertEquals(legacy, store.lastHonorDiceResult())
+            val exported = store.exportLocalState(NOW + DAY).getJSONObject("honorDice")
+            assertEquals(4, exported.length())
+            assertFalse(exported.has("pointsPerFace"))
+            assertEquals(face * 4, exported.getInt("spentQuarterUnits"))
+
+            val newRoll = Store(prefs) { face }.rollHonorDie(token(), NOW)!!
+            assertEquals(10, newRoll.pointsPerFace)
+            assertEquals(face * 40, newRoll.spentUnits)
+            assertEquals(350 - face * 40, newRoll.balanceAfterUnits)
+        }
+    }
+
+    @Test
+    fun receiptPolicyMustBeExplicitForTensAndStrictlyTypedWithoutDowngradingLegacyValidation() {
+        val current = HonorDiceResult(token(), 2, 80, 320).toJson()
+        assertNotNull(readHonorDiceResult(current.toString()))
+        val withoutPolicy = JSONObject(current.toString()).apply { remove("pointsPerFace") }
+        assertNull(readHonorDiceResult(withoutPolicy.toString()))
+        for (invalidPolicy in listOf(0, 1, 11, -10, "10", JSONObject.NULL)) {
+            val bad = JSONObject(current.toString()).put("pointsPerFace", invalidPolicy)
+            assertNull(readHonorDiceResult(bad.toString()))
+        }
+        assertNull(readHonorDiceResult(current.toString()
+            .replace("\"pointsPerFace\":10", "\"pointsPerFace\":10.0")))
+        val partialWithBalance = JSONObject(current.toString())
+            .put("spentQuarterUnits", 8).put("balanceAfterQuarterUnits", 392)
+        assertNull(readHonorDiceResult(partialWithBalance.toString()))
+        assertNull(readHonorDiceResult(JSONObject(current.toString())
+            .put("spentQuarterUnits", 81).put("balanceAfterQuarterUnits", 319).toString()))
+    }
+
+    @Test
     fun commitFailureAfterAndroidMemoryMutationCanBeRetriedAfterRotationWithoutDoubleLoss() {
         val prefs = FaultingPreferences(preferences())
         val operation = token()
@@ -127,15 +181,15 @@ class HonorDiceTest {
         prefs.fail = true
         prefs.mutateOnFailure = true
         assertNull(store.rollHonorDie(operation, NOW))
-        assertEquals(376, store.pointUnits())
+        assertEquals(160, store.pointUnits())
         assertNotNull(store.lastHonorDiceResult())
         prefs.fail = false
         val recreated = Store(prefs) { error("The receipt must survive Activity recreation") }
         val result = recreated.rollHonorDie(operation, NOW)!!
-        assertEquals(24, result.spentUnits)
-        assertEquals(376, recreated.pointUnits())
+        assertEquals(240, result.spentUnits)
+        assertEquals(160, recreated.pointUnits())
         assertEquals(result, recreated.rollHonorDie(operation, NOW))
-        assertEquals(376, recreated.pointUnits())
+        assertEquals(160, recreated.pointUnits())
     }
 
     @Test
@@ -148,22 +202,22 @@ class HonorDiceTest {
         assertEquals(400, store.pointUnits())
         assertNull(store.lastHonorDiceResult())
         prefs.fail = false
-        assertEquals(16, store.rollHonorDie(operation, NOW)!!.spentUnits)
-        assertEquals(384, store.pointUnits())
+        assertEquals(160, store.rollHonorDie(operation, NOW)!!.spentUnits)
+        assertEquals(240, store.pointUnits())
     }
 
     @Test
     fun newRollSettlesDueDailyBonusBeforeLossWhileReceiptRetryNeverAdvancesPeriods() {
         val prefs = preferences(200)
         prefs.edit().putLong("periodStart", NOW - DAY).apply()
-        val store = Store(prefs) { 6 }
+        val store = Store(prefs) { 3 }
         val operation = token()
         val original = store.rollHonorDie(operation, NOW)!!
-        assertEquals(216, store.pointUnits()) // 50 + 10 - 6 points.
-        assertEquals(216, store.readSnapshot(UsageReading(emptyMap(), null), NOW).pointUnits)
+        assertEquals(120, store.pointUnits()) // 50 + 10 - 30 points.
+        assertEquals(120, store.readSnapshot(UsageReading(emptyMap(), null), NOW).pointUnits)
         assertEquals(original, store.rollHonorDie(operation, NOW + DAY))
-        assertEquals(216, store.pointUnits())
-        assertEquals(232, store.rollHonorDie(token(), NOW + DAY)!!.balanceAfterUnits)
+        assertEquals(120, store.pointUnits())
+        assertEquals(40, store.rollHonorDie(token(), NOW + DAY)!!.balanceAfterUnits)
     }
 
     @Test
@@ -192,7 +246,8 @@ class HonorDiceTest {
         val receipt = result.toJson().put("privateUnexpectedField", "must not export")
         prefs.edit().putString(HONOR_DICE_KEY, receipt.toString()).apply()
         val exported = store.exportLocalState(NOW).getJSONObject("honorDice")
-        assertEquals(4, exported.length())
+        assertEquals(5, exported.length())
+        assertEquals(10, exported.getInt("pointsPerFace"))
         assertFalse(exported.has("privateUnexpectedField"))
         assertEquals(100, store.exportLocalState(NOW).getJSONObject("points").getInt("maximumValue"))
         for (bad in listOf("{}", receipt.put("face", 7).toString(),

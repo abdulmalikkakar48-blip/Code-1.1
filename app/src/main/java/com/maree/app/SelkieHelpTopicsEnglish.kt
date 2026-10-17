@@ -106,7 +106,7 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.POINTS, "points", "What are my points for?",
         listOf("points", "balance", "discipline points", "honor points", "honour points", "how many points", "point rules"),
         "Open the ☰ menu → Selkie rules to review the rules. You start with 100 points and your balance stays between 0 and 100. Resetting costs 10 points; a detected reopening of a locked app costs 5 points. " +
-            "You can earn points back through the discipline bonus and challenges, up to the cap of 100. Selkie dice has an optional Points mode: it deducts the rolled number, from 1 to 6 points, after you confirm the roll, without going below zero. At 0 points, adding an app or changing a limit is blocked on every plan. Points are not money."
+            "You can earn points back through the discipline bonus and challenges, up to the cap of 100. Selkie dice has an optional Points mode: it deducts ten times the rolled number, from 10 to 60 points, after you confirm the roll, without going below zero. At 0 points, adding an app or changing a limit is blocked on every plan. Points are not money."
     ),
     englishHelp(
         SelkieHelpSection.POINTS, "earn_points", "How can I earn points?",
@@ -118,7 +118,7 @@ internal val selkieHelpEntriesEnglish: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.POINTS, "lose_points", "Why did I lose points?",
         listOf("lose points", "lost points", "point loss", "fewer points", "points deducted", "penalty", "reopen an app", "open a locked app again", "points dice", "dice points", "dice points mode", "honor dice", "honour dice"),
         "Resetting a limit deducts 10 points after confirmation. A detected reopening of an app that is still locked can deduct 5 points; " +
-            "these penalties are at least 30 seconds apart for the same app. Reaching the limit alone does not deduct 5 points, but records an overrun that prevents the discipline bonus for that period. In Daily → Dice → Points, you can also choose to roll the dice: after you confirm the roll, the rolled number deducts 1 to 6 points, without going below zero. This mode is free and optional, with no winnings or payment. The three modes Activity, App and Week do not change your points."
+            "these penalties are at least 30 seconds apart for the same app. Reaching the limit alone does not deduct 5 points, but records an overrun that prevents the discipline bonus for that period. In Daily → Dice → Points, you can also choose to roll the dice: after you confirm the roll, ten times the rolled number is deducted, from 10 to 60 points, without going below zero. This mode is free and optional, with no winnings or payment. The three modes Activity, App and Week do not change your points."
     ),
     englishHelp(
         SelkieHelpSection.POINTS, "zero_points", "What can I do at 0 points?",

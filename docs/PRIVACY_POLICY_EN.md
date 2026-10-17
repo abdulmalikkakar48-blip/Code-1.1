@@ -1,6 +1,6 @@
-# Selkie privacy policy — test version 0.22.0
+# Selkie privacy policy — test version 0.23.0
 
-Information updated on **17 October 2026**, for version **0.22.0 (versionCode 35)**. This policy describes local tracking, the Coach, calendar, summaries, favourites, limit time slots, widget, programmes, Selkie Dice and colouring pages. Accounts, payments and remote AI dialogue are not enabled.
+Information updated on **17 October 2026**, for version **0.23.0 (versionCode 36)**. This policy describes local tracking, the Coach, calendar, summaries, favourites, limit time slots, widget, programmes, Selkie Dice and colouring pages. Accounts, payments and remote AI dialogue are not enabled.
 
 Selkie helps you reduce your screen time. In this free test version, tracking data stays on your device and tracking does not require an account. The local Coach uses prepared advice, without an account or sending data over the Internet. You can read this information without granting tracking access.
 
@@ -48,7 +48,7 @@ Ultra offers programmes you choose: Sleep for 7 days, Studies for 14 days and So
 
 The three Selkie Dice break modes suggest an activity, a break from a selected app or break days within the next seven days. Their unconfirmed choices and results stay temporarily in memory, without a saved roll history. Confirming only adds personal calendar tasks with their text, date and completion state. Check-ins are manual, with no extra points, automatic blocking or changes to existing limits. These tasks remain until you delete them, reset all data or uninstall the app; they are included in your chosen export.
 
-Honour points are capped at 100: older balances above 100 are reduced to 100, lower balances are not increased, and the usual rewards remain available up to that cap. The fourth dice mode, Points, is free and optional. Its cost is explained before rolling: it subtracts 1 to 6 points according to the face rolled, without exceeding the available balance or going below zero. You cannot start a new roll at zero points. This mode offers no winnings, prizes, money or paid credits; points are not sold. Any 24-hour reward already due is applied before the deduction.
+Honour points are capped at 100: older balances above 100 are reduced to 100, lower balances are not increased, and the usual rewards remain available up to that cap. The fourth dice mode, Points, is free and optional. Its cost is explained before rolling: it subtracts 10 to 60 points according to the face rolled, without exceeding the available balance or going below zero. You cannot start a new roll at zero points. This mode offers no winnings, prizes, money or paid credits; points are not sold. Any 24-hour reward already due is applied before the deduction.
 
 To recover the result after an interruption and prevent a second deduction for the same roll, Selkie keeps only the latest Points-mode receipt: operation identifier, face rolled, points deducted and resulting balance. The next roll replaces this receipt; resetting all data or uninstalling the app deletes it. There is no log of all rolls. This receipt stays in private phone storage and is included in the export you request, without sending it to the publisher.
 
@@ -104,7 +104,7 @@ The offline test version does not declare Internet permission. Links you choose 
 
 Export my data prepares a local JSON file containing stored settings and challenges, structured history still retained from the last 90 local days, time-slot rules, personal calendar tasks including confirmed dice breaks, the latest valid Points-mode receipt if present, saved illustrations and grid colouring pages, favourite references or tips and their metadata, and programme identifiers and dates. Only fields defined for this export are copied. You choose where to save it using Android. The last raw technical sample of Android usage durations, unconfirmed Activity, App and Week dice results, raw Coach messages including unrecognised messages, sign-in tokens and email addresses are excluded. No file is automatically sent to the publisher.
 
-The JSON file uses format version **6**. It includes the 100-point cap, the latest valid Points-mode receipt if present, saved colours for illustrations and grid pages, and personal tasks including confirmed dice breaks. Unconfirmed results from the three break modes and colouring undo history are not included.
+The JSON file uses format version **7**. It includes the 100-point cap, the latest valid Points-mode receipt if present, saved colours for illustrations and grid pages, and personal tasks including confirmed dice breaks. Unconfirmed results from the three break modes and colouring undo history are not included.
 
 The file may contain private information, including tracked apps and your challenge text. If you choose an online storage provider, it may synchronise the file under its own rules. An exported copy remains in your chosen location after resetting or uninstalling Selkie; delete it separately if you wish.
 
@@ -146,3 +146,8 @@ Calendar tasks are free: their text, date and completion state stay in private p
 ## Offline reading — 0.13.0
 
 Reading offers sixteen selected historical texts and poems and translations prepared for Selkie, free and offline. No account or reading history is saved. Saving an excerpt creates a text copy through Android’s file picker; resetting Selkie does not delete it. Opening a source uses your browser and the external site’s privacy rules; it may see the request and network address, but the app does not attach points, tasks or statistics. Sources contain larger works than the reviewed passages.
+
+
+## Collection and cooking — 0.23.0
+
+The 45 publisher-supplied drawings are bundled offline; only drawing IDs and palette indices are saved in importedColoring_v1, separately from earlier drawings. They are included in the chosen schema 7 JSON export under storedData.importedColoring, and deleted by page clearing, global erase or uninstall. The original bundled artwork stays available. No photo permission, account or upload is used. The 50 recipes and their searches create no saved cooking history. New Points rolls cost 10 times the face, up to the remaining balance. A pointsPerFace=10 field distinguishes new receipts; historical receipts keep their original deduction and are not charged again on retry.

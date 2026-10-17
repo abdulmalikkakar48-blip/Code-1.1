@@ -125,7 +125,7 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.POINTS, "points", "À quoi servent mes points ?",
         listOf("points", "solde", "capital discipline", "points d honneur", "combien de points", "regles des points"),
         "Consulte le menu ☰ → Règles de Selkie pour retrouver les règles. Tu commences avec 100 points et ton solde reste entre 0 et 100. Une réinitialisation coûte 10 points ; une réouverture détectée d’une application verrouillée coûte 5 points. " +
-            "Tu peux regagner des points avec le bonus de discipline et les défis, jusqu’au plafond de 100. Le mode Points du Dé Selkie est facultatif : il retire le chiffre obtenu, de 1 à 6 points, après confirmation du lancer, sans passer sous zéro. À 0 point, ajouter une application ou modifier une limite est bloqué pour toutes les offres. Les points ne sont pas de l’argent."
+            "Tu peux regagner des points avec le bonus de discipline et les défis, jusqu’au plafond de 100. Le mode Points du Dé Selkie est facultatif : il retire dix fois le chiffre obtenu, de 10 à 60 points, après confirmation du lancer, sans passer sous zéro. À 0 point, ajouter une application ou modifier une limite est bloqué pour toutes les offres. Les points ne sont pas de l’argent."
     ),
     help(
         SelkieHelpSection.POINTS, "earn_points", "Comment gagner des points ?",
@@ -137,7 +137,7 @@ internal val selkieHelpEntriesFrench: List<SelkieHelpEntry> = listOf(
         SelkieHelpSection.POINTS, "lose_points", "Pourquoi ai-je perdu des points ?",
         listOf("perdre des points", "perdu des points", "perte de points", "moins de points", "points retires", "penalite", "reouvrir une application", "rouvrir une application", "de points", "mode points du de", "de d honneur"),
         "Réinitialiser une limite retire 10 points après confirmation. Une réouverture détectée d’une application encore verrouillée peut retirer 5 points ; " +
-            "ces pénalités sont espacées d’au moins 30 secondes pour la même application. Atteindre la limite n’enlève pas à lui seul 5 points, mais enregistre un dépassement qui empêche le bonus de discipline de cette période. Dans Quotidien → Dé → Points, tu peux aussi choisir de lancer le dé : après confirmation du lancer, le chiffre obtenu retire de 1 à 6 points, sans passer sous zéro. Ce mode est gratuit et facultatif, sans gain ni paiement. Les trois modes Activité, Application et Semaine ne changent pas tes points."
+            "ces pénalités sont espacées d’au moins 30 secondes pour la même application. Atteindre la limite n’enlève pas à lui seul 5 points, mais enregistre un dépassement qui empêche le bonus de discipline de cette période. Dans Quotidien → Dé → Points, tu peux aussi choisir de lancer le dé : après confirmation du lancer, dix fois le chiffre obtenu est retiré, soit de 10 à 60 points, sans passer sous zéro. Ce mode est gratuit et facultatif, sans gain ni paiement. Les trois modes Activité, Application et Semaine ne changent pas tes points."
     ),
     help(
         SelkieHelpSection.POINTS, "zero_points", "Que faire à 0 point ?",

@@ -1,6 +1,22 @@
 # Selkie : version de travail au 17 octobre 2026
 
-## Version actuelle 0.22.0 — vingt illustrations à colorier
+## Version actuelle 0.23.0 — collection de 45 dessins, cuisine et dé corrigé
+
+La rubrique **Quotidien → Coloriage → Collection** ajoute les **45 dessins fournis par l’éditeur**, convertis en 7 571 zones de remplissage au toucher. Les images originales intégrées sont conservées octet pour octet. Choisis une couleur, touche une zone, puis retrouve ta progression sur ce téléphone. Zoom, déplacement, gomme, repères facultatifs, Annuler/Rétablir et choix premier/dernier dessin sont disponibles. Les petites images d’origine gardent leur résolution ; le zoom ne crée pas de nouveaux détails.
+
+Les **20 illustrations** et les **12 pages à carreaux** précédentes restent dans leurs rubriques, avec leurs couleurs. Export volontaire JSON schéma 7 : `storedData.importedColoring` contient les identifiants et indices de couleurs de la Collection. L’effacement global couvre aussi ce format ; les fichiers exportés sont indépendants.
+
+**Quotidien → Cuisine** propose **50 recettes originales FR/EN**, gratuites et hors ligne : 10 entrées, 15 plats, 15 desserts, 10 boissons. Recherche par ingrédient, catégories, portions, quantités, durée, étapes et allergènes. Les recettes n’utilisent ni alcool ni porc ; aucune mention religieuse dans l’interface. Aucun dé de recettes n’est ajouté à ce stade.
+
+**Dé → Points** : face 1 retire 10 points, face 2 retire 20, jusqu’à face 6 qui retire 60. Le solde reste entre 0 et 100 ; si le coût dépasse le solde, seule la quantité restante est retirée. Les reçus historiques gardent leur barème initial et une reprise ne débite jamais une deuxième fois la même tentative.
+
+[APK 0.23.0](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.23.0.apk) · [Sources exactes](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/Selkie-Android-0.23.0-source.zip) · [Validation](https://github.com/abdulmalikkakar48-blip/Code-1.1/blob/maree-apk-download/downloads/VALIDATION-0.23.0.md).
+
+VersionCode 36, Android 10+, même certificat de développement. Aucune permission, dépendance ou connexion réseau supplémentaire. Coach préparé, suivi, défis, calendrier et lectures conservés. Premium 5 €/mois ou 60 €/an, Ultra 10 €/mois ou 120 €/an, sans réduction ni achat réel.
+
+## Archive 0.22.0
+
+## Version 0.22.0 — vingt illustrations à colorier
 
 Quotidien → Coloriage → **Illustrations** propose **20 dessins originaux gratuits** : 8 dans Fleurs, 7 dans Paysages et 5 dans Motifs. Les huit modèles précédents sont conservés ; douze s’ajoutent : tournesols, nénuphars, iris, magnolia, forêt, dunes, jardin en terrasses, lac étoilé, rosace botanique, feuilles entrelacées, spirales marines et montagnes à motifs. La galerie prépare les miniatures à mesure qu’elles deviennent visibles.
 

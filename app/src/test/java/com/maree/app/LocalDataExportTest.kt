@@ -22,7 +22,7 @@ class LocalDataExportTest {
 
         assertEquals(before, prefs.all)
         assertEquals("selkie-local-data", json.getString("format"))
-        assertEquals(6, json.getInt("schemaVersion"))
+        assertEquals(7, json.getInt("schemaVersion"))
         assertEquals(Instant.ofEpochMilli(NOW + DAY).toString(), json.getString("exportedAt"))
         val preferences = json.getJSONObject("preferences")
         assertEquals("fr", preferences.getString("language"))
@@ -85,7 +85,7 @@ class LocalDataExportTest {
             assertFalse(exported.contains(privateValue))
         }
         val data = JSONObject(exported).getJSONObject("storedData")
-        assertEquals(setOf("points", "honorDice", "membership", "tracking", "standardChallenges", "customChallenges", "calendarTasks", "coloringPages", "illustrations", "dailyHistory", "limitSchedules", "coachFavorites", "guidedPrograms"),
+        assertEquals(setOf("points", "honorDice", "membership", "tracking", "standardChallenges", "customChallenges", "calendarTasks", "coloringPages", "illustrations", "importedColoring", "dailyHistory", "limitSchedules", "coachFavorites", "guidedPrograms"),
             data.keys().asSequence().toSet())
         assertEquals("Déconnecter 🐚", data.getJSONArray("customChallenges").getJSONObject(0).getString("title"))
     }
@@ -102,9 +102,9 @@ class LocalDataExportTest {
 
         val json = JSONObject(LocalDataExport.json(store, now = NOW + DAY))
 
-        assertEquals(6, json.getInt("schemaVersion"))
+        assertEquals(7, json.getInt("schemaVersion"))
         val stored = json.getJSONObject("storedData")
-        assertEquals(95.0, stored.getJSONObject("points").getDouble("value"), 0.0)
+        assertEquals(50.0, stored.getJSONObject("points").getDouble("value"), 0.0)
         assertEquals(100, stored.getJSONObject("points").getInt("maximumValue"))
         assertEquals(result.toJson().toString(), stored.getJSONObject("honorDice").toString())
         assertFalse(json.toString().contains("synthetic-private-receipt-value"))
@@ -123,7 +123,7 @@ class LocalDataExportTest {
 
         val json = JSONObject(LocalDataExport.json(store, now = NOW + DAY))
 
-        assertEquals(6, json.getInt("schemaVersion"))
+        assertEquals(7, json.getInt("schemaVersion"))
         val exported = json.getJSONObject("storedData").getJSONArray("illustrations")
         assertEquals(1, exported.length())
         assertEquals(setOf("id", "colors"), exported.getJSONObject(0).keys().asSequence().toSet())

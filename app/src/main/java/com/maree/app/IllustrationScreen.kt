@@ -68,7 +68,7 @@ internal val illustrationPalette = listOf(
     Color(0xFFF9E9BC)
 )
 
-private fun illustrationColorName(index: Int): String = listOf(
+internal fun illustrationColorName(index: Int): String = listOf(
     tr("Gomme", "Eraser"), tr("Rose pâle", "Pale pink"), tr("Rose", "Pink"),
     tr("Corail", "Coral"), tr("Framboise", "Raspberry"), tr("Pêche", "Peach"),
     tr("Or", "Gold"), tr("Lilas", "Lilac"), tr("Violet", "Purple"),
@@ -79,25 +79,26 @@ private fun illustrationColorName(index: Int): String = listOf(
 
 @Composable
 internal fun ColoringSection() {
-    var illustrations by rememberSaveable { mutableStateOf(true) }
+    var mode by rememberSaveable(key = "collection_coloring_mode_v1") { mutableStateOf("collection") }
     var busy by remember { mutableStateOf(false) }
     AppCardSurface {
         SectionLabel(tr("Atelier coloriage", "Coloring studio"), tr("Gratuit", "Free"))
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            FilterChip(selected = illustrations, enabled = !busy,
-                onClick = { illustrations = true }, modifier = Modifier.heightIn(min = 48.dp),
-                label = { Text(tr("Illustrations", "Illustrations")) })
-            FilterChip(selected = !illustrations, enabled = !busy,
-                onClick = { illustrations = false }, modifier = Modifier.heightIn(min = 48.dp),
-                label = { Text(tr("À carreaux", "Grid pages")) })
+        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            listOf("collection" to tr("Collection · 45", "Collection · 45"), "illustrations" to tr("Illustrations · 20", "Illustrations · 20"), "grid" to tr("À carreaux", "Grid pages")).forEach { (id, label) ->
+                FilterChip(selected = mode == id, enabled = !busy, onClick = { mode = id }, modifier = Modifier.heightIn(min = 48.dp), label = { Text(label) })
+            }
         }
-        Text(if (illustrations) tr("Fleurs, paysages et motifs à remplir, une zone à la fois.",
-            "Flowers, landscapes and patterns to fill, one area at a time.") else tr(
-            "Tes 12 pages à carreaux et leurs couleurs sont conservées ici.",
-            "Your 12 grid pages and their saved colors are kept here."), color = MareePalette.Muted)
+        Text(when (mode) {
+            "collection" -> tr("45 dessins détaillés. Choisis une couleur, puis touche une zone. Les images et ta progression restent sur ce téléphone.", "45 detailed drawings. Choose a color, then tap an area. Images and progress stay on this phone.")
+            "illustrations" -> tr("Fleurs, paysages et motifs, une zone à la fois.", "Flowers, landscapes and patterns, one area at a time.")
+            else -> tr("Tes 12 pages à carreaux et leurs couleurs sont conservées ici.", "Your 12 grid pages and their saved colors are kept here.")
+        }, color = MareePalette.Muted)
     }
-    if (illustrations) IllustrationSection { busy = it }
-    else GridColoringSection { busy = it }
+    when (mode) {
+        "collection" -> ImportedColoringSection { busy = it }
+        "illustrations" -> IllustrationSection { busy = it }
+        else -> GridColoringSection { busy = it }
+    }
 }
 
 @Composable
@@ -308,7 +309,7 @@ private fun IllustrationSection(onBusyChange: (Boolean) -> Unit) {
 }
 
 @Composable
-private fun IllustrationSwatch(index: Int, isSelected: Boolean, enabled: Boolean, onClick: () -> Unit) {
+internal fun IllustrationSwatch(index: Int, isSelected: Boolean, enabled: Boolean, onClick: () -> Unit) {
     Box(Modifier.size(48.dp).clip(CircleShape)
         .clickable(enabled = enabled, role = Role.RadioButton, onClick = onClick)
         .semantics { selected = isSelected; contentDescription = "${if (index == 0) "" else "$index · "}${illustrationColorName(index)}" }

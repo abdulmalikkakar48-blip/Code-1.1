@@ -28,7 +28,7 @@ class PauseFeatureIntegrationTest {
 
         val export = JSONObject(LocalDataExport.json(store))
         val data = export.getJSONObject("storedData")
-        assertEquals(6, export.getInt("schemaVersion"))
+        assertEquals(7, export.getInt("schemaVersion"))
         assertEquals(1, data.getJSONArray("calendarTasks").length())
         assertEquals(3, data.getJSONArray("coloringPages").getJSONObject(0).getJSONArray("cells").getInt(13))
         assertEquals(16, data.getJSONArray("illustrations").getJSONObject(0).getJSONArray("colors").getInt(7))

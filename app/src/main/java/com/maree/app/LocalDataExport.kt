@@ -18,7 +18,7 @@ internal object LocalDataExport {
         now: Long = System.currentTimeMillis()
     ): String = JSONObject().apply {
         put("format", "selkie-local-data")
-        put("schemaVersion", 6)
+        put("schemaVersion", 7)
         put("exportedAt", Instant.ofEpochMilli(now).toString())
         put("localTimeZone", ZoneId.systemDefault().id)
         put("application", JSONObject().apply {

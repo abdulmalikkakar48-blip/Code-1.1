@@ -203,7 +203,7 @@ class Store internal constructor(
         if (unitsBefore <= 0) return@synchronized null
         val face = honorDieFace()
         if (face !in 1..6) return@synchronized null
-        val spent = minOf(unitsBefore, face * POINT_UNITS_PER_POINT)
+        val spent = minOf(unitsBefore, face * HONOR_DICE_POINTS_PER_FACE * POINT_UNITS_PER_POINT)
         val result = HonorDiceResult(operationId, face, spent, unitsBefore - spent)
         if (!prefs.edit().putInt("pointUnits", result.balanceAfterUnits)
                 .putString(HONOR_DICE_KEY, result.toJson().toString()).commit()) return@synchronized null
@@ -312,6 +312,7 @@ class Store internal constructor(
             put("calendarTasks", CalendarTaskStore(prefs).exportJson())
             put("coloringPages", ColoringStore(prefs).exportJson())
             put("illustrations", IllustrationStore(prefs).pagesForExport())
+            put("importedColoring", ImportedColoringStore(prefs).pagesForExport())
             put("limitSchedules", schedules.exportJson())
             put("coachFavorites", CoachFavoritesStore(prefs).exportJson())
             put("guidedPrograms", GuidedProgramStore(prefs).exportJson())

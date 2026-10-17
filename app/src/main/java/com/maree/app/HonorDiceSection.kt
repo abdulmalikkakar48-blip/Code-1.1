@@ -101,13 +101,13 @@ internal fun HonorDiceSection(
                 Text(tr("Un lancer, une perte", "One roll, a deduction"),
                     color = MareePalette.Ink, style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold)
-                Text(tr("Face 1 : −1 point, face 2 : −2… jusqu’à la face 6 : −6 points.",
-                    "Face 1: −1 point, face 2: −2… up to face 6: −6 points."),
+                Text(tr("1 → −10 · 2 → −20 · 3 → −30\n4 → −40 · 5 → −50 · 6 → −60 points.",
+                    "1 → −10 · 2 → −20 · 3 → −30\n4 → −40 · 5 → −50 · 6 → −60 points."),
                     color = MareePalette.Ink, style = MaterialTheme.typography.bodyMedium)
             }
         }
-        Text(tr("Ce lancer retire immédiatement les points indiqués. Si ton solde est plus bas, tu perds seulement ce qu’il te reste. Aucun gain ni argent en jeu.",
-            "This roll immediately deducts the points shown. If your balance is lower, only your remaining points are deducted. There are no winnings or money involved."),
+        Text(tr("Attention : lancer ce dé retire immédiatement 10 à 60 points. Si ton solde est plus bas, tu perds seulement ce qu’il te reste. Aucun gain ni argent en jeu.",
+            "Warning: rolling this die immediately deducts 10 to 60 points. If your balance is lower, only your remaining points are deducted. There are no winnings or money involved."),
             color = MareePalette.Muted, style = MaterialTheme.typography.bodyMedium)
         if (balance == 0 && pendingId == null) Text(tr(
             "À 0 point, aucun nouveau lancer. Termine un défi ou attends un bonus pour en regagner.",
@@ -116,7 +116,7 @@ internal fun HonorDiceSection(
         PrimaryAction(when {
             busy -> tr("Lancer en cours…", "Rolling…")
             pendingId != null -> tr("Vérifier ce lancer", "Check this roll")
-            else -> tr("Lancer et retirer 1 à 6 points", "Roll and deduct 1 to 6 points")
+            else -> tr("Lancer et retirer 10 à 60 points", "Roll and deduct 10 to 60 points")
         }, onClick = ::roll, modifier = Modifier.fillMaxWidth(),
             enabled = ready && !busy && (pendingId != null || balance > 0))
         if (pendingId != null && !busy) Text(tr(
@@ -129,6 +129,10 @@ internal fun HonorDiceSection(
                 "Last roll: face ${last.face} · −${formatPointUnits(last.spentUnits)} point(s). Balance after that roll: ${formatPointUnits(last.balanceAfterUnits)} / 100."),
                 color = MareePalette.Ink, style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
+            if (last.pointsPerFace == 1) Text(tr(
+                "Ce reçu provient de l’ancien barème. Les nouveaux lancers retirent 10 points par face.",
+                "This receipt uses the previous rule. New rolls deduct 10 points per pip."),
+                color = MareePalette.Muted, style = MaterialTheme.typography.bodySmall)
         }
         Text(tr("Mode facultatif et gratuit. Activité, Appli et Semaine restent sans perte de points. Les limites et verrouillages habituels restent actifs.",
             "Optional and free. Activity, App and Week still deduct no points. Your normal limits and locks remain active."),

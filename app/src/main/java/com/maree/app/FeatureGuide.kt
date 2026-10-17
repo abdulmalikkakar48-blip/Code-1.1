@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 
 /** Navigation only: opening the guide never changes tracking, points or the selected plan. */
 internal enum class GuideDestination {
-    HOME, DAILY, CALENDAR, REVIEW, READING, DICE, COLORING, TOOLS, CHALLENGES, COACH,
+    HOME, DAILY, CALENDAR, REVIEW, READING, DICE, COLORING, RECIPES, TOOLS, CHALLENGES, COACH,
     ACCESS, SUBSCRIPTIONS, APPEARANCE, LANGUAGES, PRIVACY
 }
 
@@ -87,13 +87,14 @@ internal fun FeatureGuideSection(onOpen: (GuideDestination) -> Unit) {
                     "Free · Read and save selected excerpts to reflect and learn."),
                 { onOpen(GuideDestination.READING) }
             )
+            GuideLink(tr("Cuisine", "Cooking"), tr("Gratuit · 50 recettes : ingrédients, quantités, étapes et allergènes, hors ligne.", "Free · 50 offline recipes with ingredients, quantities, steps and allergens."), { onOpen(GuideDestination.RECIPES) })
             GuideLink(tr("Dé Selkie", "Selkie dice"),
-                tr("Gratuit · Activité, application ou semaine : confirme un objectif au calendrier. Le mode Points, facultatif, retire de 1 à 6 points après confirmation du lancer.",
-                    "Free · Activity, app or week: confirm a calendar goal. The optional Points mode deducts 1 to 6 points after you confirm the roll."),
+                tr("Gratuit · Activité, application ou semaine : confirme un objectif au calendrier. Le mode Points, facultatif, retire de 10 à 60 points après confirmation du lancer.",
+                    "Free · Activity, app or week: confirm a calendar goal. The optional Points mode deducts 10 to 60 points after you confirm the roll."),
                 { onOpen(GuideDestination.DICE) })
             GuideLink(tr("Coloriage", "Coloring"),
-                tr("Gratuit · Illustrations : ${illustrationPages.size} dessins à remplir par zones, classés en Fleurs, Paysages et Motifs, avec zoom et repères numérotés facultatifs. À carreaux : les ${coloringTemplates.size} pages précédentes. Tes couleurs restent sur ce téléphone.",
-                    "Free · Illustrations: ${illustrationPages.size} drawings to fill by region, grouped into Flowers, Landscapes and Patterns, with zoom and optional numbered guides. Grid pages: the ${coloringTemplates.size} existing pages. Your colors stay on this phone."),
+                tr("Gratuit · Collection : 45 dessins fournis, avec sauvegarde et zoom. Illustrations : ${illustrationPages.size} dessins à remplir par zones, classés en Fleurs, Paysages et Motifs, avec zoom et repères numérotés facultatifs. À carreaux : les ${coloringTemplates.size} pages précédentes. Tes couleurs restent sur ce téléphone.",
+                    "Free · Collection: 45 supplied drawings, with saving and zoom. Illustrations: ${illustrationPages.size} drawings to fill by region, grouped into Flowers, Landscapes and Patterns, with zoom and optional numbered guides. Grid pages: the ${coloringTemplates.size} existing pages. Your colors stay on this phone."),
                 { onOpen(GuideDestination.COLORING) })
             GuideLink(
                 tr("Outils", "Tools"),
